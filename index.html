@@ -1,14 +1,156 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#081b33" />
-    <meta name="description" content="Fly Express passenger trip booking preview." />
-    <title>Fly Express Passenger App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#081B33">
+  <meta name="description" content="Fly Express Passenger App presentation prototype">
+  <title>Fly Express Passenger App — Prototype</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://tile.openstreetmap.org">
+  <link rel="stylesheet" href="leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div id="splash-screen" class="splash-screen" role="dialog" aria-label="Fly Express introduction">
+    <button class="text-button splash-skip" type="button" data-action="skip-intro">Skip Introduction</button>
+    <div class="splash-content">
+      <div class="splash-brand-lockup">
+        <div class="logo-frame logo-frame--large">
+          <img src="assets/fly-express-logo.jpg" alt="Fly Express Travellers Association logo">
+        </div>
+        <div>
+          <p class="eyebrow">Fly Express Travellers Association</p>
+          <h1>Travel Smart.<br>Move Faster.</h1>
+        </div>
+      </div>
+      <div class="splash-vehicle-stage" aria-hidden="true">
+        <span class="splash-route-line"></span>
+        <img class="splash-vehicle" src="assets/fly-express-van.png" alt="">
+        <span class="splash-location splash-location--start">Entebbe</span>
+        <span class="splash-location splash-location--end">Kampala</span>
+      </div>
+      <div class="route-loader" aria-hidden="true">
+        <span class="route-loader__line"></span>
+        <span class="route-loader__vehicle"><i data-lucide="navigation"></i></span>
+      </div>
+      <p class="muted">Preparing your passenger experience…</p>
+    </div>
+  </div>
+
+  <section id="onboarding" class="full-screen-layer is-hidden" aria-label="App introduction">
+    <div class="onboarding-shell">
+      <button class="text-button onboarding-skip" type="button" data-action="skip-onboarding">Skip</button>
+      <div id="onboarding-content"></div>
+      <div class="onboarding-controls">
+        <button class="button button--ghost" type="button" data-action="onboarding-back">Back</button>
+        <div id="onboarding-dots" class="progress-dots" aria-label="Onboarding progress"></div>
+        <button class="button button--primary" type="button" data-action="onboarding-next">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="auth-layer" class="full-screen-layer auth-layer is-hidden" aria-label="Passenger account preview">
+    <div class="auth-shell">
+      <div class="auth-brand">
+        <div class="logo-frame">
+          <img src="assets/fly-express-logo.jpg" alt="Fly Express Travellers Association logo">
+        </div>
+        <div>
+          <strong>Fly Express</strong>
+          <span>Passenger App</span>
+        </div>
+      </div>
+      <div id="auth-content"></div>
+    </div>
+  </section>
+
+  <div id="app-shell" class="app-shell is-hidden">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="sidebar__brand">
+        <div class="logo-frame logo-frame--sidebar">
+          <img src="assets/fly-express-logo.jpg" alt="Fly Express Travellers Association logo">
+        </div>
+        <div>
+          <strong>Fly Express</strong>
+          <span>Passenger App</span>
+        </div>
+      </div>
+
+      <nav id="desktop-nav" class="sidebar__nav"></nav>
+
+      <div class="sidebar__footer">
+        <button class="prototype-link" type="button" data-action="open-demo-panel">
+          <i data-lucide="flask-conical"></i>
+          <span>Prototype Demo</span>
+        </button>
+        <div class="connection-state">
+          <span class="connection-dot"></span>
+          <span>Demo online</span>
+        </div>
+        <p>Presentation mode<br>Version 1.2.0</p>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="topbar__left">
+          <button id="back-button" class="icon-button is-hidden" type="button" data-action="go-back" aria-label="Go back">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <button class="mobile-brand" type="button" data-screen="home" aria-label="Go to home">
+            <span class="logo-frame logo-frame--mobile"><img src="assets/fly-express-logo.jpg" alt=""></span>
+          </button>
+          <div>
+            <p class="eyebrow topbar__eyebrow">Fly Express</p>
+            <h2 id="screen-title">Home</h2>
+          </div>
+        </div>
+        <div class="topbar__actions">
+          <button class="connection-pill" type="button" data-action="toggle-connection" aria-label="Toggle demo connection state">
+            <span class="connection-dot"></span>
+            <span class="connection-label">Online</span>
+          </button>
+          <button class="icon-button" type="button" data-screen="notifications" aria-label="Notifications">
+            <i data-lucide="bell"></i>
+            <span id="notification-badge" class="badge-count">5</span>
+          </button>
+          <button class="profile-button" type="button" data-screen="profile" aria-label="Passenger profile">
+            <span>SN</span>
+          </button>
+        </div>
+      </header>
+
+      <main id="main-content" class="main-content" tabindex="-1"></main>
+    </div>
+
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation"></nav>
+  </div>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <div id="modal-root"></div>
+  <div id="sheet-root"></div>
+  <div id="loading-overlay" class="loading-overlay is-hidden" role="status" aria-live="polite">
+    <div class="loading-card">
+      <div class="loading-brand-media" aria-hidden="true">
+        <div class="logo-frame logo-frame--loading"><img src="assets/fly-express-logo.jpg" alt=""></div>
+        <img class="loading-van" src="assets/fly-express-van.png" alt="">
+      </div>
+      <span class="spinner"></span>
+      <strong id="loading-message">Loading preview…</strong>
+      <small>No live service is being contacted.</small>
+    </div>
+  </div>
+
+  <noscript>
+    <div class="noscript-message">JavaScript is required to preview this interactive prototype.</div>
+  </noscript>
+</body>
 </html>
