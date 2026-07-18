@@ -29,6 +29,6 @@ pnpm build
 
 ## Deployment
 
-Pushes to `main` deploy the Vite `dist` build through the included GitHub Pages workflow.
+GitHub Pages serves the production build from the `gh-pages` branch. To publish an update, run `pnpm build`, commit the contents of `dist`, and push that build to `gh-pages`.
 
 Map data and tiles are provided by [OpenStreetMap contributors](https://www.openstreetmap.org/copyright). The app keeps attribution visible in both expanded and collapsed map states.
