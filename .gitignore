@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.npm-cache/
+.npmrc
+
+# Local design and verification material
+AGENTS.md
+design-qa.md
+qa-*.png
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Retained legacy static prototype files (not used by the Vite app)
+/assets/
+/PROJECT-GUIDE.md
+/README.txt
+/script.js
+/styles.css
