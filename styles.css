@@ -2450,16 +2450,19 @@ body[data-active-screen="trackparcel"] .topbar__eyebrow,
 body[data-active-screen="trackparcel"] .topbar__actions .connection-pill,
 body[data-active-screen="trackparcel"] .topbar__actions .icon-button,
 body[data-active-screen="trackparcel"] .topbar__actions .hamburger-menu-btn,
+body[data-active-screen="trackparcel"] .topbar__actions .desktop-profile-btn,
 body[data-active-screen="parcel-status"] .mobile-brand,
 body[data-active-screen="parcel-status"] .topbar__eyebrow,
 body[data-active-screen="parcel-status"] .topbar__actions .connection-pill,
 body[data-active-screen="parcel-status"] .topbar__actions .icon-button:not(#topbar-share-button),
 body[data-active-screen="parcel-status"] .topbar__actions .hamburger-menu-btn,
+body[data-active-screen="parcel-status"] .topbar__actions .desktop-profile-btn,
 body[data-active-screen="driver-profile"] .mobile-brand,
 body[data-active-screen="driver-profile"] .topbar__eyebrow,
 body[data-active-screen="driver-profile"] .topbar__actions .connection-pill,
 body[data-active-screen="driver-profile"] .topbar__actions .icon-button,
-body[data-active-screen="driver-profile"] .topbar__actions .hamburger-menu-btn {
+body[data-active-screen="driver-profile"] .topbar__actions .hamburger-menu-btn,
+body[data-active-screen="driver-profile"] .topbar__actions .desktop-profile-btn {
   display: none !important;
 }
 
@@ -4030,5 +4033,71 @@ body[data-active-screen="driver-profile"] .main-content {
   }
   .call-content {
     padding: 32px 20px;
+  }
+}
+
+/* Responsive visibility rules for Hamburger vs Profile */
+.desktop-profile-btn {
+  display: none !important; /* hidden by default, enabled on desktop query */
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.2s ease !important;
+}
+.desktop-profile-btn:hover {
+  background: var(--surface-alt) !important;
+  border-color: var(--brand-blue-soft) !important;
+}
+.desktop-profile-btn span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  background: var(--brand-blue) !important;
+  color: white !important;
+  font-weight: 800 !important;
+  font-size: 0.8rem !important;
+}
+.topbar--light-bg .desktop-profile-btn {
+  border-color: rgba(20, 87, 217, 0.15) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+.topbar--dark-bg .desktop-profile-btn {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.topbar--dark-bg .desktop-profile-btn span {
+  background: white !important;
+  color: var(--brand-blue-dark) !important;
+}
+
+@media (min-width: 901px) {
+  .hamburger-menu-btn {
+    display: none !important;
+  }
+  .desktop-profile-btn {
+    display: flex !important;
+  }
+  body.drawer-open .app-shell {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .hamburger-menu-btn {
+    display: flex !important;
+  }
+  .desktop-profile-btn {
+    display: none !important;
   }
 }
