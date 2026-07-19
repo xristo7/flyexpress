@@ -4101,3 +4101,77 @@ body[data-active-screen="driver-profile"] .main-content {
     display: none !important;
   }
 }
+
+/* Drawer Dark Mode Text Brightness Enhancements */
+.side-drawer__content {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.drawer-user-info h3 {
+  color: #ffffff !important;
+}
+
+.drawer-user-info p,
+.drawer-user-info .muted {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.side-drawer__header .icon-button {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.side-drawer__header .icon-button:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.drawer-section-title {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Nav Item Brightness */
+.drawer-nav-item {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+.drawer-nav-item svg {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.drawer-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+.drawer-nav-item:hover svg {
+  color: #ffffff !important;
+}
+
+/* Sub Nav Item Brightness */
+.drawer-nav-sub {
+  border-left-color: rgba(255, 255, 255, 0.12) !important;
+}
+.drawer-nav-sub-item {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+.drawer-nav-sub-item svg {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+.drawer-nav-sub-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+.drawer-nav-sub-item:hover svg {
+  color: #ffffff !important;
+}
+
+/* Specific styling for Sign Out menu item */
+.drawer-nav-item--signout {
+  color: #ff6b6b !important;
+}
+.drawer-nav-item--signout svg {
+  color: #ff6b6b !important;
+}
+.drawer-nav-item--signout:hover {
+  background: rgba(255, 82, 82, 0.08) !important;
+  color: #ff8787 !important;
+}
+.drawer-nav-item--signout:hover svg {
+  color: #ff8787 !important;
+}
