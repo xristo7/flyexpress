@@ -2801,6 +2801,15 @@ function initParcelBarcode() {
    ========================================================= */
 
 function handleClick(event) {
+  if (document.body.classList.contains('drawer-open')) {
+    if (!event.target.closest('#side-drawer') && !event.target.closest('.hamburger-menu-btn')) {
+      closeSideDrawer();
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+  }
+
   const screenTrigger = event.target.closest('[data-screen]');
   if (screenTrigger) {
     const screen = screenTrigger.dataset.screen;
@@ -3511,15 +3520,20 @@ function closeSheet() {
 function openSideDrawer() {
   const drawer = $('#side-drawer');
   if (!drawer) return;
-  drawer.classList.remove('is-hidden');
-  document.body.style.overflow = 'hidden';
-  refreshIcons();
+  const isOpen = !drawer.classList.contains('is-hidden');
+  if (isOpen) {
+    closeSideDrawer();
+  } else {
+    drawer.classList.remove('is-hidden');
+    document.body.classList.add('drawer-open');
+    refreshIcons();
+  }
 }
 function closeSideDrawer() {
   const drawer = $('#side-drawer');
   if (!drawer) return;
   drawer.classList.add('is-hidden');
-  document.body.style.overflow = '';
+  document.body.classList.remove('drawer-open');
 }
 
 function openMoreSheet() {
