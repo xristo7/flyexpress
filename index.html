@@ -122,7 +122,8 @@
             <i data-lucide="bell"></i>
             <span id="notification-badge" class="badge-count">5</span>
           </button>
-          <button class="profile-button" type="button" data-screen="profile" aria-label="Passenger profile">
+          <button class="profile-button hamburger-button" type="button" data-action="toggle-side-drawer" aria-label="Open menu">
+            <i data-lucide="menu"></i>
             <span>SN</span>
           </button>
         </div>
@@ -137,6 +138,69 @@
   <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   <div id="modal-root"></div>
   <div id="sheet-root"></div>
+
+  <div id="side-drawer" class="side-drawer is-hidden" role="dialog" aria-modal="true" aria-label="Menu drawer">
+    <div class="side-drawer__backdrop" data-action="close-drawer"></div>
+    <div class="side-drawer__content">
+      <div class="side-drawer__header">
+        <div class="drawer-user-info">
+          <div class="profile-avatar">SN</div>
+          <div>
+            <h3>Sarah Nabirye</h3>
+            <p class="muted text-small">+256 772 345 678</p>
+          </div>
+        </div>
+        <button class="icon-button icon-button--plain" type="button" data-action="close-drawer" aria-label="Close menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="side-drawer__body">
+        <div class="drawer-section">
+          <p class="drawer-section-title">Accounts</p>
+          <div class="account-switcher">
+            <div class="account-item is-active">
+              <span class="account-dot"></span>
+              <div>
+                <strong>Personal Account</strong>
+                <small>Sarah Nabirye</small>
+              </div>
+            </div>
+            <div class="account-item">
+              <span class="account-dot account-dot--corporate"></span>
+              <div>
+                <strong>Corporate Account</strong>
+                <small>Acme Corp (FXC-9921)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-section">
+          <p class="drawer-section-title">Features & Services</p>
+          <nav class="drawer-nav">
+            <button class="drawer-nav-item" type="button" data-screen="home"><i data-lucide="house"></i><span>Home Dashboard</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="book"><i data-lucide="ticket-plus"></i><span>Book a Trip</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="trips"><i data-lucide="route"></i><span>My Trips</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="returns"><i data-lucide="refresh-cw"></i><span>Return Tickets</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><span>Fly Express Wallet</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="parcel"><i data-lucide="package-plus"></i><span>Send a Parcel</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="trackparcel"><i data-lucide="scan-search"></i><span>Track Parcel</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="luggage"><i data-lucide="luggage"></i><span>Luggage Tags</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="live"><i data-lucide="navigation"></i><span>Live Trip Tracking</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="offers"><i data-lucide="badge-percent"></i><span>Special Offers</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="notifications"><i data-lucide="bell"></i><span>Notifications</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="support"><i data-lucide="life-buoy"></i><span>Help & Support</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="profile"><i data-lucide="user-round"></i><span>Profile & Settings</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="about"><i data-lucide="info"></i><span>About Fly Express</span></button>
+          </nav>
+        </div>
+      </div>
+      <div class="side-drawer__footer">
+        <button class="button button--soft-red w-full" type="button" data-action="sign-out"><i data-lucide="log-out"></i>Sign Out</button>
+        <button class="button button--ghost w-full" style="margin-top:8px;" type="button" data-action="open-demo-panel"><i data-lucide="flask-conical"></i>Prototype Demo</button>
+      </div>
+    </div>
+  </div>
+
   <div id="loading-overlay" class="loading-overlay is-hidden" role="status" aria-live="polite">
     <div class="loading-card">
       <div class="loading-brand-media" aria-hidden="true">

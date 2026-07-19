@@ -17,10 +17,11 @@ const appData = {
   },
   routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage'],
   trips: [
-    { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'High-roof van', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage' },
-    { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: '18-seat van', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage' },
-    { id: 't3', depart: '9:30 AM', arrive: '10:45 AM', seats: 2, status: 'Almost full', vehicle: '14-seat van', plate: 'UBN 742D', duration: '1 hr 15 min', fare: 5000, traffic: 'Heavy', boarding: 'Kitooro', destination: 'Clock Tower' },
-    { id: 't4', depart: '10:00 AM', arrive: '11:00 AM', seats: 11, status: 'Available', vehicle: 'High-roof van', plate: 'UBM 245K', duration: '1 hr', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage' }
+    { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'High-roof van', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
+    { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: '18-seat van', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
+    { id: 't3', depart: '9:30 AM', arrive: '10:45 AM', seats: 2, status: 'Almost full', vehicle: '14-seat van', plate: 'UBN 742D', duration: '1 hr 15 min', fare: 5000, traffic: 'Heavy', boarding: 'Kitooro', destination: 'Clock Tower', currentStage: 'Abayita Ababiri', comingFrom: 'Entebbe Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 2, vansAtStage: 1, vansApproaching: 3, driverName: 'David Okello', driverPhone: '+256 752 456 789', driverRating: '4.7', countdown: '28 mins until arrival' },
+    { id: 't4', depart: '10:00 AM', arrive: '11:00 AM', seats: 11, status: 'Available', vehicle: 'High-roof van', plate: 'UBQ 915A', duration: '1 hr', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kajjansi', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 3, vansAtStage: 4, vansApproaching: 0, driverName: 'Peter Semwanga', driverPhone: '+256 781 333 444', driverRating: '4.9', countdown: '35 mins until arrival' },
+    { id: 't5', depart: '10:30 AM', arrive: '11:35 AM', seats: 6, status: 'Available', vehicle: 'High-roof van', plate: 'UBR 104C', duration: '1 hr 05 min', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Clock Tower', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 4, vansAtStage: 0, vansApproaching: 2, driverName: 'Arthur Ssewankambo', driverPhone: '+256 702 111 222', driverRating: '4.6', countdown: '45 mins until arrival' }
   ],
   luggage: [
     { id: 'personal', icon: 'briefcase-business', name: 'Small personal item', desc: 'Handbag or compact backpack', guide: 'Fits on your lap', price: 0 },
@@ -234,11 +235,10 @@ function renderOnboarding() {
     <article class="onboarding-slide">
       <div class="onboarding-visual" aria-hidden="true">
         <div class="onboarding-orbit">
-          <span class="onboarding-route onboarding-route--one"></span>
-          <span class="onboarding-route onboarding-route--two"></span>
-          <div class="onboarding-vehicle-card">
-            <img class="onboarding-van" src="assets/fly-express-van.png" alt="">
-            <span class="onboarding-feature-icon"><i data-lucide="${slide.icon}"></i></span>
+          <div class="onboarding-vehicle-card onboarding-vehicle-card--icon">
+            <div class="onboarding-icon-placeholder">
+              <i data-lucide="${slide.icon}"></i>
+            </div>
           </div>
           ${slide.chips.map((chip, index) => `<span class="orbit-chip orbit-chip--${['one','two','three'][index]}"><i data-lucide="${chip[0]}"></i>${chip[1]}</span>`).join('')}
         </div>
@@ -361,6 +361,12 @@ function renderNavigation() {
       </button>`).join('');
   }
   if (mobile) {
+    const isBookingFlow = ['trip-details', 'passengers', 'returns', 'luggage', 'checkout'].includes(state.screen);
+    if (isBookingFlow) {
+      mobile.classList.add('is-hidden');
+    } else {
+      mobile.classList.remove('is-hidden');
+    }
     const items = [['home','Home','house'],['book','Book','ticket-plus'],['trips','Trips','route'],['wallet','Wallet','wallet-cards'],['more','More','menu']];
     mobile.innerHTML = items.map(([screen,label,icon]) => {
       const active = state.screen === screen || (screen === 'more' && !['home','book','trips','wallet'].includes(state.screen));
@@ -409,6 +415,7 @@ function renderCurrentScreen(preserveFocus = true) {
   };
   root.innerHTML = (renderers[state.screen] || renderHome)();
   refreshIcons();
+  updateHeaderTheme();
   if (state.screen === 'trip-details') setTimeout(() => { if (state.screen === 'trip-details') initTripMap(); }, 240);
   if (state.screen === 'ticket') setTimeout(initTicketQr, 0);
   if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
@@ -529,42 +536,119 @@ function renderBook() {
 }
 
 function renderTripResult(trip) {
-  return `<article class="card card--hover result-card">
-    <div class="result-time"><strong>${trip.depart}</strong><span>Departure</span><div style="margin-top:8px"><span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats</span></div></div>
-    <div class="result-route"><div><strong>${trip.boarding}</strong><div class="muted text-small">Boarding point</div></div><div class="result-route__line"></div><div class="text-right"><strong>${trip.destination}</strong><div class="muted text-small">Arrive ${trip.arrive}</div></div><div class="result-info" style="grid-column:1/-1"><span>${trip.vehicle}</span><span>${trip.duration}</span><span>Traffic: ${trip.traffic}</span><span>Vehicle ${trip.plate}</span></div><div class="amenities" style="grid-column:1/-1"><span class="amenity"><i data-lucide="badge-check"></i>Verified crew</span><span class="amenity"><i data-lucide="air-vent"></i>Ventilated</span><span class="amenity"><i data-lucide="luggage"></i>Luggage available</span><span class="amenity"><i data-lucide="package"></i>Parcel space</span></div></div>
-    <div class="result-price"><span class="muted text-small">${state.ticketType === 'return' ? 'Return package' : 'One way'}</span><strong>${formatUGX((state.ticketType === 'return' ? 9000 : trip.fare) * passengerTotal())}</strong><small class="text-success">${passengerMixLabel()}</small><button class="button button--primary button--small" style="margin-top:10px" type="button" data-action="choose-trip" data-trip-id="${trip.id}">Select Trip</button></div>
+  return `<article class="card card--hover result-card taxi-result-card">
+    <div class="taxi-result-body">
+      <div class="taxi-van-visual">
+        <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img">
+        <span class="van-plate-tag">${trip.plate}</span>
+      </div>
+      <div class="taxi-details">
+        <div class="taxi-driver-info">
+          <strong>${trip.driverName}</strong>
+          <span class="driver-rating-tag">${trip.driverRating} ★</span>
+          <span class="driver-phone-small">${trip.driverPhone}</span>
+        </div>
+        <div class="taxi-proximity-info">
+          <span class="proximity-countdown"><i data-lucide="clock"></i> ${trip.countdown}</span>
+          <span class="proximity-status">${trip.currentStage} · ${trip.vansAtStage} vans at stage</span>
+        </div>
+      </div>
+    </div>
+    <div class="taxi-result-route-preview">
+      <strong>${trip.depart}</strong>
+      <span>${trip.duration} · ${trip.traffic} traffic</span>
+      <div style="margin-top:4px"><span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span></div>
+    </div>
+    <div class="taxi-result-actions">
+      <div class="taxi-price-tag">
+        <span class="muted text-small">${state.ticketType === 'return' ? 'Return package' : 'One way'}</span>
+        <strong>${formatUGX((state.ticketType === 'return' ? 9000 : trip.fare) * passengerTotal())}</strong>
+      </div>
+      <button class="button button--primary button--small" type="button" data-action="choose-trip" data-trip-id="${trip.id}">View & Book</button>
+    </div>
   </article>`;
 }
 
 function renderTripDetails() {
   const trip = state.activeTrip;
-  return `
-    ${screenHead('Review trip details', 'Confirm the route, boarding information, vehicle, fare and travel conditions before continuing.')}
-    <section class="grid grid--sidebar">
-      <div class="grid">
-        <article class="card">
-          <div class="card-head"><div><p class="section-kicker">Selected departure</p><h2>${trip.boarding} → ${trip.destination}</h2></div><span class="status-chip status-chip--success">${trip.seats} spaces available</span></div>
-          <div class="route-map">
-            <div class="route-track">${['Entebbe','Kitooro','Abayita Ababiri','Kajjansi','Kampala'].map(place => `<div class="route-stop"><span class="route-stop__dot"></span><span>${place}</span></div>`).join('')}</div>
+  const bookingDate = new Date(`${state.bookingDate}T12:00:00`);
+  const reviewDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(bookingDate);
+  const returnSummary = state.ticketType === 'return' ? `${state.returnMode === 'date-specific' ? 'Date-specific' : state.returnMode.replace('-', ' ')} · Added` : 'Not added';
+  const seatSummary = state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available';
+
+  return `<section class="smart-review" aria-labelledby="review-title">
+    <div class="smart-review__map-card">
+      <div class="smart-review__map-copy"><p class="eyebrow">${reviewDate}</p><h1 id="review-title">Review your trip</h1><p>You’re almost ready to travel.</p></div>
+      <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
+      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="assets/fly-express-van.png" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
+    </div>
+    <div class="smart-review__sheet">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      
+      <!-- Driver Profile Card -->
+      <article class="card driver-profile-card">
+        <div class="driver-profile-header">
+          <div class="driver-avatar">${trip.driverName.split(' ').map(n=>n[0]).join('')}</div>
+          <div class="driver-meta">
+            <span class="eyebrow">Your Driver</span>
+            <h2>${trip.driverName}</h2>
+            <div class="driver-rating"><i data-lucide="star" class="star-icon" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i> <strong>${trip.driverRating} Rating</strong></div>
           </div>
-        </article>
-        <article class="card">
-          <h3>Travel information</h3>
-          <div class="grid grid--2" style="margin-top:15px">
-            <div class="detail-list"><div class="detail-row"><span>Departure</span><strong>${trip.depart}</strong></div><div class="detail-row"><span>Estimated arrival</span><strong>${trip.arrive}</strong></div><div class="detail-row"><span>Pickup point</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Drop-off point</span><strong>${trip.destination}</strong></div></div>
-            <div class="detail-list"><div class="detail-row"><span>Vehicle</span><strong>${trip.vehicle}</strong></div><div class="detail-row"><span>Registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Journey estimate</span><strong>${trip.duration}</strong></div><div class="detail-row"><span>Traffic condition</span><strong>${trip.traffic}</strong></div></div>
+          <a class="driver-phone-btn button button--primary button--small" href="tel:${trip.driverPhone}" aria-label="Call Driver"><i data-lucide="phone"></i>Call</a>
+        </div>
+      </article>
+
+      <!-- Vehicle and Transit Details Card -->
+      <article class="card transit-status-card">
+        <div class="transit-info-grid">
+          <div class="transit-van-visual">
+            <img src="assets/fly-express-van.png" alt="Fly Express Van" class="transit-van-img">
+            <span class="van-plate-tag">${trip.plate}</span>
           </div>
-        </article>
-        <article class="card card--soft">
-          <div class="grid grid--3"><div><p class="section-kicker">Luggage allowance</p><strong>Small personal item free</strong><p class="muted text-small">Register larger luggage during booking.</p></div><div><p class="section-kicker">Cancellation</p><strong>Preview flexible conditions</strong><p class="muted text-small">Refund states are demonstrated in My Trips.</p></div><div><p class="section-kicker">Passenger safety</p><strong>Verify plate before boarding</strong><p class="muted text-small">Use only the assigned vehicle and stage.</p></div></div>
-        </article>
+          <div class="transit-details">
+            <p class="section-kicker">${trip.vehicle}</p>
+            <h3>Transit & Proximity Status</h3>
+            <div class="transit-locations">
+              <div class="transit-stage">
+                <span class="stage-label">From:</span> <strong>${trip.comingFrom}</strong>
+              </div>
+              <div class="transit-stage">
+                <span class="stage-label">Current:</span> <strong class="text-success">${trip.currentStage}</strong>
+              </div>
+              <div class="transit-stage">
+                <span class="stage-label">Heading to:</span> <strong>${trip.headingTo}</strong>
+              </div>
+            </div>
+            <div class="transit-countdown-banner">
+              <i data-lucide="clock"></i> <strong>${trip.countdown}</strong>
+            </div>
+            <p class="proximity-summary">
+              Proximity: ${trip.vansAtStage} vans currently waiting at stage, ${trip.vansApproaching} on the road approaching.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <div class="review-route-row"><div><span class="review-route-icon review-route-icon--from"><i data-lucide="map-pin"></i></span><span><small>From</small><strong>${trip.boarding}</strong></span></div><span class="review-swap"><i data-lucide="arrow-left-right"></i></span><div><span><small>To</small><strong>${trip.destination}</strong></span><span class="review-route-icon review-route-icon--to"><i data-lucide="map-pin"></i></span></div></div>
+      <div class="review-date-row"><span class="review-date-icon"><i data-lucide="calendar-days"></i></span><span><small>Date</small><strong>${reviewDate}</strong></span><button class="text-button" type="button" data-screen="book">Change</button></div>
+      <div class="review-section-label">Selected departure</div>
+      <article class="review-departure"><div class="review-departure__time"><strong>${trip.depart.replace(' AM','').replace(' PM','')}</strong><span>${trip.depart.includes('AM') ? 'AM' : 'PM'}</span></div><div class="review-departure__service"><span class="review-vehicle-icon"><i data-lucide="bus-front"></i></span><span><strong>${trip.vehicle}</strong><small>${trip.duration} · ${trip.traffic} traffic · ${trip.plate}</small></span></div><div class="review-departure__price"><span>${trip.seats} seats left</span><strong>${formatUGX(trip.fare)}</strong></div><span class="review-check"><i data-lucide="check"></i></span></article>
+      
+      <div class="review-section-label review-section-label--options">Make it yours <span>Only open what you need</span></div>
+      <div class="booking-accordions">
+        ${bookingAccordion('return','refresh-cw','Return trip',returnSummary,reviewReturnOptions())}
+        ${bookingAccordion('passengers','users-round','Passengers',`${state.passengerCount} adult${state.passengerCount === 1 ? '' : 's'}${state.childCount ? `, ${state.childCount} child${state.childCount === 1 ? '' : 'ren'}` : ''}`,reviewPassengerOptions())}
+        ${bookingAccordion('assistance','headphones','Assistance & language',`${state.assistance} · ${state.language}`,reviewAssistanceOptions())}
+        ${bookingAccordion('luggage','luggage','Luggage',luggageSummary(),reviewLuggageOptions())}
+        ${bookingAccordion('seats','armchair','Seat preference',seatSummary,reviewSeatOptions())}
       </div>
-      <aside class="grid">
-        <article class="card"><p class="section-kicker">Fare summary</p><div class="detail-list"><div class="detail-row"><span>One-way fare</span><strong>${formatUGX(trip.fare)}</strong></div><div class="detail-row"><span>Return package</span><strong>UGX 9,000</strong></div><div class="detail-row"><span>Service fee</span><strong>Included</strong></div></div><hr><div class="notice"><i data-lucide="info"></i><div>Vehicle assignment may change while your booking reference remains valid.</div></div></article>
-        <article class="card"><h3>Booking conditions</h3><ul class="muted text-small"><li>Arrive before the stated boarding time.</li><li>Present the ticket QR or six-digit verification code.</li><li>Declared luggage must match the issued luggage tag.</li><li>Cash reservations are held for a limited demo period.</li></ul></article>
-        <button class="button button--primary w-full" type="button" data-screen="passengers">Continue to Passengers</button>
-      </aside>
-    </section>`;
+      <div class="review-reassurance"><i data-lucide="shield-check"></i><span>Personal item included</span><span>•</span><span>Change anything before payment.</span></div>
+    </div>
+  </section>
+  <div class="review-sticky-cta">
+    <button class="return-quick-toggle ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="quick-return-toggle" aria-pressed="${state.ticketType === 'return'}"><span class="return-quick-toggle__icon"><i data-lucide="refresh-cw"></i></span><span><small>Return</small><strong>${state.ticketType === 'return' ? 'Added' : 'Add'}</strong></span><span class="switch ${state.ticketType === 'return' ? 'is-on' : ''}" aria-hidden="true"><span></span></span></button>
+    <button class="button button--primary review-pay-button" type="button" data-action="continue-to-checkout"><span>Continue</span><strong>${formatUGX(tripReviewFare())}</strong><i data-lucide="arrow-right"></i></button>
+  </div>`;
 }
 
 function renderPassengers() {
@@ -601,7 +685,9 @@ function renderPassengers() {
       <aside class="grid">
         <article class="card"><p class="section-kicker">Booking summary</p><div class="detail-list"><div class="detail-row"><span>Adults</span><strong>${state.passengerCount}</strong></div><div class="detail-row"><span>Children</span><strong>${state.childCount}</strong></div><div class="detail-row"><span>Reserved capacity</span><strong>${state.passengerCount + state.childCount}</strong></div><div class="detail-row"><span>Reference</span><strong>${state.capacityMode === 'seats' ? state.selectedSeats.join(', ') || 'Not selected' : 'Position 04'}</strong></div></div></article>
         <article class="card card--soft"><h3>Passenger privacy</h3><p class="muted text-small">These details remain only in browser memory for this session and reset when the page refreshes.</p></article>
-        <button class="button button--primary w-full" type="button" data-screen="returns">Continue to Ticket Type</button>
+        <div class="floating-cta-container">
+          <button class="button button--primary w-full" type="button" data-screen="returns">Continue to Ticket Type</button>
+        </div>
       </aside>
     </section>`;
 }
@@ -642,7 +728,9 @@ function renderReturns() {
         ${returnOption('promotional','Promotional return','Limited campaign validity applies.','sparkles')}
       </div>
       <div class="notice" style="margin-top:16px"><i data-lucide="clock-3"></i><div><strong>${state.returnMode === 'open' ? 'Use your return ticket on an eligible departure before the expiry date.' : 'Your selected return conditions will appear on the ticket.'}</strong><div>Simulated expiry: ${expiry}. A reminder will appear three days before expiry.</div></div></div>
-      <div class="button-row button-row--end" style="margin-top:18px"><button class="button button--primary" type="button" data-screen="luggage">Continue to Luggage</button></div>
+      <div class="floating-cta-container">
+        <button class="button button--primary w-full" type="button" data-screen="luggage">Continue to Luggage</button>
+      </div>
     </section>`;
 }
 
@@ -668,7 +756,9 @@ function renderLuggage() {
       <aside class="grid">
         <article class="luggage-tag"><p class="section-kicker" style="color:var(--brand-gold)">Digital luggage tag preview</p><h2>LUG-1842</h2><div class="detail-list"><div class="detail-row"><span>Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || appData.passenger.name)}</strong></div><div class="detail-row"><span>Ticket</span><strong>FET-884210</strong></div><div class="detail-row"><span>Vehicle</span><strong>${state.activeTrip.plate}</strong></div><div class="detail-row"><span>Items</span><strong>${Object.values(state.luggageQuantities).reduce((a,b) => a+b,0)}</strong></div></div></article>
         <article class="card"><p class="section-kicker">Luggage total</p><div class="wallet-balance">${formatUGX(total)}</div><p class="muted">Commercial luggage is assessed by an authorized stage agent.</p><div class="notice"><i data-lucide="shield-alert"></i><div>Label fragile items clearly and keep valuables with you.</div></div></article>
-        <button class="button button--primary w-full" type="button" data-screen="checkout">Continue to Checkout</button>
+        <div class="floating-cta-container">
+          <button class="button button--primary w-full" type="button" data-screen="checkout">Continue to Checkout</button>
+        </div>
       </aside>
     </section>`;
 }
@@ -704,9 +794,11 @@ function renderCheckout() {
       </div>
       <aside class="card checkout-summary">
         <p class="section-kicker">Order summary</p><h2>${state.activeTrip.boarding} to ${state.activeTrip.destination}</h2>
-        <div class="detail-list"><div class="detail-row"><span>Travel date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.activeTrip.depart}</strong></div><div class="detail-row"><span>Ticket type</span><strong>${state.ticketType === 'return' ? `${state.returnMode.replace('-', ' ')} return` : 'One way'}</strong></div><div class="detail-row"><span>Passenger count</span><strong>${passengerTotal()}</strong></div><div class="detail-row"><span>Seat preference</span><strong>${state.capacityMode === 'seats' ? state.selectedSeats.join(', ') : 'Best available'}</strong></div><div class="detail-row"><span>Ticket fare</span><strong>${formatUGX(checkoutBaseFare())}</strong></div><div class="detail-row"><span>Return saving</span><strong class="text-success">${state.ticketType === 'return' ? `− ${formatUGX(1000 * passengerTotal())}` : 'Not applied'}</strong></div><div class="detail-row"><span>Luggage charges</span><strong>${formatUGX(luggageTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Voucher discount</span><strong class="text-success">${state.voucherApplied ? '− UGX 2,000' : 'Not applied'}</strong></div><div class="detail-row"><span>Service fee</span><strong>Included</strong></div></div>
+        <div class="detail-list"><div class="detail-row"><span>Travel date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.activeTrip.depart}</strong></div><div class="detail-row"><span>Ticket type</span><strong>${state.ticketType === 'return' ? `${state.returnMode.replace('-', ' ')} return` : 'One way'}</strong></div><div class="detail-row"><span>Passenger count</span><strong>${passengerTotal()}</strong></div><div class="detail-row"><span>Seat preference</span><strong>${state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available'} <button class="text-button" type="button" data-action="change-seats-checkout">Change</button></strong></div><div class="detail-row"><span>Ticket fare</span><strong>${formatUGX(checkoutBaseFare())}</strong></div><div class="detail-row"><span>Return saving</span><strong class="text-success">${state.ticketType === 'return' ? `− ${formatUGX(1000 * passengerTotal())}` : 'Not applied'}</strong></div><div class="detail-row"><span>Luggage charges</span><strong>${formatUGX(luggageTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Voucher discount</span><strong class="text-success">${state.voucherApplied ? '− UGX 2,000' : 'Not applied'}</strong></div><div class="detail-row"><span>Service fee</span><strong>Included</strong></div></div>
         <div class="total-row"><strong>Final total</strong><strong>${formatUGX(total)}</strong></div>
-        <button class="button button--red w-full" style="margin-top:18px" type="button" data-action="confirm-booking"><i data-lucide="shield-check"></i>Confirm Demo Booking</button>
+        <div class="floating-cta-container">
+          <button class="button button--red w-full" type="button" data-action="confirm-booking"><i data-lucide="shield-check"></i>Confirm Demo Booking</button>
+        </div>
         <p class="privacy-note center">No backend, gateway, mobile-money service or database will be contacted.</p>
       </aside>
     </section>`;
@@ -1033,7 +1125,22 @@ function emptyState(icon, title, copy) { return `<div class="empty-state"><div><
 let tripReviewMap = null;
 let tripReviewScrollFrame = null;
 
+function updateHeaderTheme() {
+  const topbar = $('.topbar');
+  if (!topbar) return;
+  const isScrolled = window.scrollY > 50;
+  const darkHeroScreens = ['trip-details', 'live'];
+  if (darkHeroScreens.includes(state.screen) && !isScrolled) {
+    topbar.classList.add('topbar--dark-bg');
+    topbar.classList.remove('topbar--light-bg');
+  } else {
+    topbar.classList.add('topbar--light-bg');
+    topbar.classList.remove('topbar--dark-bg');
+  }
+}
+
 function handleTripReviewScroll() {
+  updateHeaderTheme();
   if (tripReviewScrollFrame) return;
   tripReviewScrollFrame = requestAnimationFrame(() => {
     tripReviewScrollFrame = null;
@@ -1194,6 +1301,11 @@ function initTripMap() {
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(tripReviewMap);
   L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(state.activeTrip.boarding, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
   L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(state.activeTrip.destination, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
+  
+  // Live transit van position marker
+  const vehiclePoint = points[state.activeTrip.markerIndex !== undefined ? state.activeTrip.markerIndex : 0];
+  L.circleMarker(vehiclePoint, { color: '#fff', fillColor: '#f2a104', fillOpacity: 1, radius: 10, weight: 4 }).bindTooltip(`Live: ${state.activeTrip.plate} (${state.activeTrip.countdown})`, { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' }).addTo(tripReviewMap);
+  
   const bounds = L.latLngBounds(points);
   const fitMap = () => {
     if (!tripReviewMap || !target.isConnected) return;
@@ -1262,7 +1374,7 @@ function renderTicket() {
         <div class="ticket-code-area"><div id="ticket-qr" class="ticket-qr-real" aria-label="Scannable demonstration QR code"></div><div><p class="section-kicker">Verification code</p><div class="verification-code">482 915</div><p class="muted text-small">The code verifies this simulated ticket only.</p></div></div>
       </div>
       <div class="ticket-perforation"></div>
-      <footer class="ticket-actions"><button class="button button--primary button--small" type="button" data-action="download-demo"><i data-lucide="download"></i>Download Ticket</button><button class="button button--ghost button--small" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share</button><button class="button button--ghost button--small" type="button" data-screen="live"><i data-lucide="route"></i>View Route</button><button class="button button--ghost button--small" type="button" data-screen="support"><i data-lucide="headphones"></i>Support</button><button class="button button--soft-red button--small" type="button" data-action="cancel-booking"><i data-lucide="x"></i>Cancel Booking</button></footer>
+      <footer class="ticket-actions">${lifecycle === 'payment-pending' ? `<button class="button button--primary button--small" type="button" data-action="change-seats-unpaid"><i data-lucide="armchair"></i>Change Seats</button>` : ''}<button class="button button--primary button--small" type="button" data-action="download-demo"><i data-lucide="download"></i>Download Ticket</button><button class="button button--ghost button--small" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share</button><button class="button button--ghost button--small" type="button" data-screen="live"><i data-lucide="route"></i>View Route</button><button class="button button--ghost button--small" type="button" data-screen="support"><i data-lucide="headphones"></i>Support</button><button class="button button--soft-red button--small" type="button" data-action="cancel-booking"><i data-lucide="x"></i>Cancel Booking</button></footer>
     </article>`;
 }
 
@@ -1297,17 +1409,19 @@ function handleClick(event) {
   if (screenTrigger) {
     const screen = screenTrigger.dataset.screen;
     if (screen === 'about') navigate('about'); else navigate(screen);
-    closeModal(); closeSheet();
+    closeModal(); closeSheet(); closeSideDrawer();
     return;
   }
 
   const actionTrigger = event.target.closest('[data-action]');
   if (!actionTrigger) return;
-  if ((actionTrigger.classList.contains('modal-backdrop') || actionTrigger.classList.contains('sheet-backdrop')) && event.target !== actionTrigger) return;
+  if ((actionTrigger.classList.contains('modal-backdrop') || actionTrigger.classList.contains('sheet-backdrop') || actionTrigger.classList.contains('side-drawer__backdrop')) && event.target !== actionTrigger) return;
   const action = actionTrigger.dataset.action;
   const value = actionTrigger.dataset.value;
 
   const actions = {
+    'toggle-side-drawer': openSideDrawer,
+    'close-drawer': closeSideDrawer,
     'skip-intro': () => showAuth('signin'),
     'skip-onboarding': () => showAuth('signin'),
     'onboarding-next': () => {
@@ -1338,6 +1452,8 @@ function handleClick(event) {
     'booking-option': () => { state.bookingOption = state.bookingOption === value ? '' : value; renderCurrentScreen(); },
     'quick-return-toggle': () => { state.ticketType = state.ticketType === 'return' ? 'oneway' : 'return'; state.tripType = state.ticketType === 'return' ? 'return' : 'oneway'; if (state.ticketType === 'return') state.returnMode = state.returnMode || 'open'; renderCurrentScreen(); toast(state.ticketType === 'return' ? 'Return trip added.' : 'Return trip removed.', 'success'); },
     'continue-to-checkout': () => navigate('checkout'),
+    'change-seats-checkout': () => { state.bookingOption = 'seats'; navigate('trip-details'); },
+    'change-seats-unpaid': () => { state.bookingOption = 'seats'; navigate('trip-details'); },
     'set-assistance': () => { state.assistance = value; renderCurrentScreen(); },
     'set-language-inline': () => { state.language = value; renderCurrentScreen(); },
     'capacity-mode': () => { state.capacityMode = value; renderCurrentScreen(); },
@@ -1675,6 +1791,20 @@ function closeSheet() {
   updateBackgroundInert();
   if (hadSheet && sheetOpener?.isConnected) sheetOpener.focus({ preventScroll: true });
   sheetOpener = null;
+}
+
+function openSideDrawer() {
+  const drawer = $('#side-drawer');
+  if (!drawer) return;
+  drawer.classList.remove('is-hidden');
+  document.body.style.overflow = 'hidden';
+  refreshIcons();
+}
+function closeSideDrawer() {
+  const drawer = $('#side-drawer');
+  if (!drawer) return;
+  drawer.classList.add('is-hidden');
+  document.body.style.overflow = '';
 }
 
 function openMoreSheet() {
