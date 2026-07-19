@@ -175,6 +175,7 @@ const state = {
   bookingDate: '2026-07-18',
   searchFrom: 'Entebbe Main Stage',
   searchTo: 'Kampala Main Stage',
+  dropOffLocation: 'Kampala Main Stage',
   searchPeriod: 'Morning',
   bookingOption: '',
   assistance: 'None required',
@@ -812,6 +813,14 @@ function renderBook() {
             <div class="field"><label for="book-period">Preferred period</label><select id="book-period" data-field="search-period">${['Morning','Afternoon','Evening'].map(period => optionMarkup(period, state.searchPeriod, `${period} · ${period === 'Morning' ? '5:00–11:59' : period === 'Afternoon' ? '12:00–4:59' : '5:00–10:00'}`)).join('')}</select></div>
           </div>
 
+          <!-- Drop-off location along corridor -->
+          <div class="field" style="margin-top: 16px; text-align: left; width: 100%;">
+            <label for="book-drop-off">Preferred drop-off point along the corridor</label>
+            <select id="book-drop-off" data-field="drop-off-location" style="width: 100%;">
+              ${getDropOffOptions().map(stage => optionMarkup(stage, state.dropOffLocation, stage === state.searchTo ? `${stage} (Final destination)` : stage)).join('')}
+            </select>
+          </div>
+
           <!-- Modern side-by-side (stacked on mobile) Adults & Children steppers -->
           <div class="steppers-row">
             
@@ -1087,6 +1096,9 @@ function renderBook() {
         <section class="card" style="margin: 0;">
           <div class="detail-list">
             <div class="detail-row"><span>Route</span><strong>${state.searchFrom} → ${state.searchTo}</strong></div>
+            ${state.dropOffLocation !== state.searchTo ? `
+              <div class="detail-row"><span>Custom Drop-off Point</span><strong>${escapeHtml(state.dropOffLocation)}</strong></div>
+            ` : ''}
             <div class="detail-row"><span>Vehicle</span><strong>${state.activeTrip.plate} (${state.activeTrip.vehicle})</strong></div>
             <div class="detail-row"><span>Driver</span><strong>${state.activeTrip.driverName}</strong></div>
             <div class="detail-row"><span>Travel Date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.searchPeriod}</strong></div>
@@ -2146,6 +2158,31 @@ function passengerTotal() {
   return state.passengerCount + state.reservedChildSeatsCount;
 }
 
+function getDropOffOptions() {
+  const from = state.searchFrom;
+  const to = state.searchTo;
+  const allStages = appData.routes;
+  const fromIndex = allStages.indexOf(from);
+  const toIndex = allStages.indexOf(to);
+  
+  if (fromIndex === -1 || toIndex === -1) {
+    return [to];
+  }
+  
+  const min = Math.min(fromIndex, toIndex);
+  const max = Math.max(fromIndex, toIndex);
+  let slice = allStages.slice(min, max + 1);
+  
+  if (fromIndex > toIndex) {
+    slice.reverse();
+  }
+  
+  // Origin itself is not a drop-off point, so filter it out
+  slice = slice.filter(stage => stage !== from);
+  
+  return slice;
+}
+
 function getMaxAvailableSeats() {
   const routeTrips = appData.trips.filter(t => t.boarding === state.searchFrom && t.destination === state.searchTo);
   if (!routeTrips.length) return 14;
@@ -2358,7 +2395,7 @@ function renderSuccess() {
     <div class="success-check"><i data-lucide="check"></i></div>
     <p class="eyebrow">Booking successful</p><h1 id="success-title" tabindex="-1">Your trip is reserved</h1><p class="muted">This complete booking is simulated in browser memory and resets on refresh.</p>
     <div class="booking-reference"><i data-lucide="copy"></i>FX-260718-1842</div>
-    <article class="card" style="text-align:left"><div class="detail-list"><div class="detail-row"><span>Route</span><strong>${trip.boarding} → ${trip.destination}</strong></div><div class="detail-row"><span>Departure</span><strong>${formatDemoDate(state.bookingDate)} · ${trip.depart}</strong></div><div class="detail-row"><span>Vehicle</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Passengers</span><strong>${passengerTotal()}</strong></div>${state.isBookingForSomeoneElse ? `<div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Sarah Nabirye')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>` : ''}<div class="detail-row"><span>Ticket</span><strong>${displayReturnType()}</strong></div>${state.ticketType === 'return' && state.returnMode === 'date-specific' ? `<div class="detail-row"><span>Return date</span><strong>${formatDemoDate(state.returnDate)}</strong></div>` : ''}<div class="detail-row"><span>Amount</span><strong>${formatUGX(checkoutTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Payment method</span><strong>${paymentLabel()}</strong></div><div class="detail-row"><span>Payment status</span><strong class="${paymentStatus === 'Paid' ? 'text-success' : ''}">${paymentStatus}</strong></div></div></article>
+    <article class="card" style="text-align:left"><div class="detail-list"><div class="detail-row"><span>Route</span><strong>${trip.boarding} → ${trip.destination}</strong></div>${state.dropOffLocation !== state.searchTo ? `<div class="detail-row"><span>Custom Drop-off Point</span><strong>${escapeHtml(state.dropOffLocation)}</strong></div>` : ''}<div class="detail-row"><span>Departure</span><strong>${formatDemoDate(state.bookingDate)} · ${trip.depart}</strong></div><div class="detail-row"><span>Vehicle</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Passengers</span><strong>${passengerTotal()}</strong></div>${state.isBookingForSomeoneElse ? `<div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Sarah Nabirye')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>` : ''}<div class="detail-row"><span>Ticket</span><strong>${displayReturnType()}</strong></div>${state.ticketType === 'return' && state.returnMode === 'date-specific' ? `<div class="detail-row"><span>Return date</span><strong>${formatDemoDate(state.returnDate)}</strong></div>` : ''}<div class="detail-row"><span>Amount</span><strong>${formatUGX(checkoutTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Payment method</span><strong>${paymentLabel()}</strong></div><div class="detail-row"><span>Payment status</span><strong class="${paymentStatus === 'Paid' ? 'text-success' : ''}">${paymentStatus}</strong></div></div></article>
     <div class="button-row" style="justify-content:center;margin-top:18px"><button class="button button--primary" type="button" data-screen="ticket"><i data-lucide="ticket-check"></i>View Ticket</button><button class="button button--ghost" type="button" data-action="calendar-demo"><i data-lucide="calendar-plus"></i>Add to Calendar</button><button class="button button--ghost" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share Ticket</button><button class="button button--ghost" type="button" data-screen="home">Return Home</button></div>
   </section>`;
 }
@@ -2382,7 +2419,7 @@ function renderTicket() {
       <header class="ticket-header"><div class="ticket-brand"><div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2>Fly Express</h2><p>Passenger Digital Ticket</p></div></div><span class="status-chip ${statusClass}">${statusLabels[lifecycle]}</span></header>
       <div class="ticket-status-banner ticket-status-banner--${lifecycle}"><i data-lucide="${statusIcons[lifecycle]}"></i><span><strong>${statusLabels[lifecycle]}</strong><small>${statusCopy}</small></span></div>
       <div class="ticket-body">
-        <div class="ticket-route"><div class="ticket-route__place"><span>FROM</span><strong>${trip.boarding.replace(' Main Stage','')}</strong><span>${trip.boarding.includes('Main Stage') ? 'Main Stage' : 'Pickup stage'}</span></div><div class="ticket-route__arrow"><i data-lucide="arrow-right"></i></div><div class="ticket-route__place"><span>TO</span><strong>${trip.destination.replace(' Main Stage','')}</strong><span>${trip.destination.includes('Main Stage') ? 'Main Stage' : 'Drop-off stage'}</span></div></div>
+        <div class="ticket-route"><div class="ticket-route__place"><span>FROM</span><strong>${trip.boarding.replace(' Main Stage','')}</strong><span>${trip.boarding.includes('Main Stage') ? 'Main Stage' : 'Pickup stage'}</span></div><div class="ticket-route__arrow"><i data-lucide="arrow-right"></i></div><div class="ticket-route__place"><span>TO</span><strong>${state.dropOffLocation.replace(' Main Stage','')}</strong><span>${state.dropOffLocation.includes('Main Stage') ? 'Main Stage' : 'Drop-off stage'}</span></div></div>
         <div class="ticket-grid">
           ${ticketField('Passenger',escapeHtml(state.passengerDetails[0]?.name || appData.passenger.name))}${ticketField('Booking reference','FX-260718-1842')}${ticketField('Ticket number','FET-884210')}${ticketField('Travel date',formatDemoDate(state.bookingDate))}${ticketField('Departure',trip.depart)}${ticketField('Boarding time','15 minutes before departure')}${ticketField('Vehicle',trip.plate)}${ticketField('Ticket type',displayReturnType())}${ticketField('Passengers',String(passengerTotal()))}${ticketField('Capacity reference',state.capacityMode === 'seats' ? state.selectedSeats.join(', ') : 'Best available · Position 04')}${ticketField('Payment status',bookingPaymentStatus())}${ticketField('Fare paid',`${formatUGX(checkoutTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}`)}${ticketField('Luggage',luggageItems || '1 × Small personal item')}${ticketField('Assistance',state.assistance)}${ticketField('Language',state.language)}${ticketField('Return validity',state.ticketType === 'return' ? (state.returnMode === 'date-specific' ? formatDemoDate(state.returnDate) : 'Until 21 Jul 2026 · 10 PM') : 'Not applicable')}
         </div>
@@ -2780,12 +2817,13 @@ function handleClick(event) {
 function handleChange(event) {
   const target = event.target;
   const bookingFields = {
-    'search-from': value => { state.searchFrom = value; },
-    'search-to': value => { state.searchTo = value; },
+    'search-from': value => { state.searchFrom = value; state.dropOffLocation = state.searchTo; },
+    'search-to': value => { state.searchTo = value; state.dropOffLocation = value; },
     'booking-date': value => { state.bookingDate = value; },
     'search-period': value => { state.searchPeriod = value; },
     'search-adults': value => { state.passengerCount = Number(value) || 1; },
-    'search-children': value => { state.childCount = Number(value) || 0; }
+    'search-children': value => { state.childCount = Number(value) || 0; },
+    'drop-off-location': value => { state.dropOffLocation = value; }
   };
   bookingFields[target.dataset.field]?.(target.value);
   if (target.dataset.field === 'return-date') {
