@@ -243,7 +243,7 @@ const navItems = [
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Trip', 'trip-details': 'Trip Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Trips', live: 'Live Trip', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
+  home: 'Home', book: 'Book a Trip', 'trip-details': 'Trip Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Trips', live: 'Live Trip', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
 };
 
 const onboardingSlides = [
@@ -636,7 +636,7 @@ function renderCurrentScreen(preserveFocus = true) {
     home: renderHome, book: renderBook, 'trip-details': renderTripDetails, passengers: renderPassengers, returns: renderReturns,
     luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, trips: renderTrips,
     live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
-    trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
+    trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, 'driver-chat': renderDriverChat, 'driver-call': renderDriverCall, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
     profile: renderProfile, about: renderAbout
   };
   root.innerHTML = (renderers[state.screen] || renderHome)();
@@ -2063,6 +2063,140 @@ function renderDriverProfile() {
   `;
 }
 
+function renderDriverChat() {
+  const driverNameKey = state.viewingDriverName || 'isaac muwonge';
+  const driver = driversData[driverNameKey] || driversData['isaac muwonge'];
+  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+  const firstName = driver.name.split(' ')[0];
+  const initials = driver.name.split(' ').map(n => n[0]).join('');
+
+  const demoMessages = [
+    { from: 'driver', text: `Hello! I'm ${firstName}, your driver for today's trip.`, time: '8:12 AM' },
+    { from: 'driver', text: 'I am currently at Entebbe Main Stage. The vehicle is boarding now.', time: '8:12 AM' },
+    { from: 'passenger', text: 'Thank you! I\'m on my way. Please hold for 2 minutes.', time: '8:14 AM' },
+    { from: 'driver', text: 'No problem. I will wait. Please hurry, we depart at 8:30 AM.', time: '8:14 AM' },
+    { from: 'passenger', text: 'Understood, almost there!', time: '8:15 AM' },
+    { from: 'driver', text: 'Great, I can see you. Welcome aboard! 👋', time: '8:16 AM' },
+  ];
+
+  return `
+    <div class="driver-chat-screen">
+      <div class="chat-driver-header">
+        <div class="chat-driver-header__info">
+          ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="chat-driver-avatar">` : `<div class="chat-driver-avatar chat-driver-avatar--initials">${initials}</div>`}
+          <div>
+            <strong>${driver.name}</strong>
+            <span class="chat-driver-status"><span class="chat-driver-status__dot"></span>Online</span>
+          </div>
+        </div>
+        <div class="chat-driver-header__actions">
+          <button class="icon-button" type="button" data-action="call-driver" aria-label="Call driver"><i data-lucide="phone"></i></button>
+          <button class="icon-button" type="button" data-screen="driver-profile" aria-label="View profile"><i data-lucide="user-round"></i></button>
+        </div>
+      </div>
+
+      <div class="chat-date-divider"><span>Today</span></div>
+
+      <div class="chat-messages-container">
+        <div class="chat-notice">
+          <i data-lucide="shield-check"></i>
+          <span>Messages are only available for your active trip. Chat history is cleared after the trip ends.</span>
+        </div>
+
+        ${demoMessages.map(msg => `
+          <div class="chat-bubble ${msg.from === 'passenger' ? 'chat-bubble--sent' : 'chat-bubble--received'}">
+            ${msg.from === 'driver' ? `
+              ${avatarUrl ? `<img src="${avatarUrl}" alt="" class="chat-bubble__avatar">` : `<div class="chat-bubble__avatar chat-bubble__avatar--initials">${initials}</div>`}
+            ` : ''}
+            <div class="chat-bubble__body">
+              <p>${msg.text}</p>
+              <span class="chat-bubble__time">${msg.time}${msg.from === 'passenger' ? ' <i data-lucide="check-check" style="width:12px;height:12px;display:inline;vertical-align:-2px;color:var(--brand-blue);"></i>' : ''}</span>
+            </div>
+          </div>
+        `).join('')}
+
+        <div class="chat-typing-indicator">
+          <div class="chat-bubble chat-bubble--received">
+            ${avatarUrl ? `<img src="${avatarUrl}" alt="" class="chat-bubble__avatar">` : `<div class="chat-bubble__avatar chat-bubble__avatar--initials">${initials}</div>`}
+            <div class="chat-bubble__body chat-bubble__body--typing">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-compose-bar">
+        <button class="chat-compose-btn" type="button" data-action="upload-demo" aria-label="Attach file"><i data-lucide="paperclip"></i></button>
+        <input class="chat-compose-input" type="text" placeholder="Type a message..." value="">
+        <button class="chat-compose-btn chat-compose-btn--primary" type="button" data-action="send-chat-demo" aria-label="Send message"><i data-lucide="send-horizontal"></i></button>
+      </div>
+    </div>
+  `;
+}
+
+function renderDriverCall() {
+  const driverNameKey = state.viewingDriverName || 'isaac muwonge';
+  const driver = driversData[driverNameKey] || driversData['isaac muwonge'];
+  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+  const firstName = driver.name.split(' ')[0];
+  const initials = driver.name.split(' ').map(n => n[0]).join('');
+  const phone = driver.plate ? `+256 7XX XXX XXX` : '+256 700 000 000';
+
+  return `
+    <div class="driver-call-screen">
+      <div class="call-background">
+        <div class="call-bg-circle call-bg-circle--1"></div>
+        <div class="call-bg-circle call-bg-circle--2"></div>
+        <div class="call-bg-circle call-bg-circle--3"></div>
+      </div>
+
+      <div class="call-content">
+        <div class="call-avatar-section">
+          <div class="call-avatar-ring">
+            ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="call-avatar-img">` : `<div class="call-avatar-initials">${initials}</div>`}
+          </div>
+          <h2 class="call-name">${driver.name}</h2>
+          <p class="call-role">${driver.role} · ${driver.plate}</p>
+          <div class="call-status-indicator">
+            <span class="call-pulse"></span>
+            <span class="call-status-text">Calling...</span>
+          </div>
+          <p class="call-timer">00:00</p>
+        </div>
+
+        <div class="call-notice">
+          <i data-lucide="info"></i>
+          <span>This is a prototype preview. No real call is being placed.</span>
+        </div>
+
+        <div class="call-actions">
+          <button class="call-action-btn" type="button" data-action="toggle-mute-demo" aria-label="Mute">
+            <span class="call-action-icon"><i data-lucide="mic-off"></i></span>
+            <span>Mute</span>
+          </button>
+          <button class="call-action-btn" type="button" data-action="toggle-speaker-demo" aria-label="Speaker">
+            <span class="call-action-icon"><i data-lucide="volume-2"></i></span>
+            <span>Speaker</span>
+          </button>
+          <button class="call-action-btn" type="button" data-action="chat-driver" aria-label="Message">
+            <span class="call-action-icon"><i data-lucide="message-square"></i></span>
+            <span>Message</span>
+          </button>
+        </div>
+
+        <div class="call-end-section">
+          <button class="call-end-btn" type="button" data-action="end-call-demo" aria-label="End call">
+            <i data-lucide="phone-off"></i>
+          </button>
+          <span class="call-end-label">End Call</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderOffers() {
   const offers = [
     ['Return for UGX 4,000','Secure a subsidized return when booking your outbound trip.','refresh-cw','Fly Express Offer'],
@@ -2770,12 +2904,34 @@ function handleClick(event) {
       if (driver.status === 'driving') {
         toast(`For safety, ${driver.name} cannot receive messages while driving. Please call instead.`, 'warning');
       } else {
-        toast(`Chat with ${driver.name} opened.`, 'success');
+        navigate('driver-chat');
       }
     },
     'call-driver': () => {
-      const driver = driversData[state.viewingDriverName || 'isaac muwonge'] || driversData['isaac muwonge'];
-      toast(`Calling driver ${driver.name} (+256 772 999 888)...`, 'success');
+      navigate('driver-call');
+    },
+    'send-chat-demo': () => {
+      const input = document.querySelector('.chat-compose-input');
+      if (input && input.value.trim()) {
+        toast('Message sent (prototype preview).', 'success');
+        input.value = '';
+      } else {
+        toast('Type a message first.', 'warning');
+      }
+    },
+    'end-call-demo': () => {
+      toast('Call ended.', 'info');
+      navigate('driver-profile');
+    },
+    'toggle-mute-demo': () => {
+      const btn = actionTrigger.closest('.call-action-btn');
+      if (btn) btn.classList.toggle('is-active');
+      toast(btn?.classList.contains('is-active') ? 'Microphone muted.' : 'Microphone unmuted.', 'info');
+    },
+    'toggle-speaker-demo': () => {
+      const btn = actionTrigger.closest('.call-action-btn');
+      if (btn) btn.classList.toggle('is-active');
+      toast(btn?.classList.contains('is-active') ? 'Speaker on.' : 'Speaker off.', 'info');
     },
     'edit-parcel-title': () => toast('Edit title feature is a prototype concept.', 'success'),
     'receiving-another': () => toast('Receiving by another person form opened.', 'success'),
