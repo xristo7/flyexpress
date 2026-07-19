@@ -414,47 +414,11 @@ function renderOnboarding() {
   const content = $('#onboarding-content');
   if (!content) return;
 
-  let visualHtml = '';
-  if (state.onboardingIndex === 0) {
-    visualHtml = `
-      <div class="onboarding-visual-wrapper">
-        <div class="onboarding-capsule-frame">
-          <img src="assets/onboarding-1.jpg" alt="Minibus on Entebbe-Kampala route map">
-        </div>
-        <span class="floating-badge badge--route">Choose Route</span>
-        <span class="floating-badge badge--seat">Reserve Seat</span>
-        <span class="floating-badge badge--ticket">Digital Ticket</span>
-      </div>
-    `;
-  } else if (state.onboardingIndex === 1) {
-    visualHtml = `
-      <div class="onboarding-visual-wrapper">
-        <div class="onboarding-capsule-frame">
-          <img src="assets/onboarding-2.jpg" alt="Digital ticket floating above wallet card">
-        </div>
-        <span class="floating-badge badge--promo">Save with a Return Ticket</span>
-        <span class="floating-icon icon--momo"><i data-lucide="smartphone"></i></span>
-        <span class="floating-icon icon--wallet"><i data-lucide="wallet-cards"></i></span>
-        <span class="floating-icon icon--qr"><i data-lucide="qr-code"></i></span>
-        <span class="floating-icon icon--history"><i data-lucide="history"></i></span>
-      </div>
-    `;
-  } else if (state.onboardingIndex === 2) {
-    visualHtml = `
-      <div class="onboarding-visual-wrapper">
-        <div class="onboarding-capsule-frame">
-          <img src="assets/onboarding-3.jpg" alt="Minibus and tracking timeline visual">
-        </div>
-        <span class="floating-badge badge--tracking">Live Tracking</span>
-        <span class="floating-badge badge--luggage">Digital Luggage Tag</span>
-        <span class="floating-badge badge--pin">Secure Collection PIN</span>
-      </div>
-    `;
-  }
-
   content.innerHTML = `
     <article class="onboarding-slide">
-      ${visualHtml}
+      <div class="onboarding-image-container">
+        <img src="assets/onboarding-${state.onboardingIndex + 1}.jpg" alt="${escapeHtml(slide.title)} visual">
+      </div>
       <h2 style="margin-top: 24px; font-weight: 850;">${slide.title}</h2>
       <p style="margin-top: 12px; color: var(--slate); line-height: 1.5; font-size: 1rem;">${slide.message}</p>
       
