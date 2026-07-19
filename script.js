@@ -64,7 +64,11 @@ const driversData = {
     plate: 'UBM 245K',
     color: 'White & Blue',
     status: 'driving', // active on road
-    compliments: ['Safe Driver', 'Super Friendly', 'Great Navigator', 'Punctual']
+    compliments: ['Safe Driver', 'Super Friendly', 'Great Navigator', 'Punctual'],
+    reviews: [
+      { author: 'Sharon A.', rating: 5, date: '3 days ago', comment: 'Smooth ride on the expressway. Very punctual!' },
+      { author: 'Ronald K.', rating: 5, date: '1 week ago', comment: 'He helped load my heavy suitcases. Very kind driver.' }
+    ]
   },
   'moses mukasa': {
     name: 'Moses Mukasa',
@@ -79,7 +83,11 @@ const driversData = {
     plate: 'UBM 245K',
     color: 'White & Blue',
     status: 'idle',
-    compliments: ['Gentle Driver', 'Helpful', 'Polite']
+    compliments: ['Gentle Driver', 'Helpful', 'Polite'],
+    reviews: [
+      { author: 'Andrew O.', rating: 5, date: '2 days ago', comment: 'Friendly and keeps the van well ventilated.' },
+      { author: 'Jack B.', rating: 4, date: '5 days ago', comment: 'Safe driving but started 5 mins late.' }
+    ]
   },
   'john ssekabira': {
     name: 'John Ssekabira',
@@ -94,7 +102,11 @@ const driversData = {
     plate: 'UBP 318F',
     color: 'White & Blue',
     status: 'idle',
-    compliments: ['Great Music', 'Clean Van', 'Friendly']
+    compliments: ['Great Music', 'Clean Van', 'Friendly'],
+    reviews: [
+      { author: 'Maria N.', rating: 5, date: 'Yesterday', comment: 'Great playlist playing during the trip, loved the music!' },
+      { author: 'Brian L.', rating: 5, date: '4 days ago', comment: 'Very clean seats and polite conductor.' }
+    ]
   },
   'david okello': {
     name: 'David Okello',
@@ -109,7 +121,11 @@ const driversData = {
     plate: 'UBN 742D',
     color: 'White & Blue',
     status: 'idle',
-    compliments: ['Great Navigator', 'Punctual']
+    compliments: ['Great Navigator', 'Punctual'],
+    reviews: [
+      { author: 'Kenneth M.', rating: 5, date: '3 days ago', comment: 'Avoided the traffic jam near Kajjansi smartly. Good job.' },
+      { author: 'Diana K.', rating: 4, date: '1 week ago', comment: 'A bit fast but overall safe.' }
+    ]
   },
   'peter semwanga': {
     name: 'Peter Semwanga',
@@ -124,7 +140,11 @@ const driversData = {
     plate: 'UBQ 915A',
     color: 'White & Blue',
     status: 'idle',
-    compliments: ['Safe Driver', 'Polite', 'Experienced']
+    compliments: ['Safe Driver', 'Polite', 'Experienced'],
+    reviews: [
+      { author: 'Florence A.', rating: 5, date: '2 days ago', comment: 'Smooth drive and professional crew.' },
+      { author: 'Emmanuel T.', rating: 5, date: '6 days ago', comment: 'Very experienced driver. Felt safe the whole trip.' }
+    ]
   },
   'arthur ssewankambo': {
     name: 'Arthur Ssewankambo',
@@ -139,7 +159,11 @@ const driversData = {
     plate: 'UBR 104C',
     color: 'White & Blue',
     status: 'idle',
-    compliments: ['Helpful', 'Polite']
+    compliments: ['Helpful', 'Polite'],
+    reviews: [
+      { author: 'Josephine N.', rating: 5, date: '4 days ago', comment: 'Helped me lift my heavy box. Very polite!' },
+      { author: 'Peter K.', rating: 4, date: '1 week ago', comment: 'Standard drive, arrived on time.' }
+    ]
   },
   'daniel': {
     name: 'Daniel',
@@ -154,7 +178,11 @@ const driversData = {
     plate: 'UBM 245K',
     color: 'White & Blue',
     status: 'idle',
-    compliments: ['Safe Driver', 'Helpful with Luggage']
+    compliments: ['Safe Driver', 'Helpful with Luggage'],
+    reviews: [
+      { author: 'Robert S.', rating: 5, date: '2 days ago', comment: 'Excellent service, very smooth ride.' },
+      { author: 'Clara W.', rating: 5, date: '5 days ago', comment: 'Professional and highly recommended driver.' }
+    ]
   }
 };
 
@@ -2058,6 +2086,31 @@ function renderDriverProfile() {
             `).join('')}
           </div>
         </div>
+
+        <div class="driver-info-section">
+          <h3>Traveler Reviews</h3>
+          <div class="driver-reviews-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+            ${driver.reviews && driver.reviews.length ? driver.reviews.map(rev => `
+              <div class="driver-review-card" style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand-blue-soft); color: var(--brand-blue); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">
+                      ${rev.author.split(' ').map(n=>n[0]).join('')}
+                    </div>
+                    <div>
+                      <strong style="font-size: 0.82rem; color: var(--charcoal); display: block; line-height: 1.2;">${rev.author}</strong>
+                      <span class="muted" style="font-size: 0.7rem;">${rev.date}</span>
+                    </div>
+                  </div>
+                  <div style="color: var(--brand-gold); font-size: 0.8rem;">
+                    ${'★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating)}
+                  </div>
+                </div>
+                <p style="margin: 0; font-size: 0.8rem; line-height: 1.4; color: var(--slate);">${rev.comment}</p>
+              </div>
+            `).join('') : '<p class="muted" style="font-size: 0.8rem; margin: 0;">No reviews yet.</p>'}
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -2123,7 +2176,7 @@ function showDriverProfileModal(driverNameKey) {
         </div>
       </div>
 
-      <div>
+      <div style="margin-bottom: 16px;">
         <h4 style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">Compliments</h4>
         <div style="display: flex; flex-wrap: wrap; gap: 6px;">
           ${driver.compliments.map(comp => `
@@ -2132,6 +2185,31 @@ function showDriverProfileModal(driverNameKey) {
               ${comp}
             </span>
           `).join('')}
+        </div>
+      </div>
+
+      <div>
+        <h4 style="margin: 0 0 8px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">Traveler Reviews</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          ${driver.reviews && driver.reviews.length ? driver.reviews.map(rev => `
+            <div class="driver-review-card" style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; text-align: left;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <div style="width: 22px; height: 22px; border-radius: 50%; background: var(--brand-blue-soft); color: var(--brand-blue); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.65rem;">
+                    ${rev.author.split(' ').map(n=>n[0]).join('')}
+                  </div>
+                  <div>
+                    <strong style="font-size: 0.75rem; color: var(--charcoal); display: block; line-height: 1.1;">${rev.author}</strong>
+                    <span class="muted" style="font-size: 0.62rem;">${rev.date}</span>
+                  </div>
+                </div>
+                <div style="color: var(--brand-gold); font-size: 0.75rem; line-height: 1;">
+                  ${'★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating)}
+                </div>
+              </div>
+              <p style="margin: 0; font-size: 0.75rem; line-height: 1.35; color: var(--slate);">${rev.comment}</p>
+            </div>
+          `).join('') : '<p class="muted" style="font-size: 0.75rem; margin: 0;">No reviews yet.</p>'}
         </div>
       </div>
     </div>
