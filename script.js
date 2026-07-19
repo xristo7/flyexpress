@@ -1113,18 +1113,13 @@ function renderBook() {
         </section>
       </div>
 
-      <section class="card" style="margin: 16px 0 0 0; border: 1px solid rgba(7, 90, 168, 0.15); background: var(--info-soft); padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px;">
-        <div style="text-align: left;">
-          <h3 style="margin: 0 0 4px 0; font-size: 0.92rem; font-weight: 750; color: var(--brand-blue);">Save money with a Return Ticket</h3>
-          <p class="muted" style="margin: 0; font-size: 0.76rem; line-height: 1.35;">Get a guaranteed discount on your return journey.</p>
-        </div>
-        <button class="switch ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="toggle-return-switch" aria-label="Toggle return ticket"><span></span></button>
-      </section>
-
       <div class="floating-cta-container button-row" style="margin-top: 24px;">
         <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
-        <button class="button button--ghost" type="button" data-action="booking-next-step" style="flex: 1;">Skip</button>
-        <button class="button button--primary" type="button" data-action="booking-next-step" style="flex: 1;">Checkout</button>
+        ${totalItems === 0 ? `
+          <button class="button button--primary" type="button" data-action="booking-next-step" style="flex: 1;">Skip</button>
+        ` : `
+          <button class="button button--primary" type="button" data-action="booking-next-step" style="flex: 1;">Proceed</button>
+        `}
       </div>
     `;
   }
@@ -1157,11 +1152,18 @@ function renderBook() {
           </div>
         </section>
 
+        <section class="card" style="margin: 0; border: 1px solid rgba(7, 90, 168, 0.15); background: var(--info-soft); padding: 20px; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+          <h3 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 750; color: var(--brand-blue);">Save money with a Return Ticket</h3>
+          <p class="muted" style="margin: 0 0 16px 0; font-size: 0.78rem; line-height: 1.4;">Get a guaranteed discount on your journey back by adding a return voucher to your ticket package.</p>
+          <div style="display: flex; justify-content: flex-end;">
+            <button class="switch ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="toggle-return-switch" aria-label="Toggle return ticket"><span></span></button>
+          </div>
+        </section>
       </div>
 
       <div class="floating-cta-container button-row" style="margin-top: 24px;">
         <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
-        <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step">Go to Payment</button>
+        <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step">Checkout</button>
       </div>
     `;
   }
