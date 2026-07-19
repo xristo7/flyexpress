@@ -3354,3 +3354,19 @@ body[data-active-screen="driver-profile"] .main-content {
     user-select: none !important;
   }
 }
+
+/* Stepper rows responsive layout styling */
+.steppers-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  align-items: stretch;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .steppers-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
