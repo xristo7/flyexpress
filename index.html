@@ -9,12 +9,12 @@
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://tile.openstreetmap.org">
   <link rel="stylesheet" href="leaflet.css">
-  <link class="styles" rel="stylesheet" href="styles.css?v=37">
+  <link class="styles" rel="stylesheet" href="styles.css?v=38">
   <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-  <script defer src="script.js?v=37"></script>
+  <script defer src="script.js?v=38"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -227,6 +227,13 @@
       <strong id="loading-message">Loading preview…</strong>
       <small>No live service is being contacted.</small>
     </div>
+  </div>
+
+  <!-- Screen protection secure overlay -->
+  <div id="security-overlay">
+    <i data-lucide="shield-alert" style="width: 48px; height: 48px; color: var(--brand-gold); margin-bottom: 12px;"></i>
+    <h3 style="margin: 0 0 4px 0; font-size: 1.15rem; font-weight: 800; color: white;">Screen Protected</h3>
+    <p class="muted" style="max-width: 240px; font-size: 0.78rem; margin: 0; color: rgba(255, 255, 255, 0.7) !important; text-align: center;">Content is hidden for security.</p>
   </div>
 
   <noscript>
