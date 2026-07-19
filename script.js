@@ -15,7 +15,7 @@ const appData = {
     email: 'sarah.nabirye@example.com',
     preferredRoute: 'Entebbe Main Stage → Kampala Main Stage'
   },
-  routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage'],
+  routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Bweyogere'],
   trips: [
     { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'High-roof van', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
     { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: '18-seat van', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
@@ -43,14 +43,126 @@ const appData = {
   notifications: [
     { id: 1, category: 'Trips', icon: 'bus-front', title: 'Your vehicle is ready for boarding.', body: 'UBM 245K is boarding at Entebbe Main Stage. Please arrive by 8:15 AM.', time: '2 min ago', unread: true },
     { id: 2, category: 'Trips', icon: 'calendar-clock', title: 'Your return ticket expires in three days.', body: 'Book your Kampala to Entebbe return before 21 July 2026.', time: '1 hr ago', unread: true },
-    { id: 3, category: 'Parcels', icon: 'package-check', title: 'Your parcel has arrived in Kampala.', body: 'Parcel FXP-260718-0842 will soon be ready for collection.', time: '2 hrs ago', unread: true },
-    { id: 4, category: 'Wallet', icon: 'wallet-cards', title: 'UGX 20,000 was added to your wallet.', body: 'Your demonstration wallet balance is now UGX 32,500.', time: 'Yesterday', unread: true },
-    { id: 5, category: 'Service Notices', icon: 'triangle-alert', title: 'Traffic is heavier than usual.', body: 'Allow approximately 15 additional minutes on the Kampala route.', time: 'Yesterday', unread: true },
-    { id: 6, category: 'Luggage', icon: 'luggage', title: 'Your luggage reference has been confirmed.', body: 'Luggage tag LUG-1842 is linked to ticket FET-884210.', time: '15 Jul', unread: false }
+    { id: 3, category: 'Parcels', icon: 'package-check', title: 'Your parcel has arrived in Kampala.', body: 'Parcel #964201832-DL will soon be ready for collection.', time: '2 hrs ago', unread: true },
+    { id: 4, category: 'Payments', icon: 'wallet-cards', title: 'UGX 20,000 was added to your wallet.', body: 'Your demonstration wallet balance is now UGX 32,500.', time: 'Yesterday', unread: true },
+    { id: 5, category: 'Alerts', icon: 'triangle-alert', title: 'Traffic is heavier than usual.', body: 'Allow approximately 15 additional minutes on the Kampala route.', time: 'Yesterday', unread: true },
+    { id: 6, category: 'Parcels', icon: 'luggage', title: 'Your luggage reference has been confirmed.', body: 'Luggage tag LUG-1842 is linked to ticket FET-884210.', time: '15 Jul', unread: false }
   ]
 };
 
+const driversData = {
+  'isaac muwonge': {
+    name: 'Isaac Muwonge',
+    avatar: 'assets/sam-mcalen.png',
+    role: 'Fly Express Driver',
+    rating: '4.95',
+    routes: '1,420',
+    km: '58,400',
+    associationTime: '2 years 4 months',
+    bio: 'Friendly, professional driver from Uganda with over 2 years driving with the Association. Highly rated for punctuality, route knowledge along the Entebbe-Kampala Expressway, and safe handling of parcels.',
+    vehicle: 'Toyota HiAce (Fly Express Van)',
+    plate: 'UBM 245K',
+    color: 'White & Blue',
+    status: 'driving', // active on road
+    compliments: ['Safe Driver', 'Super Friendly', 'Great Navigator', 'Punctual']
+  },
+  'moses mukasa': {
+    name: 'Moses Mukasa',
+    avatar: '',
+    role: 'Fly Express Driver',
+    rating: '4.90',
+    routes: '1,280',
+    km: '48,200',
+    associationTime: '2 years 0 months',
+    bio: 'Experienced passenger van driver on the Kampala-Entebbe corridor. Committed to passenger safety and comfort.',
+    vehicle: 'High-roof van',
+    plate: 'UBM 245K',
+    color: 'White & Blue',
+    status: 'idle',
+    compliments: ['Gentle Driver', 'Helpful', 'Polite']
+  },
+  'john ssekabira': {
+    name: 'John Ssekabira',
+    avatar: '',
+    role: 'Fly Express Driver',
+    rating: '4.80',
+    routes: '980',
+    km: '36,500',
+    associationTime: '1 year 6 months',
+    bio: 'Reliable and friendly driver. Enjoys interacting with commuters and keeping a clean vehicle.',
+    vehicle: '18-seat van',
+    plate: 'UBP 318F',
+    color: 'White & Blue',
+    status: 'idle',
+    compliments: ['Great Music', 'Clean Van', 'Friendly']
+  },
+  'david okello': {
+    name: 'David Okello',
+    avatar: '',
+    role: 'Fly Express Driver',
+    rating: '4.70',
+    routes: '760',
+    km: '28,100',
+    associationTime: '1 year 0 months',
+    bio: 'Punctual and focused driver with great knowledge of traffic patterns and alternative routes.',
+    vehicle: '14-seat van',
+    plate: 'UBN 742D',
+    color: 'White & Blue',
+    status: 'idle',
+    compliments: ['Great Navigator', 'Punctual']
+  },
+  'peter semwanga': {
+    name: 'Peter Semwanga',
+    avatar: '',
+    role: 'Fly Express Driver',
+    rating: '4.90',
+    routes: '1,510',
+    km: '61,200',
+    associationTime: '3 years 0 months',
+    bio: 'One of the association\'s most senior drivers. Extremely safe records and highly commended by regulars.',
+    vehicle: 'High-roof van',
+    plate: 'UBQ 915A',
+    color: 'White & Blue',
+    status: 'idle',
+    compliments: ['Safe Driver', 'Polite', 'Experienced']
+  },
+  'arthur ssewankambo': {
+    name: 'Arthur Ssewankambo',
+    avatar: '',
+    role: 'Fly Express Driver',
+    rating: '4.60',
+    routes: '540',
+    km: '21,000',
+    associationTime: '0 years 9 months',
+    bio: 'Courteous driver specializing in morning commutes. Always ready to assist passengers with luggage.',
+    vehicle: 'High-roof van',
+    plate: 'UBR 104C',
+    color: 'White & Blue',
+    status: 'idle',
+    compliments: ['Helpful', 'Polite']
+  },
+  'daniel': {
+    name: 'Daniel',
+    avatar: '',
+    role: 'Fly Express Driver',
+    rating: '4.85',
+    routes: '1,120',
+    km: '44,600',
+    associationTime: '1 year 9 months',
+    bio: 'Professional driver dedicated to passenger safety, luggage care, and smooth journeys.',
+    vehicle: 'Toyota HiAce Van',
+    plate: 'UBM 245K',
+    color: 'White & Blue',
+    status: 'idle',
+    compliments: ['Safe Driver', 'Helpful with Luggage']
+  }
+};
+
 const state = {
+  selectedRoute: 'kajansi',
+  viewingDriverName: 'isaac muwonge',
+  bookingStep: 1,
+  dateSelectionMode: 'today',
   onboardingIndex: 0,
   authView: 'signin',
   screen: 'home',
@@ -68,6 +180,7 @@ const state = {
   assistance: 'None required',
   passengerCount: 1,
   childCount: 0,
+  reservedChildSeatsCount: 0,
   passengerDetails: [{ name: 'Sarah Nabirye', phone: '+256 772 345 678', category: 'Adult passenger', assistance: 'None required', emergency: '+256 700 123 456' }],
   capacityMode: 'capacity',
   selectedSeats: [],
@@ -82,23 +195,23 @@ const state = {
   walletFilter: 'all',
   notificationFilter: 'all',
   parcelStep: 1,
-  parcelCategory: 'Small package',
+  parcelCategory: 'Small box',
   parcelDelivery: 'Standard Stage-to-Stage',
   parcelPaymentMethod: 'wallet',
   parcelPaymentDemoState: 'idle',
   parcel: {
     senderName: 'Sarah Nabirye',
     senderPhone: '+256 772 345 678',
-    recipientName: 'David Ssemakula',
-    recipientPhone: '+256 701 555 019',
-    origin: 'Entebbe Main Stage',
-    destination: 'Kampala Main Stage',
-    description: 'Printed business documents in sealed envelope',
-    weight: 'Under 1 kg',
+    recipientName: 'Julie Robinson',
+    recipientPhone: '+44 7911 123456',
+    origin: 'Entebbe',
+    destination: 'Kampala',
+    description: 'Demonstration parcel',
+    weight: '520 g',
     quantity: '1',
-    declaredValue: 'UGX 50,000',
+    declaredValue: '£20',
     fragile: 'No',
-    instructions: 'Call recipient when the parcel reaches Kampala Main Stage.',
+    instructions: 'Deliver to Julie Robinson in Kampala.',
     dropoff: 'Today · 8:00–9:00 AM',
     departure: 'Next available vehicle'
   },
@@ -116,18 +229,17 @@ const navItems = [
   ['trips', 'My Trips', 'route'],
   ['returns', 'Return Tickets', 'refresh-cw'],
   ['wallet', 'Wallet', 'wallet-cards'],
-  ['parcel', 'Send a Parcel', 'package-plus'],
-  ['trackparcel', 'Track Parcel', 'scan-search'],
-  ['luggage', 'Luggage', 'luggage'],
-  ['live', 'Live Trip', 'navigation'],
+  ['parcel', 'Parcels', 'package-plus'],
+  ['trackparcel-list', 'Track Parcel', 'scan-search'],
+  ['luggage', 'Luggage Tags', 'luggage'],
+  ['live', 'Live Trip Tracking', 'navigation'],
   ['offers', 'Offers', 'badge-percent'],
-  ['notifications', 'Notifications', 'bell'],
   ['support', 'Help and Support', 'life-buoy'],
-  ['profile', 'Profile', 'user-round']
+  ['about', 'About Fly Express', 'info']
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Trip', 'trip-details': 'Trip Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Trips', live: 'Live Trip', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', trackparcel: 'Track Parcel', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
+  home: 'Home', book: 'Book a Trip', 'trip-details': 'Trip Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Trips', live: 'Live Trip', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
 };
 
 const onboardingSlides = [
@@ -152,7 +264,17 @@ function optionMarkup(value, selectedValue, label = value) {
 function passengerMixLabel() {
   const adults = `${state.passengerCount} adult${state.passengerCount === 1 ? '' : 's'}`;
   const children = state.childCount ? `, ${state.childCount} child${state.childCount === 1 ? '' : 'ren'}` : '';
-  return `${adults}${children}`;
+  let seatsInfo = '';
+  if (state.childCount) {
+    if (state.reservedChildSeatsCount === 0) {
+      seatsInfo = ' (on lap)';
+    } else if (state.reservedChildSeatsCount === state.childCount) {
+      seatsInfo = ' (seats reserved)';
+    } else {
+      seatsInfo = ` (${state.reservedChildSeatsCount} seat${state.reservedChildSeatsCount === 1 ? '' : 's'} reserved)`;
+    }
+  }
+  return `${adults}${children}${seatsInfo}`;
 }
 
 function getSearchResults() {
@@ -203,10 +325,7 @@ function init() {
   setTodayDefaults();
   renderOnboarding();
   renderNavigation();
-  setTimeout(() => {
-    const splash = $('#splash-screen');
-    if (!splash.classList.contains('is-hidden')) showOnboarding();
-  }, 2200);
+  
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
   document.addEventListener('input', handleInput);
@@ -214,6 +333,24 @@ function init() {
   document.addEventListener('keydown', handleKeydown);
   window.addEventListener('scroll', handleTripReviewScroll, { passive: true });
   refreshIcons();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetScreen = urlParams.get('screen') || window.location.hash.slice(1);
+  const validScreens = ['home','book','trip-details','passengers','returns','luggage','checkout','success','ticket','trips','live','wallet','parcel','parcel-receipt','trackparcel-list','trackparcel','parcel-status','offers','notifications','support','profile','about'];
+
+  if (targetScreen && validScreens.includes(targetScreen)) {
+    $('#splash-screen').classList.add('is-hidden');
+    $('#onboarding').classList.add('is-hidden');
+    $('#auth-layer').classList.add('is-hidden');
+    $('#app-shell').classList.remove('is-hidden');
+    navigate(targetScreen, {}, false);
+    return;
+  }
+
+  setTimeout(() => {
+    const splash = $('#splash-screen');
+    if (!splash.classList.contains('is-hidden')) showOnboarding();
+  }, 2200);
 }
 
 document.addEventListener('DOMContentLoaded', init);
@@ -351,17 +488,93 @@ function enterApp(message = 'Welcome to the Fly Express passenger preview.') {
   toast(message, 'success');
 }
 
+function getNavigationHtml(type) {
+  const isDesktop = type === 'desktop';
+  const itemClass = isDesktop ? 'nav-item' : 'drawer-nav-item';
+  const subItemClass = isDesktop ? 'drawer-nav-sub-item nav-item' : 'drawer-nav-sub-item';
+
+  const activeHome = state.screen === 'home' ? 'is-active' : '';
+  const activeBook = state.screen === 'book' ? 'is-active' : '';
+  const activeReturns = state.screen === 'returns' ? 'is-active' : '';
+  const activeLuggage = state.screen === 'luggage' ? 'is-active' : '';
+  const activeLive = state.screen === 'live' ? 'is-active' : '';
+  const activeTrips = state.screen === 'trips' ? 'is-active' : '';
+  const activeWallet = state.screen === 'wallet' ? 'is-active' : '';
+  const activeParcel = state.screen === 'parcel' ? 'is-active' : '';
+  const activeTrackParcel = ['trackparcel-list','trackparcel'].includes(state.screen) ? 'is-active' : '';
+  const activeOffers = state.screen === 'offers' ? 'is-active' : '';
+  const activeSupport = state.screen === 'support' ? 'is-active' : '';
+  const activeAbout = state.screen === 'about' ? 'is-active' : '';
+
+  return `
+    <button class="${itemClass} ${activeHome}" type="button" data-screen="home">
+      <i data-lucide="house"></i><span>Home</span>
+    </button>
+    
+    <div class="drawer-nav-group">
+      <button class="${itemClass} ${activeBook}" type="button" data-screen="book">
+        <i data-lucide="ticket-plus"></i><span>Book a Trip</span>
+      </button>
+      <div class="drawer-nav-sub">
+        <button class="${subItemClass} ${activeReturns}" type="button" data-screen="returns">
+          <i data-lucide="refresh-cw"></i><span>Return Tickets</span>
+        </button>
+        <button class="${subItemClass} ${activeLuggage}" type="button" data-screen="luggage">
+          <i data-lucide="luggage"></i><span>Luggage Tags</span>
+        </button>
+        <button class="${subItemClass} ${activeLive}" type="button" data-screen="live">
+          <i data-lucide="navigation"></i><span>Live Trip Tracking</span>
+        </button>
+      </div>
+    </div>
+
+    <button class="${itemClass} ${activeTrips}" type="button" data-screen="trips">
+      <i data-lucide="route"></i><span>My Trips</span>
+    </button>
+
+    <button class="${itemClass} ${activeWallet}" type="button" data-screen="wallet">
+      <i data-lucide="wallet-cards"></i><span>Wallet</span>
+    </button>
+
+    <div class="drawer-nav-group">
+      <button class="${itemClass} ${activeParcel}" type="button" data-screen="parcel">
+        <i data-lucide="package-plus"></i><span>Parcels</span>
+      </button>
+      <div class="drawer-nav-sub">
+        <button class="${subItemClass} ${activeTrackParcel}" type="button" data-screen="trackparcel-list">
+          <i data-lucide="scan-search"></i><span>Track Parcel</span>
+        </button>
+      </div>
+    </div>
+
+    <button class="${itemClass} ${activeOffers}" type="button" data-screen="offers">
+      <i data-lucide="badge-percent"></i><span>Offers</span>
+    </button>
+
+    <button class="${itemClass} ${activeSupport}" type="button" data-screen="support">
+      <i data-lucide="life-buoy"></i><span>Help & Support</span>
+    </button>
+
+    <button class="${itemClass} ${activeAbout}" type="button" data-screen="about">
+      <i data-lucide="info"></i><span>About Fly Express</span>
+    </button>
+  `;
+}
+
 function renderNavigation() {
   const desktop = $('#desktop-nav');
   const mobile = $('#mobile-nav');
+  const drawerList = $('.side-drawer__content .drawer-nav');
+  
   if (desktop) {
-    desktop.innerHTML = navItems.map(([screen, label, icon]) => `
-      <button class="nav-item ${state.screen === screen ? 'is-active' : ''}" type="button" data-screen="${screen}" ${state.screen === screen ? 'aria-current="page"' : ''}>
-        <i data-lucide="${icon}"></i><span>${label}</span>${screen === 'notifications' ? `<span class="nav-count">${state.unreadNotifications}</span>` : ''}
-      </button>`).join('');
+    desktop.innerHTML = getNavigationHtml('desktop');
   }
+  if (drawerList) {
+    drawerList.innerHTML = getNavigationHtml('drawer');
+  }
+  
   if (mobile) {
-    const isBookingFlow = ['trip-details', 'passengers', 'returns', 'luggage', 'checkout'].includes(state.screen);
+    const isBookingFlow = ['book', 'trip-details', 'passengers', 'returns', 'luggage', 'checkout', 'trackparcel', 'parcel-status'].includes(state.screen);
     if (isBookingFlow) {
       mobile.classList.add('is-hidden');
     } else {
@@ -382,10 +595,15 @@ function renderNavigation() {
 function navigate(screen, payload = {}, pushHistory = true) {
   if (pushHistory && state.screen && state.screen !== screen) state.history.push(state.screen);
   state.screen = screen;
+  document.body.setAttribute('data-active-screen', screen);
   Object.assign(state, payload);
   const title = screenTitles[screen] || 'Fly Express';
   $('#screen-title').textContent = title;
-  $('#back-button').classList.toggle('is-hidden', ['home','book','trips','wallet','offers','notifications','support','profile'].includes(screen));
+  const isHome = screen === 'home';
+  $('#back-button').classList.toggle('is-hidden', isHome);
+  const mobileBrand = document.querySelector('.mobile-brand');
+  if (mobileBrand) mobileBrand.classList.toggle('is-hidden', !isHome);
+  $('#topbar-share-button')?.classList.toggle('is-hidden', screen !== 'parcel-status');
   renderNavigation();
   renderCurrentScreen(false);
   window.scrollTo({ top: 0, behavior: document.body.classList.contains('reduce-motion') ? 'auto' : 'smooth' });
@@ -410,7 +628,7 @@ function renderCurrentScreen(preserveFocus = true) {
     home: renderHome, book: renderBook, 'trip-details': renderTripDetails, passengers: renderPassengers, returns: renderReturns,
     luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, trips: renderTrips,
     live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
-    trackparcel: renderParcelTracking, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
+    trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
     profile: renderProfile, about: renderAbout
   };
   root.innerHTML = (renderers[state.screen] || renderHome)();
@@ -493,9 +711,9 @@ function renderHome() {
     </section>
 
     <section class="grid grid--2" style="margin-top:18px">
-      <article class="card card--hover" data-screen="trackparcel" role="button" tabindex="0">
-        <div class="card-head"><div><p class="section-kicker">Active parcel</p><h3>FXP-260718-0842</h3></div><span class="status-chip status-chip--info">In Transit</span></div>
-        <div class="route-label"><div class="route-points"><span></span><i></i><span></span></div><div><strong>Entebbe</strong><p class="muted text-small">Estimated arrival 10:45 AM</p><strong>Kampala</strong></div></div>
+      <article class="card card--hover" data-screen="trackparcel-list" role="button" tabindex="0">
+        <div class="card-head"><div><p class="section-kicker">Active parcel</p><h3>#964201832-DL</h3></div><span class="status-chip status-chip--gold">On the way</span></div>
+        <div class="route-label"><div class="route-points"><span></span><i></i><span></span></div><div><strong>Entebbe</strong><p class="muted text-small">On the way to destination</p><strong>Kampala</strong></div></div>
       </article>
       <article class="card sponsored-card"><div><span class="sponsored-label">Sponsored</span><p class="section-kicker" style="margin-top:18px;color:var(--brand-gold)">Lakeview Business Centre</p><h3>Print, package and send business documents near Kitooro.</h3><p style="color:rgba(255,255,255,.72)">10% off document packaging for Fly Express passengers.</p></div><button class="button button--gold button--small" type="button" data-action="sponsored-details">View Offer</button></article>
     </section>
@@ -512,27 +730,389 @@ function departureRow(time, seats, width, label) {
 }
 
 function renderBook() {
-  const results = getSearchResults();
-  return `
-    ${screenHead('Find a departure', 'Choose your stage, destination, date, passenger mix and preferred departure period.', '<button class="button button--ghost" type="button" data-action="show-search-filters"><i data-lucide="sliders-horizontal"></i>Filters</button>')}
-    <section class="card">
-      <div class="form-grid form-grid--3">
-        <div class="field"><label for="book-from">Departure stage</label><select id="book-from" data-field="search-from">${appData.routes.map(route => optionMarkup(route, state.searchFrom)).join('')}</select></div>
-        <div class="field"><label for="book-to">Destination</label><select id="book-to" data-field="search-to">${appData.routes.slice().reverse().map(route => optionMarkup(route, state.searchTo)).join('')}</select></div>
-        <div class="field"><label for="book-date">Travel date</label><input id="book-date" type="date" value="${state.bookingDate}" data-field="booking-date"></div>
-        <div class="field"><label for="book-period">Preferred period</label><select id="book-period" data-field="search-period">${['Morning','Afternoon','Evening'].map(period => optionMarkup(period, state.searchPeriod, `${period} · ${period === 'Morning' ? '5:00–11:59' : period === 'Afternoon' ? '12:00–4:59' : '5:00–10:00'}`)).join('')}</select></div>
-        <div class="field"><label for="book-adults">Adults</label><select id="book-adults" data-field="search-adults">${[1,2,3,4].map(count => optionMarkup(String(count), String(state.passengerCount), `${count} adult${count === 1 ? '' : 's'}`)).join('')}</select></div>
-        <div class="field"><label for="book-children">Children</label><select id="book-children" data-field="search-children">${[0,1,2].map(count => optionMarkup(String(count), String(state.childCount), `${count} ${count === 1 ? 'child' : 'children'}`)).join('')}</select></div>
-      </div>
-      <div class="choice-pills" style="margin-top:15px"><button class="choice-pill ${state.tripType === 'oneway' ? 'is-selected' : ''}" type="button" data-action="trip-kind" data-value="oneway" aria-pressed="${state.tripType === 'oneway'}">One way</button><button class="choice-pill ${state.tripType === 'return' ? 'is-selected' : ''}" type="button" data-action="trip-kind" data-value="return" aria-pressed="${state.tripType === 'return'}">Return trip</button><button class="choice-pill" type="button" data-action="search-anytime">Any departure time</button></div>
-      <div class="button-row button-row--end" style="margin-top:18px"><button class="button button--primary" type="button" data-action="search-trips"><i data-lucide="search"></i>Search Available Trips</button></div>
-    </section>
+  const step = state.bookingStep || 1;
 
-    <div class="search-summary" style="margin-top:18px"><span><i data-lucide="map-pin"></i>${escapeHtml(state.searchFrom)}</span><span><i data-lucide="arrow-right"></i>${escapeHtml(state.searchTo)}</span><span><i data-lucide="calendar-days"></i>${formatDemoDate(state.bookingDate)}</span><span><i data-lucide="users"></i>${passengerMixLabel()}</span></div>
-    <div class="section-title"><h2>${results.length} departure${results.length === 1 ? '' : 's'} found</h2><span class="muted text-small">Fares are demonstration values</span></div>
-    <section class="grid">
-      ${results.length ? results.map(renderTripResult).join('') : emptyState('calendar-x-2','No departures have enough space','Try a smaller passenger group or another route.')}
-    </section>`;
+  if (step === 1) {
+    return `
+      ${screenHead('Find a departure', 'Step 1 of 6: Choose your route to begin booking.')}
+      
+      <div class="route-selector-cards" style="margin-top: 16px;">
+        <div class="route-card ${state.selectedRoute === 'kajansi' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="kajansi" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === 'kajansi' ? 'is-selected' : ''}"></div>
+          <img src="assets/entebbe.jpg" alt="Entebbe" class="route-card__icon" style="object-fit: cover;">
+          <div class="route-card__info">
+            <h3>Kampala – Entebbe</h3>
+            <p>Via Kajansi Expressway (Both ways)</p>
+          </div>
+        </div>
+        <div class="route-card ${state.selectedRoute === 'busega' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="busega" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === 'busega' ? 'is-selected' : ''}"></div>
+          <img src="assets/kampala.jpg" alt="Kampala" class="route-card__icon" style="object-fit: cover;">
+          <div class="route-card__info">
+            <h3>Entebbe – Kampala</h3>
+            <p>Via Busega Expressway (One way)</p>
+          </div>
+        </div>
+        <div class="route-card ${state.selectedRoute === 'bweyogere' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="bweyogere" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === 'bweyogere' ? 'is-selected' : ''}"></div>
+          <img src="assets/bweyogere.jpg" alt="Bweyogere" class="route-card__icon" style="object-fit: cover;">
+          <div class="route-card__info">
+            <h3>Entebbe – Bweyogere</h3>
+            <p>Via Northern Bypass (Both ways)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="floating-cta-container" style="margin-top: 24px;">
+        <button class="button button--primary w-full" type="button" data-action="booking-next-step">Continue</button>
+      </div>
+    `;
+  }
+
+  if (step === 2) {
+    const allowedFrom = appData.routes.filter(r => {
+      if (state.selectedRoute === 'bweyogere') return ['Entebbe Main Stage', 'Bweyogere'].includes(r);
+      if (state.selectedRoute === 'busega') return ['Entebbe Main Stage', 'Kampala Main Stage'].includes(r);
+      return r !== 'Bweyogere'; // kajansi
+    });
+    const allowedTo = allowedFrom;
+
+    return `
+      ${screenHead('Configure Route Details', 'Step 2 of 6: Set stages, travel date, time period and passenger counts.')}
+
+      <div style="margin-top: 16px;">
+        <section class="card" style="margin: 0;">
+          <div class="form-grid" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: end;">
+            <div class="field"><label for="book-from">Departure stage</label><select id="book-from" data-field="search-from">${allowedFrom.map(route => optionMarkup(route, state.searchFrom)).join('')}</select></div>
+            <button class="swap-button" type="button" data-action="swap-route" aria-label="Swap locations" style="margin-bottom: 4px; border: 1px solid var(--border); width: 46px; height: 46px; border-radius: 11px; display: grid; place-items: center; background: white; cursor: pointer; transition: var(--ease);"><i data-lucide="arrow-left-right" style="width: 18px; height: 18px; color: var(--brand-blue);"></i></button>
+            <div class="field"><label for="book-to">Destination</label><select id="book-to" data-field="search-to">${allowedTo.map(route => optionMarkup(route, state.searchTo)).join('')}</select></div>
+          </div>
+          
+          <div class="form-grid form-grid--2" style="margin-top: 16px; align-items: start;">
+            <div class="field">
+              <label>Travel date</label>
+              <div class="choice-pills" style="margin-top: 4px; display: flex; gap: 8px;">
+                <button class="choice-pill ${state.dateSelectionMode === 'today' ? 'is-selected' : ''}" type="button" data-action="select-date-mode" data-value="today" style="flex: 1; text-align: center;">Today</button>
+                <button class="choice-pill ${state.dateSelectionMode === 'later' ? 'is-selected' : ''}" type="button" data-action="select-date-mode" data-value="later" style="flex: 1; text-align: center;">Later</button>
+              </div>
+              ${state.dateSelectionMode === 'later' ? `
+                <div style="margin-top: 8px;">
+                  <label for="book-date" style="font-size: 0.75rem; font-weight: 700; color: var(--slate); display: block; margin-bottom: 4px;">Choose custom date</label>
+                  <input id="book-date" type="date" value="${state.bookingDate}" data-field="booking-date" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+                </div>
+              ` : ''}
+            </div>
+            <div class="field"><label for="book-period">Preferred period</label><select id="book-period" data-field="search-period">${['Morning','Afternoon','Evening'].map(period => optionMarkup(period, state.searchPeriod, `${period} · ${period === 'Morning' ? '5:00–11:59' : period === 'Afternoon' ? '12:00–4:59' : '5:00–10:00'}`)).join('')}</select></div>
+          </div>
+
+          <!-- Modern side-by-side Adults & Children steppers -->
+          <div class="steppers-row" style="display: flex; gap: 16px; margin-top: 20px; align-items: stretch; width: 100%;">
+            
+            <!-- Adults Card -->
+            <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+              <div style="text-align: left;">
+                <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Adults</strong>
+                <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">12+ years</span>
+              </div>
+              <div class="stepper-controls" style="display: flex; align-items: center; gap: 12px;">
+                <button type="button" class="stepper-btn" data-action="decrement-adults" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
+                <span id="adult-count-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.15rem; color: var(--charcoal);">${state.passengerCount}</span>
+                <button type="button" class="stepper-btn" data-action="increment-adults" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
+              </div>
+            </div>
+
+            <!-- Children Card -->
+            <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+              <div style="text-align: left;">
+                <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Children</strong>
+                <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">Under 12</span>
+              </div>
+              <div class="stepper-controls" style="display: flex; align-items: center; gap: 12px;">
+                <button type="button" class="stepper-btn" data-action="decrement-children" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
+                <span id="child-count-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.15rem; color: var(--charcoal);">${state.childCount}</span>
+                <button type="button" class="stepper-btn" data-action="increment-children" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Reserved Child Seats Stepper Card (Always Visible) -->
+          <div style="margin-top: 16px;">
+            <div class="stepper-card" style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <div style="text-align: left;">
+                <strong style="font-size: 0.95rem; display: block; color: var(--charcoal);">Reserved Child Seats</strong>
+                <span class="muted text-small" style="font-size: 0.76rem; display: block; margin-top: 2px;">Lap travel is free. Reserving a seat adds normal fare (${formatUGX(state.ticketType === 'return' ? 9000 : 5000)} / child)</span>
+              </div>
+              <div class="stepper-controls" style="display: flex; align-items: center; gap: 14px;">
+                <button type="button" class="stepper-btn" data-action="decrement-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
+                <span id="child-seats-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.2rem; color: var(--charcoal);">${state.reservedChildSeatsCount}</span>
+                <button type="button" class="stepper-btn" data-action="increment-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="floating-cta-container button-row" style="margin-top: 24px;">
+        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
+        <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step">Search Vehicles</button>
+      </div>
+    `;
+  }
+
+  if (step === 3) {
+    const results = getSearchResults();
+    const sortedTrips = results.slice().sort((a, b) => {
+      const getMins = (str) => {
+        const match = str.match(/\d+/);
+        return match ? parseInt(match[0], 10) : 999;
+      };
+      return getMins(a.countdown) - getMins(b.countdown);
+    });
+
+    return `
+      ${screenHead('Available Vehicles', 'Step 3 of 6: Select your preferred transit vehicle from active departures.')}
+
+      <div class="booking-desktop-split booking-desktop-split--60-40" style="margin-top: 16px;">
+        <section class="grid" style="gap: 14px; margin: 0;">
+          ${sortedTrips.length ? sortedTrips.map(trip => {
+            const isSelected = state.activeTrip && state.activeTrip.id === trip.id;
+            return `
+              <article class="card card--hover result-card taxi-result-card ${isSelected ? 'is-active' : ''}" data-action="select-booking-vehicle" data-trip-id="${trip.id}" role="button" tabindex="0" style="${isSelected ? 'border-color: var(--brand-blue); background: var(--info-soft); margin: 0; position: relative;' : 'margin: 0; position: relative;'}">
+                <div class="card-selection-indicator ${isSelected ? 'is-selected' : ''}"></div>
+                <div class="taxi-result-body">
+                  <div class="taxi-van-visual">
+                    <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img">
+                    <span class="van-plate-tag">${trip.plate}</span>
+                  </div>
+                  <div class="taxi-details">
+                    <div class="taxi-driver-info" data-screen="driver-profile" data-driver="${trip.driverName.toLowerCase()}" role="button" tabindex="0" onclick="event.stopPropagation();" style="cursor: pointer;">
+                      <strong>${trip.driverName} (View Profile)</strong>
+                      <span class="driver-rating-tag">${trip.driverRating} ★</span>
+                    </div>
+                    <div class="taxi-proximity-info" style="margin-top: 6px;">
+                      <span class="proximity-countdown" style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="clock" style="width: 14px; height: 14px;"></i> ${trip.countdown}</span>
+                      <span class="proximity-status" style="display: block; margin-top: 2px;">${trip.currentStage} · ${trip.vansAtStage} vans at stage</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="taxi-result-route-preview" style="text-align: right; min-width: 100px; padding-right: 14px;">
+                  <strong>${trip.depart}</strong>
+                  <span style="display: block; font-size: 0.75rem; color: var(--slate);">${trip.duration}</span>
+                  <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}" style="margin-top: 8px; display: inline-block;">${trip.seats} seats left</span>
+                </div>
+              </article>
+            `;
+          }).join('') : emptyState('calendar-x-2','No departures found','Try setting a different period or stage.')}
+        </section>
+
+        <div>
+          ${state.activeTrip ? `
+            <div class="card" style="border: 1px solid rgba(7, 90, 168, 0.22); background: var(--info-soft); padding: 24px; border-radius: 16px; margin: 0; text-align: left;">
+              <p class="section-kicker" style="margin: 0 0 4px 0;">Selected Vehicle</p>
+              <h3 style="margin: 0 0 16px 0; font-size: 1.2rem; font-weight: 750; color: var(--charcoal);">${state.activeTrip.plate}</h3>
+              
+              <div class="detail-list">
+                <div class="detail-row"><span>Driver</span><strong>${state.activeTrip.driverName} (${state.activeTrip.driverRating} ★)</strong></div>
+                <div class="detail-row"><span>Departure Time</span><strong>${state.activeTrip.depart}</strong></div>
+                <div class="detail-row"><span>Route Stage</span><strong>${state.activeTrip.currentStage}</strong></div>
+                <div class="detail-row"><span>Available Seats</span><strong>${state.activeTrip.seats} spaces left</strong></div>
+              </div>
+            </div>
+          ` : `
+            <div class="card" style="border: 1px dashed var(--border); text-align: center; padding: 32px 16px; border-radius: 16px; margin: 0; display: grid; place-items: center; min-height: 180px;">
+              <div>
+                <i data-lucide="info" style="width: 32px; height: 32px; color: var(--brand-blue); margin-bottom: 12px; margin-left: auto; margin-right: auto;"></i>
+                <strong style="display: block; font-size: 0.95rem; color: var(--charcoal);">No vehicle selected yet</strong>
+                <p class="muted" style="font-size: 0.78rem; margin: 6px 0 0 0;">Select an available van on the left to configure seat allocation options.</p>
+              </div>
+            </div>
+          `}
+        </div>
+      </div>
+
+      <div class="floating-cta-container button-row" style="margin-top: 24px;">
+        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
+        ${state.activeTrip ? `
+          <button class="button button--secondary" type="button" data-action="book-preferred-seat" style="flex: 1; font-weight: 750;">Select Seat</button>
+          <button class="button button--primary" type="button" data-action="booking-skip-seat" style="flex: 1; display: flex; flex-direction: column; align-items: center; line-height: 1.15; justify-content: center; height: 48px;">
+            <span style="font-weight: 750; font-size: 0.9rem;">Proceed</span>
+            <span style="font-size: 0.62rem; font-weight: 400; opacity: 0.85; margin-top: 1px; display: block; white-space: nowrap;">best available seat</span>
+          </button>
+        ` : `
+          <button class="button button--primary" style="flex: 1; opacity: 0.6; cursor: not-allowed;" type="button" disabled>Select a Van to Proceed</button>
+        `}
+      </div>
+    `;
+  }
+
+  if (step === '3b') {
+    const required = passengerTotal();
+    return `
+      ${screenHead('Select Preferred Seat', 'Step 3b: Choose your seat number in the passenger van layout.')}
+
+      <div class="booking-desktop-split" style="margin-top: 16px;">
+        <section class="card" style="margin: 0; display: flex; flex-direction: column; justify-content: center; text-align: left; padding: 24px;">
+          <p class="section-kicker">Seat Booking Info</p>
+          <h2 style="margin: 0 0 12px 0;">Van Seat Selection</h2>
+          <p class="muted" style="font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;">
+            Choose preferred seats from the vehicle layout. Seat availability is updated in real time based on active stage occupancy.
+          </p>
+          <div style="background: var(--surface-alt); padding: 16px; border-radius: 12px; border: 1px solid var(--border);">
+            <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Selection status</strong>
+            <span class="status-chip status-chip--info" style="margin-top: 8px; display: inline-block;">${state.selectedSeats.length} of ${required} seats selected</span>
+            ${state.selectedSeats.length > 0 ? `
+              <div style="margin-top: 12px; font-size: 0.85rem;">
+                <strong>Selected Seats:</strong> ${state.selectedSeats.join(', ')}
+              </div>
+            ` : ''}
+          </div>
+        </section>
+
+        <section class="card" style="margin: 0; text-align: center; padding: 20px;">
+          ${renderSeatMode()}
+        </section>
+      </div>
+
+      <div class="floating-cta-container button-row" style="margin-top: 24px;">
+        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
+        <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step" ${state.selectedSeats.length !== required ? 'disabled style="opacity: 0.65; cursor: not-allowed;"' : ''}>Confirm Seat</button>
+      </div>
+    `;
+  }
+
+  if (step === 4) {
+    const totalItems = Object.values(state.luggageQuantities).reduce((a,b) => a+b,0);
+    const totalLuggagePrice = luggageTotal();
+
+    return `
+      ${screenHead('Luggage Registry', 'Step 4 of 6: Declare larger luggage bags in advance to secure loading space.')}
+
+      <div class="booking-desktop-split" style="margin-top: 16px;">
+        <section class="card" style="margin: 0; padding: 24px;">
+          <div style="display: flex; gap: 16px; align-items: start;">
+            <div class="route-card__icon" style="background: var(--info-soft); color: var(--brand-blue); width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0;"><i data-lucide="luggage"></i></div>
+            <div>
+              <h3 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 750; color: var(--charcoal);">Cabin Bag vs Standard Luggage</h3>
+              <p class="muted" style="margin: 0; font-size: 0.85rem; line-height: 1.5; text-align: left;">
+                <strong>Cabin Bag (Free):</strong> A small handbag, purse, laptop sleeve, or compact daypack that fits comfortably on your lap or under the passenger seat.
+              </p>
+              <p class="muted" style="margin: 8px 0 0 0; font-size: 0.85rem; line-height: 1.5; text-align: left;">
+                <strong>Standard Luggage (Paid):</strong> Large travel suitcases, trunks, heavy storage bags, or commercial boxes. These require rear cargo rack registration to prevent vehicle overloading.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" style="margin: 0; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="margin: 0 0 12px 0; font-size: 1rem;">Luggage Declaration Summary</h3>
+            <div class="luggage-summary-badge" style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-alt); padding: 14px 18px; border-radius: 14px; border: 1px dashed var(--border);">
+              <div>
+                <strong style="font-size: 0.95rem; display: block; color: var(--charcoal);">Registered Luggage List</strong>
+                <span class="muted" style="font-size: 0.78rem;">${totalItems} items currently declared</span>
+              </div>
+              <div style="text-align: right;">
+                <strong style="color: var(--brand-blue); font-size: 1.25rem; display: block;">${formatUGX(totalLuggagePrice)}</strong>
+              </div>
+            </div>
+          </div>
+
+          <button class="button button--secondary w-full" style="margin-top: 20px;" type="button" data-action="open-luggage-modal"><i data-lucide="plus-circle"></i> Define Luggage & Quantities</button>
+        </section>
+      </div>
+
+      <div class="floating-cta-container button-row" style="margin-top: 24px;">
+        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
+        <button class="button button--ghost" type="button" data-action="booking-next-step" style="flex: 1;">Skip</button>
+        <button class="button button--primary" type="button" data-action="booking-next-step" style="flex: 1;">Review</button>
+      </div>
+    `;
+  }
+
+  if (step === 5) {
+    const total = checkoutTotal();
+
+    return `
+      ${screenHead('Checkout Review', 'Step 5 of 6: Verify passenger manifest, luggage summary and service total.')}
+
+      <div class="booking-desktop-split booking-desktop-split--60-40" style="margin-top: 16px;">
+        <section class="card" style="margin: 0;">
+          <div class="detail-list">
+            <div class="detail-row"><span>Route</span><strong>${state.searchFrom} → ${state.searchTo}</strong></div>
+            <div class="detail-row"><span>Vehicle</span><strong>${state.activeTrip.plate} (${state.activeTrip.vehicle})</strong></div>
+            <div class="detail-row"><span>Driver</span><strong>${state.activeTrip.driverName}</strong></div>
+            <div class="detail-row"><span>Travel Date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.searchPeriod}</strong></div>
+            <div class="detail-row"><span>Travellers</span><strong>${passengerMixLabel()}</strong></div>
+            <div class="detail-row"><span>Seat Preference</span><strong>${state.capacityMode === 'seats' ? `Seats: ${state.selectedSeats.join(', ')}` : 'Best available'}</strong></div>
+            <div class="detail-row"><span>Registered Luggage</span><strong>${Object.values(state.luggageQuantities).reduce((a,b) => a+b,0)} items</strong></div>
+            <div class="detail-row"><span>Base Fare</span><strong>${formatUGX(checkoutBaseFare())}</strong></div>
+            ${luggageTotal() ? `<div class="detail-row"><span>Luggage Surcharge</span><strong>${formatUGX(luggageTotal())}</strong></div>` : ''}
+            <div class="detail-row" style="border-bottom: 0;"><span>Total Amount</span><strong style="font-size: 1.25rem; color: var(--brand-blue);">${formatUGX(total)}</strong></div>
+          </div>
+        </section>
+
+        <section class="card" style="margin: 0; border: 1px solid rgba(7, 90, 168, 0.15); background: var(--info-soft); padding: 20px; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+          <h3 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 750; color: var(--brand-blue);">Save money with a Return Ticket</h3>
+          <p class="muted" style="margin: 0 0 16px 0; font-size: 0.78rem; line-height: 1.4;">Get a guaranteed discount on your journey back by adding a return voucher to your ticket package.</p>
+          <div style="display: flex; justify-content: flex-end;">
+            <button class="switch ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="toggle-return-switch" aria-label="Toggle return ticket"><span></span></button>
+          </div>
+        </section>
+      </div>
+
+      <div class="floating-cta-container button-row" style="margin-top: 24px;">
+        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
+        <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step">Go to Payment</button>
+      </div>
+    `;
+  }
+
+  if (step === 6) {
+    const total = checkoutTotal();
+    const walletRemaining = state.walletBalance - total;
+    const isReturn = state.ticketType === 'return';
+
+    return `
+      ${screenHead('Select Payment Options', 'Step 6 of 6: Authorize mobile money, deduct from wallet, or pay at desk.')}
+
+      <div class="booking-desktop-split booking-desktop-split--sidebar" style="margin-top: 16px;">
+        <section class="card" style="margin: 0;">
+          <div class="card-head"><div><p class="section-kicker">Payment method</p><h2>How would you like to pay?</h2></div><span class="status-chip status-chip--warning">Demo only</span></div>
+          <div class="radio-cards">
+            ${paymentChoice('wallet','Fly Express Wallet',`Available balance: ${formatUGX(state.walletBalance)}`,'wallet-cards')}
+            ${paymentChoice('mobile','Mobile Money','MTN MoMo or Airtel Money','smartphone')}
+            ${paymentChoice('cash','Cash at Stage','Pay the dispatcher before boarding','banknote')}
+            ${paymentChoice('corporate','Corporate Travel Account','For approved business travellers','building-2')}
+            ${paymentChoice('voucher','Promotional Voucher','Apply an eligible campaign code','ticket-percent')}
+          </div>
+        </section>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          ${renderPaymentPanel(total, walletRemaining)}
+
+          <article class="card card--soft" style="margin: 0; padding: 14px;"><label class="checkbox-row"><input id="booking-conditions" type="checkbox" checked><span><strong>I accept the booking conditions.</strong><br><span class="muted text-small">This confirms only a presentation-state booking and does not create a real reservation.</span></span></label></article>
+
+          ${!isReturn ? `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-alt); padding: 14px 18px; border-radius: 14px; border: 1px dashed var(--border); text-align: left;">
+              <div>
+                <strong style="font-size: 0.85rem; display: block; color: var(--charcoal);">Add Return Ticket?</strong>
+                <span class="muted text-small" style="display: block; margin-top: 2px;">Save up to UGX 1,000 on your return journey</span>
+              </div>
+              <button class="button button--secondary button--small" type="button" data-action="toggle-return-switch">+ Return Ticket</button>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+
+      <div class="floating-cta-container button-row" style="margin-top: 24px;">
+        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
+        <button class="button button--primary" style="flex: 1;" type="button" data-action="confirm-booking-step">
+          <i data-lucide="credit-card"></i> Pay & Confirm ${formatUGX(total)}
+        </button>
+      </div>
+    `;
+  }
 }
 
 function renderTripResult(trip) {
@@ -543,8 +1123,8 @@ function renderTripResult(trip) {
         <span class="van-plate-tag">${trip.plate}</span>
       </div>
       <div class="taxi-details">
-        <div class="taxi-driver-info">
-          <strong>${trip.driverName}</strong>
+        <div class="taxi-driver-info" data-screen="driver-profile" data-driver="${trip.driverName.toLowerCase()}" role="button" tabindex="0" style="cursor: pointer;">
+          <strong>${trip.driverName} (View Profile)</strong>
           <span class="driver-rating-tag">${trip.driverRating} ★</span>
           <span class="driver-phone-small">${trip.driverPhone}</span>
         </div>
@@ -586,15 +1166,15 @@ function renderTripDetails() {
       <div class="sheet-handle" aria-hidden="true"></div>
       
       <!-- Driver Profile Card -->
-      <article class="card driver-profile-card">
+      <article class="card driver-profile-card" data-screen="driver-profile" data-driver="${trip.driverName.toLowerCase()}" role="button" tabindex="0" style="cursor: pointer;">
         <div class="driver-profile-header">
           <div class="driver-avatar">${trip.driverName.split(' ').map(n=>n[0]).join('')}</div>
           <div class="driver-meta">
-            <span class="eyebrow">Your Driver</span>
+            <span class="eyebrow">Your Driver (Tap to view profile)</span>
             <h2>${trip.driverName}</h2>
             <div class="driver-rating"><i data-lucide="star" class="star-icon" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i> <strong>${trip.driverRating} Rating</strong></div>
           </div>
-          <a class="driver-phone-btn button button--primary button--small" href="tel:${trip.driverPhone}" aria-label="Call Driver"><i data-lucide="phone"></i>Call</a>
+          <a class="driver-phone-btn button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver"><i data-lucide="phone"></i>Call</a>
         </div>
       </article>
 
@@ -812,12 +1392,11 @@ function renderPaymentPanel(total, walletRemaining) {
   if (state.paymentMethod === 'wallet') {
     return `<div class="payment-panel"><div class="grid grid--3"><div><span class="muted text-small">Current balance</span><strong>${formatUGX(state.walletBalance)}</strong></div><div><span class="muted text-small">Amount due</span><strong>${formatUGX(total)}</strong></div><div><span class="muted text-small">Remaining balance</span><strong class="${walletRemaining < 0 ? 'text-danger' : 'text-success'}">${formatUGX(walletRemaining)}</strong></div></div><div class="field" style="margin-top:13px"><label for="wallet-pin">Wallet PIN</label><input id="wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div></div>`;
   }
-  if (state.paymentMethod === 'mtn' || state.paymentMethod === 'airtel') {
-    const network = state.paymentMethod === 'mtn' ? 'MTN Mobile Money' : 'Airtel Money';
-    if (state.paymentDemoState === 'pending') return paymentState('pending','Authorization pending',`A simulated ${network} prompt is awaiting approval.`);
+  if (state.paymentMethod === 'mobile') {
+    if (state.paymentDemoState === 'pending') return paymentState('pending','Authorization pending',`A simulated Mobile Money prompt is awaiting approval.`);
     if (state.paymentDemoState === 'success') return paymentState('success','Authorization successful','The mockup payment state has been approved.');
     if (state.paymentDemoState === 'failed') return paymentState('failed','Authorization failed','The demonstration request was declined. Try another state.');
-    return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Network</label><input value="${network}" disabled></div><div class="field"><label>Telephone number</label><input value="+256 772 345 678"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--secondary button--small" type="button" data-action="payment-state" data-value="pending">Simulate Pending</button><button class="button button--success button--small" type="button" data-action="payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="payment-state" data-value="failed">Simulate Failure</button></div></div>`;
+    return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Operator</label><select id="mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option>MTN MoMo</option><option>Airtel Money</option></select></div><div class="field"><label>Telephone number</label><input value="+256 772 345 678"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--secondary button--small" type="button" data-action="payment-state" data-value="pending">Simulate Pending</button><button class="button button--success button--small" type="button" data-action="payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="payment-state" data-value="failed">Simulate Failure</button></div></div>`;
   }
   if (state.paymentMethod === 'cash') return `<div class="payment-panel"><div class="notice"><i data-lucide="clock-3"></i><div><strong>Reservation held for 15 demonstration minutes.</strong><div>Pay the dispatcher before boarding. Booking reference FX-260718-1842 will show Payment Pending until confirmed.</div></div></div></div>`;
   if (state.paymentMethod === 'corporate') return `<div class="payment-panel"><div class="field"><label for="corporate-reference">Corporate account reference</label><input id="corporate-reference" value="FETA-CORP-DEMO-24"></div><p class="muted text-small">The account will be shown as awaiting corporate approval.</p></div>`;
@@ -841,7 +1420,7 @@ function renderSuccess() {
 }
 
 function paymentLabel(method = state.paymentMethod) {
-  return ({ wallet: 'Fly Express Wallet', mtn: 'MTN Mobile Money', airtel: 'Airtel Money', cash: 'Cash at Stage', corporate: 'Corporate Travel Account', voucher: 'Promotional Voucher' })[method] || 'Demo Payment';
+  return ({ wallet: 'Fly Express Wallet', mobile: 'Mobile Money', cash: 'Cash at Stage', corporate: 'Corporate Travel Account', voucher: 'Promotional Voucher' })[method] || 'Demo Payment';
 }
 
 function renderTicket() {
@@ -934,7 +1513,7 @@ function renderLiveTrip() {
       </div>
       <aside class="grid">
         <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><img src="assets/fly-express-van.png" alt="Fly Express passenger van"><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
+        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><img src="assets/fly-express-van.png" alt="Fly Express passenger van"><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" data-screen="driver-profile" data-driver="daniel" role="button" tabindex="0" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel (View Profile)</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
         <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
         <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
       </aside>
@@ -982,8 +1561,8 @@ function renderParcelStep() {
   if (step === 4) body = `<div class="card-head"><div><p class="section-kicker">Step 4 of 8</p><h2>Route and collection point</h2></div></div><div class="form-grid"><div class="field"><label for="parcel-origin">Origin stage</label><select id="parcel-origin" data-parcel-field="origin">${appData.routes.map(route => optionMarkup(route, state.parcel.origin)).join('')}</select></div><div class="field"><label for="parcel-route-destination">Destination stage</label><select id="parcel-route-destination" data-parcel-field="destination">${appData.routes.slice().reverse().map(route => optionMarkup(route, state.parcel.destination)).join('')}</select></div><div class="field"><label for="parcel-dropoff">Drop-off time</label><select id="parcel-dropoff" data-parcel-field="dropoff">${['Today · 8:00–9:00 AM','Today · 9:00–10:00 AM'].map(value => optionMarkup(value, state.parcel.dropoff)).join('')}</select></div><div class="field"><label for="parcel-departure">Preferred vehicle departure</label><select id="parcel-departure" data-parcel-field="departure">${['Next available vehicle','9:00 AM departure'].map(value => optionMarkup(value, state.parcel.departure)).join('')}</select></div></div><div class="route-map" style="margin-top:16px;min-height:200px"><div class="route-track">${['Entebbe','Kitooro','Abayita','Kajjansi','Kampala'].map(place => `<div class="route-stop"><span class="route-stop__dot"></span><span>${place}</span></div>`).join('')}</div></div>`;
   if (step === 5) body = `<div class="card-head"><div><p class="section-kicker">Step 5 of 8</p><h2>Delivery option</h2></div></div><div class="radio-cards">${[['Standard Stage-to-Stage','Delivery on the next suitable vehicle · UGX 7,500','truck'],['Priority Stage-to-Stage','Priority handling and earliest departure · UGX 10,000','badge-alert'],['Hold for Collection','Hold securely at destination stage · UGX 8,000','package-check'],['Future Last-Mile Delivery','Concept preview for future address delivery','map-pin-plus']].map(item => `<label class="radio-card ${state.parcelDelivery === item[0] ? 'is-selected' : ''}"><input type="radio" name="parcel-delivery" value="${item[0]}" ${state.parcelDelivery === item[0] ? 'checked' : ''}><span class="radio-card__icon"><i data-lucide="${item[2]}"></i></span><span class="radio-card__body"><strong>${item[0]}</strong><span>${item[1]}</span></span></label>`).join('')}</div>`;
   if (step === 6) body = `<div class="card-head"><div><p class="section-kicker">Step 6 of 8</p><h2>Price summary</h2></div></div><div class="detail-list"><div class="detail-row"><span>Parcel category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery option</span><strong>${state.parcelDelivery}</strong></div><div class="detail-row"><span>Route charge</span><strong>${formatUGX(parcelPrice() - 1500)}</strong></div><div class="detail-row"><span>Handling charge</span><strong>UGX 1,500</strong></div><div class="detail-row"><span>Promotional discount</span><strong class="text-success">UGX 0</strong></div></div><div class="total-row"><strong>Total</strong><strong>${formatUGX(parcelPrice())}</strong></div>`;
-  if (step === 7) body = `<div class="card-head"><div><p class="section-kicker">Step 7 of 8</p><h2>Parcel payment</h2></div></div><div class="radio-cards">${parcelPaymentChoice('wallet','Fly Express Wallet',`Available balance: ${formatUGX(state.walletBalance)}`,'wallet-cards')}${parcelPaymentChoice('mtn','MTN Mobile Money','Simulated authorization only','smartphone')}${parcelPaymentChoice('cash','Cash at Stage','Pay the parcel desk before dispatch','banknote')}</div>${renderParcelPaymentPanel()}<div class="notice" style="margin-top:16px"><i data-lucide="info"></i><div>No real payment is processed. Confirming moves directly to the receipt preview.</div></div>`;
-  if (step === 8) body = `<div class="payment-state"><div class="success-check"><i data-lucide="check"></i></div><p class="eyebrow">Parcel registered</p><h2>Your parcel is ready for handover</h2><p class="muted">Tracking number FXP-260718-0842 has been created for the demonstration.</p><button class="button button--primary" type="button" data-screen="parcel-receipt">View Parcel Receipt</button></div>`;
+  if (step === 7) body = `<div class="card-head"><div><p class="section-kicker">Step 7 of 8</p><h2>Parcel payment</h2></div></div><div class="radio-cards">${parcelPaymentChoice('wallet','Fly Express Wallet',`Available balance: ${formatUGX(state.walletBalance)}`,'wallet-cards')}${parcelPaymentChoice('mobile','Mobile Money','MTN MoMo or Airtel Money','smartphone')}${parcelPaymentChoice('cash','Cash at Stage','Pay the parcel desk before dispatch','banknote')}</div>${renderParcelPaymentPanel()}<div class="notice" style="margin-top:16px"><i data-lucide="info"></i><div>No real payment is processed. Confirming moves directly to the receipt preview.</div></div>`;
+  if (step === 8) body = `<div class="payment-state"><div class="success-check"><i data-lucide="check"></i></div><p class="eyebrow">Parcel registered</p><h2>Your parcel is ready for handover</h2><p class="muted">Tracking number #964201832-DL has been created for the demonstration.</p><button class="button button--primary" type="button" data-screen="parcel-receipt">View Parcel Receipt</button></div>`;
 
   const buttons = step < 8 ? `<div class="button-row button-row--end" style="margin-top:20px"><button class="button button--ghost" type="button" data-action="parcel-back" ${step === 1 ? 'disabled' : ''}>Back</button><button class="button button--primary" type="button" data-action="parcel-next">${step === 7 ? 'Confirm Demo Parcel' : 'Continue'}</button></div>` : '';
   return `${body}${buttons}`;
@@ -1002,10 +1581,10 @@ function renderParcelPaymentPanel() {
   if (state.parcelPaymentMethod === 'wallet') {
     return `<div class="payment-panel"><div class="detail-row"><span>Parcel total</span><strong>${formatUGX(parcelPrice())}</strong></div><div class="detail-row"><span>Balance after payment</span><strong class="${state.walletBalance >= parcelPrice() ? 'text-success' : 'text-danger'}">${formatUGX(state.walletBalance - parcelPrice())}</strong></div><div class="field" style="margin-top:13px"><label for="parcel-wallet-pin">Wallet PIN</label><input id="parcel-wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div></div>`;
   }
-  if (state.parcelPaymentMethod === 'mtn') {
-    if (state.parcelPaymentDemoState === 'success') return `<div class="payment-panel payment-state"><div class="payment-state__icon payment-state__icon--success"><i data-lucide="circle-check-big"></i></div><h3>Authorization successful</h3><p class="muted">The simulated MTN Mobile Money request was approved.</p><button class="button button--ghost button--small" type="button" data-action="parcel-payment-reset">Reset State</button></div>`;
+  if (state.parcelPaymentMethod === 'mobile') {
+    if (state.parcelPaymentDemoState === 'success') return `<div class="payment-panel payment-state"><div class="payment-state__icon payment-state__icon--success"><i data-lucide="circle-check-big"></i></div><h3>Authorization successful</h3><p class="muted">The simulated Mobile Money request was approved.</p><button class="button button--ghost button--small" type="button" data-action="parcel-payment-reset">Reset State</button></div>`;
     if (state.parcelPaymentDemoState === 'failed') return `<div class="payment-panel payment-state"><div class="payment-state__icon payment-state__icon--failed"><i data-lucide="circle-x"></i></div><h3>Authorization failed</h3><p class="muted">The simulated request was declined.</p><button class="button button--ghost button--small" type="button" data-action="parcel-payment-reset">Try Again</button></div>`;
-    return `<div class="payment-panel"><div class="field"><label for="parcel-mobile-number">MTN Mobile Money number</label><input id="parcel-mobile-number" value="${escapeHtml(state.parcel.senderPhone)}"></div><div class="button-row" style="margin-top:13px"><button class="button button--success button--small" type="button" data-action="parcel-payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="parcel-payment-state" data-value="failed">Simulate Failure</button></div></div>`;
+    return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Operator</label><select id="parcel-mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option>MTN MoMo</option><option>Airtel Money</option></select></div><div class="field"><label for="parcel-mobile-number">Mobile Money number</label><input id="parcel-mobile-number" value="${escapeHtml(state.parcel.senderPhone)}"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--success button--small" type="button" data-action="parcel-payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="parcel-payment-state" data-value="failed">Simulate Failure</button></div></div>`;
   }
   return `<div class="payment-panel"><div class="notice"><i data-lucide="clock-3"></i><div><strong>Payment due at the parcel desk.</strong><div>The parcel remains registered but will not dispatch until the simulated cash payment is confirmed.</div></div></div></div>`;
 }
@@ -1018,7 +1597,7 @@ function advanceParcel() {
   if (state.parcelStep === 7) {
     if (state.parcelPaymentMethod === 'wallet' && !/^\d{4}$/.test($('#parcel-wallet-pin')?.value.trim() || '')) return toast('Enter any four digits for the demonstration wallet PIN.', 'danger');
     if (state.parcelPaymentMethod === 'wallet' && parcelPrice() > state.walletBalance) return toast('The demonstration wallet balance is insufficient. Choose another payment method.', 'danger');
-    if (state.parcelPaymentMethod === 'mtn' && state.parcelPaymentDemoState !== 'success') return toast('Simulate a successful mobile-money response before confirming.', 'danger');
+    if (state.parcelPaymentMethod === 'mobile' && state.parcelPaymentDemoState !== 'success') return toast('Simulate a successful mobile-money response before confirming.', 'danger');
   }
   state.parcelStep = Math.min(8, state.parcelStep + 1);
   renderCurrentScreen(false);
@@ -1030,29 +1609,389 @@ function advanceParcel() {
 function renderParcelReceipt() {
   return `
     ${screenHead('Parcel receipt', 'Use this receipt to demonstrate parcel custody, tracking and collection verification.')}
-    <article class="receipt"><header class="receipt__head"><div class="ticket-brand"><div class="logo-frame"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2 style="margin:0">Fly Express Parcel</h2><p class="muted" style="margin:0">Stage-to-Stage Receipt</p></div></div><span class="status-chip status-chip--warning">Registered</span></header><div class="receipt__body"><div class="grid grid--2"><div class="detail-list"><div class="detail-row"><span>Tracking number</span><strong>FXP-260718-0842</strong></div><div class="detail-row"><span>Sender</span><strong>${escapeHtml(state.parcel.senderName)}</strong></div><div class="detail-row"><span>Sender telephone</span><strong>${escapeHtml(state.parcel.senderPhone)}</strong></div><div class="detail-row"><span>Origin</span><strong>${escapeHtml(state.parcel.origin)}</strong></div><div class="detail-row"><span>Parcel category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery</span><strong>${state.parcelDelivery}</strong></div></div><div class="detail-list"><div class="detail-row"><span>Recipient</span><strong>${escapeHtml(state.parcel.recipientName)}</strong></div><div class="detail-row"><span>Recipient telephone</span><strong>${escapeHtml(state.parcel.recipientPhone)}</strong></div><div class="detail-row"><span>Destination</span><strong>${escapeHtml(state.parcel.destination)}</strong></div><div class="detail-row"><span>Amount ${state.parcelPaymentMethod === 'cash' ? 'due' : 'paid'}</span><strong>${formatUGX(parcelPrice())}</strong></div><div class="detail-row"><span>Payment</span><strong>${paymentLabel(state.parcelPaymentMethod)}</strong></div></div></div><hr><div class="grid grid--2"><div><p class="section-kicker">Collection PIN</p><div class="verification-code">742 915</div><p class="muted text-small">Recipient should present this PIN with identification.</p></div><div><p class="section-kicker">Receipt barcode</p><svg id="parcel-barcode" class="parcel-barcode" role="img" aria-label="Barcode for parcel FXP-260718-0842"></svg></div></div><div class="notice" style="margin-top:18px"><i data-lucide="shield-check"></i><div><strong>Collection safety</strong><div>Do not share the collection PIN publicly. Inspect the parcel before leaving the collection desk.</div></div></div></div><footer class="ticket-actions"><button class="button button--primary" type="button" data-screen="trackparcel">Track Parcel</button><button class="button button--ghost" type="button" data-action="share-demo">Share Tracking</button><button class="button button--ghost" type="button" data-screen="support">Contact Parcel Desk</button><button class="button button--ghost" type="button" data-screen="home">Return Home</button></footer></article>`;
+    <article class="receipt"><header class="receipt__head"><div class="ticket-brand"><div class="logo-frame"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2 style="margin:0">Fly Express Parcel</h2><p class="muted" style="margin:0">Stage-to-Stage Receipt</p></div></div><span class="status-chip status-chip--warning">Registered</span></header><div class="receipt__body"><div class="grid grid--2"><div class="detail-list"><div class="detail-row"><span>Tracking number</span><strong>#964201832-DL</strong></div><div class="detail-row"><span>Sender</span><strong>${escapeHtml(state.parcel.senderName)}</strong></div><div class="detail-row"><span>Sender telephone</span><strong>${escapeHtml(state.parcel.senderPhone)}</strong></div><div class="detail-row"><span>Origin</span><strong>${escapeHtml(state.parcel.origin)}</strong></div><div class="detail-row"><span>Parcel category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery</span><strong>${state.parcelDelivery}</strong></div></div><div class="detail-list"><div class="detail-row"><span>Recipient</span><strong>${escapeHtml(state.parcel.recipientName)}</strong></div><div class="detail-row"><span>Recipient telephone</span><strong>${escapeHtml(state.parcel.recipientPhone)}</strong></div><div class="detail-row"><span>Destination</span><strong>${escapeHtml(state.parcel.destination)}</strong></div><div class="detail-row"><span>Amount ${state.parcelPaymentMethod === 'cash' ? 'due' : 'paid'}</span><strong>${formatUGX(parcelPrice())}</strong></div><div class="detail-row"><span>Payment</span><strong>${paymentLabel(state.parcelPaymentMethod)}</strong></div></div></div><hr><div class="grid grid--2"><div><p class="section-kicker">Collection PIN</p><div class="verification-code">742 915</div><p class="muted text-small">Recipient should present this PIN with identification.</p></div><div><p class="section-kicker">Receipt barcode</p><svg id="parcel-barcode" class="parcel-barcode" role="img" aria-label="Barcode for parcel FXP-260718-0842"></svg></div></div><div class="notice" style="margin-top:18px"><i data-lucide="shield-check"></i><div><strong>Collection safety</strong><div>Do not share the collection PIN publicly. Inspect the parcel before leaving the collection desk.</div></div></div></div><footer class="ticket-actions"><button class="button button--primary" type="button" data-screen="trackparcel">Track Parcel</button><button class="button button--ghost" type="button" data-action="share-demo">Share Tracking</button><button class="button button--ghost" type="button" data-screen="support">Contact Parcel Desk</button><button class="button button--ghost" type="button" data-screen="home">Return Home</button></footer></article>`;
 }
 
 function generateBarcode() {
   return [3,1,5,2,1,4,2,6,1,3,5,1,2,4,1,6,2,3,1,5,2,4,1,3,6,1,2,5,3,1,4,2].map(width => `<i style="width:${width}px"></i>`).join('');
 }
 
-function renderParcelTracking() {
-  const states = {
-    intransit: { chip: 'In Transit', cls: 'status-chip--info', current: 5, notice: 'Parcel is travelling toward Kampala. Expected arrival: 10:45 AM.' },
-    delayed: { chip: 'Delayed', cls: 'status-chip--warning', current: 5, notice: 'Traffic has delayed the parcel by approximately 25 minutes.' },
-    ready: { chip: 'Ready for Collection', cls: 'status-chip--success', current: 7, notice: 'The recipient may collect the parcel using PIN 742915.' },
-    collected: { chip: 'Collected', cls: 'status-chip--success', current: 8, notice: 'Parcel was collected at Kampala Main Stage at 11:06 AM.' }
-  };
-  const current = states[state.parcelTrackingState];
-  const statuses = ['Parcel Registered','Payment Confirmed','Assigned to Vehicle','Departed Entebbe','In Transit','Arrived in Kampala','Ready for Collection','Collected'];
-  return `
-    ${screenHead('Track a parcel', 'Enter a demonstration tracking number or switch between parcel status scenarios.')}
-    <section class="card"><div class="tracking-search"><div class="field"><label for="tracking-number">Tracking number</label><input id="tracking-number" value="FXP-260718-0842" placeholder="Enter FXP tracking number"></div><button class="button button--primary" type="button" data-action="track-parcel"><i data-lucide="search"></i>Load Tracking</button></div><div class="choice-pills" style="margin-top:13px"><button class="choice-pill ${state.parcelTrackingState === 'intransit' ? 'is-selected' : ''}" type="button" data-action="tracking-state" data-value="intransit">In Transit</button><button class="choice-pill ${state.parcelTrackingState === 'delayed' ? 'is-selected' : ''}" type="button" data-action="tracking-state" data-value="delayed">Delayed</button><button class="choice-pill ${state.parcelTrackingState === 'ready' ? 'is-selected' : ''}" type="button" data-action="tracking-state" data-value="ready">Ready</button><button class="choice-pill ${state.parcelTrackingState === 'collected' ? 'is-selected' : ''}" type="button" data-action="tracking-state" data-value="collected">Collected</button><button class="choice-pill" type="button" data-action="invalid-tracking">Invalid Number</button></div></section>
-    <section class="grid grid--sidebar" style="margin-top:18px"><div class="card"><div class="card-head"><div><p class="section-kicker">FXP-260718-0842</p><h2>${escapeHtml(state.parcel.origin)} → ${escapeHtml(state.parcel.destination)}</h2></div><span class="status-chip ${current.cls}">${current.chip}</span></div><div class="notice" style="margin-bottom:18px"><i data-lucide="${state.parcelTrackingState === 'delayed' ? 'triangle-alert' : 'package-check'}"></i><div>${current.notice}</div></div><div class="tracking-map-preview"><video autoplay muted loop playsinline aria-label="Animated route preview for the parcel vehicle"><source src="assets/fly-express-live-route.mp4" type="video/mp4"></video><div class="tracking-map-preview__label"><span><i data-lucide="package-check"></i>Parcel vehicle</span><strong>UBP 318F · ${escapeHtml(state.parcel.origin)} to ${escapeHtml(state.parcel.destination)}</strong></div></div><div class="timeline">${statuses.map((status,index) => `<div class="timeline-item ${index + 1 < current.current ? 'is-complete' : index + 1 === current.current ? 'is-current' : ''}"><span class="timeline-dot"><i data-lucide="${index + 1 < current.current ? 'check' : index + 1 === current.current ? 'navigation' : 'circle'}"></i></span><span class="timeline-copy"><strong>${status}</strong><span>${index + 1 <= current.current ? trackingTime(index) : 'Pending next update'}</span></span></div>`).join('')}</div></div><aside class="grid"><article class="card"><h3>Parcel details</h3><div class="detail-list"><div class="detail-row"><span>Sender</span><strong>${escapeHtml(state.parcel.senderName)}</strong></div><div class="detail-row"><span>Recipient</span><strong>${escapeHtml(state.parcel.recipientName)}</strong></div><div class="detail-row"><span>Vehicle</span><strong>UBP 318F</strong></div><div class="detail-row"><span>Expected arrival</span><strong>${state.parcelTrackingState === 'delayed' ? '11:10 AM' : '10:45 AM'}</strong></div><div class="detail-row"><span>Collection stage</span><strong>${escapeHtml(state.parcel.destination)}</strong></div><div class="detail-row"><span>Collection PIN</span><strong>742915</strong></div></div></article><button class="button button--ghost" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share Tracking</button><button class="button button--primary" type="button" data-screen="support"><i data-lucide="headphones"></i>Contact Parcel Support</button></aside></section>`;
+let parcelMap = null;
+
+function initParcelMap() {
+  const target = $('#parcel-live-map');
+  if (!target) return;
+  if (!window.L) return;
+  
+  if (parcelMap) {
+    parcelMap.remove();
+    parcelMap = null;
+  }
+
+  const entebbe = [0.0606, 32.4435];
+  const kampala = [0.3122, 32.5883];
+
+  const points = [
+    [0.0606, 32.4435],
+    [0.0934, 32.4705],
+    [0.1340, 32.5220],
+    [0.1870, 32.5350],
+    [0.2185, 32.5398],
+    [0.2480, 32.5550],
+    [0.2680, 32.5650],
+    [0.2880, 32.5680],
+    [0.2990, 32.5720],
+    [0.3122, 32.5883]
+  ];
+
+  parcelMap = L.map(target, { 
+    attributionControl: false, 
+    boxZoom: false, 
+    doubleClickZoom: false, 
+    dragging: true, 
+    keyboard: false, 
+    scrollWheelZoom: true, 
+    touchZoom: true, 
+    zoomControl: false 
+  });
+  
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+    maxZoom: 19, 
+    crossOrigin: true 
+  }).addTo(parcelMap);
+
+  // Black route line
+  L.polyline(points, { color: '#000000', opacity: 1.0, weight: 3.5 }).addTo(parcelMap);
+
+  // Start circle marker (Entebbe / ENTEBBE)
+  L.circleMarker(entebbe, { color: 'rgba(251, 192, 45, 0.4)', fillColor: 'rgba(251, 192, 45, 0.4)', fillOpacity: 1, radius: 18, weight: 0 }).addTo(parcelMap);
+  L.circleMarker(entebbe, { color: '#ffffff', fillColor: '#ffffff', fillOpacity: 1, radius: 8, weight: 0 }).addTo(parcelMap);
+  L.circleMarker(entebbe, { color: '#000000', fillColor: '#000000', fillOpacity: 1, radius: 4, weight: 0 }).addTo(parcelMap);
+
+  // End pin marker (Kampala)
+  const pinIcon = L.divIcon({
+    className: 'custom-pin-marker',
+    html: `
+      <div class="end-marker-container">
+        <div class="end-marker-outer"></div>
+        <div class="end-marker-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="black" stroke="black" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.74a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+      </div>
+    `,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18]
+  });
+  L.marker(kampala, { icon: pinIcon }).addTo(parcelMap);
+
+  const bounds = L.latLngBounds(points);
+  parcelMap.fitBounds(bounds, { padding: [50, 50] });
+
+  setTimeout(() => {
+    if (parcelMap) {
+      parcelMap.invalidateSize();
+      parcelMap.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, 200);
 }
 
-function trackingTime(index) { return ['8:02 AM','8:04 AM','8:17 AM','8:31 AM','9:36 AM','10:41 AM','10:49 AM','11:06 AM'][index]; }
+function renderParcelList() {
+  return `
+    ${screenHead('Track Parcel', 'View and track your active and past parcels.', '<button class="button button--primary" type="button" data-screen="parcel"><i data-lucide="plus"></i>Send a Parcel</button>')}
+    
+    <div class="field" style="margin-bottom: 20px;">
+      <div class="input-group">
+        <span class="input-icon"><i data-lucide="search"></i></span>
+        <input class="search-input search-input--icon" type="text" placeholder="Search by tracking number or recipient…" data-action="search-parcels">
+      </div>
+    </div>
+
+    <section class="grid" style="gap: 14px;">
+      <article class="card card--hover parcel-list-card" data-screen="trackparcel" role="button" tabindex="0">
+        <div class="card-head">
+          <div>
+            <p class="section-kicker">Tracking #964201832-DL</p>
+            <h3 style="margin: 4px 0 0;">Package from Entebbe</h3>
+          </div>
+          <span class="status-chip status-chip--gold">On the way</span>
+        </div>
+        <div class="parcel-list-card__details">
+          <div class="route-label" style="margin: 12px 0 0;">
+            <div class="route-points"><span></span><i></i><span></span></div>
+            <div><strong>Entebbe</strong><p class="muted text-small" style="margin: 2px 0;">Estimated arrival: Today, 2:30 PM</p><strong>Kampala</strong></div>
+          </div>
+          <div class="parcel-list-card__meta">
+            <span><i data-lucide="package"></i>Small box · 520 g</span>
+            <span><i data-lucide="user-round"></i>To: Julie Robinson</span>
+          </div>
+        </div>
+        <div class="parcel-list-card__footer" onclick="event.stopPropagation();">
+          <span class="parcel-list-card__driver" data-screen="driver-profile" data-driver="isaac muwonge" role="button" tabindex="0" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="View Driver Profile"><img src="assets/sam-mcalen.png" alt="Isaac Muwonge" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">Isaac Muwonge · UBM 245K</span>
+          <span class="muted text-small">Updated 3 min ago</span>
+        </div>
+      </article>
+
+      <article class="card parcel-list-card parcel-list-card--delivered">
+        <div class="card-head">
+          <div>
+            <p class="section-kicker">Tracking #964201710-DL</p>
+            <h3 style="margin: 4px 0 0;">Documents to Kampala Office</h3>
+          </div>
+          <span class="status-chip status-chip--success">Delivered</span>
+        </div>
+        <div class="parcel-list-card__details">
+          <div class="route-label" style="margin: 12px 0 0;">
+            <div class="route-points"><span></span><i></i><span></span></div>
+            <div><strong>Entebbe</strong><p class="muted text-small" style="margin: 2px 0;">Delivered: 16 Jul, 11:42 AM</p><strong>Kampala</strong></div>
+          </div>
+          <div class="parcel-list-card__meta">
+            <span><i data-lucide="package"></i>Documents · 280 g</span>
+            <span><i data-lucide="user-round"></i>To: Mark Ochieng</span>
+          </div>
+        </div>
+        <div class="parcel-list-card__footer">
+          <span class="muted text-small">Collected by recipient</span>
+          <span class="muted text-small">16 Jul 2026</span>
+        </div>
+      </article>
+
+      <article class="card parcel-list-card parcel-list-card--delivered">
+        <div class="card-head">
+          <div>
+            <p class="section-kicker">Tracking #964200988-DL</p>
+            <h3 style="margin: 4px 0 0;">Gift parcel</h3>
+          </div>
+          <span class="status-chip status-chip--success">Delivered</span>
+        </div>
+        <div class="parcel-list-card__details">
+          <div class="route-label" style="margin: 12px 0 0;">
+            <div class="route-points"><span></span><i></i><span></span></div>
+            <div><strong>Kampala</strong><p class="muted text-small" style="margin: 2px 0;">Delivered: 10 Jul, 4:15 PM</p><strong>Entebbe</strong></div>
+          </div>
+          <div class="parcel-list-card__meta">
+            <span><i data-lucide="package"></i>Medium box · 1.2 kg</span>
+            <span><i data-lucide="user-round"></i>To: Grace Nambi</span>
+          </div>
+        </div>
+        <div class="parcel-list-card__footer">
+          <span class="muted text-small">Collected by another person</span>
+          <span class="muted text-small">10 Jul 2026</span>
+        </div>
+      </article>
+    </section>
+  `;
+}
+
+function renderParcelTracking() {
+  document.body.setAttribute('data-active-screen', 'trackparcel');
+  setTimeout(initParcelMap, 50);
+
+  return `
+    <div class="parcel-live-container">
+      <div id="parcel-live-map" class="parcel-live-map"></div>
+      
+      <div class="parcel-live-card" role="button" tabindex="0" data-screen="parcel-status">
+        <div class="parcel-live-card__header">
+          <div>
+            <span class="parcel-live-card__label">Delivery ID</span>
+            <strong class="parcel-live-card__id">#964201832-DL</strong>
+          </div>
+          <span class="status-chip status-chip--gold">On the way</span>
+        </div>
+        
+        <div class="parcel-live-card__grid">
+          <div class="parcel-live-card__grid-item">
+            <span class="parcel-live-card__grid-label">Tariff</span>
+            <strong class="parcel-live-card__grid-val">Small box</strong>
+          </div>
+          <div class="parcel-live-card__grid-item">
+            <span class="parcel-live-card__grid-label">Weight</span>
+            <strong class="parcel-live-card__grid-val">520 g</strong>
+          </div>
+          <div class="parcel-live-card__grid-item">
+            <span class="parcel-live-card__grid-label">To</span>
+            <strong class="parcel-live-card__grid-val">Julie Robinson</strong>
+          </div>
+        </div>
+        
+        <hr class="parcel-live-card__divider">
+        
+        <div class="parcel-live-card__driver" data-screen="driver-profile" data-driver="isaac muwonge" role="button" tabindex="0" onclick="event.stopPropagation();">
+          <div class="parcel-live-card__driver-left">
+            <img src="assets/sam-mcalen.png" alt="Isaac Muwonge" class="parcel-live-card__avatar">
+            <div class="parcel-live-card__driver-info">
+              <strong>Isaac Muwonge</strong>
+              <span>Driver</span>
+            </div>
+          </div>
+          <div class="parcel-live-card__actions" onclick="event.stopPropagation();">
+            <button class="circle-btn" type="button" data-action="chat-driver" aria-label="Chat with driver"><i data-lucide="message-square"></i></button>
+            <button class="circle-btn" type="button" data-action="call-driver" aria-label="Call driver"><i data-lucide="phone"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderParcelStatus() {
+  document.body.setAttribute('data-active-screen', 'parcel-status');
+
+  return `
+    <div class="parcel-status-container">
+      <div class="parcel-status-card">
+        <div class="parcel-status-card__header">
+          <h2>Package from Entebbe</h2>
+          <button class="icon-button" type="button" aria-label="Edit title" data-action="edit-parcel-title"><i data-lucide="pencil"></i></button>
+        </div>
+        <span class="status-chip status-chip--gold">On the way</span>
+        
+        <div class="parcel-timeline">
+          <div class="parcel-timeline-item is-complete">
+            <div class="parcel-timeline-dot"></div>
+            <div class="parcel-timeline-content">
+              <strong>Order confirmed</strong>
+              <span>Feb 21, 2025 &bull; Entebbe</span>
+            </div>
+          </div>
+          <div class="parcel-timeline-item is-complete">
+            <div class="parcel-timeline-dot"></div>
+            <div class="parcel-timeline-content">
+              <strong>Preparing for shipment</strong>
+              <span>Feb 21, 2025, 16:05 &bull; Entebbe</span>
+            </div>
+          </div>
+          <div class="parcel-timeline-item is-complete">
+            <div class="parcel-timeline-dot"></div>
+            <div class="parcel-timeline-content">
+              <strong>Arrived to sorting facility</strong>
+              <span>Feb 22, 2025 &bull; Kampala sorting facility</span>
+            </div>
+          </div>
+          <div class="parcel-timeline-item is-active">
+            <div class="parcel-timeline-dot"></div>
+            <div class="parcel-timeline-content">
+              <strong>Transferred for delivery</strong>
+              <span>3–5 days</span>
+            </div>
+          </div>
+          <div class="parcel-timeline-item is-pending">
+            <div class="parcel-timeline-dot"></div>
+            <div class="parcel-timeline-content">
+              <strong>Expected delivery on March 4</strong>
+            </div>
+          </div>
+        </div>
+        
+        <div class="parcel-details-box">
+          <div class="parcel-details-row">
+            <span>Tariff</span>
+            <strong>Small box</strong>
+          </div>
+          <div class="parcel-details-row">
+            <span>Weight</span>
+            <strong>520 g</strong>
+          </div>
+          <div class="parcel-details-row">
+            <span>Recipient</span>
+            <strong>Julie Robinson</strong>
+          </div>
+        </div>
+        
+        <button class="button button--receivers w-full" type="button" data-action="receiving-another">
+          <span>Receiving by another person</span>
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderDriverProfile() {
+  document.body.setAttribute('data-active-screen', 'driver-profile');
+  
+  const driverNameKey = state.viewingDriverName || 'isaac muwonge';
+  const driver = driversData[driverNameKey] || driversData['isaac muwonge'];
+  
+  const isDriving = driver.status === 'driving';
+  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+
+  return `
+    <div class="driver-profile-container">
+      <div class="driver-profile-left-col">
+        <div class="driver-profile-header-card">
+          <div style="position: relative;">
+            <img src="${avatarUrl}" alt="${driver.name}" class="driver-profile-avatar">
+            ${isDriving ? `<span class="status-chip status-chip--gold" style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 0.72rem; padding: 2px 8px; border-radius: 12px; box-shadow: var(--shadow-sm); z-index: 2;">On Road</span>` : ''}
+          </div>
+          <h2>${driver.name}</h2>
+          <span class="driver-role-badge">${driver.role}</span>
+          <div class="driver-rating-row">
+            <i data-lucide="star" class="star-icon"></i>
+            <strong>${driver.rating}</strong>
+            <span class="muted">(${driver.routes} routes)</span>
+          </div>
+        </div>
+
+        <div class="driver-contact-actions">
+          <button class="button button--secondary" type="button" data-action="chat-driver" ${isDriving ? 'style="opacity: 0.6; cursor: not-allowed;"' : ''}>
+            <i data-lucide="${isDriving ? 'message-square-off' : 'message-square'}"></i> ${isDriving ? 'Chat (Unavailable)' : `Chat with ${driver.name.split(' ')[0]}`}
+          </button>
+          <button class="button button--primary" type="button" data-action="call-driver">
+            <i data-lucide="phone"></i> Call ${driver.name.split(' ')[0]}
+          </button>
+        </div>
+      </div>
+      
+      <div class="driver-profile-right-col">
+        <div class="driver-stats-grid">
+          <div class="driver-stat-card">
+            <span class="driver-stat-val">${driver.km} km</span>
+            <span class="driver-stat-label">On Road</span>
+          </div>
+          <div class="driver-stat-card">
+            <span class="driver-stat-val">${driver.associationTime}</span>
+            <span class="driver-stat-label">With Association</span>
+          </div>
+          <div class="driver-stat-card">
+            <span class="driver-stat-val">Uganda</span>
+            <span class="driver-stat-label">Country</span>
+          </div>
+        </div>
+
+        <div class="driver-info-section">
+          <h3>About ${driver.name.split(' ')[0]}</h3>
+          <p>${driver.bio}</p>
+        </div>
+
+        <div class="driver-info-section">
+          <h3>Vehicle Information</h3>
+          <div class="vehicle-details-card">
+            <div class="vehicle-icon-frame">
+              <i data-lucide="truck"></i>
+            </div>
+            <div class="vehicle-info-text">
+              <strong>${driver.vehicle}</strong>
+              <span>Plate: ${driver.plate} &bull; ${driver.color}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="driver-info-section">
+          <h3>Compliments</h3>
+          <div class="compliment-badges">
+            ${driver.compliments.map(comp => `
+              <span class="compliment-badge">
+                <i data-lucide="${comp.includes('Safe') || comp.includes('Gentle') ? 'shield-check' : comp.includes('Punctual') ? 'clock' : comp.includes('Navigator') ? 'navigation' : 'smile'}"></i>
+                ${comp}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
 function renderOffers() {
   const offers = [
@@ -1071,7 +2010,7 @@ function renderOffers() {
 }
 
 function renderNotifications() {
-  const categories = ['all','Trips','Payments','Wallet','Parcels','Luggage','Promotions','Service Notices','Support'];
+  const categories = ['all','Trips','Payments','Parcels','Alerts'];
   const items = appData.notifications.filter(item => state.notificationFilter === 'all' || item.category === state.notificationFilter);
   return `
     ${screenHead('Notifications', 'Trip, wallet, parcel, luggage, promotion and service updates appear in one place.', '<button class="button button--ghost" type="button" data-action="mark-all-read"><i data-lucide="check-check"></i>Mark all as read</button><button class="button button--primary" type="button" data-action="notification-preferences"><i data-lucide="settings-2"></i>Preferences</button>')}
@@ -1154,7 +2093,13 @@ function handleTripReviewScroll() {
 }
 
 function passengerTotal() {
-  return state.passengerCount + state.childCount;
+  return state.passengerCount + state.reservedChildSeatsCount;
+}
+
+function getMaxAvailableSeats() {
+  const routeTrips = appData.trips.filter(t => t.boarding === state.searchFrom && t.destination === state.searchTo);
+  if (!routeTrips.length) return 14;
+  return Math.max(...routeTrips.map(t => t.seats));
 }
 
 function tripReviewFare() {
@@ -1278,6 +2223,10 @@ function destroyTripMap() {
     tripReviewMap.remove();
     tripReviewMap = null;
   }
+  if (parcelMap) {
+    parcelMap.remove();
+    parcelMap = null;
+  }
 }
 
 function initTripMap() {
@@ -1288,7 +2237,7 @@ function initTripMap() {
     if (fallback) fallback.hidden = false;
     return;
   }
-  const outbound = [[0.0606,32.4435],[0.0954,32.4777],[0.1533,32.5234],[0.2219,32.5565],[0.3476,32.5825]];
+  const outbound = [[0.0606, 32.4435], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
   const reverse = state.activeTrip.boarding.toLowerCase().includes('kampala');
   const points = reverse ? outbound.slice().reverse() : outbound;
   tripReviewMap = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: false, dragging: false, keyboard: false, scrollWheelZoom: false, touchZoom: false, zoomControl: false });
@@ -1320,7 +2269,7 @@ function initTripMap() {
 function bookingPaymentStatus() {
   if (state.luggageQuantities.commercial) return 'Luggage Fee Pending';
   if (state.paymentMethod === 'cash') return 'Payment Pending';
-  if ((state.paymentMethod === 'mtn' || state.paymentMethod === 'airtel') && state.paymentDemoState === 'pending') return 'Payment Pending';
+  if (state.paymentMethod === 'mobile' && state.paymentDemoState === 'pending') return 'Payment Pending';
   if (state.paymentMethod === 'corporate') return 'Awaiting Approval';
   return 'Paid';
 }
@@ -1329,6 +2278,22 @@ function displayReturnType() {
   if (state.ticketType !== 'return') return 'One Way';
   const labels = { 'same-day': 'Same-day Return', 'date-specific': 'Date-specific Return', open: 'Open Return', promotional: 'Promotional Return' };
   return labels[state.returnMode] || 'Return Ticket';
+}
+
+function getCityImage(stage) {
+  if (!stage) return 'assets/kampala.jpg';
+  const lower = stage.toLowerCase();
+  if (lower.includes('entebbe')) return 'assets/entebbe.jpg';
+  if (lower.includes('bweyogere')) return 'assets/bweyogere.jpg';
+  return 'assets/kampala.jpg';
+}
+
+function getCityLabel(stage) {
+  if (!stage) return 'Kampala';
+  const lower = stage.toLowerCase();
+  if (lower.includes('entebbe')) return 'Entebbe';
+  if (lower.includes('bweyogere')) return 'Bweyogere';
+  return 'Kampala';
 }
 
 function formatDemoDate(value) {
@@ -1394,10 +2359,10 @@ function initParcelBarcode() {
   if (!target) return;
   if (!window.JsBarcode) {
     target.setAttribute('viewBox', '0 0 360 92');
-    target.innerHTML = '<text x="180" y="52" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#081b33">FXP-260718-0842</text>';
+    target.innerHTML = '<text x="180" y="52" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#081b33">#964201832-DL</text>';
     return;
   }
-  JsBarcode(target, 'FXP-260718-0842', { format: 'CODE128', width: 2, height: 72, displayValue: true, fontSize: 15, lineColor: '#081b33', margin: 8 });
+  JsBarcode(target, '964201832-DL', { format: 'CODE128', width: 2, height: 72, displayValue: true, fontSize: 15, lineColor: '#081b33', margin: 8 });
 }
 
 /* =========================================================
@@ -1408,7 +2373,28 @@ function handleClick(event) {
   const screenTrigger = event.target.closest('[data-screen]');
   if (screenTrigger) {
     const screen = screenTrigger.dataset.screen;
-    if (screen === 'about') navigate('about'); else navigate(screen);
+    if (screenTrigger.dataset.driver) {
+      state.viewingDriverName = screenTrigger.dataset.driver.toLowerCase();
+    }
+    
+    // Set booking steps when navigating from sidebar submenus
+    if (screen === 'returns') {
+      state.bookingStep = 5;
+      state.ticketType = 'return';
+      state.tripType = 'return';
+      navigate('book');
+    } else if (screen === 'luggage') {
+      state.bookingStep = 4;
+      navigate('book');
+    } else if (screen === 'book') {
+      state.bookingStep = 1;
+      navigate('book');
+    } else if (screen === 'about') {
+      navigate('about');
+    } else {
+      navigate(screen);
+    }
+    
     closeModal(); closeSheet(); closeSideDrawer();
     return;
   }
@@ -1442,6 +2428,156 @@ function handleClick(event) {
     'open-more': openMoreSheet,
     'toggle-connection': toggleConnection,
     'trip-kind': () => { state.tripType = value; state.ticketType = value === 'return' ? 'return' : 'oneway'; renderCurrentScreen(); },
+    'select-route-card': () => {
+      const route = actionTrigger.dataset.route;
+      state.selectedRoute = route;
+      if (route === 'bweyogere') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Bweyogere';
+      } else if (route === 'busega') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Kampala Main Stage';
+      } else { // kajansi
+        state.searchFrom = 'Kampala Main Stage';
+        state.searchTo = 'Entebbe Main Stage';
+      }
+      renderCurrentScreen();
+      toast('Route profile updated.', 'success');
+    },
+    'select-route-card-step': () => {
+      const route = actionTrigger.dataset.route;
+      state.selectedRoute = route;
+      if (route === 'bweyogere') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Bweyogere';
+      } else if (route === 'busega') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Kampala Main Stage';
+      } else { // kajansi
+        state.searchFrom = 'Kampala Main Stage';
+        state.searchTo = 'Entebbe Main Stage';
+      }
+      state.bookingStep = 2;
+      renderCurrentScreen();
+      toast('Route selected.', 'success');
+    },
+    'decrement-adults': () => {
+      state.passengerCount = Math.max(1, state.passengerCount - 1);
+      renderCurrentScreen();
+    },
+    'increment-adults': () => {
+      const maxSeats = getMaxAvailableSeats();
+      if (passengerTotal() < maxSeats && state.passengerCount < 4) {
+        state.passengerCount++;
+        renderCurrentScreen();
+      } else if (state.passengerCount >= 4) {
+        toast('Maximum of 4 adults per booking.', 'warning');
+      } else {
+        toast(`Cannot exceed available vehicle capacity of ${maxSeats} seats.`, 'warning');
+      }
+    },
+    'decrement-children': () => {
+      state.childCount = Math.max(0, state.childCount - 1);
+      renderCurrentScreen();
+    },
+    'increment-children': () => {
+      state.childCount = Math.min(2, state.childCount + 1);
+      renderCurrentScreen();
+    },
+    'decrement-child-seats': () => {
+      state.reservedChildSeatsCount = Math.max(0, state.reservedChildSeatsCount - 1);
+      renderCurrentScreen();
+    },
+    'increment-child-seats': () => {
+      const maxSeats = getMaxAvailableSeats();
+      if (passengerTotal() < maxSeats && state.reservedChildSeatsCount < 2) {
+        state.reservedChildSeatsCount++;
+        renderCurrentScreen();
+      } else if (state.reservedChildSeatsCount >= 2) {
+        toast('Maximum of 2 reserved child seats.', 'warning');
+      } else {
+        toast(`Cannot exceed available vehicle capacity of ${maxSeats} seats.`, 'warning');
+      }
+    },
+    'select-date-mode': () => {
+      state.dateSelectionMode = value;
+      if (value === 'today') {
+        state.bookingDate = '2026-07-18'; // Reset to mockup standard today
+      }
+      renderCurrentScreen();
+    },
+    'book-preferred-seat': () => {
+      state.capacityMode = 'seats';
+      state.bookingStep = '3b';
+      state.selectedSeats = [];
+      renderCurrentScreen();
+      toast('Seat selector opened. Choose your seats.', 'info');
+    },
+    'booking-skip-seat': () => {
+      state.capacityMode = 'best';
+      state.bookingStep = 4;
+      renderCurrentScreen();
+      toast('Proceeding with best available seat.', 'info');
+    },
+    'booking-next-step': () => {
+      if (state.bookingStep === 3) {
+        if (!state.activeTrip) {
+          toast('Select a vehicle to continue.', 'warning');
+          return;
+        }
+      }
+      if (state.bookingStep === '3b') {
+        const required = passengerTotal();
+        if (state.selectedSeats.length !== required) {
+          toast(`Please select exactly ${required} seat${required === 1 ? '' : 's'} to continue, or go back.`, 'warning');
+          return;
+        }
+        state.bookingStep = 4;
+      } else {
+        state.bookingStep = Math.min(6, state.bookingStep + 1);
+      }
+      renderCurrentScreen();
+    },
+    'booking-prev-step': () => {
+      if (state.bookingStep === 4) {
+        state.bookingStep = state.capacityMode === 'seats' ? '3b' : 3;
+      } else if (state.bookingStep === '3b') {
+        state.bookingStep = 3;
+      } else {
+        state.bookingStep = Math.max(1, state.bookingStep - 1);
+      }
+      renderCurrentScreen();
+    },
+    'select-booking-vehicle': () => {
+      const trip = appData.trips.find(t => t.id === actionTrigger.dataset.tripId) || appData.trips[0];
+      state.activeTrip = trip;
+      renderCurrentScreen();
+      toast(`Vehicle ${trip.plate} selected. Choose seat assignment option.`, 'success');
+    },
+    'open-luggage-modal': () => {
+      openLuggageConfigModal();
+    },
+    'modal-luggage-plus': () => {
+      const id = actionTrigger.dataset.id;
+      state.luggageQuantities[id] = (state.luggageQuantities[id] || 0) + 1;
+      openLuggageConfigModal();
+      renderCurrentScreen();
+    },
+    'modal-luggage-minus': () => {
+      const id = actionTrigger.dataset.id;
+      state.luggageQuantities[id] = Math.max(0, (state.luggageQuantities[id] || 0) - 1);
+      openLuggageConfigModal();
+      renderCurrentScreen();
+    },
+    'toggle-return-switch': () => {
+      state.ticketType = state.ticketType === 'return' ? 'oneway' : 'return';
+      state.tripType = state.ticketType === 'return' ? 'return' : 'oneway';
+      renderCurrentScreen();
+      toast(state.ticketType === 'return' ? 'Return trip package added.' : 'Return trip package removed.', 'success');
+    },
+    'confirm-booking-step': () => {
+      confirmBooking();
+    },
     'swap-route': swapRoute,
     'search-trips': () => simulateNavigation('Searching demonstration departures…', 'book'),
     'select-departure': () => { const trip = appData.trips.find(t => t.depart === actionTrigger.dataset.trip) || appData.trips[0]; state.activeTrip = trip; navigate('trip-details'); },
@@ -1495,6 +2631,20 @@ function handleClick(event) {
     'upload-demo': () => toast('Attachment placeholder selected. No file was uploaded.', 'success'),
     'track-parcel': loadTracking,
     'tracking-state': () => { state.parcelTrackingState = value; renderCurrentScreen(); },
+    'chat-driver': () => {
+      const driver = driversData[state.viewingDriverName || 'isaac muwonge'] || driversData['isaac muwonge'];
+      if (driver.status === 'driving') {
+        toast(`For safety, ${driver.name} cannot receive messages while driving. Please call instead.`, 'warning');
+      } else {
+        toast(`Chat with ${driver.name} opened.`, 'success');
+      }
+    },
+    'call-driver': () => {
+      const driver = driversData[state.viewingDriverName || 'isaac muwonge'] || driversData['isaac muwonge'];
+      toast(`Calling driver ${driver.name} (+256 772 999 888)...`, 'success');
+    },
+    'edit-parcel-title': () => toast('Edit title feature is a prototype concept.', 'success'),
+    'receiving-another': () => toast('Receiving by another person form opened.', 'success'),
     'invalid-tracking': showInvalidTracking,
     'offer-details': showOfferDetails,
     'sponsored-details': showSponsoredDetails,
@@ -1614,15 +2764,15 @@ function verifyOtp() {
 }
 
 function swapRoute() {
-  const from = $('#home-from') || $('#book-from'); const to = $('#home-to') || $('#book-to');
-  if (from && to) {
-    const fromValue = from.value; const toValue = to.value;
-    state.searchFrom = toValue;
-    state.searchTo = fromValue;
-    from.value = toValue;
-    to.value = fromValue;
-    toast('Route direction swapped.', 'success');
+  if (state.selectedRoute === 'busega') {
+    toast('The Entebbe-Kampala (Via Busega) route runs one-way only. The reverse direction is not supported.', 'warning');
+    return;
   }
+  const temp = state.searchFrom;
+  state.searchFrom = state.searchTo;
+  state.searchTo = temp;
+  renderCurrentScreen();
+  toast('Route direction swapped.', 'success');
 }
 
 function saveReturnDate() {
@@ -1673,6 +2823,37 @@ function applyVoucher() {
   toast('UGX 2,000 voucher applied. Choose how to pay the balance.', 'success');
 }
 
+function openLuggageConfigModal() {
+  const modalBody = `
+    <p class="muted" style="margin-bottom: 16px;">Specify the count of bags or items you wish to declare for this trip.</p>
+    <div class="settings-list" style="display: flex; flex-direction: column; gap: 12px;">
+      ${appData.luggage.map(item => `
+        <div class="settings-row" style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="route-card__icon" style="width: 36px; height: 36px; background: rgba(7, 90, 168, 0.08); color: var(--brand-blue); border-radius: 8px; display: grid; place-items: center;"><i data-lucide="${item.icon}" style="width: 18px; height: 18px;"></i></div>
+            <div style="text-align: left;">
+              <strong style="display: block; font-size: 0.9rem;">${item.name}</strong>
+              <span class="muted text-small" style="display: block; font-size: 0.75rem;">${item.desc}</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-weight: 700; color: var(--brand-blue); font-size: 0.9rem;">${item.price === 0 ? 'Free' : formatUGX(item.price)}</span>
+            <div style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 8px; padding: 2px; background: white;">
+              <button class="icon-button icon-button--plain" style="width:28px;height:28px; border:0; background:transparent; font-size: 1.1rem; cursor:pointer;" type="button" data-action="modal-luggage-minus" data-id="${item.id}">−</button>
+              <span style="min-width:18px; text-align:center; font-weight:700;">${state.luggageQuantities[item.id] || 0}</span>
+              <button class="icon-button icon-button--plain" style="width:28px;height:28px; border:0; background:transparent; font-size: 1.1rem; cursor:pointer;" type="button" data-action="modal-luggage-plus" data-id="${item.id}">+</button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  const modalFooter = `
+    <button class="button button--primary w-full" type="button" data-action="close-modal">Save Luggage Registration</button>
+  `;
+  openModal('Declare luggage items', modalBody, modalFooter);
+}
+
 function confirmBooking() {
   const accepted = $('#booking-conditions')?.checked;
   if (!accepted) { toast('Accept the booking conditions to continue.', 'danger'); return; }
@@ -1684,7 +2865,7 @@ function confirmBooking() {
     if (!/^\d{4}$/.test(pin)) { toast('Enter any four digits for the demonstration wallet PIN.', 'danger'); return; }
     if (checkoutTotal() > state.walletBalance) { toast('The demonstration wallet balance is insufficient. Choose another payment method.', 'danger'); return; }
   }
-  if (state.paymentMethod === 'mtn' || state.paymentMethod === 'airtel') {
+  if (state.paymentMethod === 'mobile') {
     if (state.paymentDemoState === 'idle') { toast('Simulate a mobile-money response before confirming.', 'danger'); return; }
     if (state.paymentDemoState === 'failed') { toast('The simulated authorization failed. Reset it or choose another payment method.', 'danger'); return; }
   }
@@ -1695,9 +2876,16 @@ function confirmBooking() {
 }
 
 function loadTracking() {
-  const value = $('#tracking-number')?.value.trim();
-  if (!value || value.toUpperCase() !== 'FXP-260718-0842') showInvalidTracking();
-  else { showLoading('Loading parcel history…', () => { state.parcelTrackingState = 'intransit'; renderCurrentScreen(); toast('Parcel tracking loaded.', 'success'); }); }
+  const value = $('#tracking-number')?.value.trim().toUpperCase();
+  if (!value || (value !== '964201832-DL' && value !== '#964201832-DL' && value !== 'FXP-260718-0842')) {
+    showInvalidTracking();
+  } else {
+    showLoading('Loading parcel history…', () => {
+      state.parcelTrackingState = 'intransit';
+      navigate('trackparcel');
+      toast('Parcel tracking loaded.', 'success');
+    });
+  }
 }
 
 function markAllRead() {
@@ -1882,7 +3070,7 @@ function showWalletPin() {
 }
 
 function showInvalidTracking() {
-  openModal('No parcel found', `<div class="payment-state"><div class="payment-state__icon payment-state__icon--failed"><i data-lucide="package-x"></i></div><h3>Tracking number not recognized</h3><p class="muted">Check the number and try <strong>FXP-260718-0842</strong> for the demonstration result.</p></div>`, `<button class="button button--primary" type="button" data-action="close-modal">Try Again</button>`);
+  openModal('No parcel found', `<div class="payment-state"><div class="payment-state__icon payment-state__icon--failed"><i data-lucide="package-x"></i></div><h3>Tracking number not recognized</h3><p class="muted">Check the number and try <strong>964201832-DL</strong> for the demonstration result.</p></div>`, `<button class="button button--primary" type="button" data-action="close-modal">Try Again</button>`);
 }
 
 function showOfferDetails() {
@@ -1908,8 +3096,8 @@ function showNotificationDetail(id) {
 }
 
 function showNotificationPreferences() {
-  const categories = ['Trip alerts','Payment updates','Wallet activity','Parcel updates','Luggage notices','Promotions','Service notices','Support messages'];
-  openModal('Notification preferences', `<div class="settings-list">${categories.map((label,index) => `<div class="settings-row"><span class="settings-row__icon"><i data-lucide="bell-ring"></i></span><span class="settings-row__copy"><strong>${label}</strong><span>${index === 5 ? 'Optional marketing messages' : 'Recommended operational alerts'}</span></span><button class="switch ${index !== 5 ? 'is-on' : ''}" type="button" data-action="toggle-switch"><span></span></button></div>`).join('')}</div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="save-preferences">Save Preferences</button>`);
+  const categories = ['Trip alerts & Support', 'Payments & Wallet', 'Parcels & Luggage', 'Promotions & Alerts'];
+  openModal('Notification preferences', `<div class="settings-list">${categories.map((label,index) => `<div class="settings-row"><span class="settings-row__icon"><i data-lucide="bell-ring"></i></span><span class="settings-row__copy"><strong>${label}</strong><span>${index === 3 ? 'Optional marketing messages' : 'Recommended operational alerts'}</span></span><button class="switch ${index !== 3 ? 'is-on' : ''}" type="button" data-action="toggle-switch"><span></span></button></div>`).join('')}</div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="save-preferences">Save Preferences</button>`);
 }
 
 function showCallSupport() {

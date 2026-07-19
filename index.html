@@ -9,12 +9,12 @@
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://tile.openstreetmap.org">
   <link rel="stylesheet" href="leaflet.css">
-  <link rel="stylesheet" href="styles.css">
+  <link class="styles" rel="stylesheet" href="styles.css?v=37">
   <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-  <script defer src="script.js"></script>
+  <script defer src="script.js?v=37"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -122,6 +122,9 @@
             <i data-lucide="bell"></i>
             <span id="notification-badge" class="badge-count">5</span>
           </button>
+          <button id="topbar-share-button" class="icon-button is-hidden" type="button" data-action="share-demo" aria-label="Share">
+            <i data-lucide="upload"></i>
+          </button>
           <button class="profile-button hamburger-button" type="button" data-action="toggle-side-drawer" aria-label="Open menu">
             <i data-lucide="menu"></i>
             <span>SN</span>
@@ -143,11 +146,14 @@
     <div class="side-drawer__backdrop" data-action="close-drawer"></div>
     <div class="side-drawer__content">
       <div class="side-drawer__header">
-        <div class="drawer-user-info">
-          <div class="profile-avatar">SN</div>
-          <div>
-            <h3>Sarah Nabirye</h3>
-            <p class="muted text-small">+256 772 345 678</p>
+        <div class="drawer-user-info" data-screen="profile" role="button" tabindex="0" style="cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 6px 10px; border-radius: 12px; transition: background-color 0.2s ease; margin-right: 12px;" title="View Profile" onmouseover="this.style.backgroundColor='rgba(0,0,0,0.04)'" onmouseout="this.style.backgroundColor='transparent'">
+          <div class="profile-avatar" style="margin: 0;">SN</div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <h3 style="margin: 0; font-size: 0.98rem; font-weight: 700; color: #000000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sarah Nabirye</h3>
+              <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #757575; flex-shrink: 0;"></i>
+            </div>
+            <p class="muted text-small" style="margin: 2px 0 0 0; font-size: 0.78rem;">+256 772 345 678</p>
           </div>
         </div>
         <button class="icon-button icon-button--plain" type="button" data-action="close-drawer" aria-label="Close menu">
@@ -177,19 +183,29 @@
         <div class="drawer-section">
           <p class="drawer-section-title">Features & Services</p>
           <nav class="drawer-nav">
-            <button class="drawer-nav-item" type="button" data-screen="home"><i data-lucide="house"></i><span>Home Dashboard</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="book"><i data-lucide="ticket-plus"></i><span>Book a Trip</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="home"><i data-lucide="house"></i><span>Home</span></button>
+            
+            <div class="drawer-nav-group">
+              <button class="drawer-nav-item drawer-nav-item--parent" type="button" data-screen="book"><i data-lucide="ticket-plus"></i><span>Book a Trip</span></button>
+              <div class="drawer-nav-sub">
+                <button class="drawer-nav-sub-item" type="button" data-screen="returns"><i data-lucide="refresh-cw"></i><span>Return Tickets</span></button>
+                <button class="drawer-nav-sub-item" type="button" data-screen="luggage"><i data-lucide="luggage"></i><span>Luggage Tags</span></button>
+                <button class="drawer-nav-sub-item" type="button" data-screen="live"><i data-lucide="navigation"></i><span>Live Trip Tracking</span></button>
+              </div>
+            </div>
+
             <button class="drawer-nav-item" type="button" data-screen="trips"><i data-lucide="route"></i><span>My Trips</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="returns"><i data-lucide="refresh-cw"></i><span>Return Tickets</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><span>Fly Express Wallet</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="parcel"><i data-lucide="package-plus"></i><span>Send a Parcel</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="trackparcel"><i data-lucide="scan-search"></i><span>Track Parcel</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="luggage"><i data-lucide="luggage"></i><span>Luggage Tags</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="live"><i data-lucide="navigation"></i><span>Live Trip Tracking</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="offers"><i data-lucide="badge-percent"></i><span>Special Offers</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="notifications"><i data-lucide="bell"></i><span>Notifications</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="support"><i data-lucide="life-buoy"></i><span>Help & Support</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="profile"><i data-lucide="user-round"></i><span>Profile & Settings</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><span>Wallet</span></button>
+            
+            <div class="drawer-nav-group">
+              <button class="drawer-nav-item drawer-nav-item--parent" type="button" data-screen="parcel"><i data-lucide="package-plus"></i><span>Parcels</span></button>
+              <div class="drawer-nav-sub">
+                <button class="drawer-nav-sub-item" type="button" data-screen="trackparcel-list"><i data-lucide="scan-search"></i><span>Track Parcel</span></button>
+              </div>
+            </div>
+
+            <button class="drawer-nav-item" type="button" data-screen="offers"><i data-lucide="badge-percent"></i><span>Offers</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="support"><i data-lucide="life-buoy"></i><span>Help and Support</span></button>
             <button class="drawer-nav-item" type="button" data-screen="about"><i data-lucide="info"></i><span>About Fly Express</span></button>
           </nav>
         </div>
