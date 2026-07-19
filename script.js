@@ -1043,6 +1043,10 @@ function renderBook() {
       ${screenHead('Select Preferred Seat', 'Step 3b: Choose your seat number in the passenger van layout.')}
 
       <div class="booking-desktop-split" style="margin-top: 16px;">
+        <section class="card" style="margin: 0; text-align: center; padding: 20px;">
+          ${renderSeatMode()}
+        </section>
+
         <section class="card" style="margin: 0; display: flex; flex-direction: column; justify-content: center; text-align: left; padding: 24px;">
           <p class="section-kicker">Seat Booking Info</p>
           <h2 style="margin: 0 0 12px 0;">Van Seat Selection</h2>
@@ -1058,10 +1062,6 @@ function renderBook() {
               </div>
             ` : ''}
           </div>
-        </section>
-
-        <section class="card" style="margin: 0; text-align: center; padding: 20px;">
-          ${renderSeatMode()}
         </section>
       </div>
 
