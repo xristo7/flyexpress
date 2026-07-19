@@ -1011,7 +1011,7 @@ function renderBook() {
       <div class="booking-desktop-split" style="margin-top: 16px;">
         <section class="card" style="margin: 0; padding: 24px;">
           <div style="display: flex; gap: 16px; align-items: start;">
-            <div class="route-card__icon" style="background: var(--info-soft); color: var(--brand-blue); width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0;"><i data-lucide="luggage"></i></div>
+            <div class="luggage-info-icon" style="background: var(--info-soft); color: var(--brand-blue); width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0;"><i data-lucide="luggage"></i></div>
             <div>
               <h3 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 750; color: var(--charcoal);">Cabin Bag vs Standard Luggage</h3>
               <p class="muted" style="margin: 0; font-size: 0.85rem; line-height: 1.5; text-align: left;">
@@ -2864,7 +2864,7 @@ function openLuggageConfigModal() {
       ${appData.luggage.map(item => `
         <div class="settings-row" style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center;">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="route-card__icon" style="width: 36px; height: 36px; background: rgba(7, 90, 168, 0.08); color: var(--brand-blue); border-radius: 8px; display: grid; place-items: center;"><i data-lucide="${item.icon}" style="width: 18px; height: 18px;"></i></div>
+            <div class="luggage-modal-icon" style="width: 36px; height: 36px; background: rgba(7, 90, 168, 0.08); color: var(--brand-blue); border-radius: 8px; display: grid; place-items: center; flex-shrink: 0;"><i data-lucide="${item.icon}" style="width: 18px; height: 18px;"></i></div>
             <div style="text-align: left;">
               <strong style="display: block; font-size: 0.9rem;">${item.name}</strong>
               <span class="muted text-small" style="display: block; font-size: 0.75rem;">${item.desc}</span>
