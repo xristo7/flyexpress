@@ -10,9 +10,9 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const appData = {
   passenger: {
-    name: 'Sarah Nabirye',
+    name: 'Christo I.',
     phone: '+256 772 345 678',
-    email: 'sarah.nabirye@example.com',
+    email: 'christo.i@example.com',
     preferredRoute: 'Entebbe Main Stage → Kampala Main Stage'
   },
   routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Bweyogere'],
@@ -213,7 +213,7 @@ const state = {
   isBookingForSomeoneElse: false,
   otherTravelerName: '',
   otherTravelerPhone: '',
-  passengerDetails: [{ name: 'Sarah Nabirye', phone: '+256 772 345 678', category: 'Adult passenger', assistance: 'None required', emergency: '+256 700 123 456' }],
+  passengerDetails: [{ name: 'Christo I.', phone: '+256 772 345 678', category: 'Adult passenger', assistance: 'None required', emergency: '+256 700 123 456' }],
   capacityMode: 'capacity',
   selectedSeats: [],
   luggageQuantities: { personal: 1, standard: 0, large: 0, excess: 0, fragile: 0, commercial: 0 },
@@ -232,7 +232,7 @@ const state = {
   parcelPaymentMethod: 'wallet',
   parcelPaymentDemoState: 'idle',
   parcel: {
-    senderName: 'Sarah Nabirye',
+    senderName: 'Christo I.',
     senderPhone: '+256 772 345 678',
     recipientName: 'Julie Robinson',
     recipientPhone: '+44 7911 123456',
@@ -488,9 +488,9 @@ function renderAuth() {
         <p class="eyebrow">Passenger registration</p>
         <h2>Create account preview</h2>
         <div class="form-grid">
-          <div class="field field--full"><label for="reg-name">Full name</label><input id="reg-name" value="Sarah Nabirye"></div>
+          <div class="field field--full"><label for="reg-name">Full name</label><input id="reg-name" value="Christo I."></div>
           <div class="field field--full"><label for="reg-phone">Telephone number</label><input id="reg-phone" value="+256 772 345 678"></div>
-          <div class="field field--full"><label for="reg-email">Email address <span class="muted">(optional)</span></label><input id="reg-email" type="email" value="sarah.nabirye@example.com"></div>
+          <div class="field field--full"><label for="reg-email">Email address <span class="muted">(optional)</span></label><input id="reg-email" type="email" value="christo.i@example.com"></div>
           <div class="field field--full"><label for="reg-route">Preferred route</label><select id="reg-route"><option>Entebbe to Kampala</option><option>Kampala to Entebbe</option></select></div>
           <div class="field field--full"><label for="reg-pin">Four-digit wallet PIN</label><input id="reg-pin" inputmode="numeric" maxlength="4" value="2580" type="password"></div>
         </div>
@@ -685,7 +685,7 @@ function renderHome() {
   const date = new Intl.DateTimeFormat('en-UG', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   return `
     <section class="welcome-panel">
-      <div class="welcome-user"><div class="avatar" aria-hidden="true">SN</div><div><p class="eyebrow">${escapeHtml(date)}</p><h1>Good morning, Sarah</h1><p class="muted">Where are you travelling today?</p></div></div>
+      <div class="welcome-user"><img src="assets/christo-avatar.jpg" alt="Christo I." class="avatar" aria-hidden="true" style="object-fit: cover;"><div><p class="eyebrow">${escapeHtml(date)}</p><h1>Good morning, Christo</h1><p class="muted">Where are you travelling today?</p></div></div>
       <button class="wallet-shortcut" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><div><small>Wallet balance</small><strong>${formatUGX(state.walletBalance)}</strong></div><i data-lucide="chevron-right"></i></button>
     </section>
 
@@ -1142,7 +1142,7 @@ function renderBook() {
             <div class="detail-row"><span>Travel Date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.searchPeriod}</strong></div>
             <div class="detail-row"><span>Travellers</span><strong>${passengerMixLabel()}</strong></div>
             ${state.isBookingForSomeoneElse ? `
-              <div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Sarah Nabirye')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>
+              <div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Christo I.')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>
             ` : ''}
             <div class="detail-row"><span>Seat Preference</span><strong>${state.capacityMode === 'seats' ? `Seats: ${state.selectedSeats.join(', ')}` : 'Best available'}</strong></div>
             <div class="detail-row"><span>Registered Luggage</span><strong>${Object.values(state.luggageQuantities).reduce((a,b) => a+b,0)} items</strong></div>
@@ -2416,7 +2416,7 @@ function supportSuccess() {
 function renderProfile() {
   return `
     ${screenHead('Profile and settings', 'Manage passenger details, language, accessibility, privacy and demonstration preferences.')}
-    <section class="grid grid--sidebar"><div class="grid"><article class="card"><div class="profile-hero"><div class="profile-avatar">SN</div><div><p class="eyebrow">Fly Express passenger</p><h2 style="margin-bottom:5px">Sarah Nabirye</h2><p class="muted">+256 772 345 678 · sarah.nabirye@example.com</p><button class="button button--ghost button--small" type="button" data-action="edit-profile"><i data-lucide="pencil"></i>Edit Profile</button></div></div></article><article class="card"><div class="card-head"><h2>Passenger information</h2></div><div class="detail-list"><div class="detail-row"><span>Preferred route</span><strong>Entebbe → Kampala</strong></div><div class="detail-row"><span>Emergency contact</span><strong>+256 700 123 456</strong></div><div class="detail-row"><span>Saved passengers</span><strong>2 passengers</strong></div><div class="detail-row"><span>Saved pickup points</span><strong>Entebbe Main Stage, Kitooro</strong></div></div></article><article class="card"><div class="card-head"><div><p class="section-kicker">Accessibility</p><h2>Display and interaction</h2></div></div><div class="settings-list"><div class="settings-row"><span class="settings-row__icon"><i data-lucide="case-upper"></i></span><span class="settings-row__copy"><strong>Larger text</strong><span>Increase the interface type scale</span></span><button class="switch ${document.body.classList.contains('large-text') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="large-text"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="contrast"></i></span><span class="settings-row__copy"><strong>High contrast</strong><span>Increase borders and text contrast</span></span><button class="switch ${document.body.classList.contains('high-contrast') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="high-contrast"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="pause"></i></span><span class="settings-row__copy"><strong>Reduce motion</strong><span>Limit transitions and animations</span></span><button class="switch ${document.body.classList.contains('reduce-motion') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="reduce-motion"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="audio-lines"></i></span><span class="settings-row__copy"><strong>Screen-reader labels</strong><span>Accessible labels are included throughout</span></span><span class="status-chip status-chip--success">On</span></div></div></article></div><aside class="grid"><article class="card"><h3>Account and preferences</h3><div class="settings-list">${profileRow('Saved passengers','users','Manage frequent travellers','saved-passengers')}${profileRow('Saved pickup points','map-pinned','Manage common boarding points','saved-pickups')}${profileRow('Wallet security','shield-check','PIN and Auto-Pay settings','wallet-pin')}${profileRow('Notification preferences','bell-ring','Choose alert categories','notification-preferences')}${profileRow('Language','languages',state.language,'language')}${profileRow('Privacy','lock-keyhole','Review privacy preview','privacy')}${profileRow('Terms and Conditions','file-check-2','Demonstration terms','terms')}${profileRow('About Fly Express','info','Organization and app details','about')}</div></article><article class="card"><p class="section-kicker">Reviewer tools</p><button class="button button--ghost w-full" type="button" data-action="open-demo-panel"><i data-lucide="flask-conical"></i>Prototype Demo States</button><button class="button button--soft-red w-full" style="margin-top:10px" type="button" data-action="sign-out"><i data-lucide="log-out"></i>Sign Out</button></article></aside></section>`;
+    <section class="grid grid--sidebar"><div class="grid"><article class="card"><div class="profile-hero"><img src="assets/christo-avatar.jpg" alt="Christo I." class="profile-avatar" style="width: 72px; height: 72px; border-radius: 16px; object-fit: cover; border: 2px solid var(--border); margin: 0;"><div style="flex: 1;"><p class="eyebrow">Fly Express passenger</p><h2 style="margin-bottom:5px">Christo I.</h2><p class="muted">+256 772 345 678 · christo.i@example.com</p><button class="button button--ghost button--small" type="button" data-action="edit-profile"><i data-lucide="pencil"></i>Edit Profile</button></div></div></article><article class="card"><div class="card-head"><h2>Passenger information</h2></div><div class="detail-list"><div class="detail-row"><span>Preferred route</span><strong>Entebbe → Kampala</strong></div><div class="detail-row"><span>Emergency contact</span><strong>+256 700 123 456</strong></div><div class="detail-row"><span>Saved passengers</span><strong>2 passengers</strong></div><div class="detail-row"><span>Saved pickup points</span><strong>Entebbe Main Stage, Kitooro</strong></div></div></article><article class="card"><div class="card-head"><div><p class="section-kicker">Accessibility</p><h2>Display and interaction</h2></div></div><div class="settings-list"><div class="settings-row"><span class="settings-row__icon"><i data-lucide="case-upper"></i></span><span class="settings-row__copy"><strong>Larger text</strong><span>Increase the interface type scale</span></span><button class="switch ${document.body.classList.contains('large-text') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="large-text"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="contrast"></i></span><span class="settings-row__copy"><strong>High contrast</strong><span>Increase borders and text contrast</span></span><button class="switch ${document.body.classList.contains('high-contrast') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="high-contrast"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="pause"></i></span><span class="settings-row__copy"><strong>Reduce motion</strong><span>Limit transitions and animations</span></span><button class="switch ${document.body.classList.contains('reduce-motion') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="reduce-motion"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="audio-lines"></i></span><span class="settings-row__copy"><strong>Screen-reader labels</strong><span>Accessible labels are included throughout</span></span><span class="status-chip status-chip--success">On</span></div></div></article></div><aside class="grid"><article class="card"><h3>Account and preferences</h3><div class="settings-list">${profileRow('Saved passengers','users','Manage frequent travellers','saved-passengers')}${profileRow('Saved pickup points','map-pinned','Manage common boarding points','saved-pickups')}${profileRow('Wallet security','shield-check','PIN and Auto-Pay settings','wallet-pin')}${profileRow('Notification preferences','bell-ring','Choose alert categories','notification-preferences')}${profileRow('Language','languages',state.language,'language')}${profileRow('Privacy','lock-keyhole','Review privacy preview','privacy')}${profileRow('Terms and Conditions','file-check-2','Demonstration terms','terms')}${profileRow('About Fly Express','info','Organization and app details','about')}</div></article><article class="card"><p class="section-kicker">Reviewer tools</p><button class="button button--ghost w-full" type="button" data-action="open-demo-panel"><i data-lucide="flask-conical"></i>Prototype Demo States</button><button class="button button--soft-red w-full" style="margin-top:10px" type="button" data-action="sign-out"><i data-lucide="log-out"></i>Sign Out</button></article></aside></section>`;
 }
 function profileRow(title, icon, copy, action) { return `<button class="settings-row" type="button" ${action === 'about' ? 'data-screen="about"' : `data-action="${action}"`}><span class="settings-row__icon"><i data-lucide="${icon}"></i></span><span class="settings-row__copy"><strong>${title}</strong><span>${copy}</span></span><i data-lucide="chevron-right"></i></button>`; }
 
@@ -2739,7 +2739,7 @@ function renderSuccess() {
     <div class="success-check"><i data-lucide="check"></i></div>
     <p class="eyebrow">Booking successful</p><h1 id="success-title" tabindex="-1">Your trip is reserved</h1><p class="muted">This complete booking is simulated in browser memory and resets on refresh.</p>
     <div class="booking-reference"><i data-lucide="copy"></i>FX-260718-1842</div>
-    <article class="card" style="text-align:left"><div class="detail-list"><div class="detail-row"><span>Route</span><strong>${trip.boarding} → ${trip.destination}</strong></div>${state.dropOffLocation !== state.searchTo ? `<div class="detail-row"><span>Custom Drop-off Point</span><strong>${escapeHtml(state.dropOffLocation)}</strong></div>` : ''}<div class="detail-row"><span>Departure</span><strong>${formatDemoDate(state.bookingDate)} · ${trip.depart}</strong></div><div class="detail-row"><span>Vehicle</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Passengers</span><strong>${passengerTotal()}</strong></div>${state.isBookingForSomeoneElse ? `<div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Sarah Nabirye')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>` : ''}<div class="detail-row"><span>Ticket</span><strong>${displayReturnType()}</strong></div>${state.ticketType === 'return' && state.returnMode === 'date-specific' ? `<div class="detail-row"><span>Return date</span><strong>${formatDemoDate(state.returnDate)}</strong></div>` : ''}<div class="detail-row"><span>Amount</span><strong>${formatUGX(checkoutTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Payment method</span><strong>${paymentLabel()}</strong></div><div class="detail-row"><span>Payment status</span><strong class="${paymentStatus === 'Paid' ? 'text-success' : ''}">${paymentStatus}</strong></div></div></article>
+    <article class="card" style="text-align:left"><div class="detail-list"><div class="detail-row"><span>Route</span><strong>${trip.boarding} → ${trip.destination}</strong></div>${state.dropOffLocation !== state.searchTo ? `<div class="detail-row"><span>Custom Drop-off Point</span><strong>${escapeHtml(state.dropOffLocation)}</strong></div>` : ''}<div class="detail-row"><span>Departure</span><strong>${formatDemoDate(state.bookingDate)} · ${trip.depart}</strong></div><div class="detail-row"><span>Vehicle</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Passengers</span><strong>${passengerTotal()}</strong></div>${state.isBookingForSomeoneElse ? `<div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Christo I.')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>` : ''}<div class="detail-row"><span>Ticket</span><strong>${displayReturnType()}</strong></div>${state.ticketType === 'return' && state.returnMode === 'date-specific' ? `<div class="detail-row"><span>Return date</span><strong>${formatDemoDate(state.returnDate)}</strong></div>` : ''}<div class="detail-row"><span>Amount</span><strong>${formatUGX(checkoutTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Payment method</span><strong>${paymentLabel()}</strong></div><div class="detail-row"><span>Payment status</span><strong class="${paymentStatus === 'Paid' ? 'text-success' : ''}">${paymentStatus}</strong></div></div></article>
     <div class="button-row" style="justify-content:center;margin-top:18px"><button class="button button--primary" type="button" data-screen="ticket"><i data-lucide="ticket-check"></i>View Ticket</button><button class="button button--ghost" type="button" data-action="calendar-demo"><i data-lucide="calendar-plus"></i>Add to Calendar</button><button class="button button--ghost" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share Ticket</button><button class="button button--ghost" type="button" data-screen="home">Return Home</button></div>
   </section>`;
 }
@@ -2870,7 +2870,7 @@ function handleClick(event) {
     'change-number': () => { state.authView = 'signin'; renderAuth(); },
     'resend-otp': () => { startOtpCountdown(); toast('A new demonstration code is ready: 123456.', 'success'); },
     'verify-otp': () => verifyOtp(),
-    'create-account': () => { showLoading('Creating demonstration profile…', () => enterApp('Demo account created for Sarah Nabirye.')); },
+    'create-account': () => { showLoading('Creating demonstration profile…', () => enterApp('Demo account created for Christo I.')); },
     'go-back': goBack,
     'open-more': openMoreSheet,
     'toggle-connection': toggleConnection,
@@ -3055,7 +3055,7 @@ function handleClick(event) {
         state.passengerDetails[0].phone = state.otherTravelerPhone;
         toast('Booking for someone else enabled. Please enter their details.', 'success');
       } else {
-        state.passengerDetails[0].name = 'Sarah Nabirye';
+        state.passengerDetails[0].name = 'Christo I.';
         state.passengerDetails[0].phone = '+256 772 345 678';
         toast('Booking for self enabled.', 'success');
       }
@@ -3646,7 +3646,7 @@ function showCallSupport() {
 }
 
 function showChatSupport() {
-  openModal('Chat Support preview', `<div class="card card--soft"><p><strong>Fly Express Support</strong><br><span class="muted text-small">Hello Sarah. How can we assist with your trip today?</span></p></div><div class="card" style="margin-top:10px;margin-left:18%;background:var(--brand-blue);color:white"><p style="margin:0">I would like to confirm my boarding time.</p></div><div class="field" style="margin-top:14px"><label>Message</label><div class="input-group"><input placeholder="Type a message…"><button class="button button--primary" type="button" data-action="close-modal">Send</button></div></div><p class="privacy-note">Chat messages are not sent or stored.</p>`, '', true);
+  openModal('Chat Support preview', `<div class="card card--soft"><p><strong>Fly Express Support</strong><br><span class="muted text-small">Hello Christo. How can we assist with your trip today?</span></p></div><div class="card" style="margin-top:10px;margin-left:18%;background:var(--brand-blue);color:white"><p style="margin:0">I would like to confirm my boarding time.</p></div><div class="field" style="margin-top:14px"><label>Message</label><div class="input-group"><input placeholder="Type a message…"><button class="button button--primary" type="button" data-action="close-modal">Send</button></div></div><p class="privacy-note">Chat messages are not sent or stored.</p>`, '', true);
 }
 
 function showSupportStatuses() {
@@ -3654,11 +3654,11 @@ function showSupportStatuses() {
 }
 
 function showEditProfile() {
-  openModal('Edit passenger profile', `<div class="form-grid"><div class="field field--full"><label>Full name</label><input value="Sarah Nabirye"></div><div class="field"><label>Telephone</label><input value="+256 772 345 678"></div><div class="field"><label>Email</label><input value="sarah.nabirye@example.com"></div><div class="field field--full"><label>Preferred route</label><select><option>Entebbe → Kampala</option><option>Kampala → Entebbe</option></select></div><div class="field field--full"><label>Emergency contact</label><input value="+256 700 123 456"></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="save-profile">Save Changes</button>`);
+  openModal('Edit passenger profile', `<div class="form-grid"><div class="field field--full"><label>Full name</label><input value="Christo I."></div><div class="field"><label>Telephone</label><input value="+256 772 345 678"></div><div class="field"><label>Email</label><input value="christo.i@example.com"></div><div class="field field--full"><label>Preferred route</label><select><option>Entebbe → Kampala</option><option>Kampala → Entebbe</option></select></div><div class="field field--full"><label>Emergency contact</label><input value="+256 700 123 456"></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="save-profile">Save Changes</button>`);
 }
 
 function showSavedPassengers() {
-  openModal('Saved passengers', `<div class="grid"><article class="card card--compact"><div class="card-head"><div><strong>Sarah Nabirye</strong><div class="muted text-small">Primary passenger · +256 772 345 678</div></div><span class="status-chip status-chip--success">You</span></div></article><article class="card card--compact"><div class="card-head"><div><strong>Amina Nabirye</strong><div class="muted text-small">Child passenger · Emergency contact linked</div></div><button class="button button--ghost button--tiny" type="button">Edit</button></div></article><button class="button button--primary" type="button" data-action="close-modal"><i data-lucide="user-plus"></i>Add Passenger Preview</button></div>`);
+  openModal('Saved passengers', `<div class="grid"><article class="card card--compact"><div class="card-head"><div><strong>Christo I.</strong><div class="muted text-small">Primary passenger · +256 772 345 678</div></div><span class="status-chip status-chip--success">You</span></div></article><article class="card card--compact"><div class="card-head"><div><strong>Amina Nabirye</strong><div class="muted text-small">Child passenger · Emergency contact linked</div></div><button class="button button--ghost button--tiny" type="button">Edit</button></div></article><button class="button button--primary" type="button" data-action="close-modal"><i data-lucide="user-plus"></i>Add Passenger Preview</button></div>`);
 }
 
 function showSavedPickups() {
