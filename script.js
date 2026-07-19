@@ -945,7 +945,7 @@ function renderBook() {
                     <span class="van-plate-tag">${trip.plate}</span>
                   </div>
                   <div class="taxi-details">
-                    <div class="taxi-driver-info" data-screen="driver-profile" data-driver="${trip.driverName.toLowerCase()}" role="button" tabindex="0" onclick="event.stopPropagation();" style="cursor: pointer;">
+                    <div class="taxi-driver-info" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
                       <strong>${trip.driverName} (View Profile)</strong>
                       <span class="driver-rating-tag">${trip.driverRating} ★</span>
                     </div>
@@ -1193,7 +1193,7 @@ function renderTripResult(trip) {
         <span class="van-plate-tag">${trip.plate}</span>
       </div>
       <div class="taxi-details">
-        <div class="taxi-driver-info" data-screen="driver-profile" data-driver="${trip.driverName.toLowerCase()}" role="button" tabindex="0" style="cursor: pointer;">
+        <div class="taxi-driver-info" role="button" tabindex="0" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
           <strong>${trip.driverName} (View Profile)</strong>
           <span class="driver-rating-tag">${trip.driverRating} ★</span>
           <span class="driver-phone-small">${trip.driverPhone}</span>
@@ -1236,7 +1236,7 @@ function renderTripDetails() {
       <div class="sheet-handle" aria-hidden="true"></div>
       
       <!-- Driver Profile Card -->
-      <article class="card driver-profile-card" data-screen="driver-profile" data-driver="${trip.driverName.toLowerCase()}" role="button" tabindex="0" style="cursor: pointer;">
+      <article class="card driver-profile-card" role="button" tabindex="0" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
         <div class="driver-profile-header">
           <div class="driver-avatar">${trip.driverName.split(' ').map(n=>n[0]).join('')}</div>
           <div class="driver-meta">
@@ -1583,7 +1583,7 @@ function renderLiveTrip() {
       </div>
       <aside class="grid">
         <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><img src="assets/fly-express-van.png" alt="Fly Express passenger van"><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" data-screen="driver-profile" data-driver="daniel" role="button" tabindex="0" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel (View Profile)</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
+        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><img src="assets/fly-express-van.png" alt="Fly Express passenger van"><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel (View Profile)</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
         <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
         <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
       </aside>
@@ -1796,7 +1796,7 @@ function renderParcelList() {
           </div>
         </div>
         <div class="parcel-list-card__footer" onclick="event.stopPropagation();">
-          <span class="parcel-list-card__driver" data-screen="driver-profile" data-driver="isaac muwonge" role="button" tabindex="0" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="View Driver Profile"><img src="assets/sam-mcalen.png" alt="Isaac Muwonge" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">Isaac Muwonge · UBM 245K</span>
+          <span class="parcel-list-card__driver" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('isaac muwonge');" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="View Driver Profile"><img src="assets/sam-mcalen.png" alt="Isaac Muwonge" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">Isaac Muwonge · UBM 245K</span>
           <span class="muted text-small">Updated 3 min ago</span>
         </div>
       </article>
@@ -1886,7 +1886,7 @@ function renderParcelTracking() {
         
         <hr class="parcel-live-card__divider">
         
-        <div class="parcel-live-card__driver" data-screen="driver-profile" data-driver="isaac muwonge" role="button" tabindex="0" onclick="event.stopPropagation();">
+        <div class="parcel-live-card__driver" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('isaac muwonge');" style="cursor: pointer;">
           <div class="parcel-live-card__driver-left">
             <img src="assets/sam-mcalen.png" alt="Isaac Muwonge" class="parcel-live-card__avatar">
             <div class="parcel-live-card__driver-info">
@@ -2063,6 +2063,95 @@ function renderDriverProfile() {
   `;
 }
 
+function showDriverProfileModal(driverNameKey) {
+  const driverNameClean = (driverNameKey || 'isaac muwonge').toLowerCase().trim();
+  const driver = driversData[driverNameClean] || driversData['isaac muwonge'];
+  const isDriving = driver.status === 'driving';
+  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+  const initials = driver.name.split(' ').map(n => n[0]).join('');
+
+  const bodyHtml = `
+    <div class="driver-modal-content" style="text-align: left; padding: 4px;">
+      <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
+        <div style="position: relative; flex-shrink: 0; width: 72px; height: 72px;">
+          ${driver.avatar ? `
+            <img src="${avatarUrl}" alt="${driver.name}" style="width: 100%; height: 100%; border-radius: 16px; object-fit: cover; border: 2px solid var(--border);">
+          ` : `
+            <div style="width: 100%; height: 100%; border-radius: 16px; background: var(--brand-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem; border: 2px solid var(--border);">${initials}</div>
+          `}
+          ${isDriving ? `<span class="status-chip status-chip--gold" style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; box-shadow: var(--shadow-sm); z-index: 2; white-space: nowrap;">On Road</span>` : ''}
+        </div>
+        <div>
+          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--charcoal);">${driver.name}</h3>
+          <span class="driver-role-badge" style="display: inline-block; background: var(--info-soft); color: var(--brand-blue); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; margin-top: 4px;">${driver.role}</span>
+          <div style="display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 0.85rem;">
+            <i data-lucide="star" style="width: 14px; height: 14px; fill: var(--brand-gold); color: var(--brand-gold);"></i>
+            <strong>${driver.rating}</strong>
+            <span class="muted">(${driver.routes} routes)</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--surface-alt); border-radius: 12px; padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; text-align: center; border: 1px solid var(--border);">
+        <div>
+          <strong style="display: block; font-size: 0.9rem; color: var(--charcoal);">${driver.km} km</strong>
+          <span style="font-size: 0.68rem; color: var(--slate);">On Road</span>
+        </div>
+        <div>
+          <strong style="display: block; font-size: 0.9rem; color: var(--charcoal);">${driver.associationTime}</strong>
+          <span style="font-size: 0.68rem; color: var(--slate);">With Association</span>
+        </div>
+        <div>
+          <strong style="display: block; font-size: 0.9rem; color: var(--charcoal);">Uganda</strong>
+          <span style="font-size: 0.68rem; color: var(--slate);">Country</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <h4 style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">About</h4>
+        <p style="margin: 0; font-size: 0.82rem; line-height: 1.45; color: var(--charcoal);">${driver.bio}</p>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <h4 style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">Vehicle Information</h4>
+        <div style="display: flex; align-items: center; gap: 10px; background: var(--surface-alt); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px;">
+          <i data-lucide="truck" style="color: var(--brand-blue); width: 18px; height: 18px; flex-shrink: 0;"></i>
+          <div style="font-size: 0.82rem; min-width: 0;">
+            <strong style="display: block; color: var(--charcoal); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${driver.vehicle}</strong>
+            <span class="muted" style="font-size: 0.72rem;">Plate: ${driver.plate} &bull; ${driver.color}</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">Compliments</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          ${driver.compliments.map(comp => `
+            <span class="compliment-badge" style="display: inline-flex; align-items: center; gap: 4px; background: var(--surface-alt); border: 1px solid var(--border); padding: 4px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 600; color: var(--charcoal);">
+              <i data-lucide="${comp.includes('Safe') || comp.includes('Gentle') ? 'shield-check' : comp.includes('Punctual') ? 'clock' : comp.includes('Navigator') ? 'navigation' : 'smile'}" style="width: 12px; height: 12px;"></i>
+              ${comp}
+            </span>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  const footerHtml = `
+    <div style="display: flex; gap: 12px; width: 100%;">
+      <button class="button button--secondary" type="button" data-action="modal-chat-driver" data-value="${driverNameClean}" style="flex: 1; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <i data-lucide="${isDriving ? 'message-square-off' : 'message-square'}"></i> Chat
+      </button>
+      <button class="button button--primary" type="button" data-action="modal-call-driver" data-value="${driverNameClean}" style="flex: 1; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <i data-lucide="phone"></i> Call
+      </button>
+    </div>
+  `;
+
+  openModal('Driver Profile', bodyHtml, footerHtml);
+}
+window.showDriverProfileModal = showDriverProfileModal;
+
 function renderDriverChat() {
   const driverNameKey = state.viewingDriverName || 'isaac muwonge';
   const driver = driversData[driverNameKey] || driversData['isaac muwonge'];
@@ -2091,7 +2180,7 @@ function renderDriverChat() {
         </div>
         <div class="chat-driver-header__actions">
           <button class="icon-button" type="button" data-action="call-driver" aria-label="Call driver"><i data-lucide="phone"></i></button>
-          <button class="icon-button" type="button" data-screen="driver-profile" aria-label="View profile"><i data-lucide="user-round"></i></button>
+          <button class="icon-button" type="button" onclick="showDriverProfileModal('${driverNameKey.replace(/'/g, "\\'")}')" aria-label="View profile"><i data-lucide="user-round"></i></button>
         </div>
       </div>
 
@@ -2605,6 +2694,13 @@ function handleClick(event) {
     if (screenTrigger.dataset.driver) {
       state.viewingDriverName = screenTrigger.dataset.driver.toLowerCase();
     }
+
+    if (screen === 'driver-profile') {
+      showDriverProfileModal(state.viewingDriverName);
+      closeSideDrawer();
+      closeSheet();
+      return;
+    }
     
     // Set booking steps when navigating from sidebar submenus
     if (screen === 'returns') {
@@ -2921,7 +3017,22 @@ function handleClick(event) {
     },
     'end-call-demo': () => {
       toast('Call ended.', 'info');
-      navigate('driver-profile');
+      showDriverProfileModal(state.viewingDriverName);
+    },
+    'modal-chat-driver': () => {
+      closeModal();
+      state.viewingDriverName = value;
+      const driver = driversData[value] || driversData['isaac muwonge'];
+      if (driver.status === 'driving') {
+        toast(`For safety, ${driver.name} cannot receive messages while driving. Please call instead.`, 'warning');
+      } else {
+        navigate('driver-chat');
+      }
+    },
+    'modal-call-driver': () => {
+      closeModal();
+      state.viewingDriverName = value;
+      navigate('driver-call');
     },
     'toggle-mute-demo': () => {
       const btn = actionTrigger.closest('.call-action-btn');
