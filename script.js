@@ -789,7 +789,36 @@ function renderBook() {
       ${screenHead('Configure Route Details', 'Step 2 of 6: Set stages, travel date, time period and passenger counts.')}
 
       <div style="margin-top: 16px;">
-        <section class="card" style="margin: 0;">
+        <section class="card" style="margin: 0; overflow: hidden; padding: 0;">
+          <!-- Booking-for header banner -->
+          <div class="booking-for-header ${state.isBookingForSomeoneElse ? 'is-other' : ''}">
+            <div class="booking-for-header__top">
+              <div class="booking-for-header__info">
+                <div class="booking-for-header__icon">
+                  <i data-lucide="${state.isBookingForSomeoneElse ? 'user-round-plus' : 'user-round-check'}" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                  <strong class="booking-for-header__title">${state.isBookingForSomeoneElse ? 'Booking for someone else' : 'Booking for yourself'}</strong>
+                  <span class="booking-for-header__sub">${state.isBookingForSomeoneElse ? 'Enter the primary traveler\'s details below' : `${escapeHtml(appData.passenger.name)} · ${escapeHtml(appData.passenger.phone)}`}</span>
+                </div>
+              </div>
+              <button class="switch ${state.isBookingForSomeoneElse ? 'is-on' : ''}" type="button" data-action="toggle-book-for-someone-else" aria-label="Toggle booking for someone else"><span></span></button>
+            </div>
+            ${state.isBookingForSomeoneElse ? `
+              <div class="booking-for-header__fields">
+                <div class="field" style="margin: 0;">
+                  <label for="other-traveler-name">Traveler's Full Name</label>
+                  <input id="other-traveler-name" type="text" placeholder="e.g. John Doe" value="${escapeHtml(state.otherTravelerName)}" data-field="other-traveler-name">
+                </div>
+                <div class="field" style="margin: 0;">
+                  <label for="other-traveler-phone">Traveler's Phone Number</label>
+                  <input id="other-traveler-phone" type="tel" placeholder="e.g. +256 700 000 000" value="${escapeHtml(state.otherTravelerPhone)}" data-field="other-traveler-phone">
+                </div>
+              </div>
+            ` : ''}
+          </div>
+
+          <div style="padding: 20px;">
           <div class="form-grid" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: end;">
             <div class="field"><label for="book-from">Departure stage</label><select id="book-from" data-field="search-from">${allowedFrom.map(route => optionMarkup(route, state.searchFrom)).join('')}</select></div>
             <button class="swap-button" type="button" data-action="swap-route" aria-label="Swap locations" style="margin-bottom: 4px; border: 1px solid var(--border); width: 46px; height: 46px; border-radius: 11px; display: grid; place-items: center; background: white; cursor: pointer; transition: var(--ease);"><i data-lucide="arrow-left-right" style="width: 18px; height: 18px; color: var(--brand-blue);"></i></button>
@@ -869,28 +898,6 @@ function renderBook() {
             </div>
           ` : ''}
 
-          <!-- Book for someone else option -->
-          <div class="stepper-card" style="margin-top: 16px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 14px; width: 100%;">
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-              <div style="text-align: left;">
-                <strong style="font-size: 0.95rem; display: block; color: var(--charcoal);">Book for someone else</strong>
-                <span class="muted text-small" style="font-size: 0.76rem; display: block; margin-top: 2px;">Check this if you are reserving the ticket for another traveler</span>
-              </div>
-              <button class="switch ${state.isBookingForSomeoneElse ? 'is-on' : ''}" type="button" data-action="toggle-book-for-someone-else" aria-label="Toggle booking for someone else"><span></span></button>
-            </div>
-            
-            ${state.isBookingForSomeoneElse ? `
-              <div class="form-grid" style="border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px;">
-                <div class="field" style="margin: 0; text-align: left;">
-                  <label for="other-traveler-name" style="font-size: 0.8rem; margin-bottom: 4px; display: block;">Traveler's Full Name</label>
-                  <input id="other-traveler-name" type="text" placeholder="e.g. John Doe" value="${escapeHtml(state.otherTravelerName)}" data-field="other-traveler-name" style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); width: 100%; font-size: 0.9rem;">
-                </div>
-                <div class="field" style="margin: 0; text-align: left;">
-                  <label for="other-traveler-phone" style="font-size: 0.8rem; margin-bottom: 4px; display: block;">Traveler's Phone Number</label>
-                  <input id="other-traveler-phone" type="tel" placeholder="e.g. +256 700 000 000" value="${escapeHtml(state.otherTravelerPhone)}" data-field="other-traveler-phone" style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); width: 100%; font-size: 0.9rem;">
-                </div>
-              </div>
-            ` : ''}
           </div>
         </section>
       </div>
