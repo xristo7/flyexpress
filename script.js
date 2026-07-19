@@ -181,6 +181,9 @@ const state = {
   passengerCount: 1,
   childCount: 0,
   reservedChildSeatsCount: 0,
+  isBookingForSomeoneElse: false,
+  otherTravelerName: '',
+  otherTravelerPhone: '',
   passengerDetails: [{ name: 'Sarah Nabirye', phone: '+256 772 345 678', category: 'Adult passenger', assistance: 'None required', emergency: '+256 700 123 456' }],
   capacityMode: 'capacity',
   selectedSeats: [],
@@ -852,10 +855,32 @@ function renderBook() {
                   <button type="button" class="stepper-btn" data-action="decrement-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
                   <span id="child-seats-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.2rem; color: var(--charcoal);">${state.reservedChildSeatsCount}</span>
                   <button type="button" class="stepper-btn" data-action="increment-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
-                </div>
-              </div>
             </div>
           ` : ''}
+
+          <!-- Book for someone else option -->
+          <div class="stepper-card" style="margin-top: 16px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 14px; width: 100%;">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <div style="text-align: left;">
+                <strong style="font-size: 0.95rem; display: block; color: var(--charcoal);">Book for someone else</strong>
+                <span class="muted text-small" style="font-size: 0.76rem; display: block; margin-top: 2px;">Check this if you are reserving the ticket for another traveler</span>
+              </div>
+              <button class="switch ${state.isBookingForSomeoneElse ? 'is-on' : ''}" type="button" data-action="toggle-book-for-someone-else" aria-label="Toggle booking for someone else"><span></span></button>
+            </div>
+            
+            ${state.isBookingForSomeoneElse ? `
+              <div class="form-grid" style="border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px;">
+                <div class="field" style="margin: 0; text-align: left;">
+                  <label for="other-traveler-name" style="font-size: 0.8rem; margin-bottom: 4px; display: block;">Traveler's Full Name</label>
+                  <input id="other-traveler-name" type="text" placeholder="e.g. John Doe" value="${escapeHtml(state.otherTravelerName)}" data-field="other-traveler-name" style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); width: 100%; font-size: 0.9rem;">
+                </div>
+                <div class="field" style="margin: 0; text-align: left;">
+                  <label for="other-traveler-phone" style="font-size: 0.8rem; margin-bottom: 4px; display: block;">Traveler's Phone Number</label>
+                  <input id="other-traveler-phone" type="tel" placeholder="e.g. +256 700 000 000" value="${escapeHtml(state.otherTravelerPhone)}" data-field="other-traveler-phone" style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); width: 100%; font-size: 0.9rem;">
+                </div>
+              </div>
+            ` : ''}
+          </div>
         </section>
       </div>
 
@@ -1064,6 +1089,9 @@ function renderBook() {
             <div class="detail-row"><span>Driver</span><strong>${state.activeTrip.driverName}</strong></div>
             <div class="detail-row"><span>Travel Date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.searchPeriod}</strong></div>
             <div class="detail-row"><span>Travellers</span><strong>${passengerMixLabel()}</strong></div>
+            ${state.isBookingForSomeoneElse ? `
+              <div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Sarah Nabirye')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>
+            ` : ''}
             <div class="detail-row"><span>Seat Preference</span><strong>${state.capacityMode === 'seats' ? `Seats: ${state.selectedSeats.join(', ')}` : 'Best available'}</strong></div>
             <div class="detail-row"><span>Registered Luggage</span><strong>${Object.values(state.luggageQuantities).reduce((a,b) => a+b,0)} items</strong></div>
             <div class="detail-row"><span>Base Fare</span><strong>${formatUGX(checkoutBaseFare())}</strong></div>
@@ -1452,7 +1480,7 @@ function renderTicket() {
       <div class="ticket-body">
         <div class="ticket-route"><div class="ticket-route__place"><span>FROM</span><strong>Entebbe</strong><span>Main Stage</span></div><div class="ticket-route__arrow"><i data-lucide="arrow-right"></i></div><div class="ticket-route__place"><span>TO</span><strong>Kampala</strong><span>Main Stage</span></div></div>
         <div class="ticket-grid">
-          ${ticketField('Passenger','Sarah Nabirye')}${ticketField('Booking reference','FX-260718-1842')}${ticketField('Ticket number','FET-884210')}${ticketField('Travel date','18 July 2026')}${ticketField('Departure','8:30 AM')}${ticketField('Boarding time','8:15 AM')}${ticketField('Vehicle','UBM 245K')}${ticketField('Ticket type',state.ticketType === 'return' ? 'Open Return' : 'One Way')}${ticketField('Passengers',String(state.passengerCount + state.childCount))}${ticketField('Capacity reference',state.capacityMode === 'seats' ? state.selectedSeats.join(', ') : 'Position 04')}${ticketField('Payment status',state.paymentMethod === 'cash' ? 'Pending' : 'Paid')}${ticketField('Fare paid',formatUGX(checkoutTotal()))}${ticketField('Luggage',luggageTotal() ? `LUG-1842 · ${formatUGX(luggageTotal())}` : 'Small item only')}${ticketField('Validity','Until boarding / return expiry')}${ticketField('Return expiry',state.ticketType === 'return' ? '21 Jul 2026 · 10 PM' : 'Not applicable')}
+          ${ticketField('Passenger',escapeHtml(state.passengerDetails[0]?.name || appData.passenger.name))}${ticketField('Booking reference','FX-260718-1842')}${ticketField('Ticket number','FET-884210')}${ticketField('Travel date','18 July 2026')}${ticketField('Departure','8:30 AM')}${ticketField('Boarding time','8:15 AM')}${ticketField('Vehicle','UBM 245K')}${ticketField('Ticket type',state.ticketType === 'return' ? 'Open Return' : 'One Way')}${ticketField('Passengers',String(state.passengerCount + state.childCount))}${ticketField('Capacity reference',state.capacityMode === 'seats' ? state.selectedSeats.join(', ') : 'Position 04')}${ticketField('Payment status',state.paymentMethod === 'cash' ? 'Pending' : 'Paid')}${ticketField('Fare paid',formatUGX(checkoutTotal()))}${ticketField('Luggage',luggageTotal() ? `LUG-1842 · ${formatUGX(luggageTotal())}` : 'Small item only')}${ticketField('Validity','Until boarding / return expiry')}${ticketField('Return expiry',state.ticketType === 'return' ? '21 Jul 2026 · 10 PM' : 'Not applicable')}
         </div>
         <div class="ticket-code-area"><div class="qr-code" aria-label="Decorative QR-style ticket code">${generateQr()}</div><div><p class="section-kicker">Verification code</p><div class="verification-code">482 915</div><p class="muted text-small">This code and QR visual are non-scannable demonstration elements.</p></div></div>
       </div>
@@ -2328,7 +2356,7 @@ function renderSuccess() {
     <div class="success-check"><i data-lucide="check"></i></div>
     <p class="eyebrow">Booking successful</p><h1 id="success-title" tabindex="-1">Your trip is reserved</h1><p class="muted">This complete booking is simulated in browser memory and resets on refresh.</p>
     <div class="booking-reference"><i data-lucide="copy"></i>FX-260718-1842</div>
-    <article class="card" style="text-align:left"><div class="detail-list"><div class="detail-row"><span>Route</span><strong>${trip.boarding} → ${trip.destination}</strong></div><div class="detail-row"><span>Departure</span><strong>${formatDemoDate(state.bookingDate)} · ${trip.depart}</strong></div><div class="detail-row"><span>Vehicle</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Passengers</span><strong>${passengerTotal()}</strong></div><div class="detail-row"><span>Ticket</span><strong>${displayReturnType()}</strong></div>${state.ticketType === 'return' && state.returnMode === 'date-specific' ? `<div class="detail-row"><span>Return date</span><strong>${formatDemoDate(state.returnDate)}</strong></div>` : ''}<div class="detail-row"><span>Amount</span><strong>${formatUGX(checkoutTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Payment method</span><strong>${paymentLabel()}</strong></div><div class="detail-row"><span>Payment status</span><strong class="${paymentStatus === 'Paid' ? 'text-success' : ''}">${paymentStatus}</strong></div></div></article>
+    <article class="card" style="text-align:left"><div class="detail-list"><div class="detail-row"><span>Route</span><strong>${trip.boarding} → ${trip.destination}</strong></div><div class="detail-row"><span>Departure</span><strong>${formatDemoDate(state.bookingDate)} · ${trip.depart}</strong></div><div class="detail-row"><span>Vehicle</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Passengers</span><strong>${passengerTotal()}</strong></div>${state.isBookingForSomeoneElse ? `<div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Sarah Nabirye')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>` : ''}<div class="detail-row"><span>Ticket</span><strong>${displayReturnType()}</strong></div>${state.ticketType === 'return' && state.returnMode === 'date-specific' ? `<div class="detail-row"><span>Return date</span><strong>${formatDemoDate(state.returnDate)}</strong></div>` : ''}<div class="detail-row"><span>Amount</span><strong>${formatUGX(checkoutTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Payment method</span><strong>${paymentLabel()}</strong></div><div class="detail-row"><span>Payment status</span><strong class="${paymentStatus === 'Paid' ? 'text-success' : ''}">${paymentStatus}</strong></div></div></article>
     <div class="button-row" style="justify-content:center;margin-top:18px"><button class="button button--primary" type="button" data-screen="ticket"><i data-lucide="ticket-check"></i>View Ticket</button><button class="button button--ghost" type="button" data-action="calendar-demo"><i data-lucide="calendar-plus"></i>Add to Calendar</button><button class="button button--ghost" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share Ticket</button><button class="button button--ghost" type="button" data-screen="home">Return Home</button></div>
   </section>`;
 }
@@ -2554,6 +2582,18 @@ function handleClick(event) {
       toast('Proceeding with best available seat.', 'info');
     },
     'booking-next-step': () => {
+      if (state.bookingStep === 2) {
+        if (state.isBookingForSomeoneElse) {
+          if (!state.otherTravelerName || !state.otherTravelerName.trim()) {
+            toast("Please enter the traveler's full name.", 'warning');
+            return;
+          }
+          if (!state.otherTravelerPhone || !state.otherTravelerPhone.trim()) {
+            toast("Please enter the traveler's phone number.", 'warning');
+            return;
+          }
+        }
+      }
       if (state.bookingStep === 3) {
         if (!state.activeTrip) {
           toast('Select a vehicle to continue.', 'warning');
@@ -2608,6 +2648,19 @@ function handleClick(event) {
       state.tripType = state.ticketType === 'return' ? 'return' : 'oneway';
       renderCurrentScreen();
       toast(state.ticketType === 'return' ? 'Return trip package added.' : 'Return trip package removed.', 'success');
+    },
+    'toggle-book-for-someone-else': () => {
+      state.isBookingForSomeoneElse = !state.isBookingForSomeoneElse;
+      if (state.isBookingForSomeoneElse) {
+        state.passengerDetails[0].name = state.otherTravelerName;
+        state.passengerDetails[0].phone = state.otherTravelerPhone;
+        toast('Booking for someone else enabled. Please enter their details.', 'success');
+      } else {
+        state.passengerDetails[0].name = 'Sarah Nabirye';
+        state.passengerDetails[0].phone = '+256 772 345 678';
+        toast('Booking for self enabled.', 'success');
+      }
+      renderCurrentScreen();
     },
     'confirm-booking-step': () => {
       confirmBooking();
@@ -2761,6 +2814,18 @@ function handleChange(event) {
 function handleInput(event) {
   const target = event.target;
   if (target.dataset.parcelField) state.parcel[target.dataset.parcelField] = target.value;
+  if (target.dataset.field === 'other-traveler-name') {
+    state.otherTravelerName = target.value;
+    if (state.passengerDetails[0]) {
+      state.passengerDetails[0].name = target.value;
+    }
+  }
+  if (target.dataset.field === 'other-traveler-phone') {
+    state.otherTravelerPhone = target.value;
+    if (state.passengerDetails[0]) {
+      state.passengerDetails[0].phone = target.value;
+    }
+  }
   if (target.dataset.passengerField) {
     const index = Number(target.dataset.passengerIndex);
     if (state.passengerDetails[index]) state.passengerDetails[index][target.dataset.passengerField] = target.value;
