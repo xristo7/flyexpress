@@ -278,10 +278,14 @@ function passengerMixLabel() {
 }
 
 function getSearchResults() {
-  const enoughSeats = appData.trips.filter(trip => trip.seats >= passengerTotal());
-  const exact = enoughSeats.filter(trip => trip.boarding === state.searchFrom && trip.destination === state.searchTo);
+  const exact = appData.trips.filter(trip => trip.boarding === state.searchFrom && trip.destination === state.searchTo);
   if (exact.length) return exact;
-  return enoughSeats.map(trip => ({ ...trip, boarding: state.searchFrom, destination: state.searchTo }));
+  return appData.trips.map(trip => ({ ...trip, boarding: state.searchFrom, destination: state.searchTo }));
+}
+
+function getVanCapacity(trip) {
+  if (trip.vehicle && trip.vehicle.includes('18')) return 18;
+  return 14;
 }
 
 function captureFocusDescriptor(root) {
@@ -861,6 +865,14 @@ function renderBook() {
   }
 
   if (step === 3) {
+    // If selected trip no longer has enough seats, clear selection
+    if (state.activeTrip) {
+      const liveTrip = appData.trips.find(t => t.id === state.activeTrip.id);
+      if (liveTrip && liveTrip.seats < passengerTotal()) {
+        state.activeTrip = null;
+      }
+    }
+
     const results = getSearchResults();
     const sortedTrips = results.slice().sort((a, b) => {
       const getMins = (str) => {
@@ -877,12 +889,14 @@ function renderBook() {
         <section class="grid" style="gap: 14px; margin: 0;">
           ${sortedTrips.length ? sortedTrips.map(trip => {
             const isSelected = state.activeTrip && state.activeTrip.id === trip.id;
+            const hasEnoughSeats = trip.seats >= passengerTotal();
+            const capacity = getVanCapacity(trip);
             return `
-              <article class="card card--hover result-card taxi-result-card ${isSelected ? 'is-active' : ''}" data-action="select-booking-vehicle" data-trip-id="${trip.id}" role="button" tabindex="0" style="${isSelected ? 'border-color: var(--brand-blue); background: var(--info-soft); margin: 0; position: relative;' : 'margin: 0; position: relative;'}">
-                <div class="card-selection-indicator ${isSelected ? 'is-selected' : ''}"></div>
+              <article class="card card--hover result-card taxi-result-card ${isSelected ? 'is-active' : ''} ${!hasEnoughSeats ? 'is-disabled' : ''}" data-action="${hasEnoughSeats ? 'select-booking-vehicle' : ''}" data-trip-id="${trip.id}" role="button" tabindex="${hasEnoughSeats ? '0' : '-1'}" style="${isSelected ? 'border-color: var(--brand-blue); background: var(--info-soft); margin: 0; position: relative;' : 'margin: 0; position: relative;'} ${!hasEnoughSeats ? 'opacity: 0.55; cursor: not-allowed;' : ''}">
+                ${hasEnoughSeats ? `<div class="card-selection-indicator ${isSelected ? 'is-selected' : ''}"></div>` : ''}
                 <div class="taxi-result-body">
                   <div class="taxi-van-visual">
-                    <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img">
+                    <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img" style="${!hasEnoughSeats ? 'filter: grayscale(1);' : ''}">
                     <span class="van-plate-tag">${trip.plate}</span>
                   </div>
                   <div class="taxi-details">
@@ -892,14 +906,18 @@ function renderBook() {
                     </div>
                     <div class="taxi-proximity-info" style="margin-top: 6px;">
                       <span class="proximity-countdown" style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="clock" style="width: 14px; height: 14px;"></i> ${trip.countdown}</span>
-                      <span class="proximity-status" style="display: block; margin-top: 2px;">${trip.currentStage} · ${trip.vansAtStage} vans at stage</span>
+                      <span class="proximity-status" style="display: block; margin-top: 2px;">${trip.currentStage} · ${trip.vehicle} (${capacity} seats)</span>
                     </div>
                   </div>
                 </div>
                 <div class="taxi-result-route-preview" style="text-align: right; min-width: 100px; padding-right: 14px;">
                   <strong>${trip.depart}</strong>
                   <span style="display: block; font-size: 0.75rem; color: var(--slate);">${trip.duration}</span>
-                  <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}" style="margin-top: 8px; display: inline-block;">${trip.seats} seats left</span>
+                  ${hasEnoughSeats ? `
+                    <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}" style="margin-top: 8px; display: inline-block;">${trip.seats} seats left</span>
+                  ` : `
+                    <span class="status-chip status-chip--danger" style="margin-top: 8px; display: inline-block;">Only ${trip.seats} left (Need ${passengerTotal()})</span>
+                  `}
                 </div>
               </article>
             `;
@@ -2466,37 +2484,37 @@ function handleClick(event) {
       renderCurrentScreen();
     },
     'increment-adults': () => {
-      const maxSeats = getMaxAvailableSeats();
-      if (passengerTotal() < maxSeats && state.passengerCount < 4) {
-        state.passengerCount++;
-        renderCurrentScreen();
-      } else if (state.passengerCount >= 4) {
-        toast('Maximum of 4 adults per booking.', 'warning');
-      } else {
-        toast(`Cannot exceed available vehicle capacity of ${maxSeats} seats.`, 'warning');
-      }
+      state.passengerCount++;
+      renderCurrentScreen();
     },
     'decrement-children': () => {
       state.childCount = Math.max(0, state.childCount - 1);
+      // Auto-adjust reserved seats to match child count constraint
+      state.reservedChildSeatsCount = Math.min(state.childCount, state.reservedChildSeatsCount);
+      state.reservedChildSeatsCount = Math.max(state.reservedChildSeatsCount, state.childCount - 2);
       renderCurrentScreen();
     },
     'increment-children': () => {
-      state.childCount = Math.min(2, state.childCount + 1);
+      state.childCount++;
+      // Auto-adjust reserved seats: a single passenger can't add > 2 children without automatically reserving a seat.
+      state.reservedChildSeatsCount = Math.max(state.reservedChildSeatsCount, state.childCount - 2);
       renderCurrentScreen();
     },
     'decrement-child-seats': () => {
-      state.reservedChildSeatsCount = Math.max(0, state.reservedChildSeatsCount - 1);
-      renderCurrentScreen();
+      const minSeats = Math.max(0, state.childCount - 2);
+      if (state.reservedChildSeatsCount > minSeats) {
+        state.reservedChildSeatsCount--;
+        renderCurrentScreen();
+      } else {
+        toast(`At least ${minSeats} seat(s) must be reserved for ${state.childCount} children.`, 'warning');
+      }
     },
     'increment-child-seats': () => {
-      const maxSeats = getMaxAvailableSeats();
-      if (passengerTotal() < maxSeats && state.reservedChildSeatsCount < 2) {
+      if (state.reservedChildSeatsCount < state.childCount) {
         state.reservedChildSeatsCount++;
         renderCurrentScreen();
-      } else if (state.reservedChildSeatsCount >= 2) {
-        toast('Maximum of 2 reserved child seats.', 'warning');
       } else {
-        toast(`Cannot exceed available vehicle capacity of ${maxSeats} seats.`, 'warning');
+        toast('Cannot reserve more child seats than the number of children.', 'warning');
       }
     },
     'select-date-mode': () => {
