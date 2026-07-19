@@ -855,6 +855,8 @@ function renderBook() {
                   <button type="button" class="stepper-btn" data-action="decrement-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
                   <span id="child-seats-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.2rem; color: var(--charcoal);">${state.reservedChildSeatsCount}</span>
                   <button type="button" class="stepper-btn" data-action="increment-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
+                </div>
+              </div>
             </div>
           ` : ''}
 
