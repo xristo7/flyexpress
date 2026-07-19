@@ -2012,6 +2012,7 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
     border: 1px solid var(--border) !important;
     box-shadow: 0 8px 24px rgba(16,24,40,.06) !important;
     display: flex !important;
+    align-items: center !important;
     gap: 8px !important;
     width: auto !important;
     margin: 0 !important;
@@ -2021,11 +2022,21 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   .review-sticky-cta button,
   .review-sticky-cta .button {
     margin: 0 !important;
-    width: 100% !important;
+    width: auto !important;
     flex: 1 !important;
     height: 48px !important;
     border-radius: 16px !important;
     font-size: 0.92rem !important;
+  }
+  .floating-cta-container button[data-action="booking-prev-step"],
+  .review-sticky-cta button[data-action="booking-prev-step"] {
+    flex: 0 0 48px !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
   .review-sticky-cta .return-quick-toggle {
     flex: 0 0 100px !important;
