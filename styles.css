@@ -4175,3 +4175,171 @@ body[data-active-screen="driver-profile"] .main-content {
 .drawer-nav-item--signout:hover svg {
   color: #ff8787 !important;
 }
+
+/* Custom Onboarding Capsule & Floating Styles */
+.onboarding-visual-wrapper {
+  position: relative !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 auto 36px !important;
+  width: 100% !important;
+  max-width: 320px !important;
+  height: 400px !important;
+}
+
+.onboarding-capsule-frame {
+  width: 250px !important;
+  height: 375px !important;
+  border-radius: 125px !important;
+  overflow: hidden !important;
+  border: 6px solid #ffffff !important;
+  box-shadow: 0 15px 35px rgba(8, 27, 51, 0.12) !important;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%) !important;
+  position: relative !important;
+  z-index: 10 !important;
+  transition: all 0.3s ease !important;
+}
+
+.onboarding-capsule-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Floating Badges styling */
+.floating-badge {
+  position: absolute !important;
+  background: #ffffff !important;
+  color: var(--brand-blue-dark) !important;
+  padding: 6px 12px !important;
+  border-radius: 99px !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  box-shadow: 0 6px 20px rgba(8, 27, 51, 0.1) !important;
+  border: 1px solid rgba(20, 87, 217, 0.1) !important;
+  z-index: 20 !important;
+  animation: float-badge 3s ease-in-out infinite alternate !important;
+}
+
+/* Screen 1 specific badges positioning */
+.badge--route {
+  top: 10% !important;
+  left: -15px !important;
+  animation-delay: 0s !important;
+}
+.badge--seat {
+  top: 45% !important;
+  right: -25px !important;
+  animation-delay: 0.5s !important;
+}
+.badge--ticket {
+  bottom: 12% !important;
+  left: -20px !important;
+  animation-delay: 1s !important;
+}
+
+/* Screen 2 specific badge & icons positioning */
+.badge--promo {
+  bottom: 8% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: var(--brand-gold) !important;
+  color: var(--brand-blue-dark) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  white-space: nowrap !important;
+  animation: float-badge 3.5s ease-in-out infinite alternate !important;
+}
+.floating-icon {
+  position: absolute !important;
+  width: 42px !important;
+  height: 42px !important;
+  background: #ffffff !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 6px 20px rgba(8, 27, 51, 0.08) !important;
+  border: 1px solid rgba(20, 87, 217, 0.08) !important;
+  color: var(--brand-blue) !important;
+  z-index: 20 !important;
+  animation: float-badge 4s ease-in-out infinite alternate !important;
+}
+.floating-icon i, .floating-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+.icon--momo {
+  top: 12% !important;
+  left: -10px !important;
+  animation-delay: 0.2s !important;
+}
+.icon--wallet {
+  top: 25% !important;
+  right: -15px !important;
+  animation-delay: 0.7s !important;
+}
+.icon--qr {
+  top: 60% !important;
+  left: -15px !important;
+  animation-delay: 1.2s !important;
+}
+.icon--history {
+  top: 55% !important;
+  right: -10px !important;
+  animation-delay: 1.5s !important;
+}
+
+/* Screen 3 specific badges positioning */
+.badge--tracking {
+  top: 15% !important;
+  right: -20px !important;
+  animation-delay: 0.3s !important;
+}
+.badge--luggage {
+  top: 48% !important;
+  left: -30px !important;
+  animation-delay: 0.8s !important;
+}
+.badge--pin {
+  bottom: 15% !important;
+  right: -15px !important;
+  animation-delay: 1.3s !important;
+}
+
+@keyframes float-badge {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+/* Custom Onboarding Last Page Buttons Lockup */
+.onboarding-last-buttons {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100% !important;
+  max-width: 320px !important;
+  margin: 32px auto 0 !important;
+}
+.onboarding-last-buttons .button--guest {
+  font-size: 0.9rem !important;
+  color: var(--brand-blue) !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s !important;
+  padding: 8px !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+  text-align: center !important;
+}
+.onboarding-last-buttons .button--guest:hover {
+  opacity: 0.8 !important;
+}
+
+/* Splash Loading Animation Keyframes */
+@keyframes splash-load {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}

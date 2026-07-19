@@ -275,9 +275,18 @@ const screenTitles = {
 };
 
 const onboardingSlides = [
-  { icon: 'ticket-check', title: 'Easy Passenger Booking', message: 'Find your route, reserve your seat, and receive a digital ticket.', chips: [['map-pinned', 'Choose route'], ['armchair', 'Reserve capacity'], ['qr-code', 'Digital ticket']] },
-  { icon: 'wallet-cards', title: 'Wallet and Return Tickets', message: 'Deposit funds, pay faster, and save with discounted return travel.', chips: [['badge-percent', 'Save UGX 1,000'], ['refresh-cw', 'Open return'], ['shield-check', 'Secure preview']] },
-  { icon: 'package-check', title: 'Parcels and Luggage', message: 'Send parcels, register luggage, and follow every stage of the journey.', chips: [['package-search', 'Track parcels'], ['luggage', 'Digital tags'], ['bell-ring', 'Status alerts']] }
+  {
+    title: 'Your Journey Starts Here',
+    message: 'Book your Fly Express trip between Entebbe and Kampala, choose your preferred departure, and secure your seat in seconds.'
+  },
+  {
+    title: 'Pay Easily. Travel for Less.',
+    message: 'Use your Fly Express Wallet, buy discounted return tickets, and keep all your travel payments and tickets in one place.'
+  },
+  {
+    title: 'More Than Passenger Travel',
+    message: 'Send parcels, register your luggage, and follow every journey from dispatch to safe collection.'
+  }
 ];
 
 function formatUGX(value) {
@@ -404,27 +413,87 @@ function renderOnboarding() {
   const slide = onboardingSlides[state.onboardingIndex];
   const content = $('#onboarding-content');
   if (!content) return;
+
+  let visualHtml = '';
+  if (state.onboardingIndex === 0) {
+    visualHtml = `
+      <div class="onboarding-visual-wrapper">
+        <div class="onboarding-capsule-frame">
+          <img src="assets/onboarding-1.jpg" alt="Minibus on Entebbe-Kampala route map">
+        </div>
+        <span class="floating-badge badge--route">Choose Route</span>
+        <span class="floating-badge badge--seat">Reserve Seat</span>
+        <span class="floating-badge badge--ticket">Digital Ticket</span>
+      </div>
+    `;
+  } else if (state.onboardingIndex === 1) {
+    visualHtml = `
+      <div class="onboarding-visual-wrapper">
+        <div class="onboarding-capsule-frame">
+          <img src="assets/onboarding-2.jpg" alt="Digital ticket floating above wallet card">
+        </div>
+        <span class="floating-badge badge--promo">Save with a Return Ticket</span>
+        <span class="floating-icon icon--momo"><i data-lucide="smartphone"></i></span>
+        <span class="floating-icon icon--wallet"><i data-lucide="wallet-cards"></i></span>
+        <span class="floating-icon icon--qr"><i data-lucide="qr-code"></i></span>
+        <span class="floating-icon icon--history"><i data-lucide="history"></i></span>
+      </div>
+    `;
+  } else if (state.onboardingIndex === 2) {
+    visualHtml = `
+      <div class="onboarding-visual-wrapper">
+        <div class="onboarding-capsule-frame">
+          <img src="assets/onboarding-3.jpg" alt="Minibus and tracking timeline visual">
+        </div>
+        <span class="floating-badge badge--tracking">Live Tracking</span>
+        <span class="floating-badge badge--luggage">Digital Luggage Tag</span>
+        <span class="floating-badge badge--pin">Secure Collection PIN</span>
+      </div>
+    `;
+  }
+
   content.innerHTML = `
     <article class="onboarding-slide">
-      <div class="onboarding-visual" aria-hidden="true">
-        <div class="onboarding-orbit">
-          <div class="onboarding-vehicle-card onboarding-vehicle-card--icon">
-            <div class="onboarding-icon-placeholder">
-              <i data-lucide="${slide.icon}"></i>
-            </div>
-          </div>
-          ${slide.chips.map((chip, index) => `<span class="orbit-chip orbit-chip--${['one','two','three'][index]}"><i data-lucide="${chip[0]}"></i>${chip[1]}</span>`).join('')}
+      ${visualHtml}
+      <h2 style="margin-top: 24px; font-weight: 850;">${slide.title}</h2>
+      <p style="margin-top: 12px; color: var(--slate); line-height: 1.5; font-size: 1rem;">${slide.message}</p>
+      
+      ${state.onboardingIndex === 2 ? `
+        <div class="onboarding-last-buttons">
+          <button class="button button--primary w-full" type="button" data-action="skip-onboarding" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>Get Started</span>
+            <i data-lucide="arrow-right"></i>
+          </button>
+          <button class="button--guest" type="button" data-action="continue-guest">Continue as Guest</button>
         </div>
-      </div>
-      <p class="eyebrow">Welcome to Fly Express</p>
-      <h2>${slide.title}</h2>
-      <p>${slide.message}</p>
-    </article>`;
-  $('#onboarding-dots').innerHTML = onboardingSlides.map((_, index) => `<button class="progress-dot ${index === state.onboardingIndex ? 'is-active' : ''}" data-action="onboarding-go" data-index="${index}" aria-label="Go to slide ${index + 1}"></button>`).join('');
+      ` : ''}
+    </article>
+  `;
+
+  // Update dots, back/next visibility
+  const skipBtn = $('.onboarding-skip');
+  if (skipBtn) {
+    skipBtn.classList.toggle('is-hidden', state.onboardingIndex === 2);
+  }
+
+  const controls = $('.onboarding-controls');
+  if (controls) {
+    controls.classList.toggle('is-hidden', state.onboardingIndex === 2);
+  }
+
+  $('#onboarding-dots').innerHTML = onboardingSlides.map((_, index) => `
+    <button class="progress-dot ${index === state.onboardingIndex ? 'is-active' : ''}" data-action="onboarding-go" data-index="${index}" aria-label="Go to slide ${index + 1}"></button>
+  `).join('');
+
   const next = $('[data-action="onboarding-next"]');
   const back = $('[data-action="onboarding-back"]');
-  if (next) next.textContent = state.onboardingIndex === onboardingSlides.length - 1 ? 'Get Started' : 'Next';
-  if (back) back.disabled = state.onboardingIndex === 0;
+  if (next) {
+    next.textContent = state.onboardingIndex === onboardingSlides.length - 1 ? 'Get Started' : 'Next';
+  }
+  if (back) {
+    back.disabled = state.onboardingIndex === 0;
+  }
+
   refreshIcons();
 }
 
