@@ -9,12 +9,12 @@
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://tile.openstreetmap.org">
   <link rel="stylesheet" href="leaflet.css">
-  <link class="styles" rel="stylesheet" href="styles.css?v=65">
+  <link class="styles" rel="stylesheet" href="styles.css?v=66">
   <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-  <script defer src="script.js?v=65"></script>
+  <script defer src="script.js?v=66"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -35,9 +35,9 @@
       <button class="text-button onboarding-skip" type="button" data-action="skip-onboarding">Skip</button>
       <div id="onboarding-content"></div>
       <div class="onboarding-controls">
-        <button class="button button--ghost" type="button" data-action="onboarding-back">Back</button>
+        <button class="button button--ghost" type="button" data-action="onboarding-back" aria-label="Back"><i data-lucide="chevron-left"></i></button>
         <div id="onboarding-dots" class="progress-dots" aria-label="Onboarding progress"></div>
-        <button class="button button--primary" type="button" data-action="onboarding-next">Next</button>
+        <button class="button button--primary" type="button" data-action="onboarding-next" aria-label="Next"><i data-lucide="chevron-right"></i></button>
       </div>
     </div>
   </section>

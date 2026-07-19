@@ -452,9 +452,10 @@ function renderOnboarding() {
   const next = $('[data-action="onboarding-next"]');
   const back = $('[data-action="onboarding-back"]');
   if (next) {
-    next.textContent = state.onboardingIndex === onboardingSlides.length - 1 ? 'Get Started' : 'Next';
+    next.innerHTML = `<i data-lucide="chevron-right"></i>`;
   }
   if (back) {
+    back.innerHTML = `<i data-lucide="chevron-left"></i>`;
     back.disabled = state.onboardingIndex === 0;
   }
 
