@@ -2486,8 +2486,12 @@ function handleClick(event) {
       renderCurrentScreen();
     },
     'increment-adults': () => {
-      state.passengerCount++;
-      renderCurrentScreen();
+      if (state.passengerCount + state.childCount < 18) {
+        state.passengerCount++;
+        renderCurrentScreen();
+      } else {
+        toast('Maximum limit of 18 travelers reached.', 'warning');
+      }
     },
     'decrement-children': () => {
       state.childCount = Math.max(0, state.childCount - 1);
@@ -2497,10 +2501,14 @@ function handleClick(event) {
       renderCurrentScreen();
     },
     'increment-children': () => {
-      state.childCount++;
-      // Auto-adjust reserved seats: a single passenger can't add > 2 children without automatically reserving a seat.
-      state.reservedChildSeatsCount = Math.max(state.reservedChildSeatsCount, state.childCount - 2);
-      renderCurrentScreen();
+      if (state.passengerCount + state.childCount < 18) {
+        state.childCount++;
+        // Auto-adjust reserved seats: a single passenger can't add > 2 children without automatically reserving a seat.
+        state.reservedChildSeatsCount = Math.max(state.reservedChildSeatsCount, state.childCount - 2);
+        renderCurrentScreen();
+      } else {
+        toast('Maximum limit of 18 travelers reached.', 'warning');
+      }
     },
     'decrement-child-seats': () => {
       const minSeats = Math.max(0, state.childCount - 2);
@@ -2512,11 +2520,15 @@ function handleClick(event) {
       }
     },
     'increment-child-seats': () => {
-      if (state.reservedChildSeatsCount < state.childCount) {
-        state.reservedChildSeatsCount++;
-        renderCurrentScreen();
+      if (passengerTotal() < 18) {
+        if (state.reservedChildSeatsCount < state.childCount) {
+          state.reservedChildSeatsCount++;
+          renderCurrentScreen();
+        } else {
+          toast('Cannot reserve more child seats than the number of children.', 'warning');
+        }
       } else {
-        toast('Cannot reserve more child seats than the number of children.', 'warning');
+        toast('Maximum capacity of 18 seats reached.', 'warning');
       }
     },
     'select-date-mode': () => {
