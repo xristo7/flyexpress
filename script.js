@@ -2469,6 +2469,29 @@ function passengerTotal() {
   return state.passengerCount + state.reservedChildSeatsCount;
 }
 
+function getOccupiedSeatsForTrip(trip) {
+  const allSeatNames = ['1A', '1B', '2A', '2B', '2C', '3A', '3B', '3C', '4A', '4B', '4C', '5A', '5B', '5C'];
+  if (!trip) return [];
+  const totalSeats = allSeatNames.length;
+  const availableCount = Math.min(totalSeats, trip.seats);
+  const occupiedCount = Math.max(0, totalSeats - availableCount);
+  
+  let hash = 0;
+  for (let i = 0; i < trip.id.length; i++) {
+    hash = trip.id.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  
+  const shuffled = [...allSeatNames];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.abs((hash + i) % (i + 1));
+    const temp = shuffled[i];
+    shuffled[i] = shuffled[j];
+    shuffled[j] = temp;
+  }
+  
+  return shuffled.slice(0, occupiedCount);
+}
+
 function getDropOffOptions() {
   const from = state.searchFrom;
   const to = state.searchTo;
@@ -2564,6 +2587,7 @@ function reviewSeatOptions() {
 }
 
 function renderSeatMode() {
+  const occupiedList = getOccupiedSeatsForTrip(state.activeTrip);
   const seats = [
     ['1A',29.2,29.3], ['1B',45.5,29.3],
     ['2A',28.7,43.3], ['2B',53.2,43.3], ['2C',69.6,43.3],
@@ -2574,10 +2598,19 @@ function renderSeatMode() {
   return `<div class="photo-seat-selector" role="group" aria-labelledby="photo-seat-title">
     <span id="photo-seat-title" class="sr-only">Choose passenger seats in the 14-seater vehicle</span>
     <img src="assets/fly-express-14-seater.png" alt="Top view of the Fly Express 14-seater vehicle interior">
-    ${seats.map(([seat,left,top]) => `<button class="photo-seat ${state.selectedSeats.includes(seat) ? 'is-selected' : ''}" style="--seat-left:${left}%;--seat-top:${top}%" type="button" data-action="toggle-seat" data-seat="${seat}" aria-pressed="${state.selectedSeats.includes(seat)}" aria-label="${state.selectedSeats.includes(seat) ? 'Deselect' : 'Select'} passenger seat ${seat}"><span>${seat}</span><i data-lucide="check"></i></button>`).join('')}
+    ${seats.map(([seat,left,top]) => {
+      const isOccupied = occupiedList.includes(seat);
+      const isSelected = state.selectedSeats.includes(seat);
+      return `<button class="photo-seat ${isSelected ? 'is-selected' : ''} ${isOccupied ? 'is-occupied' : ''}" style="--seat-left:${left}%;--seat-top:${top}%" type="button" ${isOccupied ? 'disabled' : 'data-action="toggle-seat"'} data-seat="${seat}" aria-pressed="${isSelected}" aria-label="${isOccupied ? `Occupied seat ${seat}` : isSelected ? `Deselect seat ${seat}` : `Select seat ${seat}`}"><span>${seat}</span><i data-lucide="${isOccupied ? 'x' : 'check'}"></i></button>`;
+    }).join('')}
     <button class="photo-seat photo-seat--driver" style="--seat-left:67.9%;--seat-top:29.4%" type="button" disabled aria-label="Driver seat, not selectable"><span>Driver</span><i data-lucide="gauge"></i></button>
   </div>
-  <div class="photo-seat-legend"><span><i class="photo-seat-key"></i>Available</span><span><i class="photo-seat-key photo-seat-key--selected"></i>Selected</span><span><i class="photo-seat-key photo-seat-key--driver"></i>Driver · unavailable</span></div>
+  <div class="photo-seat-legend">
+    <span><i class="photo-seat-key"></i>Available</span>
+    <span><i class="photo-seat-key photo-seat-key--selected"></i>Selected</span>
+    <span><i class="photo-seat-key photo-seat-key--occupied"></i>Occupied</span>
+    <span><i class="photo-seat-key photo-seat-key--driver"></i>Driver · unavailable</span>
+  </div>
   <p class="seat-selection-count" role="status" aria-live="polite"><strong>${state.selectedSeats.length} of ${passengerTotal()}</strong> passenger seat${passengerTotal() === 1 ? '' : 's'} selected</p>`;
 }
 

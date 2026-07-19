@@ -1625,6 +1625,23 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 .photo-seat-key { width: 15px; height: 15px; border: 2px solid #9aa7b4; border-radius: 5px; background: transparent; }
 .photo-seat-key--selected { border-color: #075aa8; background: rgba(7,90,168,.48); }
 .photo-seat-key--driver { border-style: dashed; border-color: #e51e2a; background: rgba(8,27,51,.25); }
+.photo-seat-key--occupied { border-color: rgba(255,255,255,0.25); background: rgba(8, 27, 51, 0.6); }
+
+/* Occupied seat style in vehicle map */
+.photo-seat.is-occupied,
+.photo-seat:disabled:not(.photo-seat--driver),
+.photo-seat:disabled:not(.photo-seat--driver):hover {
+  background: rgba(8, 27, 51, 0.65) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+.photo-seat.is-occupied > span,
+.photo-seat:disabled:not(.photo-seat--driver) > span {
+  background: rgba(180, 18, 28, 0.45) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
 .seat-selection-count { margin: 9px 0 0; text-align: center; color: var(--slate); font-size: .8rem; }
 .seat-selection-count strong { color: var(--charcoal); }
 
