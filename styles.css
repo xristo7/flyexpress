@@ -4300,3 +4300,31 @@ body[data-active-screen="driver-profile"] .main-content {
   color: var(--slate) !important;
   line-height: 1.4 !important;
 }
+
+/* Responsive Sizing and Layout Adjustments for Route Cards */
+@media (min-width: 901px) {
+  .route-card__info h3 {
+    font-size: 1.15rem !important;
+  }
+  .route-card__info p {
+    font-size: 0.88rem !important;
+    margin-top: 6px !important;
+  }
+  .corridor-towns {
+    font-size: 0.82rem !important;
+    margin-top: 12px !important;
+    padding-top: 10px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .card-selection-indicator {
+    display: none !important;
+  }
+  .route-card.is-active {
+    border-color: var(--brand-blue) !important;
+    border-width: 2px !important;
+    background: var(--info-soft) !important;
+    box-shadow: 0 8px 24px rgba(7, 90, 168, 0.12) !important;
+  }
+}
