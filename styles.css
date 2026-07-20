@@ -4353,7 +4353,8 @@ body[data-active-screen="driver-profile"] .main-content {
   .card-selection-indicator {
     display: none !important;
   }
-  .route-card.is-active {
+  .route-card.is-active,
+  .taxi-result-card.is-active {
     border-color: var(--brand-blue) !important;
     border-width: 2px !important;
     background: var(--info-soft) !important;
@@ -4531,13 +4532,13 @@ body[data-active-screen="driver-profile"] .main-content {
 
 /* Dotted Divider styles */
 .taxi-card-dotted-divider {
-  border-top: 1.5px dotted var(--border) !important;
+  border-top: 1.5px dotted #ccd6e1 !important;
   margin: 12px 0 8px 0 !important;
   width: 100% !important;
 }
 
 .taxi-card-dotted-divider-full {
-  border-top: 1.5px dotted var(--border) !important;
+  border-top: 1.5px dotted #ccd6e1 !important;
   margin: 12px -18px 8px -18px !important;
 }
 
@@ -4627,7 +4628,7 @@ body[data-active-screen="driver-profile"] .main-content {
 
   .taxi-result-actions {
     margin-left: 124px !important;
-    border-top: 1.5px dotted var(--border) !important;
+    border-top: 1.5px dotted #ccd6e1 !important;
     padding-top: 12px !important;
   }
 }
