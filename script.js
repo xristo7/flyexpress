@@ -3243,7 +3243,7 @@ function renderSeatMode() {
   const imgSrc = isHighroof ? 'assets/fly-express-highroof-topdown.png' : 'assets/fly-express-14-seater.png';
   const imgAlt = isHighroof ? 'Top view of the Fly Express 18-seater high roof vehicle interior' : 'Top view of the Fly Express 14-seater vehicle interior';
   const seatCount = isHighroof ? 18 : 14;
-  const driverLeft = isHighroof ? '70.0' : '67.9';
+  const driverLeft = isHighroof ? '72.0' : '67.9';
   const driverTop = isHighroof ? '29.5' : '29.4';
 
   return `<div class="photo-seat-selector ${isHighroof ? 'is-highroof' : ''}" role="group" aria-labelledby="photo-seat-title">
