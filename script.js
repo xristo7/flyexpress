@@ -650,12 +650,12 @@ function renderNavigation() {
     } else {
       mobile.classList.remove('is-hidden');
     }
-    const items = [['home','Home','house'],['book','Book','ticket-plus'],['trips','Trips','route'],['wallet','Wallet','wallet-cards'],['more','More','menu']];
+    const items = [['home','Home','house'],['book','Book','ticket-plus'],['trips','Trips','route'],['wallet','Wallet','wallet-cards']];
     mobile.innerHTML = items.map(([screen,label,icon]) => {
-      const active = state.screen === screen || (screen === 'more' && !['home','book','trips','wallet'].includes(state.screen));
+      const active = state.screen === screen;
       return `
-      <button class="mobile-nav-item ${active ? 'is-active' : ''}" type="button" ${screen === 'more' ? 'data-action="open-more"' : `data-screen="${screen}"`} ${active ? 'aria-current="page"' : ''}>
-        <i data-lucide="${icon}"></i><span>${label}</span>${screen === 'more' && state.unreadNotifications ? `<span class="nav-count">${state.unreadNotifications}</span>` : ''}
+      <button class="mobile-nav-item ${active ? 'is-active' : ''}" type="button" data-screen="${screen}" ${active ? 'aria-current="page"' : ''}>
+        <i data-lucide="${icon}"></i><span>${label}</span>
       </button>`;
     }).join('');
   }
@@ -2915,7 +2915,6 @@ function handleClick(event) {
     'verify-otp': () => verifyOtp(),
     'create-account': () => { showLoading('Creating demonstration profile…', () => enterApp('Demo account created for Christo I.')); },
     'go-back': goBack,
-    'open-more': openMoreSheet,
     'toggle-connection': toggleConnection,
     'trip-kind': () => { state.tripType = value; state.ticketType = value === 'return' ? 'return' : 'oneway'; renderCurrentScreen(); },
     'select-route-card': () => {
