@@ -406,6 +406,9 @@ function init() {
     const splash = $('#splash-screen');
     if (!splash.classList.contains('is-hidden')) showOnboarding();
   }, 2200);
+
+  // Auto-detect nearest city after initial render
+  detectNearestCity();
 }
 
 document.addEventListener('DOMContentLoaded', init);
@@ -838,7 +841,7 @@ function renderBook() {
             </div>
           </div>
           <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction">
-            <i data-lucide="arrow-right-left"></i>
+            <i data-lucide="arrow-left-right"></i>
           </button>
         </div>`;
         }).join('')}
@@ -3054,17 +3057,14 @@ function handleClick(event) {
     'flip-route-direction': () => {
       const route = actionTrigger.dataset.route;
       state.routeFlips[route] = !state.routeFlips[route];
-      // If this route is currently selected, also update searchFrom/searchTo
-      if (state.selectedRoute === route) {
-        const rc = appData.routeCards.find(r => r.key === route);
-        if (rc) {
-          const flipped = !!state.routeFlips[route];
-          state.searchFrom = flipped ? rc.stageB : rc.stageA;
-          state.searchTo = flipped ? rc.stageA : rc.stageB;
-        }
+      state.selectedRoute = route;
+      const rc = appData.routeCards.find(r => r.key === route);
+      if (rc) {
+        const flipped = !!state.routeFlips[route];
+        state.searchFrom = flipped ? rc.stageB : rc.stageA;
+        state.searchTo = flipped ? rc.stageA : rc.stageB;
       }
       renderCurrentScreen();
-      const rc = appData.routeCards.find(r => r.key === route);
       const flipped = !!state.routeFlips[route];
       toast(`Direction: ${flipped ? rc.cityB : rc.cityA} → ${flipped ? rc.cityA : rc.cityB}`, 'success');
     },
@@ -3898,7 +3898,7 @@ function signOut() {
 }
 
 // ---------- Geolocation: Detect nearest origin city ----------
-(function detectNearestCity() {
+function detectNearestCity() {
   if (!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition(pos => {
     const lat = pos.coords.latitude;
@@ -3933,9 +3933,12 @@ function signOut() {
       state.searchFrom = flipped ? rc.stageB : rc.stageA;
       state.searchTo = flipped ? rc.stageA : rc.stageB;
     }
-    renderCurrentScreen();
+    // Only re-render if we are on the Home screen or booking step 1 to prevent interrupting active flows
+    if (state.screen === 'home' || (state.screen === 'book' && state.bookingStep === 1)) {
+      renderCurrentScreen();
+    }
   }, () => { /* Permission denied or error — keep defaults */ }, { timeout: 5000 });
-})();
+}
 
 // ---------- Screen Protection & Focus Security ----------
 (function() {
