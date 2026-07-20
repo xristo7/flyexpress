@@ -277,7 +277,8 @@ const state = {
     companyTaxId: '',
     paymentMethod: 'wallet',
     paymentDemoState: 'idle'
-  }
+  },
+  transparentVehicles: {}
 };
 
 const navItems = [
@@ -404,6 +405,7 @@ function init() {
   document.addEventListener('keydown', handleKeydown);
   window.addEventListener('scroll', handleTripReviewScroll, { passive: true });
   refreshIcons();
+  preloadTransparentImages();
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetScreen = urlParams.get('screen') || window.location.hash.slice(1);
@@ -1046,7 +1048,7 @@ function renderBook() {
                     <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
                     <div class="taxi-van-img-wrapper">
                       <div class="taxi-van-img-box">
-                        <img src="assets/fly-express-van.png" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
+                        <img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
                       </div>
                       <!-- Ugandan Plate -->
                       <div class="ug-plate-badge">
@@ -1345,7 +1347,7 @@ function renderTripResult(trip) {
         <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
         <div class="taxi-van-img-wrapper">
           <div class="taxi-van-img-box">
-            <img src="assets/fly-express-van.png" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
+            <img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
           </div>
           <!-- Ugandan Plate -->
           <div class="ug-plate-badge">
@@ -1433,7 +1435,7 @@ function renderTripDetails() {
     <div class="smart-review__map-card">
       <div class="smart-review__map-copy"><p class="eyebrow">${reviewDate}</p><h1 id="review-title">Review your trip</h1><p>You’re almost ready to travel.</p></div>
       <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
-      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="assets/fly-express-van.png" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
+      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
     </div>
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
@@ -1455,7 +1457,7 @@ function renderTripDetails() {
       <article class="card transit-status-card">
         <div class="transit-info-grid">
           <div class="transit-van-visual">
-            <img src="assets/fly-express-van.png" alt="Fly Express Van" class="transit-van-img">
+            <img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express Van" class="transit-van-img">
             <span class="van-plate-tag">${trip.plate}</span>
           </div>
           <div class="transit-details">
@@ -1786,7 +1788,7 @@ function renderLiveTrip() {
       </div>
       <aside class="grid">
         <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="assets/fly-express-van.png" alt="Fly Express passenger van" style="padding:4px;"></div><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
+        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express passenger van" style="padding:4px;"></div><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
         <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
         <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
       </aside>
@@ -1954,7 +1956,7 @@ function renderSpecialHire() {
           <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
           <div class="vehicle-card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
             <div class="card vehicle-card ${sh.vehicleType === 'sedan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="sedan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'sedan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'sedan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-sedan.jpg" alt="Saloon Car" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <img src="${state.transparentVehicles['assets/fly-express-sedan.jpg'] || 'assets/fly-express-sedan.jpg'}" alt="Saloon Car" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Saloon Car / Sedan (4 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Perfect for solo business travelers, couples, or small private trips.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -1964,7 +1966,7 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'noah' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="noah" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'noah' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'noah' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-noah.jpg" alt="Toyota Noah" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <img src="${state.transparentVehicles['assets/fly-express-noah.jpg'] || 'assets/fly-express-noah.jpg'}" alt="Toyota Noah" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota Noah (7 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Versatile and spacious mid-size minivan for family or small groups.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -1974,7 +1976,7 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'minivan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="minivan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'minivan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'minivan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-minivan.jpg" alt="Alphard Minivan" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <img src="${state.transparentVehicles['assets/fly-express-minivan.jpg'] || 'assets/fly-express-minivan.jpg'}" alt="Alphard Minivan" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Alphard / Minivan (10 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Comfortable minivan for family travel or small business delegates.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -1984,7 +1986,7 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'commuter' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="commuter" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'commuter' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'commuter' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-hiace-commuter.jpg" alt="Toyota HiAce Commuter" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <img src="${state.transparentVehicles['assets/fly-express-hiace-commuter.jpg'] || 'assets/fly-express-hiace-commuter.jpg'}" alt="Toyota HiAce Commuter" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce Commuter (14 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Standard roof, spacious, ideal for daily commutes or standard group travel.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -1994,7 +1996,7 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-hiace-highroof.jpg" alt="Toyota HiAce High Roof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Toyota HiAce High Roof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce High Roof (18 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -2004,7 +2006,7 @@ function renderSpecialHire() {
             </div>
             
             <div class="card vehicle-card ${sh.vehicleType === 'coaster' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="coaster" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'coaster' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'coaster' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-coaster.jpg" alt="Executive Coaster" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <img src="${state.transparentVehicles['assets/fly-express-coaster.jpg'] || 'assets/fly-express-coaster.jpg'}" alt="Executive Coaster" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Executive Coaster (30 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Spacious luxury coaster for big company excursions or large events.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -3252,7 +3254,7 @@ function renderTripDetails() {
     <div class="smart-review__map-card">
       <div class="smart-review__map-copy"><p class="eyebrow">${reviewDate}</p><h1 id="review-title">Review your trip</h1><p>You’re almost ready to travel.</p></div>
       <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
-      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="assets/fly-express-van.png" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
+      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
     </div>
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
@@ -4520,3 +4522,92 @@ function detectNearestCity() {
     handleSecurityTrigger(document.hidden);
   });
 })();
+
+// ---------- Dynamic Transparent Vehicle Background Cut-out ----------
+function makeImageTransparent(imgUrl, callback) {
+  const img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.src = imgUrl;
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    
+    try {
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imgData.data;
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      const visited = new Uint8Array(width * height);
+      const queue = [];
+      
+      function isWhite(x, y) {
+        const idx = (y * width + x) * 4;
+        const r = data[idx];
+        const g = data[idx + 1];
+        const b = data[idx + 2];
+        return (r > 240 && g > 240 && b > 240);
+      }
+      
+      // Add corners to queue
+      const corners = [
+        [0, 0], [width - 1, 0], [0, height - 1], [width - 1, height - 1]
+      ];
+      for (const [cx, cy] of corners) {
+        if (isWhite(cx, cy)) {
+          queue.push(cx, cy);
+          visited[cy * width + cx] = 1;
+        }
+      }
+      
+      let head = 0;
+      while (head < queue.length) {
+        const x = queue[head++];
+        const y = queue[head++];
+        
+        const idx = (y * width + x) * 4;
+        data[idx + 3] = 0; // set alpha to 0 (transparent)
+        
+        const neighbors = [
+          [x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]
+        ];
+        for (const [nx, ny] of neighbors) {
+          if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+            const nidx = ny * width + nx;
+            if (!visited[nidx] && isWhite(nx, ny)) {
+              visited[nidx] = 1;
+              queue.push(nx, ny);
+            }
+          }
+        }
+      }
+      
+      ctx.putImageData(imgData, 0, 0);
+      callback(canvas.toDataURL('image/png'));
+    } catch (e) {
+      callback(imgUrl);
+    }
+  };
+  img.onerror = () => callback(imgUrl);
+}
+
+function preloadTransparentImages() {
+  const vehicleImages = [
+    'assets/fly-express-sedan.jpg',
+    'assets/fly-express-noah.jpg',
+    'assets/fly-express-minivan.jpg',
+    'assets/fly-express-hiace-commuter.jpg',
+    'assets/fly-express-hiace-highroof.jpg',
+    'assets/fly-express-coaster.jpg',
+    'assets/fly-express-van.png'
+  ];
+  vehicleImages.forEach(imgUrl => {
+    makeImageTransparent(imgUrl, (pngUrl) => {
+      state.transparentVehicles[imgUrl] = pngUrl;
+      renderCurrentScreen();
+    });
+  });
+}
