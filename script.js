@@ -1898,17 +1898,17 @@ function calculateSpecialHirePrice() {
   let fuelFee = 0;
   
   if (isCustom) {
-    const dailyRates = { sedan: 100000, minivan: 180000, drone: 250000, highroof: 300000, coaster: 600000 };
+    const dailyRates = { sedan: 100000, noah: 150000, minivan: 180000, drone: 250000, highroof: 300000, coaster: 600000 };
     basePrice = (dailyRates[sh.vehicleType] || 300000) * sh.durationDays;
     fuelFee = 150000 * sh.durationDays;
   } else {
     const routeRates = {
-      kajansi: { sedan: 50000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
-      busega: { sedan: 50000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
-      nambole: { sedan: 60000, minivan: 100000, drone: 150000, highroof: 180000, coaster: 350000 },
-      masaka: { sedan: 180000, minivan: 250000, drone: 350000, highroof: 400000, coaster: 700000 },
-      lyantonde: { sedan: 220000, minivan: 320000, drone: 450000, highroof: 500000, coaster: 850000 },
-      mbarara: { sedan: 280000, minivan: 380000, drone: 550000, highroof: 600000, coaster: 1000000 }
+      kajansi: { sedan: 50000, noah: 70000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
+      busega: { sedan: 50000, noah: 70000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
+      nambole: { sedan: 60000, noah: 80000, minivan: 100000, drone: 150000, highroof: 180000, coaster: 350000 },
+      masaka: { sedan: 180000, noah: 200000, minivan: 250000, drone: 350000, highroof: 400000, coaster: 700000 },
+      lyantonde: { sedan: 220000, noah: 260000, minivan: 320000, drone: 450000, highroof: 500000, coaster: 850000 },
+      mbarara: { sedan: 280000, noah: 320000, minivan: 380000, drone: 550000, highroof: 600000, coaster: 1000000 }
     };
     const rate = routeRates[sh.standardRoute] || routeRates.kajansi;
     basePrice = rate[sh.vehicleType] || 150000;
@@ -1938,6 +1938,7 @@ function renderSpecialHire() {
   const step = sh.step;
   const vehicleLabels = {
     sedan: 'Saloon Car / Sedan (4 Seats)',
+    noah: 'Toyota Noah (7 Seats)',
     minivan: 'Alphard / Minivan (10 Seats)',
     drone: 'Super Custom / Drone (14 Seats)',
     highroof: 'Highroof Van (18 Seats)',
@@ -1959,6 +1960,16 @@ function renderSpecialHire() {
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
                 <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Chauffeur Included</span>
                 <strong style="color: var(--success); font-size: 0.9rem;">UGX 100K/day</strong>
+              </div>
+            </div>
+
+            <div class="card vehicle-card ${sh.vehicleType === 'noah' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="noah" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'noah' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'noah' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <img src="assets/fly-express-noah.jpg" alt="Toyota Noah" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota Noah (7 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Versatile and spacious mid-size minivan for family or small groups.</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">WiFi & AC Included</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 150K/day</strong>
               </div>
             </div>
 
