@@ -1898,17 +1898,17 @@ function calculateSpecialHirePrice() {
   let fuelFee = 0;
   
   if (isCustom) {
-    const dailyRates = { sedan: 100000, noah: 150000, minivan: 180000, drone: 250000, highroof: 300000, coaster: 600000 };
+    const dailyRates = { sedan: 100000, noah: 150000, minivan: 180000, commuter: 220000, highroof: 300000, coaster: 600000 };
     basePrice = (dailyRates[sh.vehicleType] || 300000) * sh.durationDays;
     fuelFee = 150000 * sh.durationDays;
   } else {
     const routeRates = {
-      kajansi: { sedan: 50000, noah: 70000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
-      busega: { sedan: 50000, noah: 70000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
-      nambole: { sedan: 60000, noah: 80000, minivan: 100000, drone: 150000, highroof: 180000, coaster: 350000 },
-      masaka: { sedan: 180000, noah: 200000, minivan: 250000, drone: 350000, highroof: 400000, coaster: 700000 },
-      lyantonde: { sedan: 220000, noah: 260000, minivan: 320000, drone: 450000, highroof: 500000, coaster: 850000 },
-      mbarara: { sedan: 280000, noah: 320000, minivan: 380000, drone: 550000, highroof: 600000, coaster: 1000000 }
+      kajansi: { sedan: 50000, noah: 70000, minivan: 90000, commuter: 110000, highroof: 150000, coaster: 300000 },
+      busega: { sedan: 50000, noah: 70000, minivan: 90000, commuter: 110000, highroof: 150000, coaster: 300000 },
+      nambole: { sedan: 60000, noah: 80000, minivan: 100000, commuter: 130000, highroof: 180000, coaster: 350000 },
+      masaka: { sedan: 180000, noah: 200000, minivan: 250000, commuter: 320000, highroof: 400000, coaster: 700000 },
+      lyantonde: { sedan: 220000, noah: 260000, minivan: 320000, commuter: 400000, highroof: 500000, coaster: 850000 },
+      mbarara: { sedan: 280000, noah: 320000, minivan: 380000, commuter: 480000, highroof: 600000, coaster: 1000000 }
     };
     const rate = routeRates[sh.standardRoute] || routeRates.kajansi;
     basePrice = rate[sh.vehicleType] || 150000;
@@ -1940,8 +1940,8 @@ function renderSpecialHire() {
     sedan: 'Saloon Car / Sedan (4 Seats)',
     noah: 'Toyota Noah (7 Seats)',
     minivan: 'Alphard / Minivan (10 Seats)',
-    drone: 'Super Custom / Drone (14 Seats)',
-    highroof: 'Highroof Van (18 Seats)',
+    commuter: 'Toyota HiAce Commuter (14 Seats)',
+    highroof: 'Toyota HiAce High Roof (18 Seats)',
     coaster: 'Executive Coaster (30 Seats)'
   };
   
@@ -1983,22 +1983,22 @@ function renderSpecialHire() {
               </div>
             </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'drone' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="drone" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'drone' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'drone' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-14-seater.png" alt="Super Custom" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Super Custom / Drone (14 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Premium executive seats, maximum comfort, smooth suspension.</p>
+            <div class="card vehicle-card ${sh.vehicleType === 'commuter' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="commuter" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'commuter' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'commuter' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <img src="assets/fly-express-hiace-commuter.jpg" alt="Toyota HiAce Commuter" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce Commuter (14 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Standard roof, spacious, ideal for daily commutes or standard group travel.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Executive Comfort</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 250K/day</strong>
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Standard Commute</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 220K/day</strong>
               </div>
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-van.png" alt="Highroof Van" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Highroof Van (18 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Ideal for large families, group tours, or corporate travel.</p>
+              <img src="assets/fly-express-hiace-highroof.png" alt="Toyota HiAce High Roof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce High Roof (18 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">WiFi & AC Included</span>
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Extra Headroom & AC</span>
                 <strong style="color: var(--success); font-size: 0.9rem;">UGX 300K/day</strong>
               </div>
             </div>
