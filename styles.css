@@ -4293,17 +4293,10 @@ body[data-active-screen="driver-profile"] .main-content {
 
 /* Corridor Towns Listing Styles on Route Cards */
 .corridor-towns {
-  margin-top: 6px !important;
+  margin-top: 10px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid rgba(8, 27, 51, 0.08) !important;
   font-size: 0.74rem !important;
   color: var(--slate) !important;
-  line-height: 1.35 !important;
-}
-.corridor-towns-label {
-  color: var(--brand-blue-dark) !important;
-  font-weight: 800 !important;
-  text-transform: uppercase !important;
-  font-size: 0.62rem !important;
-  letter-spacing: 0.5px !important;
-  margin-right: 4px !important;
-  display: inline-block !important;
+  line-height: 1.4 !important;
 }

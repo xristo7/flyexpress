@@ -814,7 +814,7 @@ function renderBook() {
             <h3>Kampala – Entebbe</h3>
             <p>Via Kajansi Expressway (Both ways)</p>
             <div class="corridor-towns">
-              <span class="corridor-towns-label">Stops:</span> Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala
+              Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala
             </div>
           </div>
         </div>
@@ -825,7 +825,7 @@ function renderBook() {
             <h3>Entebbe – Kampala</h3>
             <p>Via Busega Expressway (One way)</p>
             <div class="corridor-towns">
-              <span class="corridor-towns-label">Stops:</span> Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala
+              Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala
             </div>
           </div>
         </div>
@@ -836,7 +836,7 @@ function renderBook() {
             <h3>Entebbe – Bweyogere</h3>
             <p>Via Northern Bypass (Both ways)</p>
             <div class="corridor-towns">
-              <span class="corridor-towns-label">Stops:</span> Entebbe • Kajjansi • Busega • Bwaise • Kalerwe • Kyebando • Kiwatule • Naalya • Bweyogere
+              Entebbe • Kajjansi • Busega • Bwaise • Kalerwe • Kyebando • Kiwatule • Naalya • Bweyogere
             </div>
           </div>
         </div>
