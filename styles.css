@@ -4360,6 +4360,9 @@ body[data-active-screen="driver-profile"] .main-content {
     background: var(--info-soft) !important;
     box-shadow: 0 8px 24px rgba(7, 90, 168, 0.12) !important;
   }
+  .taxi-selected-vehicle-card-wrapper {
+    display: none !important;
+  }
 }
 
 /* Custom Vehicle Card Responsive Design */

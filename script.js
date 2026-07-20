@@ -1088,7 +1088,7 @@ function renderBook() {
           }).join('') : emptyState('calendar-x-2','No departures found','Try setting a different period or stage.')}
         </section>
 
-        <div>
+        <div class="taxi-selected-vehicle-card-wrapper">
           ${state.activeTrip ? `
             <div class="card" style="border: 1px solid rgba(7, 90, 168, 0.22); background: var(--info-soft); padding: 24px; border-radius: 16px; margin: 0; text-align: left;">
               <p class="section-kicker" style="margin: 0 0 4px 0;">Selected Vehicle</p>
