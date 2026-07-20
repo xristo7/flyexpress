@@ -4361,58 +4361,273 @@ body[data-active-screen="driver-profile"] .main-content {
   }
 }
 
-/* Desktop Vehicle Result Card Layout Adjustments */
+/* Custom Vehicle Card Responsive Design */
+.taxi-card-main-layout {
+  display: flex !important;
+  gap: 20px !important;
+  width: 100% !important;
+}
+
+.taxi-card-left-col {
+  width: 104px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.taxi-van-type-label {
+  font-size: 0.74rem !important;
+  font-weight: 750 !important;
+  color: var(--slate) !important;
+  white-space: nowrap !important;
+}
+
+.taxi-van-img-wrapper {
+  position: relative !important;
+  width: 104px !important;
+  height: 72px !important;
+}
+
+.taxi-van-img-box {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 14px !important;
+  background: #e2e8f0 !important;
+  border: 1.5px solid var(--border) !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+}
+
+.taxi-van-img-box img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  padding: 4px !important;
+}
+
+.taxi-van-img-box img.is-grayscale {
+  filter: grayscale(1) !important;
+}
+
+.ug-plate-badge {
+  position: absolute !important;
+  bottom: -8px !important;
+  left: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  height: 22px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  z-index: 10 !important;
+}
+
+.ug-flag-strip {
+  background: #ffcc00 !important;
+  width: 14px !important;
+  height: 100% !important;
+}
+
+.ug-plate-number {
+  padding: 0 6px !important;
+  font-family: monospace !important;
+  font-size: 0.76rem !important;
+  font-weight: 800 !important;
+  color: #000000 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 22px !important;
+  white-space: nowrap !important;
+}
+
+/* Driver row styles */
+.taxi-driver-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  position: relative !important;
+}
+
+.driver-circle-avatar {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #e2e8f0 !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.driver-circle-avatar svg {
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--slate) !important;
+}
+
+.driver-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  line-height: 1.25 !important;
+}
+
+.driver-name-rating {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.driver-name-text {
+  color: var(--brand-blue-dark) !important;
+  font-size: 0.95rem !important;
+  font-weight: 750 !important;
+}
+
+.driver-rating-badge {
+  font-size: 0.72rem !important;
+  background: #fff8da !important;
+  color: #b7791f !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  font-weight: 750 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
+.driver-subtext {
+  font-size: 0.72rem !important;
+  color: var(--slate) !important;
+}
+
+/* Proximity Row styles */
+.taxi-proximity-row {
+  margin-top: 10px !important;
+  font-size: 0.8rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.proximity-countdown {
+  color: var(--brand-red) !important;
+  font-weight: 750 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.proximity-countdown svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.proximity-stage {
+  color: var(--slate) !important;
+}
+
+/* Dotted Divider styles */
+.taxi-card-dotted-divider {
+  border-top: 1.5px dotted var(--border) !important;
+  margin: 12px 0 8px 0 !important;
+  width: 100% !important;
+}
+
+.taxi-card-dotted-divider-full {
+  border-top: 1.5px dotted var(--border) !important;
+  margin: 12px -18px 8px -18px !important;
+}
+
+/* Default Mobile Display Rules */
+.taxi-depart-time-desktop {
+  display: none !important;
+}
+
+.taxi-desktop-divider-group {
+  display: none !important;
+}
+
+.taxi-mobile-bottom-group {
+  display: block !important;
+}
+
+.taxi-mobile-bottom-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-top: 8px !important;
+}
+
+.taxi-depart-time-mobile {
+  color: var(--brand-blue-dark) !important;
+  font-size: 0.95rem !important;
+  font-weight: 750 !important;
+}
+
+.taxi-duration-text-mobile {
+  font-size: 0.82rem !important;
+  color: var(--slate) !important;
+}
+
+/* Responsive Desktop Rules */
 @media (min-width: 901px) {
   .taxi-result-card {
-    display: grid !important;
-    grid-template-columns: auto 1fr !important;
-    grid-template-rows: auto auto !important;
-    column-gap: 24px !important;
-    row-gap: 0 !important;
-    align-items: start !important;
-    padding: 20px !important;
+    padding: 18px 20px !important;
   }
   
-  .taxi-result-body {
-    display: contents !important;
-  }
-  
-  .taxi-van-visual-col {
-    grid-column: 1 !important;
-    grid-row: 1 / span 2 !important;
+  .taxi-card-left-col {
     align-self: stretch !important;
+    justify-content: space-between !important;
+    padding-bottom: 2px !important;
+  }
+  
+  .taxi-van-img-wrapper {
+    width: 108px !important;
+    height: 76px !important;
+  }
+  
+  .taxi-depart-time-desktop {
+    display: block !important;
+    color: var(--brand-blue-dark) !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    margin-top: auto !important;
+    padding-top: 8px !important;
+  }
+  
+  .taxi-card-right-col {
+    flex: 1 !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-start !important;
-    height: 100% !important;
-    padding-bottom: 12px !important;
   }
   
-  /* Target the relative wrapper div of the van image to scale it on desktop */
-  .taxi-van-visual-col > div[style*="position: relative"] {
-    width: 112px !important;
-    height: 84px !important;
+  .taxi-desktop-divider-group {
+    display: block !important;
+    margin-top: auto !important;
   }
   
-  .taxi-details {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-    margin-top: 2px !important;
-  }
-  
-  .taxi-result-route-preview {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-    border-top: none !important;
-    padding-top: 6px !important;
-    margin-top: 6px !important;
+  .taxi-desktop-bottom-row {
     display: flex !important;
+    justify-content: space-between !important;
     align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 16px !important;
+    width: 100% !important;
   }
   
-  .taxi-result-route-preview strong {
-    font-size: 1.05rem !important;
+  .taxi-duration-text {
+    font-size: 0.82rem !important;
+    color: var(--slate) !important;
+  }
+  
+  .taxi-mobile-bottom-group {
+    display: none !important;
+  }
+
+  .taxi-result-actions {
+    margin-left: 124px !important;
+    border-top: 1.5px dotted var(--border) !important;
+    padding-top: 12px !important;
   }
 }

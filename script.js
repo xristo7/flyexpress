@@ -1010,50 +1010,78 @@ function renderBook() {
             return `
               <article class="card card--hover result-card taxi-result-card ${isSelected ? 'is-active' : ''} ${!hasEnoughSeats ? 'is-disabled' : ''}" data-action="${hasEnoughSeats ? 'select-booking-vehicle' : ''}" data-trip-id="${trip.id}" role="button" tabindex="${hasEnoughSeats ? '0' : '-1'}" style="${isSelected ? 'border-color: var(--brand-blue); background: var(--info-soft); margin: 0; position: relative;' : 'margin: 0; position: relative;'} ${!hasEnoughSeats ? 'opacity: 0.55; cursor: not-allowed;' : ''}">
                 ${hasEnoughSeats ? `<div class="card-selection-indicator ${isSelected ? 'is-selected' : ''}"></div>` : ''}
-                <div class="taxi-result-body" style="align-items: flex-start !important; gap: 20px !important;">
-                  <!-- LEFT VISUAL COLUMN -->
-                  <div class="taxi-van-visual-col" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; flex-shrink: 0; width: 104px; position: relative;">
-                    <span style="font-size: 0.74rem; font-weight: 750; color: var(--slate); white-space: nowrap;">${trip.vehicle} (${capacity} seats)</span>
-                    <div style="position: relative; width: 104px; height: 76px;">
-                      <div style="width: 100%; height: 100%; border-radius: 14px; background: #e2e8f0; border: 1.5px solid var(--border); display: grid; place-items: center; overflow: hidden;">
-                        <img src="assets/fly-express-van.png" alt="Fly Express Van" style="width: 100%; height: 100%; object-fit: contain; padding: 4px; ${!hasEnoughSeats ? 'filter: grayscale(1);' : ''}">
+                
+                <div class="taxi-card-main-layout">
+                  <!-- LEFT COLUMN -->
+                  <div class="taxi-card-left-col">
+                    <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
+                    <div class="taxi-van-img-wrapper">
+                      <div class="taxi-van-img-box">
+                        <img src="assets/fly-express-van.png" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
                       </div>
-                      <!-- Ugandan License Plate Overlay -->
-                      <div class="ug-plate-badge" style="position: absolute; bottom: -8px; left: 8px; display: flex; align-items: center; background: #ffffff; border: 1px solid #000000; border-radius: 6px; overflow: hidden; height: 22px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10;">
-                        <div style="background: #ffcc00; width: 14px; height: 100%;"></div>
-                        <div style="padding: 0 6px; font-family: monospace; font-size: 0.76rem; font-weight: 800; color: #000000; letter-spacing: 0.5px; line-height: 22px; white-space: nowrap;">${trip.plate}</div>
+                      <!-- Ugandan Plate -->
+                      <div class="ug-plate-badge">
+                        <div class="ug-flag-strip"></div>
+                        <div class="ug-plate-number">${trip.plate}</div>
                       </div>
                     </div>
+                    <!-- Desktop Departure Time -->
+                    <div class="taxi-depart-time-desktop">${trip.depart}</div>
                   </div>
-
-                  <!-- RIGHT DETAILS COLUMN -->
-                  <div class="taxi-details" style="margin-top: 14px;">
-                    <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                      <div class="driver-circle-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; display: grid; place-items: center; flex-shrink: 0;">
-                        <i data-lucide="user" style="width: 16px; height: 16px; color: var(--slate);"></i>
+                  
+                  <!-- RIGHT COLUMN -->
+                  <div class="taxi-card-right-col">
+                    <!-- Driver Row -->
+                    <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+                      <div class="driver-circle-avatar">
+                        <i data-lucide="user"></i>
                       </div>
-                      <div style="display: flex; flex-direction: column; line-height: 1.25;">
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                          <strong style="color: var(--brand-blue-dark); font-size: 0.95rem; font-weight: 750;">${trip.driverName}</strong>
-                          <span class="driver-rating-tag" style="font-size: 0.72rem; background: #fff8da; color: #b7791f; padding: 1px 5px; border-radius: 4px; font-weight: 750; display: inline-flex; align-items: center; gap: 2px;">${trip.driverRating} ★</span>
+                      <div class="driver-text-block">
+                        <div class="driver-name-rating">
+                          <strong class="driver-name-text">${trip.driverName}</strong>
+                          <span class="driver-rating-badge">${trip.driverRating} ★</span>
                         </div>
-                        <span style="font-size: 0.72rem; color: var(--slate);">Driver</span>
+                        <span class="driver-subtext">Driver</span>
                       </div>
                     </div>
-                    <div class="taxi-proximity-info" style="margin-top: 10px; font-size: 0.8rem;">
-                      <span class="proximity-countdown" style="color: var(--brand-red); font-weight: 750; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="clock" style="width: 14px; height: 14px;"></i> ${trip.countdown}</span>
-                      <span class="proximity-status" style="color: var(--slate); margin-left: 6px;">${trip.currentStage}</span>
+                    
+                    <!-- Proximity Row -->
+                    <div class="taxi-proximity-row">
+                      <span class="proximity-countdown"><i data-lucide="clock"></i> ${trip.countdown}</span>
+                      <span class="proximity-stage">${trip.currentStage}</span>
+                    </div>
+                    
+                    <!-- Desktop-only Divider and Bottom Row -->
+                    <div class="taxi-desktop-divider-group">
+                      <div class="taxi-card-dotted-divider"></div>
+                      <div class="taxi-desktop-bottom-row">
+                        <span class="taxi-duration-text">${trip.duration}</span>
+                        <div class="taxi-seats-left-wrapper">
+                          ${hasEnoughSeats ? `
+                            <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span>
+                          ` : `
+                            <span class="status-chip status-chip--danger">Only ${trip.seats} left (Need ${passengerTotal()})</span>
+                          `}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="taxi-result-route-preview" style="text-align: right; min-width: 100px; padding-right: 14px;">
-                  <strong>${trip.depart}</strong>
-                  <span style="display: block; font-size: 0.75rem; color: var(--slate);">${trip.duration}</span>
-                  ${hasEnoughSeats ? `
-                    <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}" style="margin-top: 8px; display: inline-block;">${trip.seats} seats left</span>
-                  ` : `
-                    <span class="status-chip status-chip--danger" style="margin-top: 8px; display: inline-block;">Only ${trip.seats} left (Need ${passengerTotal()})</span>
-                  `}
+                
+                <!-- MOBILE-ONLY DIVIDER AND BOTTOM ROW -->
+                <div class="taxi-mobile-bottom-group">
+                  <div class="taxi-card-dotted-divider-full"></div>
+                  <div class="taxi-mobile-bottom-row">
+                    <span class="taxi-depart-time-mobile">${trip.depart}</span>
+                    <span class="taxi-duration-text-mobile">${trip.duration}</span>
+                    <div class="taxi-seats-left-wrapper-mobile">
+                      ${hasEnoughSeats ? `
+                        <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span>
+                      ` : `
+                        <span class="status-chip status-chip--danger">Only ${trip.seats} left</span>
+                      `}
+                    </div>
+                  </div>
                 </div>
               </article>
             `;
@@ -1279,49 +1307,85 @@ function renderBook() {
 }
 
 function renderTripResult(trip) {
-  return `<article class="card card--hover result-card taxi-result-card">
-    <div class="taxi-result-body" style="align-items: flex-start !important; gap: 20px !important;">
-      <!-- LEFT VISUAL COLUMN -->
-      <div class="taxi-van-visual-col" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; flex-shrink: 0; width: 104px; position: relative;">
-        <span style="font-size: 0.74rem; font-weight: 750; color: var(--slate); white-space: nowrap;">${trip.vehicle} (${getVanCapacity(trip)} seats)</span>
-        <div style="position: relative; width: 104px; height: 76px;">
-          <div style="width: 100%; height: 100%; border-radius: 14px; background: #e2e8f0; border: 1.5px solid var(--border); display: grid; place-items: center; overflow: hidden;">
-            <img src="assets/fly-express-van.png" alt="Fly Express Van" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">
+  const hasEnoughSeats = trip.seats >= passengerTotal();
+  const capacity = getVanCapacity(trip);
+  return `<article class="card card--hover result-card taxi-result-card ${!hasEnoughSeats ? 'is-disabled' : ''}" style="${!hasEnoughSeats ? 'opacity: 0.55; cursor: not-allowed;' : ''}">
+    
+    <div class="taxi-card-main-layout">
+      <!-- LEFT COLUMN -->
+      <div class="taxi-card-left-col">
+        <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
+        <div class="taxi-van-img-wrapper">
+          <div class="taxi-van-img-box">
+            <img src="assets/fly-express-van.png" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
           </div>
-          <!-- Ugandan License Plate Overlay -->
-          <div class="ug-plate-badge" style="position: absolute; bottom: -8px; left: 8px; display: flex; align-items: center; background: #ffffff; border: 1px solid #000000; border-radius: 6px; overflow: hidden; height: 22px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10;">
-            <div style="background: #ffcc00; width: 14px; height: 100%;"></div>
-            <div style="padding: 0 6px; font-family: monospace; font-size: 0.76rem; font-weight: 800; color: #000000; letter-spacing: 0.5px; line-height: 22px; white-space: nowrap;">${trip.plate}</div>
+          <!-- Ugandan Plate -->
+          <div class="ug-plate-badge">
+            <div class="ug-flag-strip"></div>
+            <div class="ug-plate-number">${trip.plate}</div>
           </div>
         </div>
+        <!-- Desktop Departure Time -->
+        <div class="taxi-depart-time-desktop">${trip.depart}</div>
       </div>
-
-      <!-- RIGHT DETAILS COLUMN -->
-      <div class="taxi-details" style="margin-top: 14px;">
-        <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-          <div class="driver-circle-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; display: grid; place-items: center; flex-shrink: 0;">
-            <i data-lucide="user" style="width: 16px; height: 16px; color: var(--slate);"></i>
+      
+      <!-- RIGHT COLUMN -->
+      <div class="taxi-card-right-col">
+        <!-- Driver Row -->
+        <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+          <div class="driver-circle-avatar">
+            <i data-lucide="user"></i>
           </div>
-          <div style="display: flex; flex-direction: column; line-height: 1.25;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <strong style="color: var(--brand-blue-dark); font-size: 0.95rem; font-weight: 750;">${trip.driverName}</strong>
-              <span class="driver-rating-tag" style="font-size: 0.72rem; background: #fff8da; color: #b7791f; padding: 1px 5px; border-radius: 4px; font-weight: 750; display: inline-flex; align-items: center; gap: 2px;">${trip.driverRating} ★</span>
+          <div class="driver-text-block">
+            <div class="driver-name-rating">
+              <strong class="driver-name-text">${trip.driverName}</strong>
+              <span class="driver-rating-badge">${trip.driverRating} ★</span>
             </div>
-            <span style="font-size: 0.72rem; color: var(--slate);">Driver</span>
+            <span class="driver-subtext">Driver</span>
           </div>
         </div>
-        <div class="taxi-proximity-info" style="margin-top: 10px; font-size: 0.8rem;">
-          <span class="proximity-countdown" style="color: var(--brand-red); font-weight: 750; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="clock" style="width: 14px; height: 14px;"></i> ${trip.countdown}</span>
-          <span class="proximity-status" style="color: var(--slate); margin-left: 6px;">${trip.currentStage} · ${trip.vansAtStage} vans at stage</span>
+        
+        <!-- Proximity Row -->
+        <div class="taxi-proximity-row">
+          <span class="proximity-countdown"><i data-lucide="clock"></i> ${trip.countdown}</span>
+          <span class="proximity-stage">${trip.currentStage} · ${trip.vansAtStage} vans at stage</span>
+        </div>
+        
+        <!-- Desktop-only Divider and Bottom Row -->
+        <div class="taxi-desktop-divider-group">
+          <div class="taxi-card-dotted-divider"></div>
+          <div class="taxi-desktop-bottom-row">
+            <span class="taxi-duration-text">${trip.duration} · ${trip.traffic} traffic</span>
+            <div class="taxi-seats-left-wrapper">
+              ${hasEnoughSeats ? `
+                <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span>
+              ` : `
+                <span class="status-chip status-chip--danger">Only ${trip.seats} left (Need ${passengerTotal()})</span>
+              `}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="taxi-result-route-preview">
-      <strong>${trip.depart}</strong>
-      <span>${trip.duration} · ${trip.traffic} traffic</span>
-      <div style="margin-top:4px"><span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span></div>
+    
+    <!-- MOBILE-ONLY DIVIDER AND BOTTOM ROW -->
+    <div class="taxi-mobile-bottom-group">
+      <div class="taxi-card-dotted-divider-full"></div>
+      <div class="taxi-mobile-bottom-row">
+        <span class="taxi-depart-time-mobile">${trip.depart}</span>
+        <span class="taxi-duration-text-mobile">${trip.duration} · ${trip.traffic} traffic</span>
+        <div class="taxi-seats-left-wrapper-mobile">
+          ${hasEnoughSeats ? `
+            <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span>
+          ` : `
+            <span class="status-chip status-chip--danger">Only ${trip.seats} left</span>
+          `}
+        </div>
+      </div>
     </div>
-    <div class="taxi-result-actions">
+
+    <!-- Actions Row (Price & Book Button) -->
+    <div class="taxi-result-actions" style="margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 12px;">
       <div class="taxi-price-tag">
         <span class="muted text-small">${state.ticketType === 'return' ? 'Return package' : 'One way'}</span>
         <strong>${formatUGX((state.ticketType === 'return' ? 9000 : trip.fare) * passengerTotal())}</strong>
