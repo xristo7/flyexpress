@@ -1048,7 +1048,7 @@ function renderBook() {
                     <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
                     <div class="taxi-van-img-wrapper">
                       <div class="taxi-van-img-box">
-                        <img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
+                        <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
                       </div>
                       <!-- Ugandan Plate -->
                       <div class="ug-plate-badge">
@@ -1347,7 +1347,7 @@ function renderTripResult(trip) {
         <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
         <div class="taxi-van-img-wrapper">
           <div class="taxi-van-img-box">
-            <img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
+            <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
           </div>
           <!-- Ugandan Plate -->
           <div class="ug-plate-badge">
@@ -1435,7 +1435,7 @@ function renderTripDetails() {
     <div class="smart-review__map-card">
       <div class="smart-review__map-copy"><p class="eyebrow">${reviewDate}</p><h1 id="review-title">Review your trip</h1><p>You’re almost ready to travel.</p></div>
       <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
-      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
+      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
     </div>
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
@@ -1457,7 +1457,7 @@ function renderTripDetails() {
       <article class="card transit-status-card">
         <div class="transit-info-grid">
           <div class="transit-van-visual">
-            <img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express Van" class="transit-van-img">
+            <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Van" class="transit-van-img">
             <span class="van-plate-tag">${trip.plate}</span>
           </div>
           <div class="transit-details">
@@ -1788,7 +1788,7 @@ function renderLiveTrip() {
       </div>
       <aside class="grid">
         <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt="Fly Express passenger van" style="padding:4px;"></div><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
+        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express passenger van" style="padding:4px;"></div><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
         <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
         <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
       </aside>
@@ -3254,7 +3254,7 @@ function renderTripDetails() {
     <div class="smart-review__map-card">
       <div class="smart-review__map-copy"><p class="eyebrow">${reviewDate}</p><h1 id="review-title">Review your trip</h1><p>You’re almost ready to travel.</p></div>
       <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
-      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${state.transparentVehicles['assets/fly-express-van.png'] || 'assets/fly-express-van.png'}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
+      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
     </div>
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
@@ -4592,6 +4592,12 @@ function makeImageTransparent(imgUrl, callback) {
     }
   };
   img.onerror = () => callback(imgUrl);
+}
+
+function getTripVehicleImage(vehicleName) {
+  const isHighroof = vehicleName && vehicleName.toLowerCase() === 'highroof';
+  const imgUrl = isHighroof ? 'assets/fly-express-hiace-highroof.jpg' : 'assets/fly-express-hiace-commuter.jpg';
+  return state.transparentVehicles[imgUrl] || imgUrl;
 }
 
 function preloadTransparentImages() {
