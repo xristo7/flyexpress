@@ -4290,3 +4290,20 @@ body[data-active-screen="driver-profile"] .main-content {
   background-size: 200% 100% !important;
   animation: splash-load 2s cubic-bezier(0.4, 0, 0.2, 1) forwards, loading-flow 1.2s linear infinite !important;
 }
+
+/* Corridor Towns Listing Styles on Route Cards */
+.corridor-towns {
+  margin-top: 6px !important;
+  font-size: 0.74rem !important;
+  color: var(--slate) !important;
+  line-height: 1.35 !important;
+}
+.corridor-towns-label {
+  color: var(--brand-blue-dark) !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  font-size: 0.62rem !important;
+  letter-spacing: 0.5px !important;
+  margin-right: 4px !important;
+  display: inline-block !important;
+}
