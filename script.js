@@ -3218,22 +3218,43 @@ function reviewSeatOptions() {
 
 function renderSeatMode() {
   const occupiedList = getOccupiedSeatsForTrip(state.activeTrip);
-  const seats = [
+  const isHighroof = state.activeTrip && state.activeTrip.vehicle && state.activeTrip.vehicle.toLowerCase() === 'highroof';
+
+  // 14-seater Drone layout (existing)
+  const seats14 = [
     ['1A',29.2,29.3], ['1B',45.5,29.3],
     ['2A',28.7,43.3], ['2B',53.2,43.3], ['2C',69.6,43.3],
     ['3A',28.7,57.0], ['3B',53.2,57.0], ['3C',69.6,57.0],
     ['4A',28.7,70.7], ['4B',53.2,70.7], ['4C',69.6,70.7],
     ['5A',31.3,84.1], ['5B',49.8,84.1], ['5C',68.1,84.1]
   ];
+
+  // 18-seater Highroof layout (mapped to new top-down image)
+  const seats18 = [
+    ['1A',22.0,24.0], ['1B',39.0,24.0],
+    ['2A',20.0,36.5], ['2B',42.5,36.5], ['2C',64.0,36.5],
+    ['3A',20.0,47.5], ['3B',42.5,47.5], ['3C',64.0,47.5],
+    ['4A',20.0,58.5], ['4B',42.5,58.5], ['4C',64.0,58.5],
+    ['5A',20.0,69.5], ['5B',42.5,69.5], ['5C',64.0,69.5],
+    ['6A',16.0,81.5], ['6B',34.5,81.5], ['6C',53.0,81.5], ['6D',71.0,81.5]
+  ];
+
+  const seats = isHighroof ? seats18 : seats14;
+  const imgSrc = isHighroof ? 'assets/fly-express-highroof-topdown.png' : 'assets/fly-express-14-seater.png';
+  const imgAlt = isHighroof ? 'Top view of the Fly Express 18-seater high roof vehicle interior' : 'Top view of the Fly Express 14-seater vehicle interior';
+  const seatCount = isHighroof ? 18 : 14;
+  const driverLeft = isHighroof ? '63.0' : '67.9';
+  const driverTop = isHighroof ? '24.0' : '29.4';
+
   return `<div class="photo-seat-selector" role="group" aria-labelledby="photo-seat-title">
-    <span id="photo-seat-title" class="sr-only">Choose passenger seats in the 14-seater vehicle</span>
-    <img src="assets/fly-express-14-seater.png" alt="Top view of the Fly Express 14-seater vehicle interior">
+    <span id="photo-seat-title" class="sr-only">Choose passenger seats in the ${seatCount}-seater vehicle</span>
+    <img src="${imgSrc}" alt="${imgAlt}">
     ${seats.map(([seat,left,top]) => {
       const isOccupied = occupiedList.includes(seat);
       const isSelected = state.selectedSeats.includes(seat);
       return `<button class="photo-seat ${isSelected ? 'is-selected' : ''} ${isOccupied ? 'is-occupied' : ''}" style="--seat-left:${left}%;--seat-top:${top}%" type="button" ${isOccupied ? 'disabled' : 'data-action="toggle-seat"'} data-seat="${seat}" aria-pressed="${isSelected}" aria-label="${isOccupied ? `Occupied seat ${seat}` : isSelected ? `Deselect seat ${seat}` : `Select seat ${seat}`}"><span>${seat}</span><i data-lucide="${isOccupied ? 'x' : 'check'}"></i></button>`;
     }).join('')}
-    <button class="photo-seat photo-seat--driver" style="--seat-left:67.9%;--seat-top:29.4%" type="button" disabled aria-label="Driver seat, not selectable"><span>Driver</span><i data-lucide="gauge"></i></button>
+    <button class="photo-seat photo-seat--driver" style="--seat-left:${driverLeft}%;--seat-top:${driverTop}%" type="button" disabled aria-label="Driver seat, not selectable"><span>Driver</span><i data-lucide="gauge"></i></button>
   </div>
   <div class="photo-seat-legend">
     <span><i class="photo-seat-key"></i>Available</span>
