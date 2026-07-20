@@ -4716,33 +4716,3 @@ body[data-active-screen="driver-profile"] .main-content {
   border-color: var(--brand-blue) !important;
   background: var(--info-soft) !important;
 }
-
-/* ---------- HiAce Branding Overlay Styles ---------- */
-.taxi-van-img-box, .transit-van-visual {
-  position: relative !important;
-}
-.taxi-van-img-box::before, .transit-van-visual::before {
-  content: "" !important;
-  position: absolute !important;
-  bottom: 22px !important;
-  right: 6px !important;
-  width: 58px !important;
-  height: 6px !important;
-  background: linear-gradient(90deg, #075aa8 0%, #075aa8 70%, #ffd000 70%, #ffd000 80%, #075aa8 80%) !important;
-  transform: skewY(-2.5deg) rotate(-2deg) !important;
-  box-shadow: 0 0.5px 1px rgba(0,0,0,0.15) !important;
-  z-index: 2 !important;
-}
-.taxi-van-img-box::after, .transit-van-visual::after {
-  content: "" !important;
-  position: absolute !important;
-  bottom: 22px !important;
-  left: 28px !important;
-  width: 8px !important;
-  height: 8px !important;
-  background: white url("assets/fly-express-logo.jpg") no-repeat center center / contain !important;
-  border-radius: 50% !important;
-  border: 0.5px solid var(--border) !important;
-  transform: rotate(-5deg) skewX(5deg) !important;
-  z-index: 2 !important;
-}

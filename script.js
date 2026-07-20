@@ -1994,19 +1994,7 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <div style="position: relative; width: 100%; height: 120px; margin-bottom: 12px; border-radius: 10px; overflow: hidden; background: white;">
-                <img src="assets/fly-express-hiace-highroof.jpg" alt="Toyota HiAce High Roof" style="width: 100%; height: 100%; object-fit: contain;">
-                <!-- Side stripe overlay (skewed and positioned to align with the HiAce body side line!) -->
-                <div style="position: absolute; bottom: 35px; right: 8px; width: 105px; height: 10px; background: linear-gradient(90deg, #075aa8 0%, #075aa8 70%, #ffd000 70%, #ffd000 80%, #075aa8 80%); transform: skewY(-2.5deg) rotate(-2deg); display: flex; align-items: center; padding-left: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.15);">
-                  <span style="color: white; font-family: sans-serif; font-size: 4px; font-weight: 900; letter-spacing: 0.2px; line-height: 1;">FLY EXPRESS TRAVELLERS ASSOCIATION</span>
-                </div>
-                <!-- Hood Logo overlay (positioned on the front hood!) -->
-                <div style="position: absolute; bottom: 35px; left: 44px; width: 13px; height: 13px; transform: rotate(-5deg) skewX(5deg); display: grid; place-items: center;">
-                  <img src="assets/fly-express-logo.jpg" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
-                </div>
-                <!-- Hood Stripe overlay (vertical yellow/blue stripe on the hood!) -->
-                <div style="position: absolute; bottom: 42px; left: 58px; width: 4px; height: 10px; background: linear-gradient(90deg, #ffd000 0%, #ffd000 50%, #075aa8 50%, #075aa8 100%); transform: skewY(-15deg) rotate(-10deg);"></div>
-              </div>
+              <img src="assets/fly-express-hiace-highroof.jpg" alt="Toyota HiAce High Roof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce High Roof (18 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
