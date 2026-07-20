@@ -1025,8 +1025,6 @@ function renderBook() {
                         <div class="ug-plate-number">${trip.plate}</div>
                       </div>
                     </div>
-                    <!-- Desktop Departure Time -->
-                    <div class="taxi-depart-time-desktop">${trip.depart}</div>
                   </div>
                   
                   <!-- RIGHT COLUMN -->
@@ -1055,6 +1053,7 @@ function renderBook() {
                     <div class="taxi-desktop-divider-group">
                       <div class="taxi-card-dotted-divider"></div>
                       <div class="taxi-desktop-bottom-row">
+                        <span class="taxi-depart-time-desktop">${trip.depart}</span>
                         <span class="taxi-duration-text">${trip.duration}</span>
                         <div class="taxi-seats-left-wrapper">
                           ${hasEnoughSeats ? `
@@ -1325,8 +1324,6 @@ function renderTripResult(trip) {
             <div class="ug-plate-number">${trip.plate}</div>
           </div>
         </div>
-        <!-- Desktop Departure Time -->
-        <div class="taxi-depart-time-desktop">${trip.depart}</div>
       </div>
       
       <!-- RIGHT COLUMN -->
@@ -1355,6 +1352,7 @@ function renderTripResult(trip) {
         <div class="taxi-desktop-divider-group">
           <div class="taxi-card-dotted-divider"></div>
           <div class="taxi-desktop-bottom-row">
+            <span class="taxi-depart-time-desktop">${trip.depart}</span>
             <span class="taxi-duration-text">${trip.duration} · ${trip.traffic} traffic</span>
             <div class="taxi-seats-left-wrapper">
               ${hasEnoughSeats ? `

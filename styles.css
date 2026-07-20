@@ -4417,7 +4417,7 @@ body[data-active-screen="driver-profile"] .main-content {
 
 .ug-plate-badge {
   position: absolute !important;
-  bottom: -8px !important;
+  bottom: -13px !important;
   left: 8px !important;
   display: flex !important;
   align-items: center !important;
@@ -4584,22 +4584,22 @@ body[data-active-screen="driver-profile"] .main-content {
   
   .taxi-card-left-col {
     align-self: stretch !important;
-    justify-content: space-between !important;
-    padding-bottom: 2px !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    padding-bottom: 0px !important;
   }
   
   .taxi-van-img-wrapper {
     width: 108px !important;
-    height: 76px !important;
+    height: 88px !important;
+    flex-grow: 1 !important;
   }
   
   .taxi-depart-time-desktop {
     display: block !important;
     color: var(--brand-blue-dark) !important;
-    font-size: 1.1rem !important;
+    font-size: 1.15rem !important;
     font-weight: 800 !important;
-    margin-top: auto !important;
-    padding-top: 8px !important;
   }
   
   .taxi-card-right-col {
