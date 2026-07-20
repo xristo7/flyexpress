@@ -811,9 +811,11 @@ function renderBook() {
           <div class="card-selection-indicator ${state.selectedRoute === 'kajansi' ? 'is-selected' : ''}"></div>
           <img src="assets/entebbe.jpg" alt="Entebbe" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Entebbe – Kampala</h3>
-            <div class="route-card__price">UGX 5,000</div>
-            <p>Via Kajansi Expressway (Both ways)</p>
+            <div class="route-card__title-row">
+              <h3>Entebbe – Kampala</h3>
+              <div class="route-card__price">UGX 5,000</div>
+            </div>
+            <p>Via Kajansi Expressway</p>
             <div class="corridor-towns">
               Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala
             </div>
@@ -823,9 +825,11 @@ function renderBook() {
           <div class="card-selection-indicator ${state.selectedRoute === 'busega' ? 'is-selected' : ''}"></div>
           <img src="assets/kampala.jpg" alt="Kampala" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Entebbe – Kampala</h3>
-            <div class="route-card__price">UGX 5,000</div>
-            <p>Via Busega Expressway (One way)</p>
+            <div class="route-card__title-row">
+              <h3>Entebbe – Kampala</h3>
+              <div class="route-card__price">UGX 5,000</div>
+            </div>
+            <p>Via Busega Expressway</p>
             <div class="corridor-towns">
               Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala
             </div>
@@ -833,10 +837,12 @@ function renderBook() {
         </div>
         <div class="route-card ${state.selectedRoute === 'nambole' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="nambole" role="button" tabindex="0" style="position: relative;">
           <div class="card-selection-indicator ${state.selectedRoute === 'nambole' ? 'is-selected' : ''}"></div>
-          <img src="assets/kampala.jpg" alt="Nambole" class="route-card__icon" style="object-fit: cover;">
+          <img src="assets/nambole.jpg" alt="Nambole" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Entebbe – Nambole</h3>
-            <div class="route-card__price">UGX 7,000</div>
+            <div class="route-card__title-row">
+              <h3>Entebbe – Nambole</h3>
+              <div class="route-card__price">UGX 7,000</div>
+            </div>
             <p>Via Kajansi Expressway</p>
             <div class="corridor-towns">
               Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Nambole
@@ -845,10 +851,12 @@ function renderBook() {
         </div>
         <div class="route-card ${state.selectedRoute === 'masaka' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="masaka" role="button" tabindex="0" style="position: relative;">
           <div class="card-selection-indicator ${state.selectedRoute === 'masaka' ? 'is-selected' : ''}"></div>
-          <img src="assets/entebbe.jpg" alt="Masaka" class="route-card__icon" style="object-fit: cover;">
+          <img src="assets/masaka.jpg" alt="Masaka" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Entebbe – Masaka</h3>
-            <div class="route-card__price">UGX 20,000</div>
+            <div class="route-card__title-row">
+              <h3>Entebbe – Masaka</h3>
+              <div class="route-card__price">UGX 20,000</div>
+            </div>
             <p>Via Masaka Road</p>
             <div class="corridor-towns">
               Entebbe • Kajjansi • Mpigi • Buwama • Masaka
@@ -857,10 +865,12 @@ function renderBook() {
         </div>
         <div class="route-card ${state.selectedRoute === 'lyantonde' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="lyantonde" role="button" tabindex="0" style="position: relative;">
           <div class="card-selection-indicator ${state.selectedRoute === 'lyantonde' ? 'is-selected' : ''}"></div>
-          <img src="assets/kampala.jpg" alt="Lyantonde" class="route-card__icon" style="object-fit: cover;">
+          <img src="assets/lyantonde.jpg" alt="Lyantonde" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Entebbe – Lyantonde</h3>
-            <div class="route-card__price">UGX 25,000</div>
+            <div class="route-card__title-row">
+              <h3>Entebbe – Lyantonde</h3>
+              <div class="route-card__price">UGX 25,000</div>
+            </div>
             <p>Via Masaka Road</p>
             <div class="corridor-towns">
               Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde
@@ -869,10 +879,12 @@ function renderBook() {
         </div>
         <div class="route-card ${state.selectedRoute === 'mbarara' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="mbarara" role="button" tabindex="0" style="position: relative;">
           <div class="card-selection-indicator ${state.selectedRoute === 'mbarara' ? 'is-selected' : ''}"></div>
-          <img src="assets/entebbe.jpg" alt="Mbarara" class="route-card__icon" style="object-fit: cover;">
+          <img src="assets/mbarara.jpg" alt="Mbarara" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Entebbe – Mbarara</h3>
-            <div class="route-card__price">UGX 30,000</div>
+            <div class="route-card__title-row">
+              <h3>Entebbe – Mbarara</h3>
+              <div class="route-card__price">UGX 30,000</div>
+            </div>
             <p>Via Masaka Road</p>
             <div class="corridor-towns">
               Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde • Mbarara

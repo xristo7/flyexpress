@@ -3342,22 +3342,21 @@ body[data-active-screen="driver-profile"] .main-content {
 
 @media (min-width: 992px) {
   .route-selector-cards {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 .route-card {
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 0;
+  padding: 16px;
   background: var(--surface);
   cursor: pointer;
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  align-items: center;
+  gap: 14px;
   transition: all 0.22s ease;
   position: relative;
-  overflow: hidden;
 }
 
 .route-card:hover {
@@ -3406,23 +3405,31 @@ body[data-active-screen="driver-profile"] .main-content {
 }
 
 .route-card__icon {
-  width: 100%;
-  height: 140px;
-  border-radius: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
   background: var(--surface-alt);
   color: var(--brand-blue);
-  display: block;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
   transition: all 0.22s ease;
 }
 
 .route-card__info {
-  padding: 14px 16px 16px;
+  flex: 1;
+  min-width: 0;
+}
+
+.route-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .route-card__price {
   display: inline-block;
-  margin-top: 4px;
   padding: 3px 10px;
   border-radius: 6px;
   background: var(--success-soft);
@@ -3430,10 +3437,18 @@ body[data-active-screen="driver-profile"] .main-content {
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 @media (max-width: 600px) {
+  .route-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
   .route-card__icon {
+    width: 100% !important;
     height: 120px !important;
   }
 }
