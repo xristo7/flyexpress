@@ -262,12 +262,28 @@ const state = {
   routeProgress: 68,
   connected: true,
   routeFlips: {},
-  detectedOriginCity: 'Entebbe'
+  detectedOriginCity: 'Entebbe',
+  specialHire: {
+    step: 1,
+    vehicleType: 'highroof',
+    destinationType: 'standard',
+    standardRoute: 'kajansi',
+    customDestination: '',
+    date: '2026-07-21',
+    durationDays: 1,
+    driverType: 'standard',
+    hireType: 'individual',
+    companyName: '',
+    companyTaxId: '',
+    paymentMethod: 'wallet',
+    paymentDemoState: 'idle'
+  }
 };
 
 const navItems = [
   ['home', 'Home', 'house'],
   ['book', 'Book a Trip', 'ticket-plus'],
+  ['special-hire', 'Special Hire', 'bus'],
   ['trips', 'My Trips', 'route'],
   ['returns', 'Return Tickets', 'refresh-cw'],
   ['wallet', 'Wallet', 'wallet-cards'],
@@ -281,7 +297,7 @@ const navItems = [
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Trip', 'trip-details': 'Trip Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Trips', live: 'Live Trip', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
+  home: 'Home', book: 'Book a Trip', 'special-hire': 'Special Van Hire', 'trip-details': 'Trip Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Trips', live: 'Live Trip', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
 };
 
 const onboardingSlides = [
@@ -391,7 +407,7 @@ function init() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetScreen = urlParams.get('screen') || window.location.hash.slice(1);
-  const validScreens = ['home','book','trip-details','passengers','returns','luggage','checkout','success','ticket','trips','live','wallet','parcel','parcel-receipt','trackparcel-list','trackparcel','parcel-status','offers','notifications','support','profile','about'];
+  const validScreens = ['home','book','special-hire','trip-details','passengers','returns','luggage','checkout','success','ticket','trips','live','wallet','parcel','parcel-receipt','trackparcel-list','trackparcel','parcel-status','offers','notifications','support','profile','about'];
 
   if (targetScreen && validScreens.includes(targetScreen)) {
     $('#splash-screen').classList.add('is-hidden');
@@ -578,6 +594,7 @@ function getNavigationHtml(type) {
 
   const activeHome = state.screen === 'home' ? 'is-active' : '';
   const activeBook = state.screen === 'book' ? 'is-active' : '';
+  const activeSpecialHire = state.screen === 'special-hire' ? 'is-active' : '';
   const activeReturns = state.screen === 'returns' ? 'is-active' : '';
   const activeLuggage = state.screen === 'luggage' ? 'is-active' : '';
   const activeLive = state.screen === 'live' ? 'is-active' : '';
@@ -601,6 +618,9 @@ function getNavigationHtml(type) {
       <div class="drawer-nav-sub">
         <button class="${subItemClass} ${activeReturns}" type="button" data-screen="returns">
           <i data-lucide="refresh-cw"></i><span>Return Tickets</span>
+        </button>
+        <button class="${subItemClass} ${activeSpecialHire}" type="button" data-screen="special-hire">
+          <i data-lucide="bus"></i><span>Special Hire</span>
         </button>
         <button class="${subItemClass} ${activeLuggage}" type="button" data-screen="luggage">
           <i data-lucide="luggage"></i><span>Luggage Tags</span>
@@ -657,7 +677,7 @@ function renderNavigation() {
   }
   
   if (mobile) {
-    const isBookingFlow = ['book', 'trip-details', 'passengers', 'returns', 'luggage', 'checkout', 'trackparcel', 'parcel-status'].includes(state.screen);
+    const isBookingFlow = ['book', 'trip-details', 'passengers', 'returns', 'luggage', 'checkout', 'trackparcel', 'parcel-status', 'special-hire'].includes(state.screen);
     if (isBookingFlow) {
       mobile.classList.add('is-hidden');
     } else {
@@ -708,7 +728,7 @@ function renderCurrentScreen(preserveFocus = true) {
   const focusDescriptor = preserveFocus ? captureFocusDescriptor(root) : null;
   destroyTripMap();
   const renderers = {
-    home: renderHome, book: renderBook, 'trip-details': renderTripDetails, passengers: renderPassengers, returns: renderReturns,
+    home: renderHome, book: renderBook, 'special-hire': renderSpecialHire, 'trip-details': renderTripDetails, passengers: renderPassengers, returns: renderReturns,
     luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, trips: renderTrips,
     live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
     trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, 'driver-chat': renderDriverChat, 'driver-call': renderDriverCall, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
@@ -752,6 +772,7 @@ function renderHome() {
     <div class="section-title"><h2>Quick actions</h2><button class="text-button" type="button" data-action="open-more">View all</button></div>
     <section class="quick-actions" aria-label="Quick actions">
       ${quickAction('Book a Seat','ticket-plus','book')}
+      ${quickAction('Private Charter','bus','special-hire')}
       ${quickAction('Buy Return Ticket','refresh-cw','returns')}
       ${quickAction('Send Parcel','package-plus','parcel')}
       ${quickAction('Add Wallet Funds','circle-plus','wallet','open-add-funds')}
@@ -1866,6 +1887,423 @@ function renderParcelReceipt() {
 
 function generateBarcode() {
   return [3,1,5,2,1,4,2,6,1,3,5,1,2,4,1,6,2,3,1,5,2,4,1,3,6,1,2,5,3,1,4,2].map(width => `<i style="width:${width}px"></i>`).join('');
+}
+
+function calculateSpecialHirePrice() {
+  const sh = state.specialHire;
+  const isCustom = sh.destinationType === 'custom';
+  
+  let basePrice = 0;
+  let driverAllowance = 50000 * sh.durationDays;
+  let fuelFee = 0;
+  
+  if (isCustom) {
+    const dailyRates = { highroof: 300000, drone: 250000, coaster: 600000 };
+    basePrice = (dailyRates[sh.vehicleType] || 300000) * sh.durationDays;
+    fuelFee = 150000 * sh.durationDays;
+  } else {
+    const routeRates = {
+      kajansi: { highroof: 150000, drone: 120000, coaster: 300000 },
+      busega: { highroof: 150000, drone: 120000, coaster: 300000 },
+      nambole: { highroof: 180000, drone: 150000, coaster: 350000 },
+      masaka: { highroof: 400000, drone: 350000, coaster: 700000 },
+      lyantonde: { highroof: 500000, drone: 450000, coaster: 850000 },
+      mbarara: { highroof: 600000, drone: 550000, coaster: 1000000 }
+    };
+    const rate = routeRates[sh.standardRoute] || routeRates.kajansi;
+    basePrice = rate[sh.vehicleType] || 150000;
+    fuelFee = basePrice * 0.3;
+    basePrice = basePrice * 0.7;
+  }
+  
+  if (sh.driverType === 'tour') {
+    driverAllowance += 30000 * sh.durationDays;
+  }
+  
+  const subtotal = basePrice + driverAllowance + fuelFee;
+  const tax = subtotal * 0.18;
+  const total = subtotal + tax;
+  
+  return {
+    basePrice: Math.round(basePrice),
+    driverAllowance: Math.round(driverAllowance),
+    fuelFee: Math.round(fuelFee),
+    tax: Math.round(tax),
+    total: Math.round(total)
+  };
+}
+
+function renderSpecialHire() {
+  const sh = state.specialHire;
+  const step = sh.step;
+  
+  if (step === 1) {
+    return `
+      ${screenHead('Private Charter & Special Hire', 'Step 1 of 3: Choose your vehicle and destination.')}
+      
+      <div class="special-hire-flow-container" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
+          <div class="vehicle-card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+            <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <img src="assets/fly-express-van.png" alt="Highroof Van" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Highroof Van (18 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Ideal for large families, group tours, or corporate travel.</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">WiFi & AC Included</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 300K/day</strong>
+              </div>
+            </div>
+            
+            <div class="card vehicle-card ${sh.vehicleType === 'drone' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="drone" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'drone' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'drone' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <img src="assets/fly-express-14-seater.png" alt="Super Custom" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Super Custom / Drone (14 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Premium executive seats, maximum comfort, smooth suspension.</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Executive Comfort</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 250K/day</strong>
+              </div>
+            </div>
+            
+            <div class="card vehicle-card ${sh.vehicleType === 'coaster' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="coaster" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'coaster' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'coaster' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <div style="width: 100%; height: 120px; background: var(--surface-alt); border-radius: 10px; display: grid; place-items: center; margin-bottom: 12px; font-weight: 800; color: var(--slate);"><i data-lucide="bus" style="width: 48px; height: 48px; color: var(--slate);"></i></div>
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Executive Coaster (30 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Spacious luxury coaster for big company excursions or large events.</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">TV & PA System</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 600K/day</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--brand-blue-dark);">2. Select Route & Destination</h2>
+          <div class="choice-pills" style="margin-bottom: 16px; display: flex; gap: 8px;">
+            <button class="choice-pill ${sh.destinationType === 'standard' ? 'is-active' : ''}" type="button" data-action="select-hire-dest-type" data-value="standard">Standard Route Stages</button>
+            <button class="choice-pill ${sh.destinationType === 'custom' ? 'is-active' : ''}" type="button" data-action="select-hire-dest-type" data-value="custom">Custom Destination (Anywhere in Uganda)</button>
+          </div>
+          
+          ${sh.destinationType === 'standard' ? `
+            <div class="field" style="max-width: 400px;">
+              <label for="hire-route-select">Standard Route Stage</label>
+              <select id="hire-route-select" data-hire-field="standardRoute" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+                <option value="kajansi" ${sh.standardRoute === 'kajansi' ? 'selected' : ''}>Entebbe – Kampala (Via Kajansi)</option>
+                <option value="busega" ${sh.standardRoute === 'busega' ? 'selected' : ''}>Entebbe – Kampala (Via Busega)</option>
+                <option value="nambole" ${sh.standardRoute === 'nambole' ? 'selected' : ''}>Entebbe – Nambole</option>
+                <option value="masaka" ${sh.standardRoute === 'masaka' ? 'selected' : ''}>Entebbe – Masaka</option>
+                <option value="lyantonde" ${sh.standardRoute === 'lyantonde' ? 'selected' : ''}>Entebbe – Lyantonde</option>
+                <option value="mbarara" ${sh.standardRoute === 'mbarara' ? 'selected' : ''}>Entebbe – Mbarara</option>
+              </select>
+            </div>
+          ` : `
+            <div class="field" style="max-width: 400px;">
+              <label for="hire-custom-dest">Preferred Destination in Uganda</label>
+              <input id="hire-custom-dest" type="text" data-hire-field="customDestination" value="${escapeHtml(sh.customDestination)}" placeholder="e.g. Jinja town, Fort Portal, Kabale, Queen Elizabeth NP" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+            </div>
+          `}
+        </div>
+        
+        <div class="floating-cta-container" style="margin-top: 16px;">
+          <button class="button button--primary w-full" type="button" data-action="special-hire-next">Continue to Details</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (step === 2) {
+    return `
+      ${screenHead('Private Charter & Special Hire', 'Step 2 of 3: Enter charter and duration details.')}
+      
+      <div class="special-hire-flow-container" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
+        <section class="card" style="margin: 0; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+          <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--brand-blue-dark);">Charter Specifications</h2>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            <div class="field">
+              <label>Charter Date</label>
+              <input type="date" data-hire-field="date" value="${sh.date}" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+            </div>
+            
+            <div class="field">
+              <label>Duration of Hire (Days)</label>
+              <input type="number" data-hire-field="durationDays" value="${sh.durationDays}" min="1" max="30" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+            </div>
+          </div>
+          
+          <div>
+            <label style="font-weight: 750; font-size: 0.85rem; margin-bottom: 6px; display: block;">Charter Client Type</label>
+            <div class="choice-pills" style="display: flex; gap: 8px; margin-bottom: 12px;">
+              <button class="choice-pill ${sh.hireType === 'individual' ? 'is-active' : ''}" type="button" data-action="select-hire-user-type" data-value="individual">Individual / Family</button>
+              <button class="choice-pill ${sh.hireType === 'company' ? 'is-active' : ''}" type="button" data-action="select-hire-user-type" data-value="company">Company / Corporate</button>
+            </div>
+            
+            ${sh.hireType === 'company' ? `
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div class="field">
+                  <label for="hire-company-name">Company Name</label>
+                  <input id="hire-company-name" type="text" data-hire-field="companyName" value="${escapeHtml(sh.companyName)}" placeholder="e.g. Acme Tours Ltd" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+                </div>
+                <div class="field">
+                  <label for="hire-company-tax">Corporate Tax ID (optional)</label>
+                  <input id="hire-company-tax" type="text" data-hire-field="companyTaxId" value="${escapeHtml(sh.companyTaxId)}" placeholder="e.g. URA-9824-A" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+                </div>
+              </div>
+            ` : ''}
+          </div>
+          
+          <div>
+            <label style="font-weight: 750; font-size: 0.85rem; margin-bottom: 6px; display: block;">Driver Profile Preference</label>
+            <div class="choice-pills" style="display: flex; gap: 8px;">
+              <button class="choice-pill ${sh.driverType === 'standard' ? 'is-active' : ''}" type="button" data-action="select-hire-driver" data-value="standard">Standard Route Driver</button>
+              <button class="choice-pill ${sh.driverType === 'tour' ? 'is-active' : ''}" type="button" data-action="select-hire-driver" data-value="tour">Certified Tour Guide Driver (+UGX 30K/day)</button>
+            </div>
+            <p class="muted" style="font-size: 0.8rem; margin: 6px 0 0;">Tour Guide Drivers speak fluent English/local languages and have extensive tourist guiding experience.</p>
+          </div>
+        </section>
+        
+        <div class="button-row" style="margin-top: 16px; display: flex; gap: 12px;">
+          <button class="button button--ghost" type="button" data-action="special-hire-back" style="flex: 1;">Back</button>
+          <button class="button button--primary" type="button" data-action="special-hire-next" style="flex: 2;">Continue to Payment</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (step === 3) {
+    const priceDetails = calculateSpecialHirePrice();
+    const isCustom = sh.destinationType === 'custom';
+    
+    let destLabel = 'Entebbe – Kampala (Via Kajansi)';
+    if (isCustom) {
+      destLabel = sh.customDestination || 'Custom Destination';
+    } else {
+      const standardOption = appData.routeCards.find(r => r.key === sh.standardRoute);
+      if (standardOption) {
+        destLabel = `Entebbe – ${standardOption.cityB}`;
+      }
+    }
+    
+    return `
+      ${screenHead('Private Charter & Special Hire', 'Step 3 of 3: Review pricing and authorize payment.')}
+      
+      <div class="special-hire-flow-container" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
+        <article class="card" style="margin: 0; padding: 20px;">
+          <h2 style="font-size: 1.1rem; font-weight: 800; margin-top: 0; margin-bottom: 16px; color: var(--brand-blue-dark);">Charter Summary & Pricing</h2>
+          
+          <div class="detail-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="detail-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span>Vehicle Type</span>
+              <strong>${sh.vehicleType === 'highroof' ? 'Highroof Van (18 Seats)' : sh.vehicleType === 'drone' ? 'Super Custom/Drone (14 Seats)' : 'Executive Coaster (30 Seats)'}</strong>
+            </div>
+            <div class="detail-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span>Destination</span>
+              <strong>${escapeHtml(destLabel)}</strong>
+            </div>
+            <div class="detail-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span>Duration</span>
+              <strong>${sh.durationDays} day${sh.durationDays > 1 ? 's' : ''} (${sh.date})</strong>
+            </div>
+            <div class="detail-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span>Driver Preference</span>
+              <strong>${sh.driverType === 'standard' ? 'Standard Route Driver' : 'Certified Tour Guide'}</strong>
+            </div>
+            ${sh.hireType === 'company' ? `
+              <div class="detail-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+                <span>Corporate Client</span>
+                <strong>${escapeHtml(sh.companyName)} ${sh.companyTaxId ? `(${escapeHtml(sh.companyTaxId)})` : ''}</strong>
+              </div>
+            ` : ''}
+          </div>
+          
+          <div class="special-hire-pricing-breakdown" style="background: var(--surface-alt); border-radius: 12px; padding: 16px; margin-top: 16px; display: flex; flex-direction: column; gap: 8px;">
+            <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+              <span class="muted">Base Vehicle Hire Fee</span>
+              <span>${formatUGX(priceDetails.basePrice)}</span>
+            </div>
+            <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+              <span class="muted">Driver Service & Allowance</span>
+              <span>${formatUGX(priceDetails.driverAllowance)}</span>
+            </div>
+            <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+              <span class="muted">Fuel & Logistics Surcharge</span>
+              <span>${formatUGX(priceDetails.fuelFee)}</span>
+            </div>
+            <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.85rem; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span class="muted">VAT (18% Government Tax)</span>
+              <span>${formatUGX(priceDetails.tax)}</span>
+            </div>
+            <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 800; padding-top: 4px; color: var(--brand-blue-dark);">
+              <span>Total Price</span>
+              <span>${formatUGX(priceDetails.total)}</span>
+            </div>
+          </div>
+        </article>
+        
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--brand-blue-dark);">3. Select Payment Method</h2>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+            <label class="radio-card ${sh.paymentMethod === 'wallet' ? 'is-selected' : ''}" style="border: 2px solid ${sh.paymentMethod === 'wallet' ? 'var(--brand-blue)' : 'var(--border)'}; padding: 12px; border-radius: 12px; display: flex; gap: 10px; cursor: pointer; align-items: center; background: white;">
+              <input type="radio" name="hire-payment-method" value="wallet" ${sh.paymentMethod === 'wallet' ? 'checked' : ''} data-action="select-hire-payment-method" style="display:none;">
+              <i data-lucide="wallet-cards" style="color: var(--brand-blue); width: 24px; height: 24px;"></i>
+              <div style="display: flex; flex-direction: column;">
+                <strong style="font-size: 0.9rem;">Wallet Balance</strong>
+                <span class="muted" style="font-size: 0.75rem;">Bal: ${formatUGX(state.walletBalance)}</span>
+              </div>
+            </label>
+            
+            <label class="radio-card ${sh.paymentMethod === 'mobile' ? 'is-selected' : ''}" style="border: 2px solid ${sh.paymentMethod === 'mobile' ? 'var(--brand-blue)' : 'var(--border)'}; padding: 12px; border-radius: 12px; display: flex; gap: 10px; cursor: pointer; align-items: center; background: white;">
+              <input type="radio" name="hire-payment-method" value="mobile" ${sh.paymentMethod === 'mobile' ? 'checked' : ''} data-action="select-hire-payment-method" style="display:none;">
+              <i data-lucide="smartphone" style="color: var(--warning); width: 24px; height: 24px;"></i>
+              <div style="display: flex; flex-direction: column;">
+                <strong style="font-size: 0.9rem;">Mobile Money</strong>
+                <span class="muted" style="font-size: 0.75rem;">MTN MoMo or Airtel Money</span>
+              </div>
+            </label>
+          </div>
+          
+          ${sh.paymentMethod === 'wallet' ? `
+            <div class="payment-panel" style="background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px;">
+              <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px;">
+                <span>Total Charter Price</span>
+                <strong>${formatUGX(priceDetails.total)}</strong>
+              </div>
+              <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 12px;">
+                <span>Balance after payment</span>
+                <strong class="${state.walletBalance >= priceDetails.total ? 'text-success' : 'text-danger'}">${formatUGX(state.walletBalance - priceDetails.total)}</strong>
+              </div>
+              ${state.walletBalance < priceDetails.total ? `
+                <div class="notice" style="background: var(--danger-soft); color: var(--danger);"><i data-lucide="triangle-alert"></i><div>Insufficient Wallet Funds. Choose Mobile Money or deposit funds.</div></div>
+              ` : `
+                <div class="field" style="margin-top:13px">
+                  <label for="hire-wallet-pin">Wallet PIN</label>
+                  <input id="hire-wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%; max-width: 200px;">
+                  <span class="field-help">Any four digits are accepted in this preview.</span>
+                </div>
+              `}
+            </div>
+          ` : `
+            <div class="payment-panel" style="background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px;">
+              ${sh.paymentDemoState === 'success' ? `
+                <div class="payment-panel payment-state" style="text-align: center; display: grid; justify-items: center; gap: 8px;">
+                  <div class="payment-state__icon payment-state__icon--success" style="width: 48px; height: 48px; border-radius: 50%; background: var(--success-soft); color: var(--success); display: grid; place-items: center;"><i data-lucide="circle-check-big"></i></div>
+                  <h3 style="margin: 4px 0 0;">Simulated MoMo Request Approved</h3>
+                  <p class="muted" style="font-size: 0.8rem; margin: 0 0 12px;">Click Confirm below to complete your Special Hire charter.</p>
+                  <button class="button button--ghost button--small" type="button" data-action="hire-payment-reset">Reset State</button>
+                </div>
+              ` : sh.paymentDemoState === 'failed' ? `
+                <div class="payment-panel payment-state" style="text-align: center; display: grid; justify-items: center; gap: 8px;">
+                  <div class="payment-state__icon payment-state__icon--failed" style="width: 48px; height: 48px; border-radius: 50%; background: var(--danger-soft); color: var(--brand-red); display: grid; place-items: center;"><i data-lucide="circle-x"></i></div>
+                  <h3 style="margin: 4px 0 0;">Mobile Money Authorization Declined</h3>
+                  <p class="muted" style="font-size: 0.8rem; margin: 0 0 12px;">The simulated request was declined.</p>
+                  <button class="button button--ghost button--small" type="button" data-action="hire-payment-reset">Try Again</button>
+                </div>
+              ` : `
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div class="field">
+                    <label>Operator</label>
+                    <select style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option>MTN MoMo</option><option>Airtel Money</option></select>
+                  </div>
+                  <div class="field">
+                    <label>Mobile Number</label>
+                    <input type="tel" value="${escapeHtml(appData.passenger.phone)}" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+                  </div>
+                </div>
+                <div class="button-row" style="margin-top: 13px; display: flex; gap: 8px;">
+                  <button class="button button--success button--small" type="button" data-action="hire-payment-state" data-value="success" style="padding: 8px 12px;">Simulate Success</button>
+                  <button class="button button--soft-red button--small" type="button" data-action="hire-payment-state" data-value="failed" style="padding: 8px 12px;">Simulate Failure</button>
+                </div>
+              `}
+            </div>
+          `}
+        </div>
+        
+        <div class="button-row" style="margin-top: 16px; display: flex; gap: 12px;">
+          <button class="button button--ghost" type="button" data-action="special-hire-back" style="flex: 1;">Back</button>
+          <button class="button button--success" type="button" data-action="confirm-hire-payment" style="flex: 2;">Confirm Charter & Pay</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (step === 4) {
+    const isCustom = sh.destinationType === 'custom';
+    let destLabel = 'Entebbe – Kampala (Via Kajansi)';
+    if (isCustom) {
+      destLabel = sh.customDestination || 'Custom Destination';
+    } else {
+      const standardOption = appData.routeCards.find(r => r.key === sh.standardRoute);
+      if (standardOption) {
+        destLabel = `Entebbe – ${standardOption.cityB}`;
+      }
+    }
+    const priceDetails = calculateSpecialHirePrice();
+    const barcodeMarkup = generateBarcode();
+    
+    return `
+      ${screenHead('Special Hire Confirmed', 'Use this permit to present to your private driver at departure.')}
+      
+      <article class="receipt" style="margin-top: 16px; box-shadow: var(--shadow-md);">
+        <header class="receipt__head" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-strong); padding-bottom: 16px; margin-bottom: 16px;">
+          <div class="ticket-brand" style="display: flex; align-items: center; gap: 12px;">
+            <div class="logo-frame" style="width: 40px; height: 40px; border-radius: 8px; overflow: hidden; display: grid; place-items: center; background: white;"><img src="assets/fly-express-logo.jpg" alt="Fly Express" style="width: 100%; height: 100%; object-fit: cover;"></div>
+            <div>
+              <h2 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--brand-blue-dark);">Fly Express Private</h2>
+              <p class="muted" style="margin: 0; font-size: 0.75rem;">Special Hire Transit Permit</p>
+            </div>
+          </div>
+          <span class="status-chip status-chip--success" style="font-weight: 750;">Reserved</span>
+        </header>
+        
+        <div class="receipt__body">
+          <div class="grid grid--2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div class="detail-list" style="display: flex; flex-direction: column; gap: 8px;">
+              <div class="detail-row"><span>Permit Number</span><strong>#SH-98402-UG</strong></div>
+              <div class="detail-row"><span>Vehicle Type</span><strong>${sh.vehicleType === 'highroof' ? 'Highroof Van (18 Seats)' : sh.vehicleType === 'drone' ? 'Super Custom/Drone (14 Seats)' : 'Executive Coaster (30 Seats)'}</strong></div>
+              <div class="detail-row"><span>Client / Contact</span><strong>${escapeHtml(sh.hireType === 'company' ? sh.companyName : appData.passenger.name)}</strong></div>
+              <div class="detail-row"><span>Date & Duration</span><strong>${sh.date} (${sh.durationDays} Day${sh.durationDays > 1 ? 's' : ''})</strong></div>
+            </div>
+            <div class="detail-list" style="display: flex; flex-direction: column; gap: 8px;">
+              <div class="detail-row"><span>Private Route</span><strong>${escapeHtml(destLabel)}</strong></div>
+              <div class="detail-row"><span>Driver Preference</span><strong>${sh.driverType === 'standard' ? 'Standard Route Driver' : 'Certified Tour Guide'}</strong></div>
+              <div class="detail-row"><span>Total Amount Paid</span><strong>${formatUGX(priceDetails.total)}</strong></div>
+              <div class="detail-row"><span>Payment Method</span><strong>${paymentLabel(sh.paymentMethod)}</strong></div>
+            </div>
+          </div>
+          
+          <hr style="margin: 20px 0; border: 0; border-top: 1px dashed var(--border-strong);">
+          
+          <div class="grid grid--2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: center;">
+            <div>
+              <p class="section-kicker" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: var(--slate); letter-spacing: 0.05em; margin-bottom: 4px;">Authorization PIN</p>
+              <div class="verification-code" style="font-size: 2.2rem; font-weight: 900; letter-spacing: 0.15em; color: var(--brand-blue-dark);">825 041</div>
+              <p class="muted text-small" style="font-size: 0.75rem; margin-top: 4px;">Share this PIN with your driver to authorize departure.</p>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <p class="section-kicker" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: var(--slate); letter-spacing: 0.05em; margin-bottom: 6px;">Permit Barcode</p>
+              <svg id="parcel-barcode" class="parcel-barcode" role="img" aria-label="Barcode FXP-98402" style="width: 100%; max-width: 200px; height: 40px; stroke: black;">
+                ${barcodeMarkup}
+              </svg>
+            </div>
+          </div>
+          
+          <div class="notice" style="margin-top: 20px; background: var(--info-soft); color: var(--brand-blue); border-radius: 12px; padding: 12px; display: flex; gap: 10px; align-items: flex-start; font-size: 0.8rem;">
+            <i data-lucide="shield-check" style="flex-shrink:0;"></i>
+            <div>
+              <strong>Private Dispatch Agreement</strong>
+              <div style="margin-top: 4px; line-height: 1.4;">Fly Express Private charters are subject to stage and route protocols. Tolls and standard highways costs are fully covered in the total amount.</div>
+            </div>
+          </div>
+        </div>
+        
+        <footer class="ticket-actions" style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
+          <button class="button button--primary" type="button" data-action="print-permit" style="flex: 1; min-width: 120px;">Print Permit</button>
+          <button class="button button--ghost" type="button" data-action="share-demo" style="flex: 1; min-width: 120px;">Share Tracking</button>
+          <button class="button button--ghost" type="button" data-screen="home" style="flex: 1; min-width: 120px;">Return Home</button>
+        </footer>
+      </article>
+    `;
+  }
 }
 
 let parcelMap = null;
@@ -3365,6 +3803,72 @@ function handleClick(event) {
     'save-return-date': () => saveReturnDate(),
     'submit-rating': () => { closeModal(); toast('Thank you. Your demonstration rating was recorded.', 'success'); },
     'submit-lost-item': () => { closeModal(); toast('Lost-property report LP-1842 submitted.', 'success'); },
+    'select-hire-vehicle': () => {
+      state.specialHire.vehicleType = value;
+      renderCurrentScreen();
+    },
+    'select-hire-dest-type': () => {
+      state.specialHire.destinationType = value;
+      renderCurrentScreen();
+    },
+    'select-hire-driver': () => {
+      state.specialHire.driverType = value;
+      renderCurrentScreen();
+    },
+    'select-hire-user-type': () => {
+      state.specialHire.hireType = value;
+      renderCurrentScreen();
+    },
+    'select-hire-payment-method': () => {
+      state.specialHire.paymentMethod = value;
+      state.specialHire.paymentDemoState = 'idle';
+      renderCurrentScreen();
+    },
+    'hire-payment-state': () => {
+      state.specialHire.paymentDemoState = value;
+      renderCurrentScreen();
+    },
+    'hire-payment-reset': () => {
+      state.specialHire.paymentDemoState = 'idle';
+      renderCurrentScreen();
+    },
+    'special-hire-next': () => {
+      const sh = state.specialHire;
+      if (sh.step === 1) {
+        if (sh.destinationType === 'custom' && (!sh.customDestination || !sh.customDestination.trim())) {
+          toast('Please enter a destination in Uganda.', 'warning');
+          return;
+        }
+      }
+      sh.step = Math.min(4, sh.step + 1);
+      renderCurrentScreen();
+    },
+    'special-hire-back': () => {
+      state.specialHire.step = Math.max(1, state.specialHire.step - 1);
+      renderCurrentScreen();
+    },
+    'confirm-hire-payment': () => {
+      const priceDetails = calculateSpecialHirePrice();
+      if (state.specialHire.paymentMethod === 'wallet') {
+        if (state.walletBalance < priceDetails.total) {
+          toast('Insufficient wallet balance. Please add funds first.', 'danger');
+          return;
+        }
+        state.walletBalance -= priceDetails.total;
+        appData.transactions.unshift({
+          type: 'booking',
+          title: 'Special Van Hire',
+          date: 'Today, ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+          amount: priceDetails.total,
+          direction: 'out',
+          icon: 'bus'
+        });
+      }
+      state.specialHire.step = 4;
+      renderCurrentScreen();
+      toast('Private Charter booking reserved successfully!', 'success');
+    },
+    'print-permit': () => toast('Print receipt request sent to network printer.', 'success'),
     'copy-code': () => toast('Verification code copied in the mockup.', 'success')
   };
 
@@ -3406,6 +3910,13 @@ function handleChange(event) {
     if (state.passengerDetails[index]) state.passengerDetails[index][target.dataset.passengerField] = target.value;
     if (index === 0 && target.dataset.passengerField === 'assistance') state.assistance = target.value;
   }
+  if (target.dataset.hireField) {
+    state.specialHire[target.dataset.hireField] = target.value;
+    if (target.dataset.hireField === 'durationDays') {
+      state.specialHire.durationDays = Math.max(1, Number(target.value) || 1);
+    }
+    renderCurrentScreen();
+  }
 }
 
 function handleInput(event) {
@@ -3426,6 +3937,9 @@ function handleInput(event) {
   if (target.dataset.passengerField) {
     const index = Number(target.dataset.passengerIndex);
     if (state.passengerDetails[index]) state.passengerDetails[index][target.dataset.passengerField] = target.value;
+  }
+  if (target.dataset.hireField) {
+    state.specialHire[target.dataset.hireField] = target.value;
   }
   if (target.classList.contains('otp-input') && target.value.length === 1) {
     const fields = $$('.otp-input');

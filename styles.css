@@ -4695,3 +4695,24 @@ body[data-active-screen="driver-profile"] .main-content {
     padding-top: 12px !important;
   }
 }
+
+/* ---------- Special Hire Styles ---------- */
+.vehicle-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.vehicle-card {
+  transition: all 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+.vehicle-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand-blue-light) !important;
+}
+.vehicle-card.is-selected {
+  border-color: var(--brand-blue) !important;
+  background: var(--info-soft) !important;
+}
