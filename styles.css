@@ -12,7 +12,7 @@
   --charcoal: #1b1f24;
   --slate: #667085;
   --muted: #98a2b3;
-  --bg: #f5f7fa;
+  --bg: #e9ecf0;
   --surface: #ffffff;
   --surface-alt: #eef4f9;
   --border: #e5eaf0;
@@ -4701,6 +4701,11 @@ body[data-active-screen="driver-profile"] .main-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
+}
+@media (min-width: 769px) {
+  .vehicle-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 .vehicle-card {
   transition: all 0.22s ease;
