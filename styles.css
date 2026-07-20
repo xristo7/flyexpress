@@ -2268,7 +2268,7 @@ body.drawer-open .mobile-nav {
   white-space: nowrap !important;
   z-index: 2 !important;
 }
-.taxi-van-visual .van-plate-tag {
+.van-plate-tag--stacked {
   position: static !important;
   transform: none !important;
   display: block !important;
@@ -2283,6 +2283,10 @@ body.drawer-open .mobile-nav {
   font-weight: 800 !important;
   padding: 3px 4px !important;
   margin-top: 0 !important;
+  font-family: monospace !important;
+  letter-spacing: 0.5px !important;
+  white-space: nowrap !important;
+  z-index: 2 !important;
 }
 .taxi-details {
   flex: 1 !important;

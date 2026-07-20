@@ -1015,7 +1015,7 @@ function renderBook() {
                     <div class="taxi-van-img-container">
                       <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img" style="${!hasEnoughSeats ? 'filter: grayscale(1);' : ''}">
                     </div>
-                    <span class="van-plate-tag">${trip.plate}</span>
+                    <span class="van-plate-tag--stacked">${trip.plate}</span>
                   </div>
                   <div class="taxi-details">
                     <div class="taxi-driver-info" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
@@ -1267,7 +1267,7 @@ function renderTripResult(trip) {
         <div class="taxi-van-img-container">
           <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img">
         </div>
-        <span class="van-plate-tag">${trip.plate}</span>
+        <span class="van-plate-tag--stacked">${trip.plate}</span>
       </div>
       <div class="taxi-details">
         <div class="taxi-driver-info" role="button" tabindex="0" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
