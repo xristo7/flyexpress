@@ -15,7 +15,7 @@ const appData = {
     email: 'christo.i@example.com',
     preferredRoute: 'Entebbe Main Stage → Kampala Main Stage'
   },
-  routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Bweyogere'],
+  routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Nambole', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
   trips: [
     { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'Highroof', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
     { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: 'Highroof', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
@@ -811,7 +811,8 @@ function renderBook() {
           <div class="card-selection-indicator ${state.selectedRoute === 'kajansi' ? 'is-selected' : ''}"></div>
           <img src="assets/entebbe.jpg" alt="Entebbe" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Kampala – Entebbe</h3>
+            <h3>Entebbe – Kampala</h3>
+            <div class="route-card__price">UGX 5,000</div>
             <p>Via Kajansi Expressway (Both ways)</p>
             <div class="corridor-towns">
               Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala
@@ -823,20 +824,58 @@ function renderBook() {
           <img src="assets/kampala.jpg" alt="Kampala" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
             <h3>Entebbe – Kampala</h3>
+            <div class="route-card__price">UGX 5,000</div>
             <p>Via Busega Expressway (One way)</p>
             <div class="corridor-towns">
               Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala
             </div>
           </div>
         </div>
-        <div class="route-card ${state.selectedRoute === 'bweyogere' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="bweyogere" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === 'bweyogere' ? 'is-selected' : ''}"></div>
-          <img src="assets/bweyogere.jpg" alt="Bweyogere" class="route-card__icon" style="object-fit: cover;">
+        <div class="route-card ${state.selectedRoute === 'nambole' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="nambole" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === 'nambole' ? 'is-selected' : ''}"></div>
+          <img src="assets/kampala.jpg" alt="Nambole" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
-            <h3>Entebbe – Bweyogere</h3>
-            <p>Via Northern Bypass (Both ways)</p>
+            <h3>Entebbe – Nambole</h3>
+            <div class="route-card__price">UGX 7,000</div>
+            <p>Via Kajansi Expressway</p>
             <div class="corridor-towns">
-              Entebbe • Kajjansi • Busega • Bwaise • Kalerwe • Kyebando • Kiwatule • Naalya • Bweyogere
+              Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Nambole
+            </div>
+          </div>
+        </div>
+        <div class="route-card ${state.selectedRoute === 'masaka' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="masaka" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === 'masaka' ? 'is-selected' : ''}"></div>
+          <img src="assets/entebbe.jpg" alt="Masaka" class="route-card__icon" style="object-fit: cover;">
+          <div class="route-card__info">
+            <h3>Entebbe – Masaka</h3>
+            <div class="route-card__price">UGX 20,000</div>
+            <p>Via Masaka Road</p>
+            <div class="corridor-towns">
+              Entebbe • Kajjansi • Mpigi • Buwama • Masaka
+            </div>
+          </div>
+        </div>
+        <div class="route-card ${state.selectedRoute === 'lyantonde' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="lyantonde" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === 'lyantonde' ? 'is-selected' : ''}"></div>
+          <img src="assets/kampala.jpg" alt="Lyantonde" class="route-card__icon" style="object-fit: cover;">
+          <div class="route-card__info">
+            <h3>Entebbe – Lyantonde</h3>
+            <div class="route-card__price">UGX 25,000</div>
+            <p>Via Masaka Road</p>
+            <div class="corridor-towns">
+              Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde
+            </div>
+          </div>
+        </div>
+        <div class="route-card ${state.selectedRoute === 'mbarara' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="mbarara" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === 'mbarara' ? 'is-selected' : ''}"></div>
+          <img src="assets/entebbe.jpg" alt="Mbarara" class="route-card__icon" style="object-fit: cover;">
+          <div class="route-card__info">
+            <h3>Entebbe – Mbarara</h3>
+            <div class="route-card__price">UGX 30,000</div>
+            <p>Via Masaka Road</p>
+            <div class="corridor-towns">
+              Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde • Mbarara
             </div>
           </div>
         </div>
@@ -850,9 +889,12 @@ function renderBook() {
 
   if (step === 2) {
     const allowedFrom = appData.routes.filter(r => {
-      if (state.selectedRoute === 'bweyogere') return ['Entebbe Main Stage', 'Bweyogere'].includes(r);
       if (state.selectedRoute === 'busega') return ['Entebbe Main Stage', 'Kampala Main Stage'].includes(r);
-      return r !== 'Bweyogere'; // kajansi
+      if (state.selectedRoute === 'nambole') return ['Entebbe Main Stage', 'Nambole'].includes(r);
+      if (state.selectedRoute === 'masaka') return ['Entebbe Main Stage', 'Masaka'].includes(r);
+      if (state.selectedRoute === 'lyantonde') return ['Entebbe Main Stage', 'Lyantonde'].includes(r);
+      if (state.selectedRoute === 'mbarara') return ['Entebbe Main Stage', 'Mbarara'].includes(r);
+      return ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage'].includes(r);
     });
     const allowedTo = allowedFrom;
 
@@ -3037,15 +3079,21 @@ function handleClick(event) {
     'select-route-card-step': () => {
       const route = actionTrigger.dataset.route;
       state.selectedRoute = route;
-      if (route === 'bweyogere') {
-        state.searchFrom = 'Entebbe Main Stage';
-        state.searchTo = 'Bweyogere';
-      } else if (route === 'busega') {
+      if (route === 'kajansi' || route === 'busega') {
         state.searchFrom = 'Entebbe Main Stage';
         state.searchTo = 'Kampala Main Stage';
-      } else { // kajansi
-        state.searchFrom = 'Kampala Main Stage';
-        state.searchTo = 'Entebbe Main Stage';
+      } else if (route === 'nambole') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Nambole';
+      } else if (route === 'masaka') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Masaka';
+      } else if (route === 'lyantonde') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Lyantonde';
+      } else if (route === 'mbarara') {
+        state.searchFrom = 'Entebbe Main Stage';
+        state.searchTo = 'Mbarara';
       }
       renderCurrentScreen();
       toast('Route selected.', 'success');
