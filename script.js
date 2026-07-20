@@ -3231,22 +3231,22 @@ function renderSeatMode() {
 
   // 18-seater Highroof layout (mapped to new top-down image)
   const seats18 = [
-    ['1A',22.0,24.0], ['1B',39.0,24.0],
-    ['2A',20.0,36.5], ['2B',42.5,36.5], ['2C',64.0,36.5],
-    ['3A',20.0,47.5], ['3B',42.5,47.5], ['3C',64.0,47.5],
-    ['4A',20.0,58.5], ['4B',42.5,58.5], ['4C',64.0,58.5],
-    ['5A',20.0,69.5], ['5B',42.5,69.5], ['5C',64.0,69.5],
-    ['6A',16.0,81.5], ['6B',34.5,81.5], ['6C',53.0,81.5], ['6D',71.0,81.5]
+    ['1A', 25.5, 28.8], ['1B', 43.5, 28.8],
+    ['2A', 25.5, 40.5], ['2B', 44.5, 40.5], ['2C', 58.5, 40.5],
+    ['3A', 25.5, 50.0], ['3B', 44.5, 50.0], ['3C', 58.5, 50.0],
+    ['4A', 25.5, 59.0], ['4B', 44.5, 59.0], ['4C', 58.5, 59.0],
+    ['5A', 25.5, 68.0], ['5B', 44.5, 68.0], ['5C', 58.5, 68.0],
+    ['6A', 22.0, 78.5], ['6B', 39.5, 78.5], ['6C', 57.0, 78.5], ['6D', 74.5, 78.5]
   ];
 
   const seats = isHighroof ? seats18 : seats14;
   const imgSrc = isHighroof ? 'assets/fly-express-highroof-topdown.png' : 'assets/fly-express-14-seater.png';
   const imgAlt = isHighroof ? 'Top view of the Fly Express 18-seater high roof vehicle interior' : 'Top view of the Fly Express 14-seater vehicle interior';
   const seatCount = isHighroof ? 18 : 14;
-  const driverLeft = isHighroof ? '63.0' : '67.9';
-  const driverTop = isHighroof ? '24.0' : '29.4';
+  const driverLeft = isHighroof ? '60.0' : '67.9';
+  const driverTop = isHighroof ? '29.2' : '29.4';
 
-  return `<div class="photo-seat-selector" role="group" aria-labelledby="photo-seat-title">
+  return `<div class="photo-seat-selector ${isHighroof ? 'is-highroof' : ''}" role="group" aria-labelledby="photo-seat-title">
     <span id="photo-seat-title" class="sr-only">Choose passenger seats in the ${seatCount}-seater vehicle</span>
     <img src="${imgSrc}" alt="${imgAlt}">
     ${seats.map(([seat,left,top]) => {
