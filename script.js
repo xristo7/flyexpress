@@ -448,7 +448,7 @@ function renderOnboarding() {
   content.innerHTML = `
     <article class="onboarding-slide">
       <div class="onboarding-image-container">
-        <img src="assets/onboarding-${state.onboardingIndex + 1}.jpg" alt="${escapeHtml(slide.title)} visual">
+        <img src="assets/onboarding-${state.onboardingIndex + 1}.${state.onboardingIndex === 2 ? 'webp' : 'jpg'}" alt="${escapeHtml(slide.title)} visual">
       </div>
       <h2 style="margin-top: 24px; font-weight: 850;">${slide.title}</h2>
       <p style="margin-top: 12px; color: var(--slate); line-height: 1.5; font-size: 1rem;">${slide.message}</p>

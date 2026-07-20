@@ -4318,25 +4318,23 @@ body[data-active-screen="driver-profile"] .main-content {
 .onboarding-image-container {
   max-height: 40vh !important;
   max-height: 40dvh !important;
-  aspect-ratio: 2/3 !important;
   width: auto !important;
-  border-radius: 24px !important;
-  overflow: hidden !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
   margin: 0 auto 12px !important;
-  box-shadow: 0 12px 30px rgba(8, 27, 51, 0.08) !important;
-  border: 1px solid rgba(20, 87, 217, 0.06) !important;
-  background: #ffffff !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
 }
 
 .onboarding-image-container img {
-  max-height: 100% !important;
-  max-width: 100% !important;
-  height: 100% !important;
+  max-height: 40vh !important;
+  max-height: 40dvh !important;
   width: auto !important;
-  object-fit: cover !important;
+  object-fit: contain !important;
 }
 
 /* Custom Onboarding Last Page Buttons Lockup */
