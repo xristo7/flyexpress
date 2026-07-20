@@ -1898,17 +1898,17 @@ function calculateSpecialHirePrice() {
   let fuelFee = 0;
   
   if (isCustom) {
-    const dailyRates = { highroof: 300000, drone: 250000, coaster: 600000 };
+    const dailyRates = { sedan: 100000, minivan: 180000, drone: 250000, highroof: 300000, coaster: 600000 };
     basePrice = (dailyRates[sh.vehicleType] || 300000) * sh.durationDays;
     fuelFee = 150000 * sh.durationDays;
   } else {
     const routeRates = {
-      kajansi: { highroof: 150000, drone: 120000, coaster: 300000 },
-      busega: { highroof: 150000, drone: 120000, coaster: 300000 },
-      nambole: { highroof: 180000, drone: 150000, coaster: 350000 },
-      masaka: { highroof: 400000, drone: 350000, coaster: 700000 },
-      lyantonde: { highroof: 500000, drone: 450000, coaster: 850000 },
-      mbarara: { highroof: 600000, drone: 550000, coaster: 1000000 }
+      kajansi: { sedan: 50000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
+      busega: { sedan: 50000, minivan: 90000, drone: 120000, highroof: 150000, coaster: 300000 },
+      nambole: { sedan: 60000, minivan: 100000, drone: 150000, highroof: 180000, coaster: 350000 },
+      masaka: { sedan: 180000, minivan: 250000, drone: 350000, highroof: 400000, coaster: 700000 },
+      lyantonde: { sedan: 220000, minivan: 320000, drone: 450000, highroof: 500000, coaster: 850000 },
+      mbarara: { sedan: 280000, minivan: 380000, drone: 550000, highroof: 600000, coaster: 1000000 }
     };
     const rate = routeRates[sh.standardRoute] || routeRates.kajansi;
     basePrice = rate[sh.vehicleType] || 150000;
@@ -1936,6 +1936,13 @@ function calculateSpecialHirePrice() {
 function renderSpecialHire() {
   const sh = state.specialHire;
   const step = sh.step;
+  const vehicleLabels = {
+    sedan: 'Saloon Car / Sedan (4 Seats)',
+    minivan: 'Alphard / Minivan (10 Seats)',
+    drone: 'Super Custom / Drone (14 Seats)',
+    highroof: 'Highroof Van (18 Seats)',
+    coaster: 'Executive Coaster (30 Seats)'
+  };
   
   if (step === 1) {
     return `
@@ -1945,16 +1952,26 @@ function renderSpecialHire() {
         <div>
           <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
           <div class="vehicle-card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
-            <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-van.png" alt="Highroof Van" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Highroof Van (18 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Ideal for large families, group tours, or corporate travel.</p>
+            <div class="card vehicle-card ${sh.vehicleType === 'sedan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="sedan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'sedan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'sedan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <div style="width: 100%; height: 120px; background: var(--surface-alt); border-radius: 10px; display: grid; place-items: center; margin-bottom: 12px; font-weight: 800; color: var(--slate);"><i data-lucide="car" style="width: 48px; height: 48px; color: var(--slate);"></i></div>
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Saloon Car / Sedan (4 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Perfect for solo business travelers, couples, or small private trips.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">WiFi & AC Included</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 300K/day</strong>
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Chauffeur Included</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 100K/day</strong>
               </div>
             </div>
-            
+
+            <div class="card vehicle-card ${sh.vehicleType === 'minivan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="minivan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'minivan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'minivan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <div style="width: 100%; height: 120px; background: var(--surface-alt); border-radius: 10px; display: grid; place-items: center; margin-bottom: 12px; font-weight: 800; color: var(--slate);"><i data-lucide="truck" style="width: 48px; height: 48px; color: var(--slate);"></i></div>
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Alphard / Minivan (10 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Comfortable minivan for family travel or small business delegates.</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">AC & WiFi</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 180K/day</strong>
+              </div>
+            </div>
+
             <div class="card vehicle-card ${sh.vehicleType === 'drone' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="drone" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'drone' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'drone' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
               <img src="assets/fly-express-14-seater.png" alt="Super Custom" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Super Custom / Drone (14 Seats)</h3>
@@ -1962,6 +1979,16 @@ function renderSpecialHire() {
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
                 <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Executive Comfort</span>
                 <strong style="color: var(--success); font-size: 0.9rem;">UGX 250K/day</strong>
+              </div>
+            </div>
+
+            <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
+              <img src="assets/fly-express-van.png" alt="Highroof Van" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Highroof Van (18 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Ideal for large families, group tours, or corporate travel.</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">WiFi & AC Included</span>
+                <strong style="color: var(--success); font-size: 0.9rem;">UGX 300K/day</strong>
               </div>
             </div>
             
@@ -2094,7 +2121,7 @@ function renderSpecialHire() {
           <div class="detail-list" style="display: flex; flex-direction: column; gap: 8px;">
             <div class="detail-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
               <span>Vehicle Type</span>
-              <strong>${sh.vehicleType === 'highroof' ? 'Highroof Van (18 Seats)' : sh.vehicleType === 'drone' ? 'Super Custom/Drone (14 Seats)' : 'Executive Coaster (30 Seats)'}</strong>
+              <strong>${vehicleLabels[sh.vehicleType] || 'Special Vehicle'}</strong>
             </div>
             <div class="detail-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
               <span>Destination</span>
@@ -2259,7 +2286,7 @@ function renderSpecialHire() {
           <div class="grid grid--2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
             <div class="detail-list" style="display: flex; flex-direction: column; gap: 8px;">
               <div class="detail-row"><span>Permit Number</span><strong>#SH-98402-UG</strong></div>
-              <div class="detail-row"><span>Vehicle Type</span><strong>${sh.vehicleType === 'highroof' ? 'Highroof Van (18 Seats)' : sh.vehicleType === 'drone' ? 'Super Custom/Drone (14 Seats)' : 'Executive Coaster (30 Seats)'}</strong></div>
+              <div class="detail-row"><span>Vehicle Type</span><strong>${vehicleLabels[sh.vehicleType] || 'Special Vehicle'}</strong></div>
               <div class="detail-row"><span>Client / Contact</span><strong>${escapeHtml(sh.hireType === 'company' ? sh.companyName : appData.passenger.name)}</strong></div>
               <div class="detail-row"><span>Date & Duration</span><strong>${sh.date} (${sh.durationDays} Day${sh.durationDays > 1 ? 's' : ''})</strong></div>
             </div>
