@@ -1953,7 +1953,7 @@ function renderSpecialHire() {
           <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
           <div class="vehicle-card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
             <div class="card vehicle-card ${sh.vehicleType === 'sedan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="sedan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'sedan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'sedan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <div style="width: 100%; height: 120px; background: var(--surface-alt); border-radius: 10px; display: grid; place-items: center; margin-bottom: 12px; font-weight: 800; color: var(--slate);"><i data-lucide="car" style="width: 48px; height: 48px; color: var(--slate);"></i></div>
+              <img src="assets/fly-express-sedan.jpg" alt="Saloon Car" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Saloon Car / Sedan (4 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Perfect for solo business travelers, couples, or small private trips.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -1963,7 +1963,7 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'minivan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="minivan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'minivan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'minivan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <div style="width: 100%; height: 120px; background: var(--surface-alt); border-radius: 10px; display: grid; place-items: center; margin-bottom: 12px; font-weight: 800; color: var(--slate);"><i data-lucide="truck" style="width: 48px; height: 48px; color: var(--slate);"></i></div>
+              <img src="assets/fly-express-minivan.jpg" alt="Alphard Minivan" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Alphard / Minivan (10 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Comfortable minivan for family travel or small business delegates.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
@@ -1993,7 +1993,7 @@ function renderSpecialHire() {
             </div>
             
             <div class="card vehicle-card ${sh.vehicleType === 'coaster' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="coaster" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'coaster' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'coaster' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <div style="width: 100%; height: 120px; background: var(--surface-alt); border-radius: 10px; display: grid; place-items: center; margin-bottom: 12px; font-weight: 800; color: var(--slate);"><i data-lucide="bus" style="width: 48px; height: 48px; color: var(--slate);"></i></div>
+              <img src="assets/fly-express-coaster.jpg" alt="Executive Coaster" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Executive Coaster (30 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Spacious luxury coaster for big company excursions or large events.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
