@@ -1994,7 +1994,15 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="assets/fly-express-hiace-highroof.png" alt="Toyota HiAce High Roof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <div style="position: relative; width: 100%; height: 120px; margin-bottom: 12px; border-radius: 10px; overflow: hidden; background: var(--surface-alt);">
+                <img src="assets/fly-express-hiace-highroof.png" alt="Toyota HiAce High Roof" style="width: 100%; height: 100%; object-fit: contain;">
+                <div style="position: absolute; bottom: 8px; left: 0; right: 0; height: 14px; background: linear-gradient(90deg, #075aa8 0%, #075aa8 70%, #ffd000 70%, #ffd000 80%, #075aa8 80%); display: flex; align-items: center; padding-left: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.25);">
+                  <span style="color: white; font-family: sans-serif; font-size: 6px; font-weight: 900; letter-spacing: 0.5px; line-height: 1;">FLY EXPRESS TRAVELLERS ASSOCIATION</span>
+                </div>
+                <div style="position: absolute; top: 8px; left: 8px; width: 16px; height: 16px; background: white; border-radius: 50%; border: 1px solid var(--border); display: grid; place-items: center; box-shadow: var(--shadow-sm);">
+                  <img src="assets/fly-express-logo.jpg" style="width: 80%; height: 80%; object-fit: contain; border-radius: 50%;">
+                </div>
+              </div>
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce High Roof (18 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
