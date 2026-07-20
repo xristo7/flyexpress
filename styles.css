@@ -4360,3 +4360,59 @@ body[data-active-screen="driver-profile"] .main-content {
     box-shadow: 0 8px 24px rgba(7, 90, 168, 0.12) !important;
   }
 }
+
+/* Desktop Vehicle Result Card Layout Adjustments */
+@media (min-width: 901px) {
+  .taxi-result-card {
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    grid-template-rows: auto auto !important;
+    column-gap: 24px !important;
+    row-gap: 0 !important;
+    align-items: start !important;
+    padding: 20px !important;
+  }
+  
+  .taxi-result-body {
+    display: contents !important;
+  }
+  
+  .taxi-van-visual-col {
+    grid-column: 1 !important;
+    grid-row: 1 / span 2 !important;
+    align-self: stretch !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    height: 100% !important;
+    padding-bottom: 12px !important;
+  }
+  
+  /* Target the relative wrapper div of the van image to scale it on desktop */
+  .taxi-van-visual-col > div[style*="position: relative"] {
+    width: 112px !important;
+    height: 84px !important;
+  }
+  
+  .taxi-details {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    margin-top: 2px !important;
+  }
+  
+  .taxi-result-route-preview {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    border-top: none !important;
+    padding-top: 6px !important;
+    margin-top: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 16px !important;
+  }
+  
+  .taxi-result-route-preview strong {
+    font-size: 1.05rem !important;
+  }
+}
