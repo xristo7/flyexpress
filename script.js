@@ -17,11 +17,11 @@ const appData = {
   },
   routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Bweyogere'],
   trips: [
-    { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'High-roof van', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
-    { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: '18-seat van', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
-    { id: 't3', depart: '9:30 AM', arrive: '10:45 AM', seats: 2, status: 'Almost full', vehicle: '14-seat van', plate: 'UBN 742D', duration: '1 hr 15 min', fare: 5000, traffic: 'Heavy', boarding: 'Kitooro', destination: 'Clock Tower', currentStage: 'Abayita Ababiri', comingFrom: 'Entebbe Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 2, vansAtStage: 1, vansApproaching: 3, driverName: 'David Okello', driverPhone: '+256 752 456 789', driverRating: '4.7', countdown: '28 mins until arrival' },
-    { id: 't4', depart: '10:00 AM', arrive: '11:00 AM', seats: 11, status: 'Available', vehicle: 'High-roof van', plate: 'UBQ 915A', duration: '1 hr', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kajjansi', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 3, vansAtStage: 4, vansApproaching: 0, driverName: 'Peter Semwanga', driverPhone: '+256 781 333 444', driverRating: '4.9', countdown: '35 mins until arrival' },
-    { id: 't5', depart: '10:30 AM', arrive: '11:35 AM', seats: 6, status: 'Available', vehicle: 'High-roof van', plate: 'UBR 104C', duration: '1 hr 05 min', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Clock Tower', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 4, vansAtStage: 0, vansApproaching: 2, driverName: 'Arthur Ssewankambo', driverPhone: '+256 702 111 222', driverRating: '4.6', countdown: '45 mins until arrival' }
+    { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'Highroof', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
+    { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: 'Highroof', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
+    { id: 't3', depart: '9:30 AM', arrive: '10:45 AM', seats: 2, status: 'Almost full', vehicle: 'Drone', plate: 'UBN 742D', duration: '1 hr 15 min', fare: 5000, traffic: 'Heavy', boarding: 'Kitooro', destination: 'Clock Tower', currentStage: 'Abayita Ababiri', comingFrom: 'Entebbe Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 2, vansAtStage: 1, vansApproaching: 3, driverName: 'David Okello', driverPhone: '+256 752 456 789', driverRating: '4.7', countdown: '28 mins until arrival' },
+    { id: 't4', depart: '10:00 AM', arrive: '11:00 AM', seats: 11, status: 'Available', vehicle: 'Drone', plate: 'UBQ 915A', duration: '1 hr', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kajjansi', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 3, vansAtStage: 4, vansApproaching: 0, driverName: 'Peter Semwanga', driverPhone: '+256 781 333 444', driverRating: '4.9', countdown: '35 mins until arrival' },
+    { id: 't5', depart: '10:30 AM', arrive: '11:35 AM', seats: 6, status: 'Available', vehicle: 'Highroof', plate: 'UBR 104C', duration: '1 hr 05 min', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Clock Tower', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 4, vansAtStage: 0, vansApproaching: 2, driverName: 'Arthur Ssewankambo', driverPhone: '+256 702 111 222', driverRating: '4.6', countdown: '45 mins until arrival' }
   ],
   luggage: [
     { id: 'personal', icon: 'briefcase-business', name: 'Small personal item', desc: 'Handbag or compact backpack', guide: 'Fits on your lap', price: 0 },
@@ -325,8 +325,8 @@ function getSearchResults() {
 }
 
 function getVanCapacity(trip) {
-  if (trip.vehicle && trip.vehicle.includes('18')) return 18;
-  return 14;
+  if (trip.vehicle === 'Highroof') return 18;
+  return 14; // Drone
 }
 
 function captureFocusDescriptor(root) {
@@ -1012,12 +1012,14 @@ function renderBook() {
                 ${hasEnoughSeats ? `<div class="card-selection-indicator ${isSelected ? 'is-selected' : ''}"></div>` : ''}
                 <div class="taxi-result-body">
                   <div class="taxi-van-visual">
-                    <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img" style="${!hasEnoughSeats ? 'filter: grayscale(1);' : ''}">
+                    <div class="taxi-van-img-container">
+                      <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img" style="${!hasEnoughSeats ? 'filter: grayscale(1);' : ''}">
+                    </div>
                     <span class="van-plate-tag">${trip.plate}</span>
                   </div>
                   <div class="taxi-details">
                     <div class="taxi-driver-info" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
-                      <strong>${trip.driverName} (View Profile)</strong>
+                      <strong>${trip.driverName}</strong>
                       <span class="driver-rating-tag">${trip.driverRating} ★</span>
                     </div>
                     <div class="taxi-proximity-info" style="margin-top: 6px;">
@@ -1262,12 +1264,14 @@ function renderTripResult(trip) {
   return `<article class="card card--hover result-card taxi-result-card">
     <div class="taxi-result-body">
       <div class="taxi-van-visual">
-        <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img">
+        <div class="taxi-van-img-container">
+          <img src="assets/fly-express-van.png" alt="Fly Express Van" class="taxi-van-img">
+        </div>
         <span class="van-plate-tag">${trip.plate}</span>
       </div>
       <div class="taxi-details">
         <div class="taxi-driver-info" role="button" tabindex="0" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
-          <strong>${trip.driverName} (View Profile)</strong>
+          <strong>${trip.driverName}</strong>
           <span class="driver-rating-tag">${trip.driverRating} ★</span>
           <span class="driver-phone-small">${trip.driverPhone}</span>
         </div>
@@ -1656,7 +1660,7 @@ function renderLiveTrip() {
       </div>
       <aside class="grid">
         <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><img src="assets/fly-express-van.png" alt="Fly Express passenger van"><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel (View Profile)</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
+        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><img src="assets/fly-express-van.png" alt="Fly Express passenger van"><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="people-row"><span class="person-icon"><i data-lucide="user-round-check"></i></span><div><strong>Moses</strong><div class="muted text-small">Conductor · ${passengerTotal()} booked passenger${passengerTotal() === 1 ? '' : 's'}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
         <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
         <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
       </aside>

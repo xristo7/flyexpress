@@ -2225,14 +2225,24 @@ body.drawer-open .mobile-nav {
 .taxi-van-visual {
   position: relative !important;
   width: 90px !important;
-  height: 60px !important;
+  height: auto !important;
   flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+  overflow: visible !important;
+}
+.taxi-van-img-container {
+  width: 90px !important;
+  height: 60px !important;
   border-radius: 12px !important;
   background: #f5f8ff !important;
   border: 1px solid var(--border) !important;
   display: grid !important;
   place-items: center !important;
   overflow: hidden !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 .taxi-van-img {
   width: 100% !important;
@@ -2249,12 +2259,21 @@ body.drawer-open .mobile-nav {
   background: #111 !important;
   color: #ffcc00 !important;
   font-family: monospace !important;
-  font-size: 0.58rem !important;
+  font-size: 0.72rem !important;
   font-weight: 800 !important;
-  padding: 1px 4px !important;
-  border-radius: 3px !important;
-  letter-spacing: 0.05em !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  border: 1px solid #333 !important;
+  letter-spacing: 0.5px !important;
+  white-space: nowrap !important;
+  z-index: 2 !important;
+}
+.taxi-van-visual .van-plate-tag {
+  position: static !important;
+  transform: none !important;
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
 }
 .taxi-details {
   flex: 1 !important;
