@@ -16,6 +16,14 @@ const appData = {
     preferredRoute: 'Entebbe Main Stage → Kampala Main Stage'
   },
   routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Nambole', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
+  routeCards: [
+    { key: 'kajansi', cityA: 'Entebbe', cityB: 'Kampala', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', via: 'Via Kajansi Expressway', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe \u2022 Kitooro \u2022 Abayita Ababiri \u2022 Kajjansi \u2022 Clock Tower \u2022 Kampala', coordA: [0.0512, 32.4637], coordB: [0.3136, 32.5811] },
+    { key: 'busega', cityA: 'Entebbe', cityB: 'Kampala', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', via: 'Via Busega Expressway', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe \u2022 Kitooro \u2022 Abayita Ababiri \u2022 Busega \u2022 Clock Tower \u2022 Kampala', coordA: [0.0512, 32.4637], coordB: [0.3136, 32.5811] },
+    { key: 'nambole', cityA: 'Entebbe', cityB: 'Nambole', stageA: 'Entebbe Main Stage', stageB: 'Nambole', via: 'Via Kajansi Expressway', price: 'UGX 7,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/nambole.jpg', corridor: 'Entebbe \u2022 Kitooro \u2022 Abayita Ababiri \u2022 Kajjansi \u2022 Nambole', coordA: [0.0512, 32.4637], coordB: [0.3475, 32.6281] },
+    { key: 'masaka', cityA: 'Entebbe', cityB: 'Masaka', stageA: 'Entebbe Main Stage', stageB: 'Masaka', via: 'Via Masaka Road', price: 'UGX 20,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/masaka.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Mpigi \u2022 Buwama \u2022 Masaka', coordA: [0.0512, 32.4637], coordB: [-0.3375, 31.7350] },
+    { key: 'lyantonde', cityA: 'Entebbe', cityB: 'Lyantonde', stageA: 'Entebbe Main Stage', stageB: 'Lyantonde', via: 'Via Masaka Road', price: 'UGX 25,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/lyantonde.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Mpigi \u2022 Masaka \u2022 Lyantonde', coordA: [0.0512, 32.4637], coordB: [-0.4047, 31.1597] },
+    { key: 'mbarara', cityA: 'Entebbe', cityB: 'Mbarara', stageA: 'Entebbe Main Stage', stageB: 'Mbarara', via: 'Via Masaka Road', price: 'UGX 30,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/mbarara.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Mpigi \u2022 Masaka \u2022 Lyantonde \u2022 Mbarara', coordA: [0.0512, 32.4637], coordB: [-0.6071, 30.6545] }
+  ],
   trips: [
     { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'Highroof', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
     { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: 'Highroof', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
@@ -252,7 +260,9 @@ const state = {
   language: 'English',
   unreadNotifications: 5,
   routeProgress: 68,
-  connected: true
+  connected: true,
+  routeFlips: {},
+  detectedOriginCity: 'Entebbe'
 };
 
 const navItems = [
@@ -807,90 +817,31 @@ function renderBook() {
       ${screenHead('Find a departure', 'Step 1 of 6: Choose your route to begin booking.')}
       
       <div class="route-selector-cards" style="margin-top: 16px;">
-        <div class="route-card ${state.selectedRoute === 'kajansi' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="kajansi" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === 'kajansi' ? 'is-selected' : ''}"></div>
-          <img src="assets/entebbe.jpg" alt="Entebbe" class="route-card__icon" style="object-fit: cover;">
+        ${appData.routeCards.map(rc => {
+          const flipped = !!state.routeFlips[rc.key];
+          const origin = flipped ? rc.cityB : rc.cityA;
+          const dest = flipped ? rc.cityA : rc.cityB;
+          const img = flipped ? rc.imageA : rc.imageB;
+          const corridor = flipped ? rc.corridor.split(' \u2022 ').reverse().join(' \u2022 ') : rc.corridor;
+          return `
+        <div class="route-card ${state.selectedRoute === rc.key ? 'is-active' : ''}" data-action="select-route-card-step" data-route="${rc.key}" role="button" tabindex="0" style="position: relative;">
+          <div class="card-selection-indicator ${state.selectedRoute === rc.key ? 'is-selected' : ''}"></div>
+          <img src="${img}" alt="${dest}" class="route-card__icon" style="object-fit: cover;">
           <div class="route-card__info">
             <div class="route-card__title-row">
-              <h3>Entebbe – Kampala</h3>
-              <div class="route-card__price">UGX 5,000</div>
+              <h3>${dest}</h3>
+              <div class="route-card__price">${rc.price}</div>
             </div>
-            <p>Via Kajansi Expressway</p>
+            <p>From ${origin} \u2022 ${rc.via}</p>
             <div class="corridor-towns">
-              Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala
+              ${corridor}
             </div>
           </div>
-        </div>
-        <div class="route-card ${state.selectedRoute === 'busega' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="busega" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === 'busega' ? 'is-selected' : ''}"></div>
-          <img src="assets/kampala.jpg" alt="Kampala" class="route-card__icon" style="object-fit: cover;">
-          <div class="route-card__info">
-            <div class="route-card__title-row">
-              <h3>Entebbe – Kampala</h3>
-              <div class="route-card__price">UGX 5,000</div>
-            </div>
-            <p>Via Busega Expressway</p>
-            <div class="corridor-towns">
-              Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala
-            </div>
-          </div>
-        </div>
-        <div class="route-card ${state.selectedRoute === 'nambole' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="nambole" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === 'nambole' ? 'is-selected' : ''}"></div>
-          <img src="assets/nambole.jpg" alt="Nambole" class="route-card__icon" style="object-fit: cover;">
-          <div class="route-card__info">
-            <div class="route-card__title-row">
-              <h3>Entebbe – Nambole</h3>
-              <div class="route-card__price">UGX 7,000</div>
-            </div>
-            <p>Via Kajansi Expressway</p>
-            <div class="corridor-towns">
-              Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Nambole
-            </div>
-          </div>
-        </div>
-        <div class="route-card ${state.selectedRoute === 'masaka' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="masaka" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === 'masaka' ? 'is-selected' : ''}"></div>
-          <img src="assets/masaka.jpg" alt="Masaka" class="route-card__icon" style="object-fit: cover;">
-          <div class="route-card__info">
-            <div class="route-card__title-row">
-              <h3>Entebbe – Masaka</h3>
-              <div class="route-card__price">UGX 20,000</div>
-            </div>
-            <p>Via Masaka Road</p>
-            <div class="corridor-towns">
-              Entebbe • Kajjansi • Mpigi • Buwama • Masaka
-            </div>
-          </div>
-        </div>
-        <div class="route-card ${state.selectedRoute === 'lyantonde' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="lyantonde" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === 'lyantonde' ? 'is-selected' : ''}"></div>
-          <img src="assets/lyantonde.jpg" alt="Lyantonde" class="route-card__icon" style="object-fit: cover;">
-          <div class="route-card__info">
-            <div class="route-card__title-row">
-              <h3>Entebbe – Lyantonde</h3>
-              <div class="route-card__price">UGX 25,000</div>
-            </div>
-            <p>Via Masaka Road</p>
-            <div class="corridor-towns">
-              Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde
-            </div>
-          </div>
-        </div>
-        <div class="route-card ${state.selectedRoute === 'mbarara' ? 'is-active' : ''}" data-action="select-route-card-step" data-route="mbarara" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === 'mbarara' ? 'is-selected' : ''}"></div>
-          <img src="assets/mbarara.jpg" alt="Mbarara" class="route-card__icon" style="object-fit: cover;">
-          <div class="route-card__info">
-            <div class="route-card__title-row">
-              <h3>Entebbe – Mbarara</h3>
-              <div class="route-card__price">UGX 30,000</div>
-            </div>
-            <p>Via Masaka Road</p>
-            <div class="corridor-towns">
-              Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde • Mbarara
-            </div>
-          </div>
-        </div>
+          <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction">
+            <i data-lucide="arrow-right-left"></i>
+          </button>
+        </div>`;
+        }).join('')}
       </div>
 
       <div class="floating-cta-container" style="margin-top: 24px;">
@@ -3091,24 +3042,31 @@ function handleClick(event) {
     'select-route-card-step': () => {
       const route = actionTrigger.dataset.route;
       state.selectedRoute = route;
-      if (route === 'kajansi' || route === 'busega') {
-        state.searchFrom = 'Entebbe Main Stage';
-        state.searchTo = 'Kampala Main Stage';
-      } else if (route === 'nambole') {
-        state.searchFrom = 'Entebbe Main Stage';
-        state.searchTo = 'Nambole';
-      } else if (route === 'masaka') {
-        state.searchFrom = 'Entebbe Main Stage';
-        state.searchTo = 'Masaka';
-      } else if (route === 'lyantonde') {
-        state.searchFrom = 'Entebbe Main Stage';
-        state.searchTo = 'Lyantonde';
-      } else if (route === 'mbarara') {
-        state.searchFrom = 'Entebbe Main Stage';
-        state.searchTo = 'Mbarara';
+      const rc = appData.routeCards.find(r => r.key === route);
+      if (rc) {
+        const flipped = !!state.routeFlips[route];
+        state.searchFrom = flipped ? rc.stageB : rc.stageA;
+        state.searchTo = flipped ? rc.stageA : rc.stageB;
       }
       renderCurrentScreen();
       toast('Route selected.', 'success');
+    },
+    'flip-route-direction': () => {
+      const route = actionTrigger.dataset.route;
+      state.routeFlips[route] = !state.routeFlips[route];
+      // If this route is currently selected, also update searchFrom/searchTo
+      if (state.selectedRoute === route) {
+        const rc = appData.routeCards.find(r => r.key === route);
+        if (rc) {
+          const flipped = !!state.routeFlips[route];
+          state.searchFrom = flipped ? rc.stageB : rc.stageA;
+          state.searchTo = flipped ? rc.stageA : rc.stageB;
+        }
+      }
+      renderCurrentScreen();
+      const rc = appData.routeCards.find(r => r.key === route);
+      const flipped = !!state.routeFlips[route];
+      toast(`Direction: ${flipped ? rc.cityB : rc.cityA} → ${flipped ? rc.cityA : rc.cityB}`, 'success');
     },
     'decrement-adults': () => {
       state.passengerCount = Math.max(1, state.passengerCount - 1);
@@ -3938,6 +3896,46 @@ function signOut() {
   renderAuth();
   toast('Signed out of the demonstration session.', 'success');
 }
+
+// ---------- Geolocation: Detect nearest origin city ----------
+(function detectNearestCity() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    // Collect unique city endpoints with coordinates
+    const cities = [];
+    const seen = new Set();
+    appData.routeCards.forEach(rc => {
+      if (!seen.has(rc.cityA)) { seen.add(rc.cityA); cities.push({ name: rc.cityA, lat: rc.coordA[0], lng: rc.coordA[1] }); }
+      if (!seen.has(rc.cityB)) { seen.add(rc.cityB); cities.push({ name: rc.cityB, lat: rc.coordB[0], lng: rc.coordB[1] }); }
+    });
+    // Find nearest city by Haversine-like distance
+    let nearest = cities[0];
+    let minDist = Infinity;
+    cities.forEach(c => {
+      const d = Math.pow(lat - c.lat, 2) + Math.pow(lng - c.lng, 2);
+      if (d < minDist) { minDist = d; nearest = c; }
+    });
+    state.detectedOriginCity = nearest.name;
+    // Auto-flip routes where user is closer to cityB
+    appData.routeCards.forEach(rc => {
+      const distA = Math.pow(lat - rc.coordA[0], 2) + Math.pow(lng - rc.coordA[1], 2);
+      const distB = Math.pow(lat - rc.coordB[0], 2) + Math.pow(lng - rc.coordB[1], 2);
+      if (distB < distA) {
+        state.routeFlips[rc.key] = true;
+      }
+    });
+    // Update the currently selected route's searchFrom/searchTo
+    const rc = appData.routeCards.find(r => r.key === state.selectedRoute);
+    if (rc) {
+      const flipped = !!state.routeFlips[rc.key];
+      state.searchFrom = flipped ? rc.stageB : rc.stageA;
+      state.searchTo = flipped ? rc.stageA : rc.stageB;
+    }
+    renderCurrentScreen();
+  }, () => { /* Permission denied or error — keep defaults */ }, { timeout: 5000 });
+})();
 
 // ---------- Screen Protection & Focus Security ----------
 (function() {

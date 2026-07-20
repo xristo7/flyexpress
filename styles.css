@@ -3453,6 +3453,41 @@ body[data-active-screen="driver-profile"] .main-content {
   }
 }
 
+.route-card__flip-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--slate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  z-index: 5;
+  padding: 0;
+}
+.route-card__flip-btn i,
+.route-card__flip-btn svg {
+  width: 15px;
+  height: 15px;
+}
+.route-card__flip-btn:hover {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+  color: white;
+  transform: rotate(180deg);
+  box-shadow: 0 4px 12px rgba(7, 90, 168, 0.2);
+}
+.route-card.is-active .route-card__flip-btn {
+  border-color: var(--brand-blue);
+  color: var(--brand-blue);
+}
+
 .route-card.is-active .route-card__icon {
   background: var(--brand-blue);
   color: white;
