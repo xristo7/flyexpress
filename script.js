@@ -2947,7 +2947,6 @@ function handleClick(event) {
         state.searchFrom = 'Kampala Main Stage';
         state.searchTo = 'Entebbe Main Stage';
       }
-      state.bookingStep = 2;
       renderCurrentScreen();
       toast('Route selected.', 'success');
     },
