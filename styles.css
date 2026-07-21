@@ -5737,6 +5737,20 @@ body[data-active-screen="home"] .main-content {
   width: 100% !important;
 }
 
+body[data-active-screen="home"] .workspace > .topbar {
+  display: none !important;
+}
+
+.home-redesign .hamburger-menu-btn {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .home-redesign .hamburger-menu-btn {
+    display: flex !important;
+  }
+}
+
 .home-redesign {
   --edge-gutter: clamp(16px, 3vw, 34px);
 }

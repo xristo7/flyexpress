@@ -887,6 +887,9 @@ function renderHome() {
           <button class="icon-button" type="button" data-screen="notifications" aria-label="Open notifications">
             <svg><use href="#i-bell"></use></svg><span class="badge">5</span>
           </button>
+          <button class="icon-button hamburger-menu-btn" type="button" data-action="open-drawer" aria-label="Open navigation menu">
+            <svg><use href="#i-menu"></use></svg>
+          </button>
         </div>
       </header>
 
