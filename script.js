@@ -843,6 +843,14 @@ function renderHome() {
       img = 'assets/fly-express-sedan-2014_1784553015505.jpg';
     }
 
+    // Find destination thumbnail from routeCards
+    let destThumb = 'assets/kampala.jpg'; // fallback
+    const destLower = trip.destination.toLowerCase();
+    for (const rc of appData.routeCards) {
+      if (destLower.includes(rc.cityB.toLowerCase())) { destThumb = rc.imageB; break; }
+      if (destLower.includes(rc.cityA.toLowerCase())) { destThumb = rc.imageA; break; }
+    }
+
     let badgeClass = 'is-available';
     if (trip.status === 'Almost full') {
       badgeClass = 'is-warning';
@@ -863,6 +871,7 @@ function renderHome() {
       vehicle: trip.vehicle,
       traffic: `${trip.traffic} traffic`,
       img: img,
+      destThumb: destThumb,
       plate: trip.plate,
       driverName: trip.driverName,
       driverRating: trip.driverRating,
@@ -934,60 +943,18 @@ function renderHome() {
             <div class="departure-scroll" id="departureCarousel">
               ${departures.map((dep, index) => {
                 const isSaved = state.savedDepartures && state.savedDepartures.includes(dep.id);
-                const driverKey = dep.driverName.toLowerCase();
-                const driverInfo = driversData[driverKey];
-                const driverAvatarImg = driverInfo && driverInfo.avatar ? driverInfo.avatar : '';
                 
-                let driverAvatarHTML = `<i data-lucide="user" style="width: 14px; height: 14px;"></i>`;
-                if (driverAvatarImg) {
-                  driverAvatarHTML = `<img src="${driverAvatarImg}" alt="${dep.driverName}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
-                }
-                
-                let visualClass = '';
-                let visualDecorations = '';
-                
-                if (index % 3 === 0) {
-                  // Morning departure
-                  visualClass = '';
-                  visualDecorations = `
-                    <span class="visual-label">Morning departure</span>
-                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
-                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
-                    </button>
-                    <span class="sun-shape"></span><span class="city-shape"></span><span class="road-shape"></span>
-                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
-                  `;
-                } else if (index % 3 === 1) {
-                  // Fastest option (Night/Sunset)
-                  visualClass = ' night';
-                  visualDecorations = `
-                    <span class="visual-label">Fastest option</span>
-                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
-                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
-                    </button>
-                    <span class="sun-shape" style="width:34px;height:34px;top:24px;background:#ffd99c"></span><span class="city-shape"></span><span class="road-shape"></span>
-                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
-                  `;
-                } else {
-                  // Airport link (Airport/Plane)
-                  visualClass = ' airport';
-                  visualDecorations = `
-                    <span class="visual-label">Airport link</span>
-                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
-                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
-                    </button>
-                    <span class="terminal-shape"></span>
-                    <span class="plane-shape"><svg><use href="#i-plane"></use></svg></span>
-                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
-                  `;
-                }
-
                 const isWarning = dep.spaces <= 2;
                 
                 return `
                 <article class="departure-card" data-card-index="${index}">
-                  <div class="departure-visual${visualClass}">
-                    ${visualDecorations}
+                  <div class="departure-visual departure-visual--photo">
+                    <img src="${dep.destThumb}" alt="${dep.dest}" class="departure-visual__thumb" />
+                    <div class="departure-visual__overlay"></div>
+                    <span class="visual-label">${dep.vehicle} · ${dep.countdown}</span>
+                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
+                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
+                    </button>
                   </div>
                   <div class="departure-body">
                     <div class="departure-title-row">

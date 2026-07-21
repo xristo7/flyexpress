@@ -6784,3 +6784,48 @@ body[data-active-screen="home"] .workspace > .topbar {
     left: 21px;
   }
 }
+
+/* ---------- DEPARTURE CARD PHOTO THUMBNAIL VISUAL ---------- */
+.departure-visual--photo {
+  position: relative;
+  overflow: hidden;
+  background: #1a2a3a;
+}
+
+.departure-visual__thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.departure-visual__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 41, 77, 0.10) 0%, rgba(5, 41, 77, 0.55) 100%);
+  z-index: 1;
+}
+
+.departure-visual--photo .visual-label {
+  z-index: 2;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  letter-spacing: 0.01em;
+}
+
+.departure-visual--photo .save-button {
+  z-index: 2;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
