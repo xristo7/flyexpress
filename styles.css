@@ -3447,14 +3447,16 @@ body[data-active-screen="driver-profile"] .main-content {
 .route-card {
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px;
+  padding: 0;
   background: var(--surface);
   cursor: pointer;
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
   transition: all 0.22s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .route-card:hover {
@@ -3466,6 +3468,15 @@ body[data-active-screen="driver-profile"] .main-content {
   border-color: var(--brand-blue);
   background: var(--info-soft);
   box-shadow: 0 0 0 2px rgba(7, 90, 168, 0.12);
+}
+
+.route-card-main-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  width: 100%;
+  position: relative;
 }
 
 .card-selection-indicator {
@@ -3500,6 +3511,23 @@ body[data-active-screen="driver-profile"] .main-content {
 }
 .card-selection-indicator.is-selected::after {
   transform: scale(1);
+}
+
+.route-card-expand-section {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.24s ease, padding 0.28s ease, border-top-color 0.28s ease;
+  padding: 0 16px;
+  background: rgba(255, 255, 255, 0.45);
+  border-top: 1px solid transparent;
+}
+
+.route-card.is-active .route-card-expand-section {
+  max-height: 84px;
+  opacity: 1;
+  padding: 12px 16px 16px;
+  border-top-color: rgba(7, 90, 168, 0.1);
 }
 
 .route-card__icon {

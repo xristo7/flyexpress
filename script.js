@@ -681,9 +681,8 @@ function renderNavigation() {
   
   if (mobile) {
     const isBookingFlow = ['book', 'trip-details', 'passengers', 'returns', 'luggage', 'checkout', 'trackparcel', 'parcel-status', 'special-hire'].includes(state.screen);
-    // On book step 1 with no route selected, keep the mobile nav visible
-    const isBookStep1NoRoute = state.screen === 'book' && (state.bookingStep || 1) === 1 && !state.selectedRoute;
-    if (isBookingFlow && !isBookStep1NoRoute) {
+    const isBookStep1 = state.screen === 'book' && (state.bookingStep || 1) === 1;
+    if (isBookingFlow && !isBookStep1) {
       mobile.classList.add('is-hidden');
     } else {
       mobile.classList.remove('is-hidden');
@@ -1080,29 +1079,30 @@ function renderBook() {
           const img = flipped ? rc.imageA : rc.imageB;
           const corridor = flipped ? rc.corridor.split(' \u2022 ').reverse().join(' \u2022 ') : rc.corridor;
           return `
-        <div class="route-card ${state.selectedRoute === rc.key ? 'is-active' : ''}" data-action="select-route-card-step" data-route="${rc.key}" role="button" tabindex="0" style="position: relative;">
-          <div class="card-selection-indicator ${state.selectedRoute === rc.key ? 'is-selected' : ''}"></div>
-          <img src="${img}" alt="${dest}" class="route-card__icon" style="object-fit: cover;">
-          <div class="route-card__info">
-            <div class="route-card__title-row">
-              <h3>${dest}</h3>
-              <div class="route-card__price">${rc.price}</div>
-            </div>
-            <p>From ${origin} \u2022 ${rc.via}</p>
-            <div class="corridor-towns">
-              ${corridor}
+        <div class="route-card ${state.selectedRoute === rc.key ? 'is-active' : ''}" style="position: relative;">
+          <div class="route-card-main-row" data-action="select-route-card-step" data-route="${rc.key}" role="button" tabindex="0">
+            <div class="card-selection-indicator ${state.selectedRoute === rc.key ? 'is-selected' : ''}"></div>
+            <img src="${img}" alt="${dest}" class="route-card__icon" style="object-fit: cover;">
+            <div class="route-card__info">
+              <div class="route-card__title-row">
+                <h3>${dest}</h3>
+                <div class="route-card__price">${rc.price}</div>
+              </div>
+              <p>From ${origin} \u2022 ${rc.via}</p>
+              <div class="corridor-towns">
+                ${corridor}
+              </div>
             </div>
           </div>
           <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction">
             <i data-lucide="arrow-left-right"></i>
           </button>
+          <div class="route-card-expand-section">
+            <button class="button button--primary w-full" type="button" data-action="booking-next-step">Continue</button>
+          </div>
         </div>`;
         }).join('')}
       </div>
-
-      ${state.selectedRoute ? `<div class="floating-cta-container" style="margin-top: 24px;">
-        <button class="button button--primary w-full" type="button" data-action="booking-next-step">Continue</button>
-      </div>` : ''}
     `;
   }
 
