@@ -196,7 +196,7 @@ const driversData = {
 };
 
 const state = {
-  selectedRoute: 'kajansi',
+  selectedRoute: null,
   viewingDriverName: 'isaac muwonge',
   bookingStep: 1,
   dateSelectionMode: 'today',
