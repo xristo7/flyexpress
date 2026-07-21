@@ -731,6 +731,7 @@ function renderCurrentScreen(preserveFocus = true) {
   root.innerHTML = (renderers[state.screen] || renderHome)();
   refreshIcons();
   updateHeaderTheme();
+  renderNavigation();
   if (state.screen === 'trip-details') setTimeout(() => { if (state.screen === 'trip-details') initTripMap(); }, 240);
   if (state.screen === 'ticket') setTimeout(initTicketQr, 0);
   if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
@@ -1080,10 +1081,10 @@ function renderBook() {
                 ${corridor}
               </div>
             </div>
+            <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction">
+              <i data-lucide="arrow-left-right"></i>
+            </button>
           </div>
-          <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction">
-            <i data-lucide="arrow-left-right"></i>
-          </button>
           <div class="route-card-expand-section">
             <button class="button button--primary w-full" type="button" data-action="booking-next-step">Continue</button>
           </div>
