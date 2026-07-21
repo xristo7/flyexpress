@@ -883,27 +883,12 @@ function renderHome() {
 
   return `
     <div class="home-redesign app fade-in-up">
-      <!-- 2. MOBILE HEADER -->
-      <header class="topbar">
-        <div class="identity" data-screen="profile" style="cursor: pointer;">
-          <div class="avatar" aria-hidden="true" style="overflow: hidden;">
-            <img src="assets/christo-avatar.jpg" alt="Christo avatar" style="width: 100%; height: 100%; object-fit: cover;" />
-          </div>
-          <div class="greeting">
-            <small>Hi ${state.passengerDetails[0]?.name.split(' ')[0] || 'Sarah'}</small>
-            <h1 id="timeGreeting">${greeting}</h1>
-            <p>Where would you like to travel today?</p>
-          </div>
-        </div>
-        <div class="header-actions">
-          <button class="icon-button" type="button" data-screen="notifications" aria-label="Open notifications">
-            <svg><use href="#i-bell"></use></svg><span class="badge">5</span>
-          </button>
-          <button class="icon-button hamburger-menu-btn" type="button" data-action="open-drawer" aria-label="Open navigation menu">
-            <svg><use href="#i-menu"></use></svg>
-          </button>
-        </div>
-      </header>
+      <!-- 2. HOME GREETING SECTION -->
+      <div class="home-greeting-card" style="margin-bottom: 22px; animation: enter .45s var(--ease) both; text-align: left;">
+        <small style="text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--muted); font-weight: 750; display: block;">Hi ${escapeHtml(state.passengerDetails[0]?.name.split(' ')[0] || 'Christo')}</small>
+        <h1 id="timeGreeting" style="font-size: clamp(1.8rem, 6.5vw, 2.2rem); font-weight: 850; color: var(--brand-blue-dark); margin: 3px 0 1px; letter-spacing: -0.025em; line-height: 1.15;">${greeting}</h1>
+        <p style="color: var(--slate); font-size: 0.92rem; margin: 0; opacity: 0.88;">Where would you like to travel today?</p>
+      </div>
 
       <!-- 3. SEARCH AND FILTER ROW -->
       <div class="search-row">
