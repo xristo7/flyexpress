@@ -1,230 +1,1695 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#081B33">
-  <meta name="description" content="Fly Express Passenger App presentation prototype">
-  <title>Fly Express Passenger App — Prototype</title>
-  <link rel="preconnect" href="https://unpkg.com">
-  <link rel="preconnect" href="https://tile.openstreetmap.org">
-  <link rel="stylesheet" href="leaflet.css">
-  <link class="styles" rel="stylesheet" href="styles.css?v=155">
-  <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
-  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-  <script defer src="script.js?v=155"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f2f6fb" />
+  <meta name="description" content="Fly Express passenger app homepage concept" />
+  <title>Fly Express — Passenger Home</title>
+  <style>
+    :root {
+      --blue-950: #05294d;
+      --blue-900: #063865;
+      --blue-800: #07599f;
+      --blue-700: #0874c9;
+      --blue-500: #18a9e0;
+      --blue-100: #e8f4fd;
+      --blue-50: #f3f9fe;
+      --red: #e51e2a;
+      --red-soft: #fff0f2;
+      --gold: #f5c518;
+      --gold-soft: #fff7cf;
+      --green: #138a59;
+      --green-soft: #e9f8f1;
+      --ink: #14233a;
+      --muted: #6d7b8f;
+      --muted-2: #99a4b3;
+      --page: #f2f6fb;
+      --card: #ffffff;
+      --line: #e5ebf2;
+      --line-strong: #d3dde8;
+      --shadow-xs: 0 2px 8px rgba(10, 42, 73, .05);
+      --shadow-sm: 0 10px 26px rgba(7, 49, 88, .09);
+      --shadow-md: 0 20px 48px rgba(7, 49, 88, .14);
+      --r-sm: 14px;
+      --r-md: 20px;
+      --r-lg: 28px;
+      --ease: 240ms cubic-bezier(.2, .8, .2, 1);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-top: env(safe-area-inset-top, 0px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      overflow-x: hidden;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 5% 12%, rgba(24,169,224,.10), transparent 28%),
+        radial-gradient(circle at 92% 4%, rgba(245,197,24,.09), transparent 24%),
+        var(--page);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    button, [role="button"] { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+      outline: 3px solid rgba(24,169,224,.34);
+      outline-offset: 3px;
+    }
+    svg { display: block; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { letter-spacing: -.03em; line-height: 1.12; }
+
+    .app {
+      min-height: 100vh;
+      width: min(100%, 1320px);
+      max-width: 100%;
+      overflow: clip;
+      margin: 0 auto;
+      padding: calc(22px + var(--safe-top)) clamp(16px, 3vw, 34px) calc(118px + var(--safe-bottom));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+      animation: enter .45s var(--ease) both;
+    }
+
+    .identity {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 13px;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 18px;
+      flex: 0 0 auto;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      letter-spacing: .02em;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.20), transparent 45%),
+        linear-gradient(145deg, var(--red), var(--blue-800) 70%);
+      box-shadow: 0 9px 22px rgba(7,89,159,.22);
+      border: 3px solid rgba(255,255,255,.9);
+    }
+
+    .greeting small {
+      display: block;
+      color: var(--muted);
+      font-weight: 650;
+      margin-bottom: 1px;
+    }
+
+    .greeting h1 {
+      font-size: clamp(1.42rem, 5vw, 2.2rem);
+      margin: 0 0 3px;
+    }
+
+    .greeting p {
+      color: var(--muted);
+      margin: 0;
+      font-size: .9rem;
+    }
+
+    .header-actions { display: flex; gap: 9px; }
+
+    .icon-button {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(14px);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-xs);
+      transition: transform var(--ease), border-color var(--ease), color var(--ease), background var(--ease);
+    }
+    .icon-button:hover { transform: translateY(-2px); color: var(--blue-800); border-color: rgba(7,89,159,.24); }
+    .icon-button:active { transform: scale(.96); }
+    .icon-button svg { width: 21px; height: 21px; }
+    .badge {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      min-width: 21px;
+      height: 21px;
+      padding: 0 5px;
+      border-radius: 99px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--red);
+      border: 2px solid var(--page);
+      font-size: .67rem;
+      font-weight: 850;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 60px;
+      gap: 12px;
+      margin-bottom: 22px;
+      animation: enter .5s .06s var(--ease) both;
+    }
+
+    .search-button {
+      min-width: 0;
+      min-height: 58px;
+      border: 0;
+      border-radius: 19px;
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow-sm);
+      padding: 0 17px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted-2);
+      cursor: pointer;
+      text-align: left;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+    .search-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .search-button:active { transform: scale(.99); }
+    .search-button svg { width: 20px; height: 20px; color: var(--blue-800); flex: 0 0 auto; }
+    .search-button span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .filter-button {
+      border: 0;
+      border-radius: 19px;
+      background: linear-gradient(145deg, var(--blue-700), var(--blue-900));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: 0 13px 28px rgba(7,89,159,.26);
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+    .filter-button:hover { transform: translateY(-2px) rotate(-2deg); box-shadow: 0 16px 32px rgba(7,89,159,.32); }
+    .filter-button:active { transform: scale(.95); }
+    .filter-button svg { width: 23px; height: 23px; }
+
+    .layout { display: grid; gap: 20px; min-width: 0; }
+    .main-column, .side-column, .section { min-width: 0; display: grid; gap: 20px; align-content: start; }
+    .card, .section-head > *, .compact-head > *, .departure-title-row > *, .departure-foot > * { min-width: 0; }
+    .greeting, .departure-title-row > div, .compact-head > div { min-width: 0; }
+    .greeting h1, .greeting p, .section-head h2, .departure-title-row h3, .compact-head h3, .offer-card h2 { overflow-wrap: anywhere; }
+
+    .card {
+      background: rgba(255,255,255,.95);
+      border: 1px solid rgba(223,232,241,.92);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .journey-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 280px;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 84% 16%, rgba(245,197,24,.17), transparent 26%),
+        linear-gradient(145deg, var(--blue-950), var(--blue-800) 67%, var(--blue-700));
+      color: white;
+      border: 0;
+      box-shadow: var(--shadow-md);
+      animation: enter .55s .1s var(--ease) both;
+    }
+    .journey-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .14;
+      background-image: radial-gradient(rgba(255,255,255,.75) 1px, transparent 1px);
+      background-size: 19px 19px;
+      mask-image: linear-gradient(to bottom right, transparent, black 40%, transparent 90%);
+    }
+    .journey-card::after {
+      content: "";
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      right: -120px;
+      bottom: -110px;
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 0 0 34px rgba(255,255,255,.035), 0 0 0 67px rgba(255,255,255,.02);
+    }
+    .journey-card > * { position: relative; z-index: 1; }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .68rem;
+      font-weight: 850;
+      margin-bottom: 7px;
+      color: rgba(255,255,255,.67);
+    }
+
+    .journey-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .journey-head h2 { margin: 0; font-size: clamp(1.55rem, 6vw, 2.4rem); max-width: 520px; }
+    .journey-head .offer-chip {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border-radius: 99px;
+      color: #3d3100;
+      background: var(--gold);
+      font-size: .72rem;
+      font-weight: 850;
+      box-shadow: 0 8px 18px rgba(245,197,24,.18);
+    }
+
+    .route-toggle {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+      align-items: center;
+      gap: 12px;
+      margin-top: 26px;
+    }
+    .route-place span { display: block; color: rgba(255,255,255,.6); font-size: .74rem; margin-bottom: 4px; }
+    .route-place strong { display: block; font-size: 1.02rem; }
+    .route-place:last-child { text-align: right; }
+    .swap-route {
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: transform .45s var(--ease), background var(--ease);
+    }
+    .swap-route:hover { background: rgba(255,255,255,.17); }
+    .swap-route.is-swapping { transform: rotate(180deg); }
+    .swap-route svg { width: 19px; height: 19px; }
+
+    .route-line {
+      position: relative;
+      height: 34px;
+      margin: 14px 4px 10px;
+    }
+    .route-line::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 15px;
+      height: 3px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--red), var(--gold), var(--blue-500));
+    }
+    .route-dot {
+      position: absolute;
+      top: 9px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 0 0 2px currentColor;
+      color: var(--red);
+      background: currentColor;
+    }
+    .route-dot:first-child { left: 2px; }
+    .route-dot:last-child { right: 2px; color: var(--blue-500); }
+    .route-van {
+      position: absolute;
+      left: 45%;
+      top: 0;
+      width: 44px;
+      height: 31px;
+      border-radius: 10px;
+      background: white;
+      color: var(--blue-800);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 18px rgba(0,0,0,.14);
+      animation: vanFloat 2.6s ease-in-out infinite;
+    }
+    .route-van svg { width: 27px; height: 27px; }
+
+    .journey-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .journey-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 99px;
+      color: rgba(255,255,255,.82);
+      font-size: .76rem;
+    }
+    .journey-meta svg { width: 15px; height: 15px; }
+
+    .journey-actions {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .primary-button, .secondary-button, .text-button {
+      border: 0;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform var(--ease), box-shadow var(--ease), background var(--ease), color var(--ease);
+    }
+    .primary-button {
+      min-height: 49px;
+      padding: 11px 17px;
+      border-radius: 15px;
+      background: var(--gold);
+      color: #322800;
+      box-shadow: 0 10px 22px rgba(245,197,24,.20);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .primary-button:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(245,197,24,.27); }
+    .primary-button:active, .secondary-button:active { transform: scale(.97); }
+    .primary-button svg, .secondary-button svg { width: 18px; height: 18px; }
+    .secondary-button {
+      min-height: 49px;
+      border-radius: 15px;
+      padding: 11px 15px;
+      color: #fff;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .secondary-button:hover { background: rgba(255,255,255,.17); }
+
+    .section {
+      animation: enter .55s var(--ease) both;
+      display: block;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-bottom: 13px;
+      padding: 0 3px;
+    }
+    .section-head h2 { font-size: 1.25rem; margin: 0; }
+    .text-button {
+      color: var(--blue-800);
+      background: transparent;
+      padding: 6px 3px;
+      font-size: .82rem;
+    }
+    .text-button:hover { color: var(--blue-950); }
+
+    .services-scroll, .departure-scroll {
+      display: grid;
+      grid-auto-flow: column;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: inline mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .services-scroll::-webkit-scrollbar, .departure-scroll::-webkit-scrollbar { display: none; }
+
+    .services-scroll {
+      grid-auto-columns: minmax(92px, 1fr);
+      gap: 11px;
+      padding: 2px 2px 7px;
+    }
+    .service {
+      min-height: 112px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.95);
+      border-radius: 22px;
+      padding: 13px 8px 12px;
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 9px;
+      cursor: pointer;
+      scroll-snap-align: start;
+      box-shadow: var(--shadow-xs);
+      font-weight: 750;
+      font-size: .8rem;
+      text-align: center;
+      transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease);
+    }
+    .service:hover { transform: translateY(-3px); border-color: rgba(7,89,159,.24); box-shadow: var(--shadow-sm); }
+    .service:active { transform: scale(.97); }
+    .service-icon {
+      width: 49px;
+      height: 49px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: var(--blue-800);
+      background: var(--blue-100);
+    }
+    .service:nth-child(2) .service-icon { background: var(--gold-soft); color: #8a6f00; }
+    .service:nth-child(3) .service-icon { background: var(--green-soft); color: var(--green); }
+    .service:nth-child(4) .service-icon { background: var(--red-soft); color: var(--red); }
+    .service-icon svg { width: 24px; height: 24px; }
+
+    .departure-scroll {
+      grid-auto-columns: min(88%, 360px);
+      gap: 15px;
+      padding: 12px 14px 18px;
+      scroll-padding-inline: 14px;
+    }
+    .departure-card {
+      scroll-snap-align: center;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 27px;
+      padding: 11px;
+      box-shadow: var(--shadow-sm);
+      min-width: 0;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+    .departure-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .departure-visual {
+      position: relative;
+      overflow: hidden;
+      height: 176px;
+      border-radius: 21px;
+      background: linear-gradient(160deg, #9bdcf4 0%, #e8f8ff 43%, #b7ddbf 44%, #4f8b5f 100%);
+    }
+    .departure-visual.night {
+      background: linear-gradient(170deg, #172c55 0%, #426394 48%, #ffcc8a 49%, #61472f 100%);
+    }
+    .departure-visual.airport {
+      background: linear-gradient(165deg, #b6e7ff 0%, #edf9ff 49%, #b9c7d0 50%, #718793 100%);
+    }
+    .sky-shape, .road-shape, .city-shape, .sun-shape, .terminal-shape { position: absolute; }
+    .sun-shape { width: 45px; height: 45px; border-radius: 50%; top: 20px; right: 30px; background: rgba(255,244,182,.92); box-shadow: 0 0 0 14px rgba(255,244,182,.16); }
+    .road-shape { width: 145%; height: 78px; background: #3e4850; left: -22%; bottom: -32px; transform: rotate(-7deg); box-shadow: inset 0 8px rgba(255,255,255,.16); }
+    .road-shape::after { content:""; position:absolute; left: 15%; right: 10%; top: 24px; height: 3px; background: repeating-linear-gradient(90deg,#fff 0 26px,transparent 26px 48px); opacity:.8; }
+    .city-shape { left: 0; right: 0; bottom: 28px; height: 66px; background: linear-gradient(90deg,#325370 0 8%,transparent 8% 11%,#25425d 11% 22%,transparent 22% 26%,#3a617e 26% 42%,transparent 42% 46%,#294b68 46% 54%,transparent 54% 58%,#345b78 58% 73%,transparent 73% 77%,#24445f 77% 91%,transparent 91%); opacity:.9; }
+    .terminal-shape { left: 18px; right: 18px; bottom: 34px; height: 60px; border-radius: 10px 10px 2px 2px; background: rgba(255,255,255,.78); border: 2px solid rgba(20,71,100,.24); }
+    .terminal-shape::before { content:""; position:absolute; left:14px; right:14px; top:14px; height:20px; background: repeating-linear-gradient(90deg,#6ca7bd 0 18px,transparent 18px 24px); }
+    .plane-shape { position:absolute; top:27px; left:42px; color:#21597d; transform:rotate(-8deg); }
+    .plane-shape svg { width:58px; height:58px; }
+    .mini-van {
+      position: absolute;
+      left: 37%;
+      bottom: 25px;
+      width: 86px;
+      color: var(--blue-800);
+      filter: drop-shadow(0 10px 10px rgba(10,25,40,.20));
+      z-index: 3;
+    }
+    .mini-van svg { width: 100%; height: auto; }
+    .save-button {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 13px;
+      background: rgba(255,255,255,.92);
+      color: var(--blue-800);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(8,49,83,.12);
+      transition: transform var(--ease), color var(--ease), background var(--ease);
+      z-index: 4;
+    }
+    .save-button:hover { transform: scale(1.06); }
+    .save-button.is-saved { color: var(--red); background: #fff; }
+    .save-button.pop { animation: pop .36s var(--ease); }
+    .save-button svg { width: 19px; height: 19px; }
+    .visual-label {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      min-height: 29px;
+      padding: 6px 9px;
+      border-radius: 99px;
+      color: #fff;
+      background: rgba(5,41,77,.75);
+      backdrop-filter: blur(8px);
+      font-size: .7rem;
+      font-weight: 800;
+      z-index: 4;
+    }
+
+    .departure-body { padding: 15px 7px 6px; }
+    .departure-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .departure-title-row h3 { font-size: 1.03rem; margin: 0 0 4px; }
+    .departure-title-row p { color: var(--muted); margin: 0; font-size: .77rem; }
+    .capacity-chip {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 8px;
+      border-radius: 99px;
+      color: var(--blue-800);
+      background: var(--blue-100);
+      font-size: .68rem;
+      font-weight: 850;
+    }
+    .capacity-chip.warning { color: #9d5900; background: #fff2dc; }
+    .departure-times {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+      margin: 15px 0 13px;
+    }
+    .time strong, .time span { display: block; }
+    .time strong { font-size: 1.04rem; }
+    .time span { color: var(--muted); font-size: .68rem; }
+    .time:last-child { text-align: right; }
+    .time-line { height: 2px; background: var(--line-strong); position: relative; }
+    .time-line::before, .time-line::after { content:""; position:absolute; top:50%; width:8px; height:8px; border-radius:50%; transform:translateY(-50%); }
+    .time-line::before { left:0; background:var(--red); }
+    .time-line::after { right:0; background:var(--blue-500); }
+
+    .departure-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+    .fare small, .fare strong { display: block; }
+    .fare small { color: var(--muted); font-size: .7rem; }
+    .fare strong { font-size: 1.35rem; }
+    .select-button {
+      min-height: 41px;
+      border: 0;
+      border-radius: 13px;
+      padding: 9px 20px;
+      color: white;
+      background: var(--blue-800);
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform var(--ease), background var(--ease);
+    }
+    .select-button:hover { transform: translateY(-2px); background: var(--blue-950); }
+    .select-button:active { transform: scale(.97); }
+
+    .carousel-dots { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 3px; }
+    .carousel-dot { width: 6px; height: 6px; border: 0; padding: 0; border-radius: 99px; background: var(--line-strong); transition: width var(--ease), background var(--ease); cursor: pointer; }
+    .carousel-dot.is-active { width: 24px; background: var(--blue-800); }
+
+    .offer-card {
+      overflow: hidden;
+      position: relative;
+      padding: 22px;
+      color: white;
+      border: 0;
+      background:
+        radial-gradient(circle at 88% 18%, rgba(245,197,24,.22), transparent 29%),
+        linear-gradient(145deg, var(--blue-950), var(--blue-800));
+      box-shadow: var(--shadow-sm);
+    }
+    .offer-card::after {
+      content: "FX";
+      position: absolute;
+      right: -7px;
+      bottom: -46px;
+      font-size: 8.5rem;
+      line-height: 1;
+      font-weight: 950;
+      color: rgba(255,255,255,.055);
+      letter-spacing: -.1em;
+    }
+    .offer-card > * { position: relative; z-index: 1; }
+    .offer-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 99px;
+      color: #3d3100;
+      background: var(--gold);
+      font-size: .68rem;
+      font-weight: 900;
+    }
+    .offer-card h2 { margin: 15px 0 8px; font-size: 1.45rem; max-width: 520px; }
+    .offer-card p { color: rgba(255,255,255,.72); margin-bottom: 17px; }
+    .offer-prices { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+    .offer-price { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08); border-radius: 14px; padding: 10px; }
+    .offer-price small, .offer-price strong { display: block; }
+    .offer-price small { color: rgba(255,255,255,.62); font-size: .67rem; }
+    .offer-price strong { margin-top: 2px; font-size: .94rem; }
+    .offer-price:last-child strong { color: var(--gold); }
+
+    .compact-card { padding: 19px; }
+    .compact-head { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .compact-head h3 { margin: 0 0 4px; font-size: 1.07rem; }
+    .compact-head p { color: var(--muted); margin: 0; font-size: .77rem; }
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 99px;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: .68rem;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+    .status-chip::before { content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
+    .status-chip.info { color: var(--blue-800); background: var(--blue-100); }
+
+    .trip-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; margin-bottom: 15px; }
+    .detail-box { padding: 11px; border-radius: 14px; background: var(--blue-50); }
+    .detail-box small, .detail-box strong { display: block; }
+    .detail-box small { color: var(--muted); font-size: .67rem; }
+    .detail-box strong { margin-top: 3px; font-size: .84rem; }
+    .compact-actions { display: grid; grid-template-columns: repeat(2,1fr); gap: 9px; }
+    .compact-action {
+      min-height: 42px;
+      border-radius: 13px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--blue-800);
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform var(--ease), border-color var(--ease), background var(--ease);
+    }
+    .compact-action.primary { color: white; border-color: var(--blue-800); background: var(--blue-800); }
+    .compact-action:hover { transform: translateY(-2px); border-color: var(--blue-500); }
+    .compact-action:active { transform: scale(.97); }
+
+    .wallet-card {
+      position: relative;
+      overflow: hidden;
+      padding: 21px;
+      color: #fff;
+      border: 0;
+      background: linear-gradient(135deg, var(--blue-950), var(--blue-700) 68%, var(--blue-500));
+      box-shadow: var(--shadow-sm);
+    }
+    .wallet-card::before {
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      right:-90px;
+      top:-95px;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 0 0 30px rgba(255,255,255,.035),0 0 0 60px rgba(255,255,255,.02);
+    }
+    .wallet-card > * { position:relative; z-index:1; }
+    .wallet-card small { color: rgba(255,255,255,.66); }
+    .wallet-balance { font-size: 2rem; font-weight: 950; letter-spacing: -.05em; margin: 4px 0 3px; }
+    .wallet-credit { color: rgba(255,255,255,.72); margin: 0 0 18px; font-size: .78rem; }
+    .wallet-actions { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
+    .wallet-action {
+      min-height: 42px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.17);
+      background: rgba(255,255,255,.10);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 800;
+      transition: background var(--ease), transform var(--ease);
+    }
+    .wallet-action:first-child { background: white; color: var(--blue-900); }
+    .wallet-action:hover { transform: translateY(-2px); background: rgba(255,255,255,.17); }
+    .wallet-action:first-child:hover { background:#fff; }
+
+    .parcel-progress { margin: 14px 0 10px; }
+    .parcel-progress-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); font-size: .72rem; margin-bottom: 7px; }
+    .progress-track { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+    .progress-track span { display:block; width:66%; height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--red),var(--gold),var(--blue-500),var(--blue-800)); }
+
+    .mobile-nav {
+      position: fixed;
+      z-index: 70;
+      left: 50%;
+      bottom: calc(14px + var(--safe-bottom));
+      transform: translateX(-50%);
+      width: min(calc(100vw - 26px), 520px);
+      min-height: 72px;
+      padding: 8px;
+      border-radius: 27px;
+      border: 1px solid rgba(223,232,241,.82);
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(20px) saturate(150%);
+      box-shadow: 0 20px 46px rgba(7,38,68,.18);
+      display: grid;
+      grid-template-columns: repeat(5,1fr);
+      gap: 4px;
+    }
+    .nav-item {
+      min-width: 0;
+      min-height: 56px;
+      border: 0;
+      border-radius: 20px;
+      background: transparent;
+      color: #6f7b8c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      cursor: pointer;
+      font-weight: 850;
+      overflow: hidden;
+      transition: background var(--ease), color var(--ease), gap var(--ease), padding var(--ease), transform var(--ease);
+    }
+    .nav-item svg { width: 21px; height: 21px; flex:0 0 auto; }
+    .nav-item span { max-width:0; opacity:0; transform:translateX(-4px); white-space:nowrap; overflow:hidden; font-size:.76rem; transition:max-width var(--ease),opacity var(--ease),transform var(--ease),margin var(--ease); }
+    .nav-item.is-active { color:var(--blue-800); background:#e4efff; gap:7px; padding:0 12px; }
+    .nav-item.is-active span { max-width:58px; opacity:1; transform:none; }
+    .nav-item:active { transform:scale(.95); }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(8,23,39,.54);
+      backdrop-filter: blur(5px);
+    }
+    .overlay.is-open { display: flex; animation: fade .18s ease both; }
+    .sheet {
+      width: min(100%, 560px);
+      max-height: min(84vh, 760px);
+      overflow-y: auto;
+      border-radius: 28px;
+      background: #fff;
+      box-shadow: 0 28px 70px rgba(3,27,49,.28);
+      padding: 12px 20px calc(22px + var(--safe-bottom));
+      animation: sheetIn .28s var(--ease) both;
+    }
+    .grabber { width:44px; height:5px; border-radius:99px; background:var(--line-strong); margin:0 auto 14px; }
+    .sheet-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:16px; }
+    .sheet-head h2 { margin:0 0 4px; font-size:1.35rem; }
+    .sheet-head p { margin:0; color:var(--muted); font-size:.8rem; }
+    .close-button { width:40px; height:40px; border:0; border-radius:13px; background:var(--page); display:grid; place-items:center; cursor:pointer; }
+    .close-button svg { width:19px; height:19px; }
+
+    .search-options { display:grid; gap:9px; }
+    .search-option {
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:13px;
+      display:grid;
+      grid-template-columns:42px 1fr auto;
+      align-items:center;
+      gap:11px;
+      text-align:left;
+      cursor:pointer;
+      transition:transform var(--ease),background var(--ease),border-color var(--ease);
+    }
+    .search-option:hover { transform:translateY(-2px); background:var(--blue-50); border-color:rgba(7,89,159,.22); }
+    .search-option-icon { width:42px; height:42px; border-radius:13px; display:grid; place-items:center; color:var(--blue-800); background:var(--blue-100); }
+    .search-option-icon svg { width:20px; height:20px; }
+    .search-option strong, .search-option small { display:block; }
+    .search-option small { color:var(--muted); margin-top:2px; }
+    .search-option > svg { width:18px; height:18px; color:var(--muted-2); }
+
+    .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .field { display:grid; gap:6px; }
+    .field.full { grid-column:1/-1; }
+    .field label { color:var(--muted); font-size:.76rem; font-weight:800; }
+    .field select, .field input { width:100%; min-height:47px; border:1px solid var(--line-strong); border-radius:14px; background:#fff; color:var(--ink); padding:10px 12px; }
+    .time-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .time-pill { min-height:38px; border:1px solid var(--line); border-radius:99px; background:#fff; padding:8px 13px; cursor:pointer; font-weight:750; }
+    .time-pill.is-selected { color:#fff; background:var(--blue-800); border-color:var(--blue-800); }
+    .sheet-actions { display:grid; grid-template-columns:1fr 1.4fr; gap:9px; margin-top:18px; }
+    .sheet-button { min-height:48px; border-radius:15px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:850; }
+    .sheet-button.primary { border-color:var(--blue-800); color:#fff; background:var(--blue-800); }
+
+    .toast-region {
+      position:fixed;
+      z-index:200;
+      top:calc(16px + var(--safe-top));
+      right:16px;
+      width:min(360px,calc(100vw - 32px));
+      pointer-events:none;
+      display:grid;
+      gap:9px;
+    }
+    .toast {
+      padding:13px 14px;
+      border-radius:16px;
+      color:#fff;
+      background:var(--blue-950);
+      box-shadow:var(--shadow-md);
+      display:grid;
+      grid-template-columns:24px 1fr;
+      gap:9px;
+      align-items:center;
+      animation:toastIn .24s var(--ease),toastOut .25s ease 2.8s forwards;
+    }
+    .toast.success { background:#0e6e49; }
+    .toast.warning { background:#875700; }
+    .toast svg { width:20px; height:20px; }
+
+    @keyframes enter { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+    @keyframes fade { from { opacity:0; } }
+    @keyframes sheetIn { from { opacity:0; transform:translateY(34px) scale(.985); } }
+    @keyframes vanFloat { 50% { transform:translateY(-4px); } }
+    @keyframes pop { 50% { transform:scale(1.22); } }
+    @keyframes toastIn { from { opacity:0; transform:translateX(28px); } }
+    @keyframes toastOut { to { opacity:0; transform:translateX(28px); } }
+
+    @media (min-width: 720px) {
+      .services-scroll { grid-auto-flow: initial; grid-template-columns: repeat(4,1fr); overflow:visible; }
+      .departure-scroll { grid-auto-columns: min(45vw,390px); }
+      .compact-card { padding:21px; }
+    }
+
+    @media (min-width: 980px) {
+      .app { padding-bottom: 42px; }
+      .layout { grid-template-columns: minmax(0,1.55fr) minmax(300px,.75fr); align-items:start; }
+      .journey-card { min-height: 300px; }
+      .departure-scroll { grid-auto-columns: min(390px, 46%); }
+      .mobile-nav {
+        position:sticky;
+        left:auto;
+        bottom:auto;
+        transform:none;
+        margin:0 auto 22px;
+        width:min(100%,690px);
+      }
+      .side-column { position:sticky; top:20px; }
+    }
+
+    @media (max-width: 420px) {
+      .app { padding-left: 13px; padding-right: 13px; }
+      .greeting p { display:none; }
+      .avatar { width:46px; height:46px; border-radius:16px; }
+      .icon-button { width:46px; height:46px; }
+      .journey-card { padding:20px; }
+      .journey-head .offer-chip { display:none; }
+      .journey-actions { grid-template-columns:1fr; }
+      .secondary-button { min-height:45px; }
+      .services-scroll { grid-auto-columns: 86px; }
+      .offer-prices { grid-template-columns:1fr 1fr; }
+      .offer-price:last-child { grid-column:1/-1; }
+      .nav-item.is-active { padding:0 8px; gap:5px; }
+      .nav-item.is-active span { max-width:48px; font-size:.7rem; }
+    }
+
+    @media (max-width: 719px) {
+      .app {
+        padding-left: clamp(12px, 4vw, 20px);
+        padding-right: clamp(12px, 4vw, 20px);
+      }
+      .layout, .main-column, .side-column { gap: 16px; }
+      .side-column { grid-template-columns: 1fr; }
+      .departure-scroll { grid-auto-columns: min(91%, 360px); }
+      .offer-card, .compact-card, .wallet-card { border-radius: 24px; }
+      .offer-card { padding: clamp(18px, 5vw, 22px); }
+    }
+
+    @media (min-width: 560px) and (max-width: 979px) {
+      .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .side-column > :last-child { grid-column: 1 / -1; }
+      .departure-scroll { grid-auto-columns: min(58%, 390px); }
+    }
+
+    @media (max-width: 479px) {
+      .topbar { align-items: flex-start; }
+      .greeting h1 { font-size: clamp(1.35rem, 7vw, 1.8rem); }
+      .search-row { grid-template-columns: minmax(0, 1fr) 54px; gap: 9px; }
+      .search-button, .filter-button { min-height: 54px; border-radius: 17px; }
+      .search-button { padding-inline: 14px; }
+      .section-head h2 { font-size: 1.12rem; }
+      .departure-scroll { grid-auto-columns: calc(100% - 22px); gap: 12px; }
+      .departure-card { border-radius: 23px; padding: 9px; }
+      .departure-visual { height: 155px; border-radius: 18px; }
+      .departure-body { padding: 13px 5px 5px; }
+      .departure-title-row { gap: 8px; }
+      .departure-title-row h3 { font-size: .96rem; }
+      .capacity-chip { flex: 0 0 auto; }
+      .departure-times { gap: 8px; }
+      .fare strong { font-size: 1.18rem; }
+      .select-button { min-height: 39px; padding-inline: 20px; font-size: .78rem; }
+      .offer-prices { grid-template-columns: 1fr; }
+      .offer-price:last-child { grid-column: auto; }
+      .trip-detail-grid, .compact-actions, .wallet-actions { grid-template-columns: 1fr 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .sheet { padding-inline: 15px; border-radius: 24px 24px 0 0; }
+      .sheet-actions { grid-template-columns: 1fr; }
+      .mobile-nav {
+        width: calc(100vw - 18px);
+        min-height: 68px;
+        padding: 6px;
+        border-radius: 24px;
+      }
+      .nav-item { min-height: 54px; border-radius: 18px; }
+      .nav-item.is-active { padding-inline: 8px; gap: 5px; }
+      .nav-item.is-active span { max-width: 44px; font-size: .68rem; }
+    }
+
+    @media (max-width: 359px) {
+      .app { padding-left: 10px; padding-right: 10px; }
+      .avatar { width: 42px; height: 42px; border-radius: 14px; }
+      .icon-button { width: 42px; height: 42px; border-radius: 14px; }
+      .greeting small { font-size: .75rem; }
+      .greeting p { display: none; }
+      .search-button span { font-size: .82rem; }
+      .services-scroll { grid-auto-columns: 82px; }
+      .service { min-height: 104px; border-radius: 19px; }
+      .service-icon { width: 45px; height: 45px; }
+      .departure-scroll { grid-auto-columns: calc(100% - 10px); }
+      .departure-title-row { display: grid; }
+      .capacity-chip { justify-self: start; }
+      .departure-foot { align-items: center; }
+      .offer-card h2 { font-size: 1.25rem; }
+      .wallet-balance { font-size: 1.7rem; }
+      .nav-item svg { width: 19px; height: 19px; }
+      .nav-item.is-active span { display: none; }
+      .nav-item.is-active { gap: 0; padding-inline: 0; }
+    }
+
+    /* ---------- Responsive containment fixes for feature cards ---------- */
+    html, body, .app {
+      inline-size: 100%;
+      max-inline-size: 100%;
+    }
+
+    .app > *,
+    .layout > *,
+    .main-column > *,
+    .side-column > *,
+    .journey-card > *,
+    .offer-card > * {
+      min-inline-size: 0;
+      max-inline-size: 100%;
+    }
+
+    .journey-card,
+    .offer-card {
+      inline-size: 100%;
+      max-inline-size: 100%;
+      min-inline-size: 0;
+      overflow: hidden;
+    }
+
+    .journey-head {
+      flex-wrap: wrap;
+    }
+
+    .journey-head > *,
+    .route-toggle > *,
+    .journey-actions > *,
+    .offer-prices > * {
+      min-width: 0;
+    }
+
+    .journey-card h2,
+    .journey-card p,
+    .offer-card h2,
+    .offer-card p,
+    .offer-price small,
+    .offer-price strong {
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+
+    .offer-card h2 {
+      max-width: min(100%, 620px);
+    }
+
+    .offer-prices {
+      width: 100%;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .offer-price {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .journey-card .primary-button,
+    .journey-card .secondary-button,
+    .offer-card .primary-button {
+      max-width: 100%;
+      white-space: normal;
+      text-align: center;
+    }
+
+    @media (max-width: 719px) {
+      .journey-card {
+        min-height: 0;
+        padding: clamp(18px, 5vw, 24px);
+      }
+
+      .journey-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .journey-head h2 {
+        width: 100%;
+        max-width: none;
+        font-size: clamp(1.5rem, 7vw, 2.1rem);
+      }
+
+      .journey-head .offer-chip {
+        justify-self: start;
+      }
+
+      .route-toggle {
+        width: 100%;
+        grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .route-place strong {
+        overflow-wrap: anywhere;
+      }
+
+      .journey-actions {
+        width: 100%;
+        grid-template-columns: 1fr;
+      }
+
+      .journey-actions .primary-button,
+      .journey-actions .secondary-button {
+        width: 100%;
+      }
+
+      .offer-card {
+        padding: clamp(18px, 5vw, 24px);
+      }
+
+      .offer-card h2 {
+        max-width: none;
+        font-size: clamp(1.3rem, 5.6vw, 1.72rem);
+      }
+
+      .offer-card .primary-button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .journey-meta {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .journey-meta span {
+        min-width: 0;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+      }
+
+      .journey-meta span:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .offer-prices {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .route-toggle {
+        grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+      }
+
+      .swap-route {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+      }
+
+      .journey-card h2 {
+        font-size: 1.45rem;
+      }
+
+      .offer-label {
+        max-width: 100%;
+        white-space: normal;
+      }
+    }
+
+    /* ---------- Compact expanding floating navigation ---------- */
+    .mobile-nav {
+      inline-size: max-content;
+      width: max-content;
+      max-inline-size: calc(100vw - 32px);
+      max-width: calc(100vw - 32px);
+      min-height: 64px;
+      padding: 9px;
+      display: flex;
+      grid-template-columns: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 24px;
+    }
+
+    .nav-item {
+      flex: 0 0 43px;
+      inline-size: 43px;
+      width: 43px;
+      min-inline-size: 43px;
+      min-width: 43px;
+      min-height: 52px;
+      padding-inline: 0;
+      border-radius: 18px;
+      transition: width var(--ease), flex-basis var(--ease), background var(--ease), color var(--ease), gap var(--ease), padding var(--ease), transform var(--ease);
+    }
+
+    .nav-item span {
+      display: inline-block;
+      max-width: 0;
+      opacity: 0;
+      margin: 0;
+      font-size: .72rem;
+    }
+
+    .nav-item.is-active {
+      flex-basis: 96px;
+      inline-size: 96px;
+      width: 96px;
+      min-inline-size: 96px;
+      min-width: 96px;
+      padding-inline: 11px;
+      gap: 6px;
+    }
+
+    .nav-item.is-active span {
+      display: inline-block;
+      max-width: 54px;
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 360px) {
+      .mobile-nav {
+        max-inline-size: calc(100vw - 24px);
+        max-width: calc(100vw - 24px);
+        padding: 8px;
+        gap: 8px;
+      }
+
+      .nav-item {
+        flex-basis: 40px;
+        inline-size: 40px;
+        width: 40px;
+        min-inline-size: 40px;
+        min-width: 40px;
+      }
+
+      .nav-item.is-active {
+        flex-basis: 88px;
+        inline-size: 88px;
+        width: 88px;
+        min-inline-size: 88px;
+        min-width: 88px;
+        padding-inline: 9px;
+      }
+
+      .nav-item.is-active span {
+        display: inline-block;
+        max-width: 48px;
+        font-size: .68rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+    }
+  
+
+    /* ---------- Carousel edge-bleed and shadow fix ---------- */
+    .select-button {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+      white-space: nowrap;
+      inline-size: max-content;
+      max-inline-size: 100%;
+      flex: 0 0 auto;
+    }
+
+    /*
+      The vertical padding gives each card's shadow room to render inside the
+      horizontal scroller. The scroller itself is widened on mobile/tablet so
+      cards enter and leave at the physical viewport edges instead of being
+      clipped at the page-content gutter.
+    */
+    .departure-scroll {
+      padding-block-start: 20px;
+      padding-block-end: 34px;
+    }
+
+    .departure-card {
+      margin-block: 1px 5px;
+      box-shadow: 0 12px 30px rgba(7, 49, 88, .12);
+    }
+
+    @media (max-width: 979px) {
+      .departure-scroll {
+        --carousel-gutter: clamp(16px, 3vw, 34px);
+        inline-size: calc(100% + var(--carousel-gutter) + var(--carousel-gutter));
+        max-inline-size: none;
+        margin-inline: calc(-1 * var(--carousel-gutter));
+        padding-inline-start: calc(var(--carousel-gutter) + 10px);
+        padding-inline-end: calc(var(--carousel-gutter) + 10px);
+        scroll-padding-inline-start: calc(var(--carousel-gutter) + 10px);
+        scroll-padding-inline-end: calc(var(--carousel-gutter) + 10px);
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+    }
+
+    @media (max-width: 719px) {
+      .departure-scroll {
+        --carousel-gutter: clamp(12px, 4vw, 20px);
+      }
+    }
+
+    @media (max-width: 359px) {
+      .departure-scroll {
+        --carousel-gutter: 10px;
+        padding-inline-start: 18px;
+        padding-inline-end: 18px;
+        scroll-padding-inline-start: 18px;
+        scroll-padding-inline-end: 18px;
+      }
+    }
+    /* ---------- End carousel edge-bleed fix ---------- */
+
+</style>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.3 21h3.4M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m20 20-4-4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h6M14 7h6M4 17h10M18 17h2M10 4v6M14 14v6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="10" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="16" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1.9"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="m7 7-3 3 3 3M4 10h16M17 17l3-3-3-3M20 14H4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 3v4M16 3v4M3 10h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M4 5h16v4a3 3 0 0 0 0 6v4H4v-4a3 3 0 0 0 0-6V5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M13 8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="2 2"/></symbol>
+    <symbol id="i-return" viewBox="0 0 24 24"><path d="M4 7h11a5 5 0 0 1 0 10H8M8 4 4 7l4 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-package" viewBox="0 0 24 24"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m4 7 8 4 8-4M12 11v10M8 5l8 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 6h14a2 2 0 0 1 2 2v11H5a2 2 0 0 1-2-2V7a3 3 0 0 1 3-3h11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 11h6v5h-6a2.5 2.5 0 0 1 0-5Z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart-fill" viewBox="0 0 24 24"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z" fill="currentColor"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 18h2a4 4 0 0 0 4-4v-4a4 4 0 0 1 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-seat" viewBox="0 0 24 24"><path d="M7 4v9a3 3 0 0 0 3 3h7v4M6 20v-5M5 11h8a3 3 0 0 1 3 3v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bus" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 9h12M7 19v2M17 19v2M8 15h.01M16 15h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="m22 2-8 8-7-3-2 2 5 5-3 3-4-1-1 1 5 5 1-1-1-4 3-3 5 5 2-2-3-7 8-8Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-location" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-track" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5M12 8h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-van" viewBox="0 0 120 70">
+      <path d="M19 22c4-10 12-14 25-14h42c9 0 16 5 19 14l8 22v12H7V42l12-20Z" fill="currentColor"/>
+      <path d="M27 17h58c5 0 9 2 11 8l4 11H20l7-19Z" fill="#eef8ff"/>
+      <path d="M58 17v19M80 17l7 19" stroke="#9dcce6" stroke-width="3"/>
+      <rect x="13" y="42" width="94" height="12" rx="4" fill="#fff"/>
+      <rect x="46" y="45" width="30" height="5" rx="2" fill="#e51e2a"/>
+      <circle cx="28" cy="57" r="9" fill="#173449"/><circle cx="92" cy="57" r="9" fill="#173449"/>
+      <circle cx="28" cy="57" r="4" fill="#bac8d2"/><circle cx="92" cy="57" r="4" fill="#bac8d2"/>
+      <rect x="9" y="38" width="7" height="9" rx="3" fill="#f5c518"/><rect x="104" y="38" width="7" height="9" rx="3" fill="#f5c518"/>
+    </symbol>
+  </svg>
 
-  <div id="splash-screen" class="splash-screen" role="dialog" aria-label="Fly Express introduction">
-    <div class="splash-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px;">
-      <div class="logo-frame logo-frame--large" style="margin: 0; box-shadow: var(--shadow-lg); width: 140px; height: 140px; border-radius: 36px; overflow: hidden; border: 4px solid #ffffff; background: #ffffff; padding: 12px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">
-        <img src="assets/fly-express-logo.jpg" alt="Fly Express Travellers Association logo">
-      </div>
-      <div class="route-loader" aria-hidden="true" style="width: 160px; height: 6px; background: rgba(0, 87, 217, 0.08); border-radius: 99px; overflow: hidden; position: relative; border: 1px solid rgba(20, 87, 217, 0.08);">
-        <div class="route-loader__bar" style="position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-blue-soft) 100%); border-radius: 99px; animation: splash-load 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;"></div>
-      </div>
-    </div>
-  </div>
-
-  <section id="onboarding" class="full-screen-layer is-hidden" aria-label="App introduction">
-    <div class="onboarding-shell">
-      <button class="text-button onboarding-skip" type="button" data-action="skip-onboarding">Skip</button>
-      <div id="onboarding-content"></div>
-      <div class="onboarding-controls">
-        <button class="button button--ghost" type="button" data-action="onboarding-back" aria-label="Back"><i data-lucide="chevron-left"></i></button>
-        <div id="onboarding-dots" class="progress-dots" aria-label="Onboarding progress"></div>
-        <button class="button button--primary" type="button" data-action="onboarding-next" aria-label="Next"><i data-lucide="chevron-right"></i></button>
-      </div>
-    </div>
-  </section>
-
-  <section id="auth-layer" class="full-screen-layer auth-layer is-hidden" aria-label="Passenger account preview">
-    <div class="auth-shell">
-      <div class="auth-brand">
-        <div class="logo-frame">
-          <img src="assets/fly-express-logo.jpg" alt="Fly Express Travellers Association logo">
-        </div>
-        <div>
-          <strong>Fly Express</strong>
-          <span>Passenger App</span>
-        </div>
-      </div>
-      <div id="auth-content"></div>
-    </div>
-  </section>
-
-  <div id="app-shell" class="app-shell is-hidden">
-    <aside class="sidebar" aria-label="Primary navigation">
-      <div class="sidebar__brand">
-        <div class="logo-frame logo-frame--sidebar">
-          <img src="assets/fly-express-logo.jpg" alt="Fly Express Travellers Association logo">
-        </div>
-        <div>
-          <strong>Fly Express</strong>
-          <span>Passenger App</span>
+  <main class="app">
+    <header class="topbar">
+      <div class="identity">
+        <div class="avatar" aria-hidden="true">SN</div>
+        <div class="greeting">
+          <small>Hi Sarah</small>
+          <h1 id="timeGreeting">Good morning</h1>
+          <p>Where would you like to travel today?</p>
         </div>
       </div>
-
-      <nav id="desktop-nav" class="sidebar__nav"></nav>
-
-      <div class="sidebar__footer">
-        <button class="prototype-link" type="button" data-action="open-demo-panel">
-          <i data-lucide="flask-conical"></i>
-          <span>Prototype Demo</span>
-        </button>
-        <div class="connection-state">
-          <span class="connection-dot"></span>
-          <span>Demo online</span>
-        </div>
-        <p>Presentation mode<br>Version 1.2.0</p>
-      </div>
-    </aside>
-
-    <div class="workspace">
-      <header class="topbar">
-        <div class="topbar__left">
-          <button id="back-button" class="icon-button is-hidden" type="button" data-action="go-back" aria-label="Go back">
-            <i data-lucide="arrow-left"></i>
-          </button>
-          <button class="mobile-brand" type="button" data-screen="home" aria-label="Go to home">
-            <span class="logo-frame logo-frame--mobile"><img src="assets/fly-express-logo.jpg" alt=""></span>
-          </button>
-          <div>
-            <p class="eyebrow topbar__eyebrow">Fly Express</p>
-            <h2 id="screen-title">Home</h2>
-          </div>
-        </div>
-        <div class="topbar__actions">
-          <button class="connection-pill" type="button" data-action="toggle-connection" aria-label="Toggle demo connection state">
-            <span class="connection-dot"></span>
-            <span class="connection-label">Online</span>
-          </button>
-          <button class="icon-button" type="button" data-screen="notifications" aria-label="Notifications">
-            <i data-lucide="bell"></i>
-            <span id="notification-badge" class="badge-count">5</span>
-          </button>
-          <button id="topbar-share-button" class="icon-button is-hidden" type="button" data-action="share-demo" aria-label="Share">
-            <i data-lucide="upload"></i>
-          </button>
-          <button class="desktop-profile-btn" type="button" data-screen="profile" aria-label="View profile">
-            <img src="assets/christo-avatar.jpg" alt="Christo I." style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-          </button>
-          <button class="hamburger-menu-btn" type="button" data-action="toggle-side-drawer" aria-label="Open menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </header>
-
-      <main id="main-content" class="main-content" tabindex="-1"></main>
-    </div>
-  </div>
-
-  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation"></nav>
-
-  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
-  <div id="modal-root"></div>
-  <div id="sheet-root"></div>
-
-  <div id="side-drawer" class="side-drawer is-hidden" role="dialog" aria-modal="true" aria-label="Menu drawer">
-    <div class="side-drawer__backdrop" data-action="close-drawer"></div>
-    <div class="side-drawer__content">
-      <div class="side-drawer__header">
-        <div class="drawer-user-info" data-screen="profile" role="button" tabindex="0" style="cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 6px 10px; border-radius: 12px; transition: background-color 0.2s ease; margin-right: 12px;" title="View Profile" onmouseover="this.style.backgroundColor='rgba(0,0,0,0.04)'" onmouseout="this.style.backgroundColor='transparent'">
-          <img src="assets/christo-avatar.jpg" alt="Christo I." class="profile-avatar" style="margin: 0; width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
-          <div style="flex: 1; min-width: 0;">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <h3 style="margin: 0; font-size: 0.98rem; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Christo I.</h3>
-              <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: rgba(255,255,255,0.5); flex-shrink: 0;"></i>
-            </div>
-            <p class="muted text-small" style="margin: 2px 0 0 0; font-size: 0.78rem; color: rgba(255, 255, 255, 0.7) !important;">+256 772 345 678</p>
-          </div>
-        </div>
-        <button class="icon-button icon-button--plain" type="button" data-action="close-drawer" aria-label="Close menu">
-          <i data-lucide="x"></i>
+      <div class="header-actions">
+        <button class="icon-button" type="button" data-action="notifications" aria-label="Open notifications">
+          <svg><use href="#i-bell"></use></svg><span class="badge">5</span>
         </button>
       </div>
-      <div class="side-drawer__body">
-        <div class="drawer-section">
-          <p class="drawer-section-title">Accounts</p>
-          <div class="account-switcher">
-            <div class="account-item is-active">
-              <span class="account-dot"></span>
-              <div>
-                <strong>Personal Account</strong>
-                <small>Christo I.</small>
-              </div>
-            </div>
-            <div class="account-item">
-              <span class="account-dot account-dot--corporate"></span>
-              <div>
-                <strong>Corporate Account</strong>
-                <small>Acme Corp (FXC-9921)</small>
-              </div>
-            </div>
+    </header>
+
+    <div class="search-row">
+      <button class="search-button" type="button" data-open="searchSheet" aria-haspopup="dialog">
+        <svg><use href="#i-search"></use></svg><span>Search route, stage or service</span>
+      </button>
+      <button class="filter-button" type="button" data-open="filterSheet" aria-label="Open trip filters" aria-haspopup="dialog">
+        <svg><use href="#i-sliders"></use></svg>
+      </button>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Primary navigation">
+      <button class="nav-item is-active" type="button" data-nav="Home" aria-current="page"><svg><use href="#i-home"></use></svg><span>Home</span></button>
+      <button class="nav-item" type="button" data-nav="Book"><svg><use href="#i-ticket"></use></svg><span>Book</span></button>
+      <button class="nav-item" type="button" data-nav="Trips"><svg><use href="#i-route"></use></svg><span>Trips</span></button>
+      <button class="nav-item" type="button" data-nav="Wallet"><svg><use href="#i-wallet"></use></svg><span>Wallet</span></button>
+      <button class="nav-item" type="button" data-nav="More"><svg><use href="#i-menu"></use></svg><span>More</span></button>
+    </nav>
+
+    <div class="layout">
+      <div class="main-column">
+        <section class="section" style="animation-delay:.10s" aria-labelledby="servicesTitle">
+          <div class="section-head"><h2 id="servicesTitle">Popular services</h2><button class="text-button" type="button" data-action="showServices">Show all</button></div>
+          <div class="services-scroll">
+            <button class="service" type="button" data-service="Book a trip"><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Trip</span></button>
+            <button class="service" type="button" data-service="Return tickets"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
+            <button class="service" type="button" data-service="Send a parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
+            <button class="service" type="button" data-service="Wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
           </div>
-        </div>
-        <div class="drawer-section">
-          <p class="drawer-section-title">Features & Services</p>
-          <nav class="drawer-nav">
-            <button class="drawer-nav-item" type="button" data-screen="home"><i data-lucide="house"></i><span>Home</span></button>
-            
-            <div class="drawer-nav-group">
-              <button class="drawer-nav-item drawer-nav-item--parent" type="button" data-screen="book"><i data-lucide="ticket-plus"></i><span>Book a Trip</span></button>
-              <div class="drawer-nav-sub">
-                <button class="drawer-nav-sub-item" type="button" data-screen="returns"><i data-lucide="refresh-cw"></i><span>Return Tickets</span></button>
-                <button class="drawer-nav-sub-item" type="button" data-screen="luggage"><i data-lucide="luggage"></i><span>Luggage Tags</span></button>
-                <button class="drawer-nav-sub-item" type="button" data-screen="live"><i data-lucide="navigation"></i><span>Live Trip Tracking</span></button>
-              </div>
-            </div>
+        </section>
 
-            <button class="drawer-nav-item" type="button" data-screen="trips"><i data-lucide="route"></i><span>My Trips</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><span>Wallet</span></button>
-            
-            <div class="drawer-nav-group">
-              <button class="drawer-nav-item drawer-nav-item--parent" type="button" data-screen="parcel"><i data-lucide="package-plus"></i><span>Parcels</span></button>
-              <div class="drawer-nav-sub">
-                <button class="drawer-nav-sub-item" type="button" data-screen="trackparcel-list"><i data-lucide="scan-search"></i><span>Track Parcel</span></button>
+        <section class="section" style="animation-delay:.2s" aria-labelledby="departuresTitle">
+          <div class="section-head"><h2 id="departuresTitle">Recommended departures</h2><button class="text-button" type="button" data-action="showDepartures">Show all</button></div>
+          <div class="departure-scroll" id="departureCarousel">
+            <article class="departure-card" data-card-index="0">
+              <div class="departure-visual">
+                <span class="visual-label">Morning departure</span>
+                <button class="save-button" type="button" data-action="save" aria-label="Save 8:30 AM departure"><svg><use href="#i-heart"></use></svg></button>
+                <span class="sun-shape"></span><span class="city-shape"></span><span class="road-shape"></span>
+                <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
               </div>
-            </div>
+              <div class="departure-body">
+                <div class="departure-title-row"><div><h3>Entebbe Main Stage → Kampala</h3><p>High-roof van · Moderate traffic</p></div><span class="capacity-chip">4 spaces</span></div>
+                <div class="departure-times"><div class="time"><strong>8:30 AM</strong><span>Departure</span></div><div class="time-line"></div><div class="time"><strong>9:35 AM</strong><span>Arrival</span></div></div>
+                <div class="departure-foot"><div class="fare"><small>Starting from</small><strong>UGX 5,000</strong></div><button class="select-button" type="button" data-select="8:30 AM">Select Trip</button></div>
+              </div>
+            </article>
 
-            <button class="drawer-nav-item" type="button" data-screen="offers"><i data-lucide="badge-percent"></i><span>Offers</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="support"><i data-lucide="life-buoy"></i><span>Help and Support</span></button>
-            <button class="drawer-nav-item" type="button" data-screen="about"><i data-lucide="info"></i><span>About Fly Express</span></button>
-            <button class="drawer-nav-item" type="button" data-action="open-demo-panel"><i data-lucide="flask-conical"></i><span>Prototype Demo</span></button>
-            <button class="drawer-nav-item drawer-nav-item--signout" type="button" data-action="sign-out"><i data-lucide="log-out"></i><span>Sign Out</span></button>
-          </nav>
-        </div>
+            <article class="departure-card" data-card-index="1">
+              <div class="departure-visual night">
+                <span class="visual-label">Fastest option</span>
+                <button class="save-button" type="button" data-action="save" aria-label="Save 9:00 AM departure"><svg><use href="#i-heart"></use></svg></button>
+                <span class="sun-shape" style="width:34px;height:34px;top:24px;background:#ffd99c"></span><span class="city-shape"></span><span class="road-shape"></span>
+                <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
+              </div>
+              <div class="departure-body">
+                <div class="departure-title-row"><div><h3>Entebbe Main Stage → Clock Tower</h3><p>18-seat van · Light traffic</p></div><span class="capacity-chip">8 spaces</span></div>
+                <div class="departure-times"><div class="time"><strong>9:00 AM</strong><span>Departure</span></div><div class="time-line"></div><div class="time"><strong>10:00 AM</strong><span>Arrival</span></div></div>
+                <div class="departure-foot"><div class="fare"><small>Starting from</small><strong>UGX 5,000</strong></div><button class="select-button" type="button" data-select="9:00 AM">Select Trip</button></div>
+              </div>
+            </article>
+
+            <article class="departure-card" data-card-index="2">
+              <div class="departure-visual airport">
+                <span class="visual-label">Airport connection</span>
+                <button class="save-button" type="button" data-action="save" aria-label="Save 9:30 AM departure"><svg><use href="#i-heart"></use></svg></button>
+                <span class="sun-shape"></span><span class="terminal-shape"></span><span class="plane-shape"><svg><use href="#i-plane"></use></svg></span>
+                <span class="mini-van" style="left:52%;bottom:20px;width:76px"><svg><use href="#i-van"></use></svg></span>
+              </div>
+              <div class="departure-body">
+                <div class="departure-title-row"><div><h3>Kitooro → Kampala Main Stage</h3><p>14-seat van · Heavy traffic</p></div><span class="capacity-chip warning">2 spaces</span></div>
+                <div class="departure-times"><div class="time"><strong>9:30 AM</strong><span>Departure</span></div><div class="time-line"></div><div class="time"><strong>10:45 AM</strong><span>Arrival</span></div></div>
+                <div class="departure-foot"><div class="fare"><small>Starting from</small><strong>UGX 5,000</strong></div><button class="select-button" type="button" data-select="9:30 AM">Select Trip</button></div>
+              </div>
+            </article>
+          </div>
+          <div class="carousel-dots" aria-label="Departure carousel position">
+            <button class="carousel-dot is-active" type="button" data-dot="0" aria-label="Show departure 1"></button>
+            <button class="carousel-dot" type="button" data-dot="1" aria-label="Show departure 2"></button>
+            <button class="carousel-dot" type="button" data-dot="2" aria-label="Show departure 3"></button>
+          </div>
+        </section>
+
+        <section class="card offer-card section" style="animation-delay:.24s">
+          <span class="offer-label"><svg width="15" height="15"><use href="#i-return"></use></svg>Save UGX 1,000</span>
+          <h2>Travel to Kampala and secure your return for less.</h2>
+          <p>Buy both journeys together and use the return on an eligible departure before it expires.</p>
+          <div class="offer-prices">
+            <div class="offer-price"><small>Outbound</small><strong>UGX 5,000</strong></div>
+            <div class="offer-price"><small>Return</small><strong>UGX 4,000</strong></div>
+            <div class="offer-price"><small>Package total</small><strong>UGX 9,000</strong></div>
+          </div>
+          <button class="primary-button" type="button" data-action="returnTicket">Get Return Ticket <svg><use href="#i-arrow"></use></svg></button>
+        </section>
+      </div>
+
+      <aside class="side-column">
+        <section class="card compact-card section" style="animation-delay:.14s">
+          <div class="compact-head"><div><h3>Upcoming trip</h3><p>Today · Entebbe to Kampala</p></div><span class="status-chip">Confirmed</span></div>
+          <div class="trip-detail-grid">
+            <div class="detail-box"><small>Boarding</small><strong>8:15 AM</strong></div>
+            <div class="detail-box"><small>Departure</small><strong id="upcomingTime">8:30 AM</strong></div>
+            <div class="detail-box"><small>Vehicle</small><strong>UBM 245K</strong></div>
+            <div class="detail-box"><small>Capacity</small><strong>Position 04</strong></div>
+          </div>
+          <div class="compact-actions"><button class="compact-action primary" type="button" data-action="ticket">View Ticket</button><button class="compact-action" type="button" data-action="trackVehicle">Track Vehicle</button></div>
+        </section>
+
+        <section class="card wallet-card section" style="animation-delay:.18s">
+          <small>Fly Express Wallet</small><div class="wallet-balance">UGX 32,500</div><p class="wallet-credit">UGX 2,000 promotional credit available</p>
+          <div class="wallet-actions"><button class="wallet-action" type="button" data-action="addFunds">Add Funds</button><button class="wallet-action" type="button" data-action="transactions">Transactions</button></div>
+        </section>
+
+        <section class="card compact-card section" style="animation-delay:.22s">
+          <div class="compact-head"><div><h3>Active parcel</h3><p>FXP-260718-0842</p></div><span class="status-chip info">In Transit</span></div>
+          <div class="parcel-progress"><div class="parcel-progress-row"><span>Entebbe</span><strong>66%</strong><span>Kampala</span></div><div class="progress-track"><span></span></div></div>
+          <div class="trip-detail-grid"><div class="detail-box"><small>Estimated arrival</small><strong>10:45 AM</strong></div><div class="detail-box"><small>Vehicle</small><strong>UBP 318F</strong></div></div>
+          <button class="compact-action primary" style="width:100%" type="button" data-action="trackParcel">Track Parcel</button>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div class="overlay" id="searchSheet" role="dialog" aria-modal="true" aria-labelledby="searchSheetTitle">
+    <div class="sheet">
+      <div class="grabber"></div>
+      <div class="sheet-head"><div><h2 id="searchSheetTitle">What do you need?</h2><p>Choose a passenger service to continue.</p></div><button class="close-button" type="button" data-close aria-label="Close search"><svg><use href="#i-x"></use></svg></button></div>
+      <div class="search-options">
+        <button class="search-option" type="button" data-result="Book Entebbe to Kampala"><span class="search-option-icon"><svg><use href="#i-route"></use></svg></span><span><strong>Book Entebbe to Kampala</strong><small>Find the next available departure</small></span><svg><use href="#i-arrow"></use></svg></button>
+        <button class="search-option" type="button" data-result="Book Kampala to Entebbe"><span class="search-option-icon"><svg><use href="#i-return"></use></svg></span><span><strong>Book Kampala to Entebbe</strong><small>Plan your return journey</small></span><svg><use href="#i-arrow"></use></svg></button>
+        <button class="search-option" type="button" data-result="Track my vehicle"><span class="search-option-icon"><svg><use href="#i-track"></use></svg></span><span><strong>Track my vehicle</strong><small>View trip progress and estimated arrival</small></span><svg><use href="#i-arrow"></use></svg></button>
+        <button class="search-option" type="button" data-result="Send a parcel"><span class="search-option-icon"><svg><use href="#i-package"></use></svg></span><span><strong>Send or track a parcel</strong><small>Register a delivery or check its status</small></span><svg><use href="#i-arrow"></use></svg></button>
+        <button class="search-option" type="button" data-result="Open wallet"><span class="search-option-icon"><svg><use href="#i-wallet"></use></svg></span><span><strong>Open Fly Express Wallet</strong><small>Add funds or view transactions</small></span><svg><use href="#i-arrow"></use></svg></button>
       </div>
     </div>
   </div>
 
-  <div id="loading-overlay" class="loading-overlay is-hidden" role="status" aria-live="polite">
-    <div class="loading-card">
-      <div class="loading-brand-media" aria-hidden="true">
-        <div class="logo-frame logo-frame--loading"><img src="assets/fly-express-logo.jpg" alt=""></div>
-        <img class="loading-van" src="assets/fly-express-van.png" alt="">
+  <div class="overlay" id="filterSheet" role="dialog" aria-modal="true" aria-labelledby="filterSheetTitle">
+    <div class="sheet">
+      <div class="grabber"></div>
+      <div class="sheet-head"><div><h2 id="filterSheetTitle">Trip filters</h2><p>Refine the departures shown on the homepage.</p></div><button class="close-button" type="button" data-close aria-label="Close filters"><svg><use href="#i-x"></use></svg></button></div>
+      <div class="form-grid">
+        <div class="field"><label for="filterFrom">From</label><select id="filterFrom"><option>Entebbe Main Stage</option><option>Kitooro</option><option>Abayita Ababiri</option><option>Kampala Main Stage</option></select></div>
+        <div class="field"><label for="filterTo">To</label><select id="filterTo"><option>Kampala Main Stage</option><option>Clock Tower</option><option>Kajjansi</option><option>Entebbe Main Stage</option></select></div>
+        <div class="field"><label for="filterDate">Travel date</label><input id="filterDate" type="date" /></div>
+        <div class="field"><label for="filterPassengers">Passengers</label><select id="filterPassengers"><option>1 passenger</option><option>2 passengers</option><option>3 passengers</option><option>4 passengers</option></select></div>
+        <div class="field full"><label>Preferred period</label><div class="time-pills"><button class="time-pill is-selected" type="button">Morning</button><button class="time-pill" type="button">Afternoon</button><button class="time-pill" type="button">Evening</button><button class="time-pill" type="button">Any time</button></div></div>
+        <div class="field"><label for="filterType">Ticket type</label><select id="filterType"><option>One way</option><option>Return</option></select></div>
+        <div class="field"><label for="filterAvailability">Availability</label><select id="filterAvailability"><option>Available only</option><option>Show all</option></select></div>
       </div>
-      <span class="spinner"></span>
-      <strong id="loading-message">Loading preview…</strong>
-      <small>No live service is being contacted.</small>
+      <div class="sheet-actions"><button class="sheet-button" type="button" data-action="resetFilters">Reset</button><button class="sheet-button primary" type="button" data-action="applyFilters">Apply Filters</button></div>
     </div>
   </div>
 
-  <!-- Screen protection secure overlay -->
-  <div id="security-overlay">
-    <i data-lucide="shield-alert" style="width: 48px; height: 48px; color: var(--brand-gold); margin-bottom: 12px;"></i>
-    <h3 style="margin: 0 0 4px 0; font-size: 1.15rem; font-weight: 800; color: white;">Screen Protected</h3>
-    <p class="muted" style="max-width: 240px; font-size: 0.78rem; margin: 0; color: rgba(255, 255, 255, 0.7) !important; text-align: center;">Content is hidden for security.</p>
-  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
-  <noscript>
-    <div class="noscript-message">JavaScript is required to preview this interactive prototype.</div>
-  </noscript>
+  <script>
+    (() => {
+      'use strict';
+
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+      const state = { activeSlide: 0 };
+
+      const now = new Date();
+      const hour = now.getHours();
+      $('#timeGreeting').textContent = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+      $('#filterDate').value = now.toISOString().slice(0, 10);
+
+      function icon(name) {
+        return `<svg><use href="#i-${name}"></use></svg>`;
+      }
+
+      function toast(message, type = '') {
+        const el = document.createElement('div');
+        el.className = `toast ${type}`.trim();
+        el.innerHTML = `${icon(type === 'success' ? 'check' : 'info')}<span>${message}</span>`;
+        $('#toastRegion').appendChild(el);
+        setTimeout(() => el.remove(), 3300);
+      }
+
+      function openSheet(id) {
+        const overlay = document.getElementById(id);
+        if (!overlay) return;
+        overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => overlay.querySelector('button, input, select')?.focus(), 30);
+      }
+
+      function closeSheets() {
+        $$('.overlay.is-open').forEach(el => el.classList.remove('is-open'));
+        document.body.style.overflow = '';
+      }
+
+      function setActiveNav(button) {
+        $$('.nav-item').forEach(item => {
+          item.classList.toggle('is-active', item === button);
+          item.toggleAttribute('aria-current', item === button);
+        });
+      }
+
+      function scrollToDepartures() {
+        $('#departuresTitle').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      }
+
+      document.addEventListener('click', event => {
+        const open = event.target.closest('[data-open]');
+        if (open) { openSheet(open.dataset.open); return; }
+
+        if (event.target.closest('[data-close]')) { closeSheets(); return; }
+        const overlay = event.target.classList.contains('overlay') ? event.target : null;
+        if (overlay) { closeSheets(); return; }
+
+        const nav = event.target.closest('[data-nav]');
+        if (nav) {
+          setActiveNav(nav);
+          const target = nav.dataset.nav;
+          if (target === 'Home') window.scrollTo({ top: 0, behavior: 'smooth' });
+          else toast(`${target} screen selected in this homepage prototype.`);
+          return;
+        }
+
+        const save = event.target.closest('[data-action="save"]');
+        if (save) {
+          const saved = save.classList.toggle('is-saved');
+          save.classList.remove('pop'); void save.offsetWidth; save.classList.add('pop');
+          save.innerHTML = saved ? icon('heart-fill') : icon('heart');
+          toast(saved ? 'Departure saved.' : 'Departure removed from saved trips.', 'success');
+          return;
+        }
+
+        const dot = event.target.closest('[data-dot]');
+        if (dot) {
+          const index = Number(dot.dataset.dot);
+          const card = $(`[data-card-index="${index}"]`);
+          card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          return;
+        }
+
+        const result = event.target.closest('[data-result]');
+        if (result) {
+          closeSheets();
+          toast(`${result.dataset.result} selected.`);
+          if (result.dataset.result.includes('Book')) scrollToDepartures();
+          return;
+        }
+
+        const service = event.target.closest('[data-service]');
+        if (service) { toast(`${service.dataset.service} opened.`); return; }
+
+        const select = event.target.closest('[data-select]');
+        if (select) {
+          $('#upcomingTime').textContent = select.dataset.select;
+          toast(`${select.dataset.select} departure selected. Upcoming trip updated.`, 'success');
+          return;
+        }
+
+        const timePill = event.target.closest('.time-pill');
+        if (timePill) {
+          $$('.time-pill').forEach(pill => pill.classList.remove('is-selected'));
+          timePill.classList.add('is-selected');
+          return;
+        }
+
+        const action = event.target.closest('[data-action]')?.dataset.action;
+        if (!action) return;
+
+        const handlers = {
+          notifications: () => toast('You have 5 unread notifications.'),
+          showServices: () => openSheet('searchSheet'),
+          showDepartures: () => toast('All available departures would open here.'),
+          returnTicket: () => toast('Return-ticket booking selected. Save UGX 1,000.', 'success'),
+          ticket: () => toast('Digital ticket preview opened.'),
+          trackVehicle: () => toast('Live vehicle tracking preview opened.'),
+          addFunds: () => toast('Add-funds preview opened.'),
+          transactions: () => toast('Wallet transactions preview opened.'),
+          trackParcel: () => toast('Parcel tracking preview opened.'),
+          resetFilters: () => {
+            $('#filterFrom').selectedIndex = 0;
+            $('#filterTo').selectedIndex = 0;
+            $('#filterPassengers').selectedIndex = 0;
+            $('#filterType').selectedIndex = 0;
+            $('#filterAvailability').selectedIndex = 0;
+            $$('.time-pill').forEach((pill, i) => pill.classList.toggle('is-selected', i === 0));
+            toast('Filters reset.');
+          },
+          applyFilters: () => { closeSheets(); scrollToDepartures(); toast('Trip filters applied.', 'success'); }
+        };
+        handlers[action]?.();
+      });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeSheets();
+      });
+
+      const carousel = $('#departureCarousel');
+      let scrollTimer;
+      carousel.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          const cards = $$('.departure-card', carousel);
+          const center = carousel.scrollLeft + carousel.clientWidth / 2;
+          let nearest = 0, distance = Infinity;
+          cards.forEach((card, index) => {
+            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+            const nextDistance = Math.abs(center - cardCenter);
+            if (nextDistance < distance) { distance = nextDistance; nearest = index; }
+          });
+          state.activeSlide = nearest;
+          $$('.carousel-dot').forEach((dot, index) => dot.classList.toggle('is-active', index === nearest));
+        }, 80);
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>
