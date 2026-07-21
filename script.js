@@ -8,6 +8,118 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
+function timeToMinutes(timeStr) {
+  if (!timeStr) return 0;
+  const parts = timeStr.trim().split(' ');
+  if (parts.length < 2) return 0;
+  const [time, modifier] = parts;
+  let [hours, minutes] = time.split(':').map(Number);
+  if (hours === 12) {
+    hours = 0;
+  }
+  if (modifier === 'PM') {
+    hours += 12;
+  }
+  return hours * 60 + minutes;
+}
+
+function minutesToTimeStr(m) {
+  const totalMins = m % 1440;
+  let hours = Math.floor(totalMins / 60);
+  const minutes = totalMins % 60;
+  const modifier = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+  return `${hours}:${String(minutes).padStart(2, '0')} ${modifier}`;
+}
+
+function getAvailableTrips() {
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  let startSlot = Math.ceil(currentMinutes / 30) * 30;
+  const trips = [];
+  const routeCards = appData.routeCards || [];
+  
+  const driverKeys = Object.keys(driversData || {});
+  const plates = ['UBM 245K', 'UBP 318F', 'UBN 742D', 'UBQ 915A', 'UBR 104C', 'UBS 882E', 'UBT 551X', 'UBU 394M', 'UBV 194P', 'UBW 821Z'];
+  
+  for (let i = 0; i < 12; i++) {
+    const slot = startSlot + i * 30;
+    const minsLeft = slot - currentMinutes;
+    
+    let countdown = '';
+    if (minsLeft < 60) {
+      countdown = `${minsLeft} mins`;
+    } else {
+      const hrs = Math.floor(minsLeft / 60);
+      const mins = minsLeft % 60;
+      countdown = `${hrs}h ${mins}m`;
+    }
+
+    const departTime = minutesToTimeStr(slot);
+    const arriveTime = minutesToTimeStr(slot + 65);
+    
+    const rc = routeCards[i % routeCards.length] || { key: 'kajansi', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', price: 'UGX 5,000', via: 'Via Kajansi Expressway', imageB: 'assets/kampala.jpg' };
+    
+    const driverKey = driverKeys[i % driverKeys.length] || 'isaac muwonge';
+    const driver = (driversData && driversData[driverKey]) || { name: 'Isaac Muwonge', rating: '4.95' };
+    
+    let driverName = driver.name;
+    let plate = plates[i % plates.length];
+    let driverRating = driver.rating;
+    let driverPhone = '+256 774 123 ' + String(100 + i);
+    let image = 'assets/first_van_driver.jpg';
+    if (i === 0) {
+      driverName = 'Moses Mukasa';
+      plate = 'UBM 245K';
+      driverRating = '4.90';
+      driverPhone = '+256 774 123 456';
+    } else {
+      if (rc.key === 'kajansi' || rc.key === 'busega') {
+        image = 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg';
+      } else if (rc.key === 'bweyogere' || rc.key === 'nambole') {
+        image = 'assets/fly-express-minivan-2014_1784553037010.jpg';
+      } else {
+        image = 'assets/fly-express-noah-2014_1784553026735.jpg';
+      }
+    }
+
+    const seats = 3 + (i * 7 + 13) % 10;
+    const status = seats <= 3 ? 'Almost full' : 'Available';
+
+    trips.push({
+      id: `dynamic-t${i}`,
+      depart: departTime,
+      arrive: arriveTime,
+      seats: seats,
+      status: status,
+      vehicle: rc.key === 'kajansi' || rc.key === 'busega' ? 'Commuter Van' : 'Express Van',
+      plate: plate,
+      duration: '1 hr 05 min',
+      fare: parseInt(rc.price.replace(/[^\d]/g, '')) || 5000,
+      traffic: i % 3 === 0 ? 'Light' : i % 3 === 1 ? 'Moderate' : 'Heavy',
+      boarding: rc.stageA,
+      destination: rc.stageB,
+      currentStage: rc.stageA,
+      comingFrom: rc.stageB,
+      headingTo: rc.stageA,
+      markerIndex: 0,
+      vansAtStage: 4,
+      vansApproaching: 1,
+      driverName: driverName,
+      driverPhone: driverPhone,
+      driverRating: driverRating,
+      countdown: countdown,
+      img: image,
+      destThumb: rc.imageB,
+      price: rc.price,
+      via: rc.via
+    });
+  }
+  return trips;
+}
+
 const appData = {
   passenger: {
     name: 'Christo I.',
@@ -25,13 +137,9 @@ const appData = {
     { key: 'lyantonde', cityA: 'Entebbe', cityB: 'Lyantonde', stageA: 'Entebbe Main Stage', stageB: 'Lyantonde', via: 'Via Masaka Road', price: 'UGX 25,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/lyantonde.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Mpigi \u2022 Masaka \u2022 Lyantonde', coordA: [0.0618, 32.4742], coordB: [-0.4047, 31.1597] },
     { key: 'mbarara', cityA: 'Entebbe', cityB: 'Mbarara', stageA: 'Entebbe Main Stage', stageB: 'Mbarara', via: 'Via Masaka Road', price: 'UGX 30,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/mbarara.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Mpigi \u2022 Masaka \u2022 Lyantonde \u2022 Mbarara', coordA: [0.0618, 32.4742], coordB: [-0.6071, 30.6545] }
   ],
-  trips: [
-    { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'Highroof', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
-    { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: 'Highroof', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
-    { id: 't3', depart: '9:30 AM', arrive: '10:45 AM', seats: 2, status: 'Almost full', vehicle: 'Commuter', plate: 'UBN 742D', duration: '1 hr 15 min', fare: 5000, traffic: 'Heavy', boarding: 'Kitooro', destination: 'Clock Tower', currentStage: 'Abayita Ababiri', comingFrom: 'Entebbe Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 2, vansAtStage: 1, vansApproaching: 3, driverName: 'David Okello', driverPhone: '+256 752 456 789', driverRating: '4.7', countdown: '28 mins until arrival' },
-    { id: 't4', depart: '10:00 AM', arrive: '11:00 AM', seats: 11, status: 'Available', vehicle: 'Commuter', plate: 'UBQ 915A', duration: '1 hr', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kajjansi', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 3, vansAtStage: 4, vansApproaching: 0, driverName: 'Peter Semwanga', driverPhone: '+256 781 333 444', driverRating: '4.9', countdown: '35 mins until arrival' },
-    { id: 't5', depart: '10:30 AM', arrive: '11:35 AM', seats: 6, status: 'Available', vehicle: 'Highroof', plate: 'UBR 104C', duration: '1 hr 05 min', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Clock Tower', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 4, vansAtStage: 0, vansApproaching: 2, driverName: 'Arthur Ssewankambo', driverPhone: '+256 702 111 222', driverRating: '4.6', countdown: '45 mins until arrival' }
-  ],
+  get trips() {
+    return getAvailableTrips();
+  },
   luggage: [
     { id: 'personal', icon: 'briefcase-business', name: 'Small personal item', desc: 'Handbag or compact backpack', guide: 'Fits on your lap', price: 0 },
     { id: 'standard', icon: 'luggage', name: 'Standard bag', desc: 'Regular travel suitcase', guide: 'Up to 15 kg', price: 2000 },
@@ -297,7 +405,7 @@ const navItems = [
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express', tracking: 'Tracking', 'search-results': 'Search Results'
+  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express', tracking: 'Tracking', 'search-results': 'Search Results', 'available-vans': 'Available Departures'
 };
 
 const onboardingSlides = [
@@ -726,7 +834,7 @@ function renderCurrentScreen(preserveFocus = true) {
     luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, trips: renderTrips,
     live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
     trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, 'driver-chat': renderDriverChat, 'driver-call': renderDriverCall, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
-    profile: renderProfile, about: renderAbout, tracking: renderTracking, 'search-results': renderSearchResultsScreen
+    profile: renderProfile, about: renderAbout, tracking: renderTracking, 'search-results': renderSearchResultsScreen, 'available-vans': renderAvailableVansScreen
   };
   root.innerHTML = (renderers[state.screen] || renderHome)();
   refreshIcons();
@@ -828,26 +936,7 @@ function showSearchShortcuts() {
 
 function renderHome() {
   const greeting = getGreetingText();
-  const departures = appData.trips.map((trip) => {
-    let img = 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg';
-    if (trip.vehicle.includes('Coaster')) {
-      img = 'assets/fly-express-coaster-2014_1784553048223.jpg';
-    } else if (trip.vehicle.includes('Noah')) {
-      img = 'assets/fly-express-noah-2014_1784553026735.jpg';
-    } else if (trip.vehicle.includes('Minivan')) {
-      img = 'assets/fly-express-minivan-2014_1784553037010.jpg';
-    } else if (trip.vehicle.includes('Sedan')) {
-      img = 'assets/fly-express-sedan-2014_1784553015505.jpg';
-    }
-
-    // Find destination thumbnail from routeCards
-    let destThumb = 'assets/kampala.jpg'; // fallback
-    const destLower = trip.destination.toLowerCase();
-    for (const rc of appData.routeCards) {
-      if (destLower.includes(rc.cityB.toLowerCase())) { destThumb = rc.imageB; break; }
-      if (destLower.includes(rc.cityA.toLowerCase())) { destThumb = rc.imageA; break; }
-    }
-
+  const departures = appData.trips.slice(0, 4).map((trip) => {
     let badgeClass = 'is-available';
     if (trip.status === 'Almost full') {
       badgeClass = 'is-warning';
@@ -856,7 +945,7 @@ function renderHome() {
     }
 
     return {
-      id: trip.id,
+      ...trip,
       origin: trip.boarding,
       dest: trip.destination,
       time: trip.depart,
@@ -865,15 +954,7 @@ function renderHome() {
       badge: trip.status === 'Almost full' ? 'Almost full' : `${trip.seats} spaces available`,
       badgeClass: badgeClass,
       price: formatUGX(trip.fare),
-      vehicle: trip.vehicle,
-      traffic: `${trip.traffic} traffic`,
-      img: img,
-      destThumb: destThumb,
-      plate: trip.plate,
-      driverName: trip.driverName,
-      driverRating: trip.driverRating,
-      countdown: trip.countdown,
-      currentStage: trip.currentStage
+      traffic: `${trip.traffic} traffic`
     };
   });
 
@@ -920,7 +1001,7 @@ function renderHome() {
           <section class="section" style="animation-delay:.15s" aria-labelledby="departuresTitle">
             <div class="section-head">
               <h2 id="departuresTitle">Recommended departures</h2>
-              <button class="text-button" type="button" data-screen="book">Show all</button>
+              <button class="text-button" type="button" data-screen="available-vans">Show all</button>
             </div>
             
             <div class="departure-scroll" id="departureCarousel">
@@ -4476,6 +4557,18 @@ function handleClick(event) {
     'swap-route': swapRoute,
     'search-trips': () => simulateNavigation('Searching demonstration departures…', 'book'),
     'select-departure': () => { const trip = appData.trips.find(t => t.depart === actionTrigger.dataset.trip) || appData.trips[0]; state.activeTrip = trip; navigate('trip-details'); },
+    'select-departure-direct': () => {
+      const tripId = actionTrigger.dataset.tripId;
+      const trip = appData.trips.find(t => t.id === tripId);
+      if (trip) {
+        state.activeTrip = trip;
+        state.selectedRoute = appData.routeCards.find(rc => rc.stageA === trip.boarding && rc.stageB === trip.destination)?.key || 'kajansi';
+        state.searchFrom = trip.boarding;
+        state.searchTo = trip.destination;
+        state.bookingStep = 2;
+        navigate('book');
+      }
+    },
     'choose-trip': () => { state.activeTrip = getSearchResults().find(t => t.id === actionTrigger.dataset.tripId) || getSearchResults()[0] || appData.trips[0]; navigate('trip-details'); },
     'show-search-filters': showSearchFilters,
     'apply-filters': () => { closeModal(); toast('Demonstration filters applied.', 'success'); },
@@ -5587,6 +5680,96 @@ function renderSearchResultsScreen() {
             <button class="button button--ghost button--small" type="button" onclick="handleSearchSubmit('Kajjansi')">Try Kajjansi</button>
             <button class="button button--ghost button--small" type="button" onclick="handleSearchSubmit('Masaka')">Try Masaka</button>
             <button class="button button--ghost button--small" type="button" onclick="handleSearchSubmit('Kampala')">Try Kampala</button>
+          </div>
+        </div>
+      `}
+    </div>
+
+    <div class="floating-cta-container" style="margin-top: 24px;">
+      <button class="button button--ghost w-full" type="button" data-screen="home">Back to Home</button>
+    </div>
+  `;
+}
+
+function renderAvailableVansScreen() {
+  const allTrips = appData.trips;
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  
+  const availableVans = allTrips.filter(trip => {
+    const departMins = timeToMinutes(trip.depart);
+    let diff = departMins - currentMinutes;
+    if (diff < 0) diff += 1440; // wrap around midnight
+    return diff <= 180; // 3 hours window
+  });
+
+  return `
+    ${screenHead('Available Departures', 'Real-time schedule of active passenger vans leaving Entebbe within a 3-hour window.')}
+
+    <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.08); padding: 14px 16px; border-radius: 16px; margin-bottom: 22px; display: flex; align-items: start; gap: 12px; animation: enter .4s var(--ease) both;">
+      <i data-lucide="info" style="width: 20px; height: 20px; color: var(--brand-blue); flex-shrink: 0; margin-top: 2px;"></i>
+      <div style="font-size: 0.88rem; line-height: 1.45; color: var(--brand-blue-dark); font-weight: 600;">
+        Vans exit the window automatically after departure. Tap "Select &amp; Book" to secure your seat.
+      </div>
+    </div>
+
+    <div class="available-vans-list" style="display: grid; gap: 16px;">
+      ${availableVans.length ? availableVans.map((trip, idx) => {
+        const isWarning = trip.seats <= 2;
+        return `
+          <article class="card" style="margin: 0; padding: 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 14px; text-align: left; background: white;">
+            <div style="display: flex; gap: 14px; align-items: center;">
+              <div style="width: 80px; height: 80px; border-radius: 14px; overflow: hidden; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.05); position: relative; background: var(--surface-alt);">
+                <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
+                ${idx === 0 ? `<span style="position: absolute; bottom: 0; left: 0; right: 0; background: var(--brand-blue); color: white; font-size: 0.58rem; text-align: center; font-weight: 850; padding: 2px 0; letter-spacing: 0.05em;">ACTIVE</span>` : `<span style="position: absolute; bottom: 0; left: 0; right: 0; background: var(--muted); color: white; font-size: 0.58rem; text-align: center; font-weight: 850; padding: 2px 0; letter-spacing: 0.05em;">STAGE</span>`}
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
+                  <div>
+                    <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 750; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
+                    <h3 style="margin: 3px 0 0 0; font-size: 1.15rem; font-weight: 850; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
+                  </div>
+                  <strong style="font-size: 1.1rem; color: var(--brand-blue); font-weight: 800;">${trip.price}</strong>
+                </div>
+                <p style="margin: 6px 0 0 0; font-size: 0.82rem; color: var(--slate); font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                  <i data-lucide="user" style="width: 13px; height: 13px; color: var(--muted);"></i> Driver: <strong>${trip.driverName}</strong> · <i data-lucide="star" style="width: 12px; height: 12px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
+                </p>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--page); padding: 10px 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(0,0,0,0.02);">
+              <div>
+                <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Boarding</span>
+                <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.depart}</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Duration</span>
+                <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.duration}</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Plate</span>
+                <span class="van-plate-tag" style="display: inline-block; padding: 2px 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #000; border-radius: 4px; background: #fff; color: #000; margin-top: 1px;">${trip.plate}</span>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+              <span class="capacity-chip ${isWarning ? 'warning' : ''}" style="font-size: 0.8rem; padding: 4px 10px;">
+                ${trip.seats} space${trip.seats === 1 ? '' : 's'} available
+              </span>
+              <button class="button button--primary button--small" type="button" data-action="select-departure-direct" data-trip-id="${trip.id}">
+                Select &amp; Book
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('') : `
+        <div class="card" style="margin: 0; padding: 36px 20px; text-align: center; display: grid; justify-items: center; gap: 16px;">
+          <div style="background: var(--warning-soft); color: var(--warning); display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%;">
+            <i data-lucide="clock" style="width: 32px; height: 32px;"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 6px; font-size: 1.15rem; font-weight: 800; color: var(--brand-blue-dark);">No Upcoming Departures</h3>
+            <p class="muted" style="margin: 0; font-size: 0.88rem; max-width: 280px; margin-inline: auto;">There are no scheduled departures in the next 3 hours. Please check back later.</p>
           </div>
         </div>
       `}
