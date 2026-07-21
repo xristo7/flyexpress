@@ -1659,9 +1659,8 @@ function renderTripDetails() {
   const returnSummary = state.ticketType === 'return' ? `${state.returnMode === 'date-specific' ? 'Date-specific' : state.returnMode.replace('-', ' ')} · Added` : 'Not added';
   const seatSummary = state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available';
 
-  return `<section class="smart-review" aria-labelledby="review-title">
+  return `<section class="smart-review" aria-label="Review your trip">
     <div class="smart-review__map-card">
-      <div class="smart-review__map-copy"><p class="eyebrow">${reviewDate}</p><h1 id="review-title">Review your trip</h1><p>You’re almost ready to travel.</p></div>
       <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
       <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
     </div>
@@ -3331,16 +3330,6 @@ function updateHeaderTheme() {
 
 function handleTripReviewScroll() {
   updateHeaderTheme();
-  if (tripReviewScrollFrame) return;
-  tripReviewScrollFrame = requestAnimationFrame(() => {
-    tripReviewScrollFrame = null;
-    const review = $('.smart-review');
-    if (!review) return;
-    const condensed = window.scrollY > 170;
-    if (review.classList.contains('is-condensed') === condensed) return;
-    review.classList.toggle('is-condensed', condensed);
-    setTimeout(() => tripReviewMap?.invalidateSize({ animate: false }), 180);
-  });
 }
 
 function passengerTotal() {
@@ -3523,9 +3512,8 @@ function renderTripDetails() {
   const reviewDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(bookingDate);
   const returnSummary = state.ticketType === 'return' ? `${state.returnMode === 'date-specific' ? 'Date-specific' : state.returnMode.replace('-', ' ')} · Added` : 'Not added';
   const seatSummary = state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available';
-  return `<section class="smart-review" aria-labelledby="review-title">
+  return `<section class="smart-review" aria-label="Review your trip">
     <div class="smart-review__map-card">
-      <div class="smart-review__map-copy"><p class="eyebrow">${reviewDate}</p><h1 id="review-title">Review your trip</h1><p>You’re almost ready to travel.</p></div>
       <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
       <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
     </div>
