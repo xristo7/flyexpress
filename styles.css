@@ -5738,7 +5738,7 @@ body[data-active-screen="driver-profile"] .main-content {
 
 
 /* ---------- RECOMMENDED DEPARTURES CAROUSEL STYLES (MOCKUP ORIGINAL) ---------- */
-    .card, .section-head > *, .compact-head > *, .departure-title-row > *, .departure-foot > * { min-width: 0; }
+    .home-redesign .card, .section-head > *, .compact-head > *, .departure-title-row > *, .departure-foot > * { min-width: 0; }
 
     .services-scroll, .departure-scroll {
       display: grid;
@@ -6001,11 +6001,11 @@ body[data-active-screen="driver-profile"] .main-content {
     }
 
     @media (min-width: 980px) {
-      .app { padding-bottom: 42px; }
-      .layout { grid-template-columns: minmax(0,1.55fr) minmax(300px,.75fr); align-items:start; }
+      .home-redesign .app\b { padding-bottom: 42px; }
+      .home-redesign .layout { grid-template-columns: minmax(0,1.55fr) minmax(300px,.75fr); align-items:start; }
       .journey-card { min-height: 300px; }
       .departure-scroll { grid-auto-columns: min(390px, 46%); }
-      .mobile-nav {
+      .home-redesign .mobile-nav {
         position:sticky;
         left:auto;
         bottom:auto;
@@ -6013,33 +6013,33 @@ body[data-active-screen="driver-profile"] .main-content {
         margin:0 auto 22px;
         width:min(100%,690px);
       }
-      .side-column { position:sticky; top:20px; }
+      .home-redesign .side-column { position:sticky; top:20px; }
     }
 
     @media (max-width: 719px) {
-      .app {
+      .home-redesign .app\b {
         padding-left: clamp(12px, 4vw, 20px);
         padding-right: clamp(12px, 4vw, 20px);
       }
-      .layout, .main-column, .side-column { gap: 16px; }
-      .side-column { grid-template-columns: 1fr; }
+      .home-redesign .layout, .home-redesign .main-column, .home-redesign .side-column { gap: 16px; }
+      .home-redesign .side-column { grid-template-columns: 1fr; }
       .departure-scroll { grid-auto-columns: min(91%, 360px); }
       .offer-card, .compact-card, .wallet-card { border-radius: 24px; }
       .offer-card { padding: clamp(18px, 5vw, 22px); }
     }
 
     @media (min-width: 560px) and (max-width: 979px) {
-      .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .side-column > :last-child { grid-column: 1 / -1; }
+      .home-redesign .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .home-redesign .side-column > :last-child { grid-column: 1 / -1; }
       .departure-scroll { grid-auto-columns: min(58%, 390px); }
     }
 
     @media (max-width: 479px) {
-      .topbar { align-items: flex-start; }
-      .greeting h1 { font-size: clamp(1.35rem, 7vw, 1.8rem); }
-      .search-row { grid-template-columns: minmax(0, 1fr) 54px; gap: 9px; }
-      .search-button, .filter-button { min-height: 54px; border-radius: 17px; }
-      .search-button { padding-inline: 14px; }
+      .home-redesign .topbar { align-items: flex-start; }
+      .home-redesign .greeting h1 { font-size: clamp(1.35rem, 7vw, 1.8rem); }
+      .home-redesign .search-row { grid-template-columns: minmax(0, 1fr) 54px; gap: 9px; }
+      .home-redesign .search-button, .home-redesign .filter-button { min-height: 54px; border-radius: 17px; }
+      .home-redesign .search-button { padding-inline: 14px; }
       .section-head h2 { font-size: 1.12rem; }
       .departure-scroll { grid-auto-columns: calc(100% - 22px); gap: 12px; }
       .departure-card { border-radius: 23px; padding: 9px; }
@@ -6058,24 +6058,24 @@ body[data-active-screen="driver-profile"] .main-content {
       .field.full { grid-column: auto; }
       .sheet { padding-inline: 15px; border-radius: 24px 24px 0 0; }
       .sheet-actions { grid-template-columns: 1fr; }
-      .mobile-nav {
+      .home-redesign .mobile-nav {
         width: calc(100vw - 18px);
         min-height: 68px;
         padding: 6px;
         border-radius: 24px;
       }
-      .nav-item { min-height: 54px; border-radius: 18px; }
-      .nav-item.is-active { padding-inline: 8px; gap: 5px; }
-      .nav-item.is-active span { max-width: 44px; font-size: .68rem; }
+      .home-redesign .nav-item { min-height: 54px; border-radius: 18px; }
+      .home-redesign .nav-item.is-active { padding-inline: 8px; gap: 5px; }
+      .home-redesign .nav-item.is-active span { max-width: 44px; font-size: .68rem; }
     }
 
     @media (max-width: 359px) {
-      .app { padding-left: 10px; padding-right: 10px; }
-      .avatar { width: 42px; height: 42px; border-radius: 14px; }
-      .icon-button { width: 42px; height: 42px; border-radius: 14px; }
-      .greeting small { font-size: .75rem; }
-      .greeting p { display: none; }
-      .search-button span { font-size: .82rem; }
+      .home-redesign .app\b { padding-left: 10px; padding-right: 10px; }
+      .home-redesign .avatar { width: 42px; height: 42px; border-radius: 14px; }
+      .home-redesign .icon-button { width: 42px; height: 42px; border-radius: 14px; }
+      .home-redesign .greeting small { font-size: .75rem; }
+      .home-redesign .greeting p { display: none; }
+      .home-redesign .search-button span { font-size: .82rem; }
       .services-scroll { grid-auto-columns: 82px; }
       .service { min-height: 104px; border-radius: 19px; }
       .service-icon { width: 45px; height: 45px; }
@@ -6085,9 +6085,9 @@ body[data-active-screen="driver-profile"] .main-content {
       .departure-foot { align-items: center; }
       .offer-card h2 { font-size: 1.25rem; }
       .wallet-balance { font-size: 1.7rem; }
-      .nav-item svg { width: 19px; height: 19px; }
-      .nav-item.is-active span { display: none; }
-      .nav-item.is-active { gap: 0; padding-inline: 0; }
+      .home-redesign .nav-item svg { width: 19px; height: 19px; }
+      .home-redesign .nav-item.is-active span { display: none; }
+      .home-redesign .nav-item.is-active { gap: 0; padding-inline: 0; }
     }
 
     @media (max-width: 979px) {

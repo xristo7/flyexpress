@@ -870,7 +870,7 @@ function renderHome() {
   const upcomingDepart = upcomingTrip.depart;
 
   return `
-    <div class="fade-in-up">
+    <div class="home-redesign app fade-in-up">
       <!-- 2. MOBILE HEADER -->
       <header class="topbar">
         <div class="identity" data-screen="profile" style="cursor: pointer;">
