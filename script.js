@@ -674,7 +674,7 @@ function renderNavigation() {
     } else {
       mobile.classList.remove('is-hidden');
     }
-    const items = [['home','Home','house'],['book','Book','ticket-plus'],['trips','Travels','route'],['wallet','Wallet','wallet-cards']];
+    const items = [['home','Home','house'],['book','Book','ticket-plus'],['tracking','Tracking','navigation'],['trips','Travels','route'],['wallet','Wallet','wallet-cards']];
     mobile.innerHTML = items.map(([screen,label,icon]) => {
       const active = state.screen === screen;
       return `
