@@ -13,6 +13,7 @@
   --slate: #667085;
   --muted: #98a2b3;
   --bg: #e9ecf0;
+  --page: #f2f6fb;
   --surface: #ffffff;
   --surface-alt: #eef4f9;
   --border: #e5eaf0;
@@ -2947,12 +2948,7 @@ body[data-active-screen="trackparcel"] .main-content {
 }
 
 /* Screen 2: Status/Timeline details layout */
-body[data-active-screen="parcel-status"] .workspace {
-  background: #ffffff !important;
-}
-
 body[data-active-screen="parcel-status"] .main-content {
-  background: #ffffff !important;
   padding-top: calc(66px + var(--safe-top) + 20px) !important;
 }
 
@@ -3148,12 +3144,7 @@ body[data-active-screen="parcel-status"] .main-content {
    Driver Profile Screen Styles
    ========================================================= */
 
-body[data-active-screen="driver-profile"] .workspace {
-  background: #ffffff !important;
-}
-
 body[data-active-screen="driver-profile"] .main-content {
-  background: #ffffff !important;
   padding-top: calc(66px + var(--safe-top) + 20px) !important;
 }
 
