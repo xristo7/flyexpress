@@ -420,9 +420,9 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   left: 0;
   right: 0;
   bottom: -30px;
-  background: linear-gradient(to bottom, var(--page) 0%, rgba(242, 246, 251, 0.98) 55%, rgba(242, 246, 251, 0) 100%) !important;
   pointer-events: none;
   z-index: -1;
+  transition: background 250ms ease;
 }
 .topbar__left, .topbar__actions { display: flex; align-items: center; gap: 12px; }
 .topbar h2 { margin: 0; font-size: 1.3rem; }
@@ -1928,10 +1928,14 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   backdrop-filter: none !important;
   background: transparent !important;
   transition: background 250ms ease, color 250ms ease, box-shadow 250ms ease;
+  box-shadow: none !important;
 }
 .topbar--light-bg {
-  background: linear-gradient(to bottom, rgba(245, 247, 250, 0.95) 0%, rgba(245, 247, 250, 0.4) 60%, transparent 100%) !important;
-  box-shadow: 0 4px 20px rgba(8, 27, 51, 0.05);
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.topbar--light-bg::after {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 45%, rgba(255, 255, 255, 0) 100%) !important;
 }
 .topbar--light-bg h2,
 .topbar--light-bg .icon-button,
@@ -1940,8 +1944,11 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   color: var(--brand-blue-dark) !important;
 }
 .topbar--dark-bg {
-  background: linear-gradient(to bottom, rgba(8, 27, 51, 0.9) 0%, rgba(8, 27, 51, 0.3) 60%, transparent 100%) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.topbar--dark-bg::after {
+  background: linear-gradient(to bottom, rgba(8, 27, 51, 1) 0%, rgba(8, 27, 51, 0.95) 45%, rgba(8, 27, 51, 0) 100%) !important;
 }
 .topbar--dark-bg h2,
 .topbar--dark-bg .icon-button,
