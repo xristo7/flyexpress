@@ -5494,14 +5494,19 @@ function initTrackingMiniMaps() {
 
 function findMatchingRoutes(query) {
   if (!query) return [];
-  const q = query.toLowerCase().trim();
+  let q = query.toLowerCase().trim();
+  if (q.includes('kajjansi')) q = q.replace(/kajjansi/g, 'kajansi');
   return appData.routeCards.filter(rc => {
+    const normCorridor = rc.corridor.toLowerCase().replace(/kajjansi/g, 'kajansi');
+    const normVia = rc.via.toLowerCase().replace(/kajjansi/g, 'kajansi');
+    const normKey = rc.key.toLowerCase().replace(/kajjansi/g, 'kajansi');
     return rc.cityA.toLowerCase().includes(q) ||
            rc.cityB.toLowerCase().includes(q) ||
            rc.stageA.toLowerCase().includes(q) ||
            rc.stageB.toLowerCase().includes(q) ||
-           rc.corridor.toLowerCase().includes(q) ||
-           rc.via.toLowerCase().includes(q);
+           normCorridor.includes(q) ||
+           normVia.includes(q) ||
+           normKey.includes(q);
   });
 }
 
@@ -5533,7 +5538,9 @@ function renderSearchResultsScreen() {
       ${matchingRoutes.length ? matchingRoutes.map(rc => {
         const stations = rc.corridor.split(' \u2022 ');
         const formattedCorridor = stations.map(s => {
-          const isMatch = query && s.toLowerCase().includes(query.toLowerCase());
+          const normS = s.toLowerCase().replace(/kajjansi/g, 'kajansi');
+          const normQ = query.toLowerCase().replace(/kajjansi/g, 'kajansi');
+          const isMatch = query && normS.includes(normQ);
           return isMatch ? `<strong style="color: var(--brand-blue); background: var(--info-soft); padding: 2px 6px; border-radius: 6px;">${s}</strong>` : s;
         }).join(' \u2192 ');
 
