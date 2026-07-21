@@ -702,6 +702,9 @@ function renderNavigation() {
 
 function navigate(screen, payload = {}, pushHistory = true) {
   if (pushHistory && state.screen && state.screen !== screen) state.history.push(state.screen);
+  if (screen !== 'book' && !['trip-details', 'passengers', 'returns', 'luggage', 'checkout'].includes(screen)) {
+    state.selectedRoute = null;
+  }
   state.screen = screen;
   document.body.setAttribute('data-active-screen', screen);
   Object.assign(state, payload);
@@ -3798,16 +3801,23 @@ function handleClick(event) {
     },
     'select-route-card-step': () => {
       const route = actionTrigger.dataset.route;
-      state.selectedRoute = route;
-      const rc = appData.routeCards.find(r => r.key === route);
-      if (rc) {
-        const flipped = !!state.routeFlips[route];
-        state.searchFrom = flipped ? rc.stageB : rc.stageA;
-        state.searchTo = flipped ? rc.stageA : rc.stageB;
+      if (state.selectedRoute === route) {
+        state.selectedRoute = null;
+        renderCurrentScreen();
+        renderNavigation();
+        toast('Route selection cleared.', 'success');
+      } else {
+        state.selectedRoute = route;
+        const rc = appData.routeCards.find(r => r.key === route);
+        if (rc) {
+          const flipped = !!state.routeFlips[route];
+          state.searchFrom = flipped ? rc.stageB : rc.stageA;
+          state.searchTo = flipped ? rc.stageA : rc.stageB;
+        }
+        renderCurrentScreen();
+        renderNavigation();
+        toast('Route selected.', 'success');
       }
-      renderCurrentScreen();
-      renderNavigation();
-      toast('Route selected.', 'success');
     },
     'flip-route-direction': () => {
       const route = actionTrigger.dataset.route;
