@@ -2669,7 +2669,7 @@ function initParcelMap() {
   
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { 
     maxZoom: 19, 
-    crossOrigin: true 
+    crossOrigin: false 
   }).addTo(parcelMap);
 
   // Black route line
@@ -3831,10 +3831,16 @@ function destroyTripMap() {
 function initTripMap() {
   const target = $('#trip-review-map');
   const fallback = $('#trip-map-fallback');
+  if (fallback) fallback.hidden = false;
   if (!target) return;
   if (!window.L) {
     if (fallback) fallback.hidden = false;
     return;
+  }
+
+  if (tripReviewMap) {
+    tripReviewMap.remove();
+    tripReviewMap = null;
   }
 
   let routeKey = state.selectedRoute || 'entebbe';
@@ -3853,10 +3859,11 @@ function initTripMap() {
   const points = getCurrentRoutePoints(routeKey, isReverse);
   tripReviewMap = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: false, dragging: false, keyboard: false, scrollWheelZoom: false, touchZoom: false, zoomControl: false });
   let tileErrors = 0;
-  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: true, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' });
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' });
   tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
   tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
   tiles.addTo(tripReviewMap);
+  setTimeout(() => { if (fallback) fallback.hidden = true; }, 150);
   
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(tripReviewMap);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(tripReviewMap);
@@ -3897,13 +3904,19 @@ function initBookingStep2Map() {
   const isFlipped = !!state.routeFlips[route];
   const points = getCurrentRoutePoints(route, isFlipped);
   
+  if (bookingStep2Map) {
+    bookingStep2Map.remove();
+    bookingStep2Map = null;
+  }
+  
   bookingStep2Map = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: true, dragging: true, keyboard: true, scrollWheelZoom: false, touchZoom: true, zoomControl: true });
   
   let tileErrors = 0;
-  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: true, attribution: '&copy; OpenStreetMap contributors' });
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false, attribution: '&copy; OpenStreetMap contributors' });
   tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
   tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
   tiles.addTo(bookingStep2Map);
+  setTimeout(() => { if (fallback) fallback.hidden = true; }, 150);
   
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(bookingStep2Map);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(bookingStep2Map);
@@ -3948,13 +3961,19 @@ function initLiveTravelMap() {
   const isReverse = state.activeTrip ? state.activeTrip.boarding.toLowerCase().includes('kampala') || state.activeTrip.boarding.toLowerCase().includes('bweyogere') || state.activeTrip.boarding.toLowerCase().includes('busega') || state.activeTrip.boarding.toLowerCase().includes('nambole') || state.activeTrip.boarding.toLowerCase().includes('masaka') || state.activeTrip.boarding.toLowerCase().includes('lyantonde') || state.activeTrip.boarding.toLowerCase().includes('mbarara') : false;
   
   const points = getCurrentRoutePoints(routeKey, isReverse);
+  if (liveTravelMap) {
+    liveTravelMap.remove();
+    liveTravelMap = null;
+  }
+  
   liveTravelMap = L.map(target, { attributionControl: false, boxZoom: false, doubleClickZoom: true, dragging: true, keyboard: false, scrollWheelZoom: true, touchZoom: true, zoomControl: false });
   
   let tileErrors = 0;
-  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: true });
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false });
   tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
   tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
   tiles.addTo(liveTravelMap);
+  setTimeout(() => { if (fallback) fallback.hidden = true; }, 150);
   
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(liveTravelMap);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(liveTravelMap);
@@ -5390,3 +5409,18 @@ function preloadTransparentImages() {
     });
   });
 }
+
+// Global error logging for prototype debugging
+window.addEventListener('error', (event) => {
+  const msg = `${event.message} at ${event.filename}:${event.lineno}:${event.colno}`;
+  console.error("PROTOTYPE EXCEPTION: ", msg);
+  if (typeof toast === 'function') {
+    toast(`[JS Error] ${event.message}`, 'danger');
+  }
+});
+window.addEventListener('unhandledrejection', (event) => {
+  console.error("PROTOTYPE PROMISE REJECTION: ", event.reason);
+  if (typeof toast === 'function') {
+    toast(`[Promise Error] ${event.reason?.message || event.reason}`, 'danger');
+  }
+});
