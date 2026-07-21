@@ -392,7 +392,14 @@ select::-ms-expand { display: none; }
 .connection-state { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
 .connection-dot { width: 8px; height: 8px; border-radius: 50%; background: #30c987; box-shadow: 0 0 0 4px rgba(48,201,135,.12); }
 body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px rgba(191,48,56,.12); }
-.workspace { grid-column: 2; min-width: 0; }
+.workspace {
+  grid-column: 2;
+  min-width: 0;
+  background:
+    radial-gradient(circle at 5% 12%, rgba(24,169,224,.10), transparent 28%),
+    radial-gradient(circle at 92% 4%, rgba(245,197,24,.09), transparent 24%),
+    var(--page);
+}
 .topbar {
   height: var(--topbar-height);
   position: sticky;
@@ -5728,10 +5735,13 @@ body[data-active-screen="driver-profile"] .main-content {
   margin-bottom: 24px !important;
 }
 
-/* Homepage edge-to-edge layout constraints */
+/* Padding and background constraints */
+.main-content {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
 body[data-active-screen="home"] .main-content {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
   padding-top: 0 !important;
   max-width: 100% !important;
   width: 100% !important;
@@ -5739,6 +5749,23 @@ body[data-active-screen="home"] .main-content {
 
 body[data-active-screen="home"] .workspace > .topbar {
   display: none !important;
+}
+
+.home-redesign.app {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.home-redesign .services-scroll,
+.home-redesign .departure-scroll {
+  width: calc(100% + 40px) !important;
+  max-width: none !important;
+  margin-left: -20px !important;
+  margin-right: -20px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  scroll-padding-left: 20px !important;
+  scroll-padding-right: 20px !important;
 }
 
 .home-redesign .hamburger-menu-btn {
@@ -5749,39 +5776,6 @@ body[data-active-screen="home"] .workspace > .topbar {
   .home-redesign .hamburger-menu-btn {
     display: flex !important;
   }
-}
-
-.home-redesign {
-  --edge-gutter: clamp(16px, 3vw, 34px);
-}
-
-@media (max-width: 420px) {
-  .home-redesign {
-    --edge-gutter: 13px !important;
-  }
-}
-
-@media (max-width: 359px) {
-  .home-redesign {
-    --edge-gutter: 10px !important;
-  }
-}
-
-.home-redesign.app {
-  padding-left: var(--edge-gutter) !important;
-  padding-right: var(--edge-gutter) !important;
-}
-
-.home-redesign .services-scroll,
-.home-redesign .departure-scroll {
-  width: calc(100% + var(--edge-gutter) + var(--edge-gutter)) !important;
-  max-width: none !important;
-  margin-left: calc(-1 * var(--edge-gutter)) !important;
-  margin-right: calc(-1 * var(--edge-gutter)) !important;
-  padding-left: var(--edge-gutter) !important;
-  padding-right: var(--edge-gutter) !important;
-  scroll-padding-left: var(--edge-gutter) !important;
-  scroll-padding-right: var(--edge-gutter) !important;
 }
 
 
