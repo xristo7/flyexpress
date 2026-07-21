@@ -5912,7 +5912,7 @@ body[data-active-screen="home"] .workspace > .topbar {
       max-width: 100%;
       overflow: clip;
       margin: 0 auto;
-      padding: calc(102px + var(--safe-top)) clamp(16px, 3vw, 34px) calc(118px + var(--safe-bottom));
+      padding: calc(132px + var(--safe-top)) clamp(16px, 3vw, 34px) calc(118px + var(--safe-bottom));
     }.home-redesign .topbar{
       display: flex;
       align-items: center;
