@@ -75,14 +75,6 @@ function getAvailableTrips() {
       plate = 'UBM 245K';
       driverRating = '4.90';
       driverPhone = '+256 774 123 456';
-    } else {
-      if (rc.key === 'kajansi' || rc.key === 'busega') {
-        image = 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg';
-      } else if (rc.key === 'bweyogere' || rc.key === 'nambole') {
-        image = 'assets/fly-express-minivan-2014_1784553037010.jpg';
-      } else {
-        image = 'assets/fly-express-noah-2014_1784553026735.jpg';
-      }
     }
 
     const seats = 3 + (i * 7 + 13) % 10;
@@ -1013,7 +1005,7 @@ function renderHome() {
                 return `
                 <article class="departure-card" data-card-index="${index}">
                   <div class="departure-visual departure-visual--photo">
-                    <img src="${dep.destThumb}" alt="${dep.dest}" class="departure-visual__thumb" />
+                    <img src="${dep.img}" alt="${dep.driverName}" class="departure-visual__thumb" />
                     <div class="departure-visual__overlay"></div>
                     <span class="visual-label">${dep.vehicle} · ${dep.countdown}</span>
                     <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
@@ -5717,48 +5709,61 @@ function renderAvailableVansScreen() {
       ${availableVans.length ? availableVans.map((trip, idx) => {
         const isWarning = trip.seats <= 2;
         return `
-          <article class="card" style="margin: 0; padding: 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 14px; text-align: left; background: white;">
-            <div style="display: flex; gap: 14px; align-items: center;">
-              <div style="width: 80px; height: 80px; border-radius: 14px; overflow: hidden; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.05); position: relative; background: var(--surface-alt);">
-                <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
-                ${idx === 0 ? `<span style="position: absolute; bottom: 0; left: 0; right: 0; background: var(--brand-blue); color: white; font-size: 0.58rem; text-align: center; font-weight: 850; padding: 2px 0; letter-spacing: 0.05em;">ACTIVE</span>` : `<span style="position: absolute; bottom: 0; left: 0; right: 0; background: var(--muted); color: white; font-size: 0.58rem; text-align: center; font-weight: 850; padding: 2px 0; letter-spacing: 0.05em;">STAGE</span>`}
-              </div>
-              <div style="flex: 1; min-width: 0;">
-                <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
-                  <div>
-                    <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 750; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
-                    <h3 style="margin: 3px 0 0 0; font-size: 1.15rem; font-weight: 850; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
-                  </div>
-                  <strong style="font-size: 1.1rem; color: var(--brand-blue); font-weight: 800;">${trip.price}</strong>
-                </div>
-                <p style="margin: 6px 0 0 0; font-size: 0.82rem; color: var(--slate); font-weight: 600; display: flex; align-items: center; gap: 4px;">
-                  <i data-lucide="user" style="width: 13px; height: 13px; color: var(--muted);"></i> Driver: <strong>${trip.driverName}</strong> · <i data-lucide="star" style="width: 12px; height: 12px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
-                </p>
-              </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--page); padding: 10px 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(0,0,0,0.02);">
-              <div>
-                <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Boarding</span>
-                <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.depart}</strong>
-              </div>
-              <div>
-                <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Duration</span>
-                <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.duration}</strong>
-              </div>
-              <div>
-                <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Plate</span>
-                <span class="van-plate-tag" style="display: inline-block; padding: 2px 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #000; border-radius: 4px; background: #fff; color: #000; margin-top: 1px;">${trip.plate}</span>
-              </div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
-              <span class="capacity-chip ${isWarning ? 'warning' : ''}" style="font-size: 0.8rem; padding: 4px 10px;">
-                ${trip.seats} space${trip.seats === 1 ? '' : 's'} available
+          <article class="card" style="margin: 0; padding: 0; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; text-align: left; background: white; overflow: hidden; border-radius: 20px;">
+            <div style="position: relative; width: 100%; height: 160px; overflow: hidden; background: var(--surface-alt);">
+              <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%);"></div>
+              <span style="position: absolute; bottom: 12px; left: 12px; font-size: 0.72rem; font-weight: 750; color: white; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; backdrop-filter: blur(4px); display: inline-flex; align-items: center; gap: 4px;">
+                <i data-lucide="info" style="width: 12px; height: 12px;"></i> ${trip.vehicle} · ${trip.countdown}
               </span>
-              <button class="button button--primary button--small" type="button" data-action="select-departure-direct" data-trip-id="${trip.id}">
-                Select &amp; Book
-              </button>
+              ${idx === 0 ? `
+                <span style="position: absolute; top: 12px; right: 12px; background: var(--brand-blue); color: white; font-size: 0.68rem; text-align: center; font-weight: 850; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; box-shadow: var(--shadow-sm);">ACTIVE</span>
+              ` : `
+                <span style="position: absolute; top: 12px; right: 12px; background: var(--muted); color: white; font-size: 0.68rem; text-align: center; font-weight: 850; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; box-shadow: var(--shadow-sm);">STAGE</span>
+              `}
+            </div>
+            
+            <div style="padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
+                <div>
+                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 750; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
+                  <h3 style="margin: 3px 0 0 0; font-size: 1.2rem; font-weight: 850; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
+                </div>
+                <strong style="font-size: 1.15rem; color: var(--brand-blue); font-weight: 800;">${trip.price}</strong>
+              </div>
+              
+              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--slate); font-weight: 600; padding-bottom: 2px;">
+                <span style="display: flex; align-items: center; gap: 4px;">
+                  <i data-lucide="user" style="width: 14px; height: 14px; color: var(--muted);"></i> Driver: <strong>${trip.driverName}</strong>
+                </span>
+                <span style="display: flex; align-items: center; gap: 3px;">
+                  <i data-lucide="star" style="width: 13px; height: 13px; fill: var(--brand-gold); color: var(--brand-gold);"></i> <strong>${trip.driverRating}</strong>
+                </span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--page); padding: 10px 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(0,0,0,0.02);">
+                <div>
+                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Boarding</span>
+                  <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.depart}</strong>
+                </div>
+                <div>
+                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Duration</span>
+                  <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.duration}</strong>
+                </div>
+                <div>
+                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Plate</span>
+                  <span class="van-plate-tag" style="display: inline-block; padding: 2px 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #000; border-radius: 4px; background: #fff; color: #000; margin-top: 1px;">${trip.plate}</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+                <span class="capacity-chip ${isWarning ? 'warning' : ''}" style="font-size: 0.8rem; padding: 4px 10px;">
+                  ${trip.seats} space${trip.seats === 1 ? '' : 's'} available
+                </span>
+                <button class="button button--primary button--small" type="button" data-action="select-departure-direct" data-trip-id="${trip.id}">
+                  Select &amp; Book
+                </button>
+              </div>
             </div>
           </article>
         `;
