@@ -6316,7 +6316,7 @@ body[data-active-screen="home"] .workspace > .topbar {
       left: 50%;
       bottom: calc(14px + var(--safe-bottom));
       transform: translateX(-50%);
-      width: min(calc(100vw - 26px), 520px);
+      width: min(calc(100vw - 48px), 420px);
       min-height: 72px;
       padding: 8px;
       border-radius: 27px;

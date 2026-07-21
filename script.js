@@ -681,7 +681,9 @@ function renderNavigation() {
   
   if (mobile) {
     const isBookingFlow = ['book', 'trip-details', 'passengers', 'returns', 'luggage', 'checkout', 'trackparcel', 'parcel-status', 'special-hire'].includes(state.screen);
-    if (isBookingFlow) {
+    // On book step 1 with no route selected, keep the mobile nav visible
+    const isBookStep1NoRoute = state.screen === 'book' && (state.bookingStep || 1) === 1 && !state.selectedRoute;
+    if (isBookingFlow && !isBookStep1NoRoute) {
       mobile.classList.add('is-hidden');
     } else {
       mobile.classList.remove('is-hidden');
@@ -1128,9 +1130,9 @@ function renderBook() {
         }).join('')}
       </div>
 
-      <div class="floating-cta-container" style="margin-top: 24px;">
+      ${state.selectedRoute ? `<div class="floating-cta-container" style="margin-top: 24px;">
         <button class="button button--primary w-full" type="button" data-action="booking-next-step">Continue</button>
-      </div>
+      </div>` : ''}
     `;
   }
 
