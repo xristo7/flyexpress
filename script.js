@@ -75,7 +75,8 @@ function getAvailableTrips() {
       'assets/driver_3.jpg',
       'assets/driver_4.jpg',
       'assets/driver_5.jpg',
-      'assets/driver_6.jpg'
+      'assets/driver_6.jpg',
+      'assets/driver_7.jpg'
     ];
     let image = driverImages[i % driverImages.length];
     if (i === 0) {
