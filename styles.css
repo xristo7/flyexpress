@@ -4644,7 +4644,7 @@ body[data-active-screen="driver-profile"] .main-content {
 /* Responsive Desktop Rules */
 @media (min-width: 901px) {
   .taxi-result-card {
-    padding: 18px 20px !important;
+    padding: 15px !important;
   }
   
   .taxi-card-left-col {
