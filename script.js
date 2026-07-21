@@ -966,26 +966,25 @@ function renderHome() {
 
   return `
     <div class="home-redesign app fade-in-up">
-      <!-- 2. HOME GREETING SECTION -->
-      <div class="home-greeting-card" style="margin-bottom: 22px; animation: enter .45s var(--ease) both; text-align: left;">
-        <small style="text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--muted); font-weight: 750; display: block;">Hi ${escapeHtml(state.passengerDetails[0]?.name.split(' ')[0] || 'Christo')}</small>
-        <h1 id="timeGreeting" style="font-size: clamp(1.8rem, 6.5vw, 2.2rem); font-weight: 850; color: var(--brand-blue-dark); margin: 3px 0 1px; letter-spacing: -0.025em; line-height: 1.15;">${greeting}</h1>
-        <p style="color: var(--slate); font-size: 0.92rem; margin: 0; opacity: 0.88;">Where would you like to travel today?</p>
-      </div>
-
-      <!-- 3. SEARCH AND FILTER ROW -->
-      <form class="search-row" onsubmit="event.preventDefault(); handleSearchSubmit(this.querySelector('.search-input').value);">
-        <div style="position: relative; display: flex; align-items: center; min-width: 0;">
-          <svg style="position: absolute; left: 17px; width: 20px; height: 20px; color: var(--blue-800); pointer-events: none; z-index: 5;"><use href="#i-search"></use></svg>
-          <input class="search-input" type="text" placeholder="Search route, stage or service..." style="width: 100%; min-height: 58px; border: 0; border-radius: 19px; background: rgba(255,255,255,.92); box-shadow: var(--shadow-sm); padding: 0 17px 0 48px; color: var(--ink); font-weight: 650; outline: none; transition: transform var(--ease), box-shadow var(--ease); font-size: 15px;" value="${escapeHtml(state.homeSearchQuery || '')}" />
-        </div>
-        <button class="filter-button" type="button" data-action="show-search-filters" aria-label="Open trip filters" aria-haspopup="dialog" style="cursor: pointer;">
-          <svg style="width: 20px; height: 20px;"><use href="#i-sliders"></use></svg>
-        </button>
-      </form>
-
       <div class="layout">
         <div class="main-column">
+          <!-- 2. HOME GREETING SECTION -->
+          <div class="home-greeting-card" style="margin-bottom: 22px; animation: enter .45s var(--ease) both; text-align: left;">
+            <small style="text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--muted); font-weight: 750; display: block;">Hi ${escapeHtml(state.passengerDetails[0]?.name.split(' ')[0] || 'Christo')}</small>
+            <h1 id="timeGreeting" style="font-size: clamp(1.8rem, 6.5vw, 2.2rem); font-weight: 850; color: var(--brand-blue-dark); margin: 3px 0 1px; letter-spacing: -0.025em; line-height: 1.15;">${greeting}</h1>
+            <p style="color: var(--slate); font-size: 0.92rem; margin: 0; opacity: 0.88;">Where would you like to travel today?</p>
+          </div>
+
+          <!-- 3. SEARCH AND FILTER ROW -->
+          <form class="search-row" onsubmit="event.preventDefault(); handleSearchSubmit(this.querySelector('.search-input').value);">
+            <div style="position: relative; display: flex; align-items: center; min-width: 0;">
+              <svg style="position: absolute; left: 17px; width: 20px; height: 20px; color: var(--blue-800); pointer-events: none; z-index: 5;"><use href="#i-search"></use></svg>
+              <input class="search-input" type="text" placeholder="Search route, stage or service..." style="width: 100%; min-height: 58px; border: 0; border-radius: 19px; background: rgba(255,255,255,.92); box-shadow: var(--shadow-sm); padding: 0 17px 0 48px; color: var(--ink); font-weight: 650; outline: none; transition: transform var(--ease), box-shadow var(--ease); font-size: 15px;" value="${escapeHtml(state.homeSearchQuery || '')}" />
+            </div>
+            <button class="filter-button" type="button" data-action="show-search-filters" aria-label="Open trip filters" aria-haspopup="dialog" style="cursor: pointer;">
+              <svg style="width: 20px; height: 20px;"><use href="#i-sliders"></use></svg>
+            </button>
+          </form>
 
           <!-- 5. POPULAR SERVICES SECTION -->
           <section class="section" style="animation-delay:.10s" aria-labelledby="servicesTitle">
