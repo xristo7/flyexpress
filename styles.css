@@ -198,8 +198,8 @@ select::-ms-expand { display: none; }
 .button:hover { transform: translateY(-1.5px); box-shadow: 0 6px 14px rgba(0,0,0,0.05); }
 .button:active { transform: translateY(0) scale(.985); }
 .button:disabled { opacity: .48; cursor: not-allowed; transform: none; box-shadow: none; }
-.button--primary { background: linear-gradient(135deg, #16a9e0 0%, #075aa8 60%, #063d73 100%) !important; color: white !important; border: none !important; box-shadow: 0 4px 12px rgba(7, 90, 168, 0.2) !important; }
-.button--primary:hover { background: linear-gradient(135deg, #35bbf0 0%, #0866bd 60%, #074786 100%) !important; box-shadow: 0 6px 16px rgba(7, 90, 168, 0.3) !important; }
+.button--primary { background: linear-gradient(135deg, #0a82b3 0%, #075aa8 60%, #063d73 100%) !important; color: white !important; border: none !important; box-shadow: 0 4px 12px rgba(7, 90, 168, 0.2) !important; }
+.button--primary:hover { background: linear-gradient(135deg, #0e95cd 0%, #0866bd 60%, #074786 100%) !important; box-shadow: 0 6px 16px rgba(7, 90, 168, 0.3) !important; }
 .button--red { background: var(--brand-red); color: white; box-shadow: 0 8px 20px rgba(229, 30, 42, 0.15); }
 .button--red:hover { box-shadow: 0 10px 24px rgba(229, 30, 42, 0.22); }
 .button--gold { background: var(--brand-gold); color: #2b2200; box-shadow: 0 4px 12px rgba(245, 197, 24, 0.12); }
