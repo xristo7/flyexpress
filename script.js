@@ -1099,7 +1099,7 @@ function renderBook() {
 
     return `
       <div class="booking-map-wrapper">
-        <div id="booking-step2-map" style="width: 100%; height: 100%; z-index: 1;"></div>
+        <div id="booking-step2-map" style="position: absolute; top: -60px; left: 0; width: 100%; height: calc(100% + 120px); z-index: 1;"></div>
         <div id="booking-step2-map-fallback" class="trip-map-fallback" style="background: #eef3f7; z-index: 2;" hidden>
           <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
           <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Preparing Route Map...</strong>
@@ -1107,8 +1107,7 @@ function renderBook() {
         </div>
       </div>
 
-      <div style="margin-top: 0px;">
-        <section class="card" style="margin: 0; overflow: hidden; padding: 0;">
+      <section class="card booking-card-step2">
           <!-- Booking-for header banner -->
           <div class="booking-for-header ${state.isBookingForSomeoneElse ? 'is-other' : ''}">
             <div class="booking-for-header__top">
@@ -1219,7 +1218,6 @@ function renderBook() {
 
           </div>
         </section>
-      </div>
 
       <div class="floating-cta-container button-row" style="margin-top: 24px;">
         <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
@@ -3920,6 +3918,17 @@ function initBookingStep2Map() {
   fitMap();
   requestAnimationFrame(() => requestAnimationFrame(fitMap));
   setTimeout(fitMap, 320);
+
+  // Parallax scroll handler
+  const handleScroll = () => {
+    if (!target.isConnected) {
+      window.removeEventListener('scroll', handleScroll);
+      return;
+    }
+    const scrollY = window.scrollY;
+    target.style.transform = `translate3d(0, ${Math.min(100, scrollY * 0.35)}px, 0)`;
+  };
+  window.addEventListener('scroll', handleScroll, { passive: true });
 }
 
 function initLiveTravelMap() {
