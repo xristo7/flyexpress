@@ -745,6 +745,27 @@ function renderCurrentScreen(preserveFocus = true) {
   if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
   if (focusDescriptor) setTimeout(() => restoreDescribedFocus(root, focusDescriptor), 20);
   if (state.screen === 'live') startLiveProgress(); else stopLiveProgress();
+  if (state.screen === 'home') setTimeout(initHomeCarousel, 50);
+}
+
+function initHomeCarousel() {
+  const carousel = $('#departureCarousel');
+  if (!carousel) return;
+  let scrollTimer;
+  carousel.addEventListener('scroll', () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const cards = $$('.departure-card', carousel);
+      const center = carousel.scrollLeft + carousel.clientWidth / 2;
+      let nearest = 0, distance = Infinity;
+      cards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const nextDistance = Math.abs(center - cardCenter);
+        if (nextDistance < distance) { distance = nextDistance; nearest = index; }
+      });
+      $$('.carousel-dot').forEach((dot, index) => dot.classList.toggle('is-active', index === nearest));
+    }, 80);
+  }, { passive: true });
 }
 
 function screenHead(title, description, actions = '') {
@@ -843,260 +864,237 @@ function renderHome() {
     };
   });
 
+  const upcomingTrip = state.activeTrip || appData.trips[0];
+  const upcomingBoarding = upcomingTrip.boarding;
+  const upcomingDest = upcomingTrip.destination;
+  const upcomingDepart = upcomingTrip.depart;
+
   return `
     <div class="fade-in-up">
       <!-- 2. MOBILE HEADER -->
-      <header class="home-header">
-        <div class="home-header-left" data-screen="profile" style="cursor: pointer;">
-          <img src="assets/christo-avatar.jpg" alt="Christo avatar" class="home-header-avatar" />
-          <div class="home-header-greet">
+      <header class="topbar">
+        <div class="identity" data-screen="profile" style="cursor: pointer;">
+          <img src="assets/christo-avatar.jpg" alt="Christo avatar" class="avatar" style="width:50px; height:50px; border-radius:18px; object-fit:cover;" />
+          <div class="greeting">
             <small>Hi ${state.passengerDetails[0]?.name.split(' ')[0] || 'Sarah'}</small>
             <h1>${greeting}</h1>
             <p>Where would you like to travel today?</p>
           </div>
         </div>
-        <button class="home-header-bell-btn" type="button" data-screen="notifications" aria-label="Open notifications menu">
-          <i data-lucide="bell"></i>
-          <span class="bell-badge">3</span>
-        </button>
+        <div class="header-actions">
+          <button class="icon-button" type="button" data-screen="notifications" aria-label="Open notifications">
+            <svg><use href="#i-bell"></use></svg><span class="badge">5</span>
+          </button>
+        </div>
       </header>
 
       <!-- 3. SEARCH AND FILTER ROW -->
-      <div class="home-search-row">
-        <div class="home-search-bar" role="button" tabindex="0" data-action="open-search-shortcuts">
-          <i data-lucide="search"></i>
-          <span>Search route, stage or service</span>
-        </div>
-        <button class="home-filter-btn" type="button" data-action="show-search-filters" aria-label="Open filters sheet">
-          <i data-lucide="sliders-horizontal"></i>
+      <div class="search-row">
+        <button class="search-button" type="button" data-action="open-search-shortcuts" aria-haspopup="dialog">
+          <svg><use href="#i-search"></use></svg><span>Search route, stage or service</span>
+        </button>
+        <button class="filter-button" type="button" data-action="show-search-filters" aria-label="Open trip filters" aria-haspopup="dialog">
+          <svg><use href="#i-sliders"></use></svg>
         </button>
       </div>
 
-      <div class="grid grid--sidebar">
-        <div>
+      <div class="layout">
+        <div class="main-column">
           <!-- 4. PRIMARY BOOKING CARD -->
-          <section class="home-booking-card" aria-labelledby="journey-card-title">
-            <p class="card-kicker" id="journey-card-title">Plan your journey</p>
+          <section class="card journey-card section" style="animation-delay:.05s">
+            <p class="eyebrow">Plan your journey</p>
+            <div class="journey-head">
+              <h2>Fast, reliable transit between Entebbe and Kampala</h2>
+              <span class="offer-chip">Save 20% on returns</span>
+            </div>
             
-            <div class="home-booking-route-row">
-              <div class="home-booking-route-texts">
-                <h2>
-                  <span id="route-text-origin">${state.searchFrom || 'Entebbe'}</span>
-                  <i data-lucide="arrow-right" style="width:18px;height:18px;margin:0 4px;color:var(--slate)"></i>
-                  <span id="route-text-dest">${state.searchTo || 'Kampala'}</span>
-                </h2>
-                <p>Today ┬╖ 1 passenger ┬╖ One way</p>
+            <div class="route-toggle">
+              <div class="route-place">
+                <span>BOARDING STAGE</span>
+                <strong id="route-text-origin">${state.searchFrom || 'Entebbe Main Stage'}</strong>
               </div>
-              <button class="home-swap-circle-btn" type="button" data-action="swap-home-route" aria-label="Swap source and destination directions">
-                <i data-lucide="arrow-left-right"></i>
+              <button class="swap-route" type="button" data-action="swap-home-route" aria-label="Swap directions">
+                <svg><use href="#i-swap"></use></svg>
+              </button>
+              <div class="route-place">
+                <span>DESTINATION STAGE</span>
+                <strong id="route-text-dest">${state.searchTo || 'Kampala Main Stage'}</strong>
+              </div>
+            </div>
+            
+            <div class="route-line" aria-hidden="true">
+              <span class="route-dot"></span>
+              <span class="route-van"><svg><use href="#i-van"></use></svg></span>
+              <span class="route-dot"></span>
+            </div>
+            
+            <div class="journey-meta">
+              <span><svg><use href="#i-calendar"></use></svg>${formatDemoDate(state.bookingDate)}</span>
+              <span><svg><use href="#i-user"></use></svg>${passengerTotal()} Passenger${passengerTotal() === 1 ? '' : 's'}</span>
+              <span><svg><use href="#i-ticket"></use></svg>One way</span>
+            </div>
+            
+            <div class="journey-actions">
+              <button class="primary-button" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'>
+                <svg><use href="#i-search"></use></svg>Find Departures
+              </button>
+              <button class="secondary-button" type="button" data-action="show-search-filters">
+                <svg><use href="#i-sliders"></use></svg>Filters
               </button>
             </div>
-
-            <!-- Route visual line component -->
-            <div class="home-route-line-box">
-              <span class="home-route-dot home-route-dot--origin"></span>
-              <span class="home-route-line-connect"></span>
-              <span class="home-route-dot home-route-dot--dest"></span>
-            </div>
-            <div class="home-route-labels">
-              <span>${state.searchFrom || 'Entebbe'}</span>
-              <span>${state.searchTo || 'Kampala'}</span>
-            </div>
-
-            <div class="home-booking-meta-grid">
-              <div class="home-booking-meta-cell">
-                <small>Departure</small>
-                <strong>Today</strong>
-              </div>
-              <div class="home-booking-meta-cell">
-                <small>Passengers</small>
-                <strong>1 Person</strong>
-              </div>
-              <div class="home-booking-meta-cell">
-                <small>Fare from</small>
-                <strong>UGX 5,000</strong>
-              </div>
-            </div>
-
-            <button class="button button--primary w-full" type="button" data-screen="book" data-action-payload='{"bookingStep":1}' style="height: 52px; border-radius: 16px;">
-              <i data-lucide="search" style="margin-right:8px"></i>Find Departures
-            </button>
           </section>
 
           <!-- 5. POPULAR SERVICES SECTION -->
-          <div class="home-section-header">
-            <h2>Popular services</h2>
-            <button class="show-all-btn" type="button" data-action="open-more">Show all</button>
-          </div>
-          <section class="popular-services-scroller">
-            <div class="popular-service-item" data-screen="book" data-action-payload='{"bookingStep":1}'>
-              <div class="popular-tile"><i data-lucide="ticket-plus"></i></div>
-              <span>Book Trip</span>
-            </div>
-            <div class="popular-service-item" data-screen="returns">
-              <div class="popular-tile"><i data-lucide="refresh-cw"></i></div>
-              <span>Return Ticket</span>
-            </div>
-            <div class="popular-service-item" data-screen="parcel">
-              <div class="popular-tile"><i data-lucide="package-plus"></i></div>
-              <span>Send Parcel</span>
-            </div>
-            <div class="popular-service-item" data-screen="wallet">
-              <div class="popular-tile"><i data-lucide="wallet"></i></div>
-              <span>Wallet</span>
+          <section class="section" style="animation-delay:.10s" aria-labelledby="servicesTitle">
+            <div class="section-head"><h2 id="servicesTitle">Popular services</h2><button class="text-button" type="button" data-action="open-search-shortcuts">Show all</button></div>
+            <div class="services-scroll">
+              <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Trip</span></button>
+              <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
+              <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
+              <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
             </div>
           </section>
-        </div>
 
-        <div>
           <!-- 6. RECOMMENDED DEPARTURES CAROUSEL -->
-          <div class="home-section-header">
-            <h2>Recommended departures</h2>
-            <button class="show-all-btn" type="button" data-screen="book">Show all</button>
-          </div>
-          <div class="carousel-viewport">
-            <div class="carousel-scroller" id="departures-carousel">
+          <section class="section" style="animation-delay:.15s" aria-labelledby="departuresTitle">
+            <div class="section-head">
+              <h2 id="departuresTitle">Recommended departures</h2>
+              <button class="text-button" type="button" data-screen="book">Show all</button>
+            </div>
+            
+            <div class="departure-scroll" id="departureCarousel">
               ${departures.map((dep, index) => {
                 const isSaved = state.savedDepartures && state.savedDepartures.includes(dep.id);
+                
+                let visualClass = '';
+                let visualDecorations = '';
+                
+                if (index % 3 === 0) {
+                  // Morning departure
+                  visualClass = '';
+                  visualDecorations = `
+                    <span class="visual-label">Morning departure</span>
+                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
+                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
+                    </button>
+                    <span class="sun-shape"></span><span class="city-shape"></span><span class="road-shape"></span>
+                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
+                  `;
+                } else if (index % 3 === 1) {
+                  // Fastest option (Night/Sunset)
+                  visualClass = ' night';
+                  visualDecorations = `
+                    <span class="visual-label">Fastest option</span>
+                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
+                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
+                    </button>
+                    <span class="sun-shape" style="width:34px;height:34px;top:24px;background:#ffd99c"></span><span class="city-shape"></span><span class="road-shape"></span>
+                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
+                  `;
+                } else {
+                  // Airport link (Airport/Plane)
+                  visualClass = ' airport';
+                  visualDecorations = `
+                    <span class="visual-label">Airport link</span>
+                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
+                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
+                    </button>
+                    <span class="terminal-shape"></span>
+                    <span class="plane-shape"><svg><use href="#i-plane"></use></svg></span>
+                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
+                  `;
+                }
+
+                const isWarning = dep.spaces <= 2;
+                
                 return `
-                <article class="recommended-departure-card" data-index="${index}">
-                  <div class="recommended-card-img-panel">
-                    <img src="${dep.img}" alt="Fly Express ${dep.vehicle} van image" />
-                    <button class="recommended-card-save-btn ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save this departure to favorites">
-                      <i data-lucide="${isSaved ? 'heart-handshake' : 'heart'}"></i>
-                    </button>
-                    <span class="recommended-card-price-overlay">${dep.price}</span>
-                    <span class="recommended-card-badge-overlay ${dep.badgeClass}">${dep.badge}</span>
+                <article class="departure-card" data-card-index="${index}">
+                  <div class="departure-visual${visualClass}">
+                    ${visualDecorations}
                   </div>
-                  <div class="recommended-card-meta">
-                    <h3>${dep.origin} ΓåÆ ${dep.dest}</h3>
-                    <p style="display:flex; align-items:center; gap:6px;">
-                      <i data-lucide="clock" style="width:14px;color:var(--slate)"></i>
-                      <span>${dep.time} (Est. arrival ${dep.arrival})</span>
-                    </p>
-                    <p style="display:flex; align-items:center; gap:6px; margin-top:2px;">
-                      <i data-lucide="bus" style="width:14px;color:var(--slate)"></i>
-                      <span>${dep.vehicle} Passenger Van ┬╖ ${dep.traffic}</span>
-                    </p>
-                  </div>
-                  <div class="recommended-card-footer">
-                    <div class="recommended-card-footer-info">
-                      <small>Standard Fare</small>
-                      <strong>${dep.price}</strong>
+                  <div class="departure-body">
+                    <div class="departure-title-row">
+                      <div>
+                        <h3>${dep.origin.split(' ')[0]} → ${dep.dest.split(' ')[0]}</h3>
+                        <p>${dep.vehicle} · ${dep.traffic}</p>
+                      </div>
+                      <span class="capacity-chip ${isWarning ? 'warning' : ''}">${dep.spaces} space${dep.spaces === 1 ? '' : 's'}</span>
                     </div>
-                    <button class="button button--secondary button--small" type="button" data-action="select-departure" data-trip="${dep.time}">
-                      Select Trip
-                    </button>
+                    <div class="departure-times">
+                      <div class="time"><strong>${dep.time}</strong><span>Departure</span></div>
+                      <div class="time-line"></div>
+                      <div class="time"><strong>${dep.arrival}</strong><span>Arrival</span></div>
+                    </div>
+                    <div class="departure-foot">
+                      <div class="fare"><small>Starting from</small><strong>${dep.price}</strong></div>
+                      <button class="select-button" type="button" data-action="select-departure" data-trip="${dep.time}">Select Trip</button>
+                    </div>
                   </div>
                 </article>
                 `;
               }).join('')}
             </div>
-            <div class="recommended-dots">
-              ${departures.map((_, i) => `<span class="recommended-dot ${i === 0 ? 'is-active' : ''}" data-dot-index="${i}"></span>`).join('')}
+            <div class="carousel-dots">
+              ${departures.map((_, i) => `<button class="carousel-dot ${i === 0 ? 'is-active' : ''}" type="button" data-dot="${i}" aria-label="Slide ${i + 1}"></button>`).join('')}
             </div>
-          </div>
+          </section>
+
+          <!-- 7. SAVE-WITH-RETURN-TICKET FEATURE CARD -->
+          <section class="card offer-card section" style="animation-delay:.24s">
+            <span class="offer-label"><svg width="15" height="15"><use href="#i-return"></use></svg>Save UGX 1,000</span>
+            <h2>Travel to Kampala and secure your return for less.</h2>
+            <p>Buy both journeys together and use the return on an eligible departure before it expires.</p>
+            <div class="offer-prices">
+              <div class="offer-price"><small>Outbound</small><strong>UGX 5,000</strong></div>
+              <div class="offer-price"><small>Return</small><strong>UGX 4,000</strong></div>
+              <div class="offer-price"><small>Package total</small><strong>UGX 9,000</strong></div>
+            </div>
+            <button class="primary-button" type="button" data-screen="returns">Get Return Ticket <svg><use href="#i-arrow"></use></svg></button>
+          </section>
         </div>
-      </div>
 
-      <div class="grid grid--2" style="margin-top:20px; gap:20px;">
-        <!-- 7. RETURN-TICKET FEATURE CARD -->
-        <article class="premium-gradient-card">
-          <p class="card-kicker">Save with a return ticket</p>
-          <h3>Travel to Kampala and secure your return for less.</h3>
-          <div class="price-row">
-            <div class="price-cell">
-              <small>Outbound</small>
-              <strong>UGX 5,000</strong>
+        <!-- SIDE COLUMN -->
+        <aside class="side-column">
+          <!-- 8. UPCOMING TRIP CARD -->
+          <section class="card compact-card section" style="animation-delay:.14s">
+            <div class="compact-head"><div><h3>Upcoming trip</h3><p>Today · ${upcomingBoarding.split(' ')[0]} to ${upcomingDest.split(' ')[0]}</p></div><span class="status-chip">Confirmed</span></div>
+            <div class="trip-detail-grid">
+              <div class="detail-box"><small>Boarding</small><strong>8:15 AM</strong></div>
+              <div class="detail-box"><small>Departure</small><strong id="upcomingTime">${upcomingDepart}</strong></div>
+              <div class="detail-box"><small>Vehicle</small><strong>${upcomingTrip.plate}</strong></div>
+              <div class="detail-box"><small>Capacity</small><strong>Seat position 04</strong></div>
             </div>
-            <div class="price-cell">
-              <small>Return</small>
-              <strong>UGX 4,000</strong>
+            <div class="compact-actions">
+              <button class="compact-action primary" type="button" data-screen="ticket">View Ticket</button>
+              <button class="compact-action" type="button" data-screen="live">Track Vehicle</button>
             </div>
-            <div class="price-cell">
-              <small>Total Package</small>
-              <strong style="color:var(--brand-gold)">UGX 9,000</strong>
-            </div>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-            <span class="gold-savings-badge">Save UGX 1,000</span>
-            <button class="button button--primary button--small" type="button" data-screen="returns">
-              Get Return Ticket
-            </button>
-          </div>
-        </article>
+          </section>
 
-        <!-- 9. WALLET SUMMARY CARD -->
-        <article class="card" style="border-radius:28px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(135deg, #10233b, #1b3d64); color:white; border:none; box-shadow:var(--shadow-md);">
-          <div>
-            <p class="section-kicker" style="color:rgba(255,255,255,0.7)">Fly Express Wallet</p>
-            <h2 style="font-size:2rem; font-weight:900; color:white; margin:8px 0 4px 0">${formatUGX(state.walletBalance)}</h2>
-            <p style="font-size:0.85rem; color:rgba(255,255,255,0.85); margin:0 0 20px 0; display:flex; align-items:center; gap:6px;">
-              <i data-lucide="sparkles" style="width:14px;color:var(--brand-gold)"></i>
-              <span>UGX 2,000 promotional credit available</span>
-            </p>
-          </div>
-          <div style="display:flex; gap:10px;">
-            <button class="button button--gold button--small" style="flex:1" type="button" data-action="open-add-funds">Add Funds</button>
-            <button class="button button--ghost button--small" style="flex:1; border-color:rgba(255,255,255,0.2); color:white;" type="button" data-screen="wallet">Transactions</button>
-          </div>
-        </article>
-      </div>
+          <!-- 9. WALLET CARD -->
+          <section class="card wallet-card section" style="animation-delay:.18s">
+            <small>Fly Express Wallet</small>
+            <div class="wallet-balance">${formatUGX(state.walletBalance)}</div>
+            <p class="wallet-credit">UGX 2,000 promotional credit available</p>
+            <div class="wallet-actions">
+              <button class="wallet-action" type="button" data-action="open-add-funds">Add Funds</button>
+              <button class="wallet-action" type="button" data-screen="wallet">Transactions</button>
+            </div>
+          </section>
 
-      <div class="grid grid--2" style="margin-top:20px; gap:20px;">
-        <!-- 8. UPCOMING TRIP CARD -->
-        <article class="upcoming-trip-clean-card">
-          <p class="card-kicker">Upcoming trip</p>
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-            <div>
-              <h3 style="margin:0; font-size:1.15rem; font-weight:850">Entebbe to Kampala</h3>
-              <p style="margin:4px 0 0; font-size:0.8rem; color:var(--slate)">Today ┬╖ Boarding 8:15 AM ┬╖ Depart 8:30 AM</p>
+          <!-- 10. ACTIVE PARCEL CARD -->
+          <section class="card compact-card section" style="animation-delay:.22s">
+            <div class="compact-head"><div><h3>Active parcel</h3><p>FXP-260718-0842</p></div><span class="status-chip info">In Transit</span></div>
+            <div class="parcel-progress">
+              <div class="parcel-progress-row"><span>Entebbe</span><strong>66%</strong><span>Kampala</span></div>
+              <div class="progress-track"><span></span></div>
             </div>
-            <span class="status-chip status-chip--success" style="background:#eafcf3; color:#138a59">Confirmed</span>
-          </div>
-          <div class="route-label" style="margin-bottom:14px;">
-            <div class="route-points" style="margin-top: 4px;"><span></span><i></i><span></span></div>
-            <div>
-              <strong style="font-size:0.85rem">Entebbe Main Stage</strong>
-              <div style="height:12px"></div>
-              <strong style="font-size:0.85rem">Kampala Main Stage</strong>
+            <div class="trip-detail-grid">
+              <div class="detail-box"><small>Estimated arrival</small><strong>10:45 AM</strong></div>
+              <div class="detail-box"><small>Vehicle</small><strong>UBP 318F</strong></div>
             </div>
-          </div>
-          <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:16px; font-size:0.78rem; color:var(--slate);">
-            <span style="display:flex;align-items:center;gap:4px"><i data-lucide="bus-front" style="width:14px"></i>UBM 245K</span>
-            <span style="display:flex;align-items:center;gap:4px"><i data-lucide="armchair" style="width:14px"></i>Seat position 04</span>
-            <span style="display:flex;align-items:center;gap:4px"><i data-lucide="ticket-check" style="width:14px"></i>Return included</span>
-          </div>
-          <div style="display:flex; gap:10px;">
-            <button class="button button--primary button--small" style="flex:1" type="button" data-screen="ticket">View Ticket</button>
-            <button class="button button--ghost button--small" style="flex:1" type="button" data-screen="live">Track Vehicle</button>
-          </div>
-        </article>
-
-        <!-- 10. ACTIVE PARCEL CARD -->
-        <article class="active-parcel-clean-card" style="display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-              <div>
-                <p class="section-kicker" style="color:var(--brand-blue); margin:0">Active parcel</p>
-                <h3 style="margin:4px 0 0; font-size:1.1rem; font-weight:850">#964201832-DL</h3>
-              </div>
-              <span class="status-chip status-chip--gold" style="background:#fffcf0; color:#b76700">In Transit</span>
-            </div>
-            <div class="route-label" style="margin-bottom:12px;">
-              <div class="route-points" style="margin-top: 4px;"><span></span><i></i><span></span></div>
-              <div>
-                <strong style="font-size:0.85rem">Entebbe Depot</strong>
-                <div style="height:12px"></div>
-                <strong style="font-size:0.85rem">Kampala Main Stage</strong>
-              </div>
-            </div>
-            <p style="margin:0 0 16px 0; font-size:0.8rem; color:var(--slate)">Estimated arrival: 10:45 AM today</p>
-          </div>
-          <button class="button button--ghost button--small w-full" type="button" data-screen="trackparcel">
-            <i data-lucide="navigation" style="margin-right:6px"></i>Track Parcel
-          </button>
-        </article>
+            <button class="compact-action primary" style="width:100%" type="button" data-screen="trackparcel">Track Parcel</button>
+          </section>
+        </aside>
       </div>
 
       <!-- Notice Panel -->
@@ -3742,6 +3740,15 @@ function handleClick(event) {
       event.stopPropagation();
       return;
     }
+  }
+
+  const dotTrigger = event.target.closest('[data-dot]');
+  if (dotTrigger) {
+    const index = Number(dotTrigger.dataset.dot);
+    const carousel = $('#departureCarousel');
+    const card = carousel?.querySelector(`[data-card-index="${index}"]`);
+    card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    return;
   }
 
   const screenTrigger = event.target.closest('[data-screen]');
