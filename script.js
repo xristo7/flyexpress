@@ -47,11 +47,11 @@ const appData = {
     { type: 'parcel', title: 'Parcel delivery', date: '14 Jul, 10:25 AM', amount: 7500, direction: 'out', icon: 'package' },
     { type: 'promotion', title: 'Promotional credit', date: '12 Jul, 9:00 AM', amount: 2000, direction: 'in', icon: 'gift' },
     { type: 'luggage', title: 'Luggage payment', date: '10 Jul, 2:15 PM', amount: 4000, direction: 'out', icon: 'luggage' },
-    { type: 'refund', title: 'Pending trip refund', date: '8 Jul, 4:34 PM', amount: 5000, direction: 'in', icon: 'rotate-ccw' }
+    { type: 'refund', title: 'Pending travel refund', date: '8 Jul, 4:34 PM', amount: 5000, direction: 'in', icon: 'rotate-ccw' }
   ],
   notifications: [
-    { id: 1, category: 'Trips', icon: 'bus-front', title: 'Your vehicle is ready for boarding.', body: 'UBM 245K is boarding at Entebbe Main Stage. Please arrive by 8:15 AM.', time: '2 min ago', unread: true },
-    { id: 2, category: 'Trips', icon: 'calendar-clock', title: 'Your return ticket expires in three days.', body: 'Book your Kampala to Entebbe return before 21 July 2026.', time: '1 hr ago', unread: true },
+    { id: 1, category: 'Travels', icon: 'bus-front', title: 'Your vehicle is ready for boarding.', body: 'UBM 245K is boarding at Entebbe Main Stage. Please arrive by 8:15 AM.', time: '2 min ago', unread: true },
+    { id: 2, category: 'Travels', icon: 'calendar-clock', title: 'Your return ticket expires in three days.', body: 'Book your Kampala to Entebbe return before 21 July 2026.', time: '1 hr ago', unread: true },
     { id: 3, category: 'Parcels', icon: 'package-check', title: 'Your parcel has arrived in Kampala.', body: 'Parcel #964201832-DL will soon be ready for collection.', time: '2 hrs ago', unread: true },
     { id: 4, category: 'Payments', icon: 'wallet-cards', title: 'UGX 20,000 was added to your wallet.', body: 'Your demonstration wallet balance is now UGX 32,500.', time: 'Yesterday', unread: true },
     { id: 5, category: 'Alerts', icon: 'triangle-alert', title: 'Traffic is heavier than usual.', body: 'Allow approximately 15 additional minutes on the Kampala route.', time: 'Yesterday', unread: true },
@@ -113,7 +113,7 @@ const driversData = {
     status: 'idle',
     compliments: ['Great Music', 'Clean Van', 'Friendly'],
     reviews: [
-      { author: 'Maria N.', rating: 5, date: 'Yesterday', comment: 'Great playlist playing during the trip, loved the music!' },
+      { author: 'Maria N.', rating: 5, date: 'Yesterday', comment: 'Great playlist playing during the travel, loved the music!' },
       { author: 'Brian L.', rating: 5, date: '4 days ago', comment: 'Very clean seats and polite driver.' }
     ]
   },
@@ -152,7 +152,7 @@ const driversData = {
     compliments: ['Safe Driver', 'Polite', 'Experienced'],
     reviews: [
       { author: 'Florence A.', rating: 5, date: '2 days ago', comment: 'Smooth drive and professional crew.' },
-      { author: 'Emmanuel T.', rating: 5, date: '6 days ago', comment: 'Very experienced driver. Felt safe the whole trip.' }
+      { author: 'Emmanuel T.', rating: 5, date: '6 days ago', comment: 'Very experienced driver. Felt safe the whole travel.' }
     ]
   },
   'arthur ssewankambo': {
@@ -1982,7 +1982,7 @@ function tripCard(day, month, route, date, vehicle, status, type, payment, mode)
   const actions = mode === 'upcoming'
     ? `<button class="button button--primary button--small" type="button" data-screen="ticket">View Ticket</button><button class="button button--ghost button--small" type="button" data-screen="live">Track Vehicle</button><button class="button button--ghost button--small" type="button" data-action="change-return">Change Return Date</button><button class="button button--ghost button--small" type="button" data-screen="support">Contact Support</button>`
     : mode === 'completed'
-      ? `<button class="button button--primary button--small" type="button" data-action="rate-trip">Rate Trip</button><button class="button button--ghost button--small" type="button" data-screen="book">Book Again</button><button class="button button--ghost button--small" type="button" data-action="lost-item">Report Lost Item</button>`
+      ? `<button class="button button--primary button--small" type="button" data-action="rate-trip">Rate Travel</button><button class="button button--ghost button--small" type="button" data-screen="book">Book Again</button><button class="button button--ghost button--small" type="button" data-action="lost-item">Report Lost Item</button>`
       : `<button class="button button--ghost button--small" type="button" data-screen="support">View Support Reference</button><button class="button button--primary button--small" type="button" data-screen="book">Book Again</button>`;
   return `<article class="card trip-card"><div class="trip-date-block"><strong>${day}</strong><span>${month}</span></div><div><div class="card-head"><div><h3>${route}</h3><span class="muted text-small">${date}</span></div><span class="status-chip ${statusClass}">${status}</span></div><div class="trip-meta"><span><i data-lucide="bus-front"></i>${vehicle}</span><span><i data-lucide="ticket"></i>${type}</span><span><i data-lucide="credit-card"></i>${payment}</span></div>${mode === 'upcoming' ? '<div class="countdown" style="margin-top:10px"><i data-lucide="clock-3"></i>Boarding begins in 42 minutes</div>' : mode === 'cancelled' ? '<p class="muted text-small" style="margin:10px 0 0">Reason: Passenger cancelled · Support reference SUP-44720</p>' : ''}</div><div class="trip-card__actions">${actions}</div></article>`;
 }
@@ -2002,7 +2002,7 @@ function stopLiveProgress() { clearInterval(liveTimer); }
 function renderLiveTrip() {
   const trip = state.activeTrip;
   return `
-    ${screenHead('Live trip tracking', `Follow ${trip.plate} along the demonstration ${trip.boarding}–${trip.destination} corridor.`, '<button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button>')}
+    ${screenHead('Live travel tracking', `Follow ${trip.plate} along the demonstration ${trip.boarding}–${trip.destination} corridor.`, '<button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Travel</button>')}
     <section class="live-layout live-layout--media">
       <div class="live-map live-map--media" aria-label="Animated Fly Express route preview from Entebbe toward Kampala">
         <video class="live-map__media" autoplay muted loop playsinline aria-label="Animated map preview showing a vehicle travelling from Entebbe toward Kampala"><source src="assets/fly-express-live-route.mp4" type="video/mp4"></video>
@@ -4659,15 +4659,15 @@ function showReturnDateModal() {
 }
 
 function showRatingModal() {
-  openModal('Rate your trip', `<p class="muted">How was your completed journey?</p><div class="choice-pills">${[1,2,3,4,5].map(n => `<button class="choice-pill ${n === 5 ? 'is-selected' : ''}" type="button">${n} / 5</button>`).join('')}</div><div class="field" style="margin-top:14px"><label>Feedback</label><textarea>The vehicle departed on time and the crew was professional.</textarea></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="submit-rating">Submit Rating</button>`);
+  openModal('Rate your travel', `<p class="muted">How was your completed journey?</p><div class="choice-pills">${[1,2,3,4,5].map(n => `<button class="choice-pill ${n === 5 ? 'is-selected' : ''}\" type="button">${n} / 5</button>`).join('')}</div><div class="field" style="margin-top:14px"><label>Feedback</label><textarea>The vehicle departed on time and the crew was professional.</textarea></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="submit-rating">Submit Rating</button>`);
 }
 
 function openLostPropertyModal() {
-  openModal('Report lost property', `<div class="form-grid"><div class="field"><label>Related trip</label><select><option>16 Jul · Kampala → Entebbe</option></select></div><div class="field"><label>Item category</label><select><option>Bag</option><option>Phone</option><option>Documents</option><option>Clothing</option></select></div><div class="field field--full"><label>Item description</label><textarea>Black notebook left near the rear seat.</textarea></div><div class="field field--full"><label>Contact number</label><input value="+256 772 345 678"></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="submit-lost-item">Submit Report</button>`);
+  openModal('Report lost property', `<div class="form-grid"><div class="field"><label>Related travel</label><select><option>16 Jul · Kampala → Entebbe</option></select></div><div class="field"><label>Item category</label><select><option>Bag</option><option>Phone</option><option>Documents</option><option>Clothing</option></select></div><div class="field field--full"><label>Item description</label><textarea>Black notebook left near the rear seat.</textarea></div><div class="field field--full"><label>Contact number</label><input value="+256 772 345 678"></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="submit-lost-item">Submit Report</button>`);
 }
 
 function showEmergencyModal() {
-  openModal('Emergency and safety contact', `<div class="payment-state"><div class="payment-state__icon payment-state__icon--failed"><i data-lucide="siren"></i></div><h3>Fly Express emergency assistance</h3><p class="muted">In a production app this would offer verified emergency calling and trip context. This prototype does not place calls.</p></div><div class="detail-list"><div class="detail-row"><span>Vehicle</span><strong>${state.activeTrip.plate}</strong></div><div class="detail-row"><span>Route</span><strong>${state.activeTrip.boarding} → ${state.activeTrip.destination}</strong></div><div class="detail-row"><span>Demonstration number</span><strong>+256 700 000 099</strong></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Close</button><button class="button button--soft-red" type="button" data-action="close-modal">Call Preview</button>`);
+  openModal('Emergency and safety contact', `<div class="payment-state"><div class="payment-state__icon payment-state__icon--failed"><i data-lucide="siren"></i></div><h3>Fly Express emergency assistance</h3><p class="muted">In a production app this would offer verified emergency calling and travel context. This prototype does not place calls.</p></div><div class="detail-list"><div class="detail-row"><span>Vehicle</span><strong>${state.activeTrip.plate}</strong></div><div class="detail-row"><span>Route</span><strong>${state.activeTrip.boarding} → ${state.activeTrip.destination}</strong></div><div class="detail-row"><span>Demonstration number</span><strong>+256 700 000 099</strong></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Close</button><button class="button button--soft-red" type="button" data-action="close-modal">Call Preview</button>`);
 }
 
 function openAddFunds() {
