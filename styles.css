@@ -4828,3 +4828,32 @@ body[data-active-screen="driver-profile"] .main-content {
     justify-content: center !important;
   }
 }
+
+/* ---------- Wallet Mobile Responsiveness Overrides ---------- */
+@media (max-width: 600px) {
+  .card {
+    padding: 15px !important;
+    min-width: 0 !important;
+  }
+  .grid--sidebar {
+    gap: 16px !important;
+  }
+  .tabs {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+  .settings-row__copy,
+  .transaction__copy {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  .settings-row__copy strong,
+  .settings-row__copy span,
+  .transaction__copy strong,
+  .transaction__copy span {
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+}
