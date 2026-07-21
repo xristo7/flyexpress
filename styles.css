@@ -5738,7 +5738,7 @@ body[data-active-screen="driver-profile"] .main-content {
 
 
 /* ---------- RECOMMENDED DEPARTURES CAROUSEL STYLES (MOCKUP ORIGINAL) ---------- */
-.home-redesign :root{
+.home-redesign {
       --blue-950: #05294d;
       --blue-900: #063865;
       --blue-800: #07599f;
