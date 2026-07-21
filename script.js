@@ -297,7 +297,7 @@ const navItems = [
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express', tracking: 'Tracking'
+  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express', tracking: 'Tracking', 'search-results': 'Search Results'
 };
 
 const onboardingSlides = [
@@ -408,7 +408,7 @@ function init() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetScreen = urlParams.get('screen') || window.location.hash.slice(1);
-  const validScreens = ['home','book','special-hire','trip-details','passengers','returns','luggage','checkout','success','ticket','trips','live','wallet','parcel','parcel-receipt','trackparcel-list','trackparcel','parcel-status','offers','notifications','support','profile','about','tracking'];
+  const validScreens = ['home','book','special-hire','trip-details','passengers','returns','luggage','checkout','success','ticket','trips','live','wallet','parcel','parcel-receipt','trackparcel-list','trackparcel','parcel-status','offers','notifications','support','profile','about','tracking','search-results'];
 
   if (targetScreen && validScreens.includes(targetScreen)) {
     $('#splash-screen').classList.add('is-hidden');
@@ -726,7 +726,7 @@ function renderCurrentScreen(preserveFocus = true) {
     luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, trips: renderTrips,
     live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
     trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, 'driver-chat': renderDriverChat, 'driver-call': renderDriverCall, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
-    profile: renderProfile, about: renderAbout, tracking: renderTracking
+    profile: renderProfile, about: renderAbout, tracking: renderTracking, 'search-results': renderSearchResultsScreen
   };
   root.innerHTML = (renderers[state.screen] || renderHome)();
   refreshIcons();
@@ -892,14 +892,15 @@ function renderHome() {
       </div>
 
       <!-- 3. SEARCH AND FILTER ROW -->
-      <div class="search-row">
-        <button class="search-button" type="button" data-action="open-search-shortcuts" aria-haspopup="dialog">
-          <svg><use href="#i-search"></use></svg><span>Search route, stage or service</span>
+      <form class="search-row" onsubmit="event.preventDefault(); handleSearchSubmit(this.querySelector('.search-input').value);">
+        <div style="position: relative; display: flex; align-items: center; min-width: 0;">
+          <svg style="position: absolute; left: 17px; width: 20px; height: 20px; color: var(--blue-800); pointer-events: none; z-index: 5;"><use href="#i-search"></use></svg>
+          <input class="search-input" type="text" placeholder="Search route, stage or service..." style="width: 100%; min-height: 58px; border: 0; border-radius: 19px; background: rgba(255,255,255,.92); box-shadow: var(--shadow-sm); padding: 0 17px 0 48px; color: var(--ink); font-weight: 650; outline: none; transition: transform var(--ease), box-shadow var(--ease); font-size: 15px;" value="${escapeHtml(state.homeSearchQuery || '')}" />
+        </div>
+        <button class="filter-button" type="button" data-action="show-search-filters" aria-label="Open trip filters" aria-haspopup="dialog" style="cursor: pointer;">
+          <svg style="width: 20px; height: 20px;"><use href="#i-sliders"></use></svg>
         </button>
-        <button class="filter-button" type="button" data-action="show-search-filters" aria-label="Open trip filters" aria-haspopup="dialog">
-          <svg><use href="#i-sliders"></use></svg>
-        </button>
-      </div>
+      </form>
 
       <div class="layout">
         <div class="main-column">
@@ -4191,6 +4192,17 @@ function handleClick(event) {
     'go-back': goBack,
     'toggle-connection': toggleConnection,
     'trip-kind': () => { state.tripType = value; state.ticketType = value === 'return' ? 'return' : 'oneway'; renderCurrentScreen(); },
+    'book-searched-route': () => {
+      const route = actionTrigger.dataset.route;
+      state.selectedRoute = route;
+      state.bookingStep = 2;
+      const rc = appData.routeCards.find(r => r.key === route);
+      if (rc) {
+        state.searchFrom = rc.stageA;
+        state.searchTo = rc.stageB;
+      }
+      navigate('book');
+    },
     'select-route-card': () => {
       const route = actionTrigger.dataset.route;
       state.selectedRoute = route;
@@ -5478,6 +5490,105 @@ function initTrackingMiniMaps() {
       console.error('Failed to init mini-map:', targetSpec.id, err);
     }
   });
+}
+
+function findMatchingRoutes(query) {
+  if (!query) return [];
+  const q = query.toLowerCase().trim();
+  return appData.routeCards.filter(rc => {
+    return rc.cityA.toLowerCase().includes(q) ||
+           rc.cityB.toLowerCase().includes(q) ||
+           rc.stageA.toLowerCase().includes(q) ||
+           rc.stageB.toLowerCase().includes(q) ||
+           rc.corridor.toLowerCase().includes(q) ||
+           rc.via.toLowerCase().includes(q);
+  });
+}
+
+function handleSearchSubmit(query) {
+  if (!query || !query.trim()) {
+    toast('Please enter a destination, stage, or town to search.', 'warning');
+    return;
+  }
+  state.homeSearchQuery = query;
+  navigate('search-results');
+}
+
+function renderSearchResultsScreen() {
+  const query = state.homeSearchQuery || '';
+  const matchingRoutes = findMatchingRoutes(query);
+  
+  return `
+    ${screenHead('Search Corridors', `Search results for "${escapeHtml(query)}"`)}
+    
+    <form class="search-row" onsubmit="event.preventDefault(); handleSearchSubmit(this.querySelector('.search-input').value);" style="margin-top: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; margin-bottom: 22px;">
+      <div style="position: relative; display: flex; align-items: center; min-width: 0;">
+        <i data-lucide="search" style="position: absolute; left: 16px; color: var(--muted); width: 18px; height: 18px; pointer-events: none;"></i>
+        <input class="search-input" type="text" placeholder="Search route, stage or service..." style="width: 100%; min-height: 50px; border-radius: 14px; border: 1px solid var(--border); padding: 0 16px 0 46px; background: white; font-weight: 650; color: var(--ink); outline: none; font-size: 0.95rem;" value="${escapeHtml(query)}" />
+      </div>
+      <button class="button button--ghost" type="submit" style="min-height: 50px; border-radius: 14px; padding-inline: 20px; font-weight: 700; cursor: pointer; color: var(--brand-blue);">Search</button>
+    </form>
+
+    <div class="search-results-list" style="display: grid; gap: 16px;">
+      ${matchingRoutes.length ? matchingRoutes.map(rc => {
+        const stations = rc.corridor.split(' \u2022 ');
+        const formattedCorridor = stations.map(s => {
+          const isMatch = query && s.toLowerCase().includes(query.toLowerCase());
+          return isMatch ? `<strong style="color: var(--brand-blue); background: var(--info-soft); padding: 2px 6px; border-radius: 6px;">${s}</strong>` : s;
+        }).join(' \u2192 ');
+
+        return `
+          <article class="card search-result-card" style="margin: 0; padding: 18px; display: flex; flex-direction: column; gap: 14px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;">
+            <div style="display: flex; justify-content: space-between; align-items: start; gap: 12px;">
+              <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 750; display: block;">${rc.via}</span>
+                <h3 style="margin: 4px 0 0; font-size: 1.25rem; font-weight: 850; color: var(--brand-blue-dark);">${rc.cityA} &rarr; ${rc.cityB}</h3>
+              </div>
+              <div style="text-align: right;">
+                <span class="muted" style="font-size: 0.75rem; display: block;">Fare from</span>
+                <strong style="font-size: 1.15rem; color: var(--brand-blue); font-weight: 800;">${rc.price}</strong>
+              </div>
+            </div>
+
+            <div style="font-size: 0.88rem; background: var(--page); padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03);">
+              <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px; color: var(--muted); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em;">
+                <i data-lucide="route" style="width: 14px; height: 14px;"></i> Corridor Stages
+              </div>
+              <p style="margin: 0; line-height: 1.45; color: var(--charcoal); font-weight: 550;">${formattedCorridor}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+              <span style="font-size: 0.82rem; color: var(--muted); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                <i data-lucide="check" style="width: 14px; height: 14px; color: var(--success); stroke-width: 3;"></i> Bookable Online
+              </span>
+              <button class="button button--primary button--small" type="button" data-action="book-searched-route" data-route="${rc.key}">
+                Book Ride
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('') : `
+        <div class="card" style="margin: 0; padding: 36px 20px; text-align: center; display: grid; justify-items: center; gap: 16px;">
+          <div style="background: var(--red-soft); color: var(--brand-red); display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%;">
+            <i data-lucide="search" style="width: 32px; height: 32px;"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 6px; font-size: 1.15rem; font-weight: 800; color: var(--brand-blue-dark);">No Corridors Found</h3>
+            <p class="muted" style="margin: 0; font-size: 0.88rem; max-width: 280px; margin-inline: auto;">We couldn't find any active transit corridors matching "${escapeHtml(query)}".</p>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px;">
+            <button class="button button--ghost button--small" type="button" onclick="handleSearchSubmit('Kajjansi')">Try Kajjansi</button>
+            <button class="button button--ghost button--small" type="button" onclick="handleSearchSubmit('Masaka')">Try Masaka</button>
+            <button class="button button--ghost button--small" type="button" onclick="handleSearchSubmit('Kampala')">Try Kampala</button>
+          </div>
+        </div>
+      `}
+    </div>
+
+    <div class="floating-cta-container" style="margin-top: 24px;">
+      <button class="button button--ghost w-full" type="button" data-screen="home">Back to Home</button>
+    </div>
+  `;
 }
 
 // Global error logging for prototype debugging
