@@ -860,7 +860,12 @@ function renderHome() {
       price: formatUGX(trip.fare),
       vehicle: trip.vehicle,
       traffic: `${trip.traffic} traffic`,
-      img: img
+      img: img,
+      plate: trip.plate,
+      driverName: trip.driverName,
+      driverRating: trip.driverRating,
+      countdown: trip.countdown,
+      currentStage: trip.currentStage
     };
   });
 
@@ -927,6 +932,14 @@ function renderHome() {
             <div class="departure-scroll" id="departureCarousel">
               ${departures.map((dep, index) => {
                 const isSaved = state.savedDepartures && state.savedDepartures.includes(dep.id);
+                const driverKey = dep.driverName.toLowerCase();
+                const driverInfo = driversData[driverKey];
+                const driverAvatarImg = driverInfo && driverInfo.avatar ? driverInfo.avatar : '';
+                
+                let driverAvatarHTML = `<i data-lucide="user" style="width: 14px; height: 14px;"></i>`;
+                if (driverAvatarImg) {
+                  driverAvatarHTML = `<img src="${driverAvatarImg}" alt="${dep.driverName}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
+                }
                 
                 let visualClass = '';
                 let visualDecorations = '';
@@ -977,11 +990,37 @@ function renderHome() {
                   <div class="departure-body">
                     <div class="departure-title-row">
                       <div>
-                        <h3>${dep.origin.split(' ')[0]} → ${dep.dest.split(' ')[0]}</h3>
-                        <p>${dep.vehicle} · ${dep.traffic}</p>
+                        <h3 style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 0 0 4px 0;">
+                          <span>${dep.origin.split(' ')[0]} → ${dep.dest.split(' ')[0]}</span>
+                          <span class="ug-plate-badge" style="display: inline-flex; flex-direction: column; border: 1.2px solid #000; border-radius: 4px; background: #fdfcfa; padding: 1px 4px; font-weight: 800; font-family: monospace; font-size: 0.65rem; color: #000; box-shadow: var(--shadow-xs); line-height: 1.1; vertical-align: middle;">
+                            <span class="ug-flag-strip" style="height: 1.5px; display: block; width: 100%; background: linear-gradient(90deg, #000 0%, #000 16.6%, #ffd900 16.6%, #ffd900 33.3%, #e51e2a 33.3%, #e51e2a 50%, #000 50%, #000 66.6%, #ffd900 66.6%, #ffd900 83.3%, #e51e2a 83.3%, #e51e2a 100%);"></span>
+                            <span style="display: block;">${dep.plate}</span>
+                          </span>
+                        </h3>
+                        <p style="margin: 0;">${dep.vehicle} · ${dep.traffic}</p>
                       </div>
                       <span class="capacity-chip ${isWarning ? 'warning' : ''}">${dep.spaces} space${dep.spaces === 1 ? '' : 's'}</span>
                     </div>
+
+                    <!-- Driver Row -->
+                    <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${dep.driverName.toLowerCase()}');" style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 10px; margin-bottom: 2px;">
+                      <div class="driver-circle-avatar" style="width: 28px; height: 28px; border-radius: 50%; background: #e8f4fd; display: flex; align-items: center; justify-content: center; color: var(--blue-700); overflow: hidden;">
+                        ${driverAvatarHTML}
+                      </div>
+                      <div class="driver-text-block" style="display: flex; align-items: center;">
+                        <strong style="font-size: 0.85rem; color: var(--ink);">${dep.driverName}</strong>
+                        <span style="font-size: 0.72rem; background: var(--gold-soft); padding: 1px 4px; border-radius: 4px; font-weight: 600; color: #7a5e00; margin-left: 5px; display: inline-flex; align-items: center; gap: 1px;">${dep.driverRating} ★</span>
+                        <span class="muted text-small" style="font-size: 0.75rem; color: var(--muted); margin-left: 6px;">· Driver</span>
+                      </div>
+                    </div>
+
+                    <!-- Proximity / Stage Row -->
+                    <div class="taxi-proximity-row" style="display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--muted); margin-top: 6px; margin-bottom: 12px;">
+                      <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="clock" style="width: 12px; height: 12px;"></i> ${dep.countdown}</span>
+                      <span>·</span>
+                      <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="map-pin" style="width: 12px; height: 12px;"></i> ${dep.currentStage}</span>
+                    </div>
+
                     <div class="departure-times">
                       <div class="time"><strong>${dep.time}</strong><span>Departure</span></div>
                       <div class="time-line"></div>
