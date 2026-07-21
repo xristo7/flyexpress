@@ -1115,8 +1115,8 @@ function renderBook() {
     return `
       <div class="booking-map-wrapper">
         <div id="booking-step2-map" style="width: 100%; height: 100%; z-index: 1;"></div>
-        <div id="booking-step2-map-fallback" class="map-fallback" style="position: absolute; inset: 0; background: #eef3f7; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; gap: 8px;" hidden>
-          <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;">
+        <div id="booking-step2-map-fallback" class="trip-map-fallback" style="background: #eef3f7; z-index: 2;" hidden>
+          <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
           <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Preparing Route Map...</strong>
           <span style="font-size: 0.8rem; color: var(--muted);">Connecting to map tiles...</span>
         </div>
@@ -2037,8 +2037,10 @@ function renderLiveTrip() {
     <section class="live-layout live-layout--media">
       <div class="live-map live-map--media" aria-label="Animated Fly Express route preview" style="position: relative; overflow: hidden; min-height: 480px;">
         <div id="live-travel-map" style="width: 100%; height: 100%; position: absolute; inset: 0; z-index: 1;"></div>
-        <div id="live-travel-map-fallback" class="map-fallback" style="position: absolute; inset: 0; background: #eef3f7; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2;" hidden>
-          <strong style="color: var(--brand-blue-dark);">Preparing Live Map...</strong>
+        <div id="live-travel-map-fallback" class="trip-map-fallback" style="background: #eef3f7; z-index: 2;" hidden>
+          <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
+          <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Preparing Live Map...</strong>
+          <span style="font-size: 0.8rem; color: var(--muted);">Connecting to map tiles...</span>
         </div>
         <div class="map-media-topbar" style="z-index: 10; position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; pointer-events: none;">
           <span class="map-live-pill" style="pointer-events: auto;"><span></span>Live preview</span>
@@ -3884,6 +3886,7 @@ function initTripMap() {
 function initBookingStep2Map() {
   const target = $('#booking-step2-map');
   const fallback = $('#booking-step2-map-fallback');
+  if (fallback) fallback.hidden = false;
   if (!target) return;
   if (!window.L) {
     if (fallback) fallback.hidden = false;
@@ -3924,6 +3927,7 @@ function initBookingStep2Map() {
 function initLiveTravelMap() {
   const target = $('#live-travel-map');
   const fallback = $('#live-travel-map-fallback');
+  if (fallback) fallback.hidden = false;
   if (!target) return;
   if (!window.L) {
     if (fallback) fallback.hidden = false;
