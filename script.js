@@ -2059,11 +2059,31 @@ function renderParcelBooking() {
   const steps = ['Sender','Recipient','Parcel','Route','Delivery','Summary','Payment','Confirmed'];
   return `
     ${screenHead('Send a parcel', 'Book a traceable stage-to-stage parcel delivery using demonstration data.')}
+    
+    <!-- Horizontal progress bar for desktop -->
     <div class="flow-progress" aria-label="Parcel booking progress">${steps.map((label,index) => `<div class="flow-step ${state.parcelStep === index + 1 ? 'is-active' : state.parcelStep > index + 1 ? 'is-complete' : ''}"><span class="flow-step__number">${state.parcelStep > index + 1 ? '<i data-lucide="check"></i>' : index + 1}</span><span>${label}</span></div>`).join('')}</div>
-    <section class="grid grid--sidebar">
-      <div class="card">${renderParcelStep()}</div>
-      <aside class="grid"><article class="card"><p class="section-kicker">Live estimate</p><h2>${state.parcelDelivery}</h2><div class="detail-list"><div class="detail-row"><span>Origin</span><strong>${escapeHtml(state.parcel.origin)}</strong></div><div class="detail-row"><span>Destination</span><strong>${escapeHtml(state.parcel.destination)}</strong></div><div class="detail-row"><span>Category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery time</span><strong>${state.parcelDelivery === 'Priority Stage-to-Stage' ? 'Next eligible departure' : state.parcelDelivery === 'Hold for Collection' ? '1–2 hours, then held' : state.parcelDelivery === 'Future Last-Mile Delivery' ? 'Same-day concept preview' : '1–2 hours'}</strong></div><div class="detail-row"><span>Estimated price</span><strong>${formatUGX(parcelPrice())}</strong></div></div></article><div class="notice"><i data-lucide="package-check"></i><div><strong>Parcel safety</strong><div>Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div></div></div></aside>
-    </section>`;
+    
+    <div class="parcel-booking-flow-container">
+      <!-- Vertical rail progress step indicator for mobile -->
+      <div class="vertical-step-rail" aria-hidden="true">
+        ${steps.map((label, index) => {
+          const isActive = state.parcelStep === index + 1;
+          const isComplete = state.parcelStep > index + 1;
+          const statusClass = isActive ? 'is-active' : isComplete ? 'is-complete' : '';
+          return `
+            <div class="rail-step ${statusClass}">
+              <span class="rail-step__number">${isComplete ? '<i data-lucide="check" style="width:14px;height:14px;"></i>' : index + 1}</span>
+              <span class="rail-step__label">${label}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      
+      <section class="grid grid--sidebar parcel-booking-main-grid">
+        <div class="card">${renderParcelStep()}</div>
+        <aside class="grid"><article class="card"><p class="section-kicker">Live estimate</p><h2>${state.parcelDelivery}</h2><div class="detail-list"><div class="detail-row"><span>Origin</span><strong>${escapeHtml(state.parcel.origin)}</strong></div><div class="detail-row"><span>Destination</span><strong>${escapeHtml(state.parcel.destination)}</strong></div><div class="detail-row"><span>Category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery time</span><strong>${state.parcelDelivery === 'Priority Stage-to-Stage' ? 'Next eligible departure' : state.parcelDelivery === 'Hold for Collection' ? '1–2 hours, then held' : state.parcelDelivery === 'Future Last-Mile Delivery' ? 'Same-day concept preview' : '1–2 hours'}</strong></div><div class="detail-row"><span>Estimated price</span><strong>${formatUGX(parcelPrice())}</strong></div></div></article><div class="notice"><i data-lucide="package-check"></i><div><strong>Parcel safety</strong><div>Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div></div></div></aside>
+      </section>
+    </div>`;
 }
 
 function renderParcelStep() {
