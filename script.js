@@ -737,7 +737,12 @@ function renderCurrentScreen(preserveFocus = true) {
   if (state.screen === 'ticket') setTimeout(initTicketQr, 0);
   if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
   if (focusDescriptor) setTimeout(() => restoreDescribedFocus(root, focusDescriptor), 20);
-  if (state.screen === 'live') startLiveProgress(); else stopLiveProgress();
+  if (state.screen === 'live') {
+    startLiveProgress();
+    setTimeout(() => { if (state.screen === 'live') initLiveTravelMap(); }, 240);
+  } else {
+    stopLiveProgress();
+  }
   if (state.screen === 'home') setTimeout(initHomeCarousel, 50);
 }
 
@@ -1986,12 +1991,42 @@ function tripCard(day, month, route, date, vehicle, status, type, payment, mode)
 let liveTimer;
 function startLiveProgress() {
   stopLiveProgress();
+
+  let routeKey = state.selectedRoute || 'entebbe';
+  if (state.activeTrip) {
+    const boarding = state.activeTrip.boarding.toLowerCase();
+    const destination = state.activeTrip.destination.toLowerCase();
+    const rc = appData.routeCards.find(r => 
+      (boarding.includes(r.cityA.toLowerCase()) && destination.includes(r.cityB.toLowerCase())) ||
+      (boarding.includes(r.cityB.toLowerCase()) && destination.includes(r.cityA.toLowerCase()))
+    );
+    if (rc) routeKey = rc.key;
+  }
+  const isReverse = state.activeTrip ? state.activeTrip.boarding.toLowerCase().includes('kampala') || state.activeTrip.boarding.toLowerCase().includes('bweyogere') || state.activeTrip.boarding.toLowerCase().includes('busega') || state.activeTrip.boarding.toLowerCase().includes('nambole') || state.activeTrip.boarding.toLowerCase().includes('masaka') || state.activeTrip.boarding.toLowerCase().includes('lyantonde') || state.activeTrip.boarding.toLowerCase().includes('mbarara') : false;
+  const points = getCurrentRoutePoints(routeKey, isReverse);
+  
+  const rc = appData.routeCards.find(r => r.key === routeKey) || appData.routeCards[0];
+  const towns = isReverse ? rc.corridor.split(' \u2022 ').reverse() : rc.corridor.split(' \u2022 ');
+
   liveTimer = setInterval(() => {
-    state.routeProgress = state.routeProgress >= 84 ? 68 : state.routeProgress + 1;
-    $$('.live-progress-bar span, .live-road__progress').forEach(el => el.style.width = `${state.routeProgress}%`);
+    state.routeProgress = state.routeProgress >= 95 ? 20 : state.routeProgress + 2;
+    
+    $$('.live-progress-bar span').forEach(el => el.style.width = `${state.routeProgress}%`);
     const label = $('#live-progress-value'); if (label) label.textContent = `${state.routeProgress}%`;
-    const marker = $('.vehicle-marker'); if (marker) marker.style.left = `${Math.min(78, state.routeProgress - 8)}%`;
-  }, 1400);
+    
+    if (liveTravelMap && liveVehicleMarker) {
+      const idx = Math.min(points.length - 1, Math.floor((state.routeProgress / 100) * points.length));
+      liveVehicleMarker.setLatLng(points[idx]);
+    }
+    
+    const currentTownIdx = Math.min(towns.length - 1, Math.floor((state.routeProgress / 100) * towns.length));
+    const nextTownIdx = Math.min(towns.length - 1, currentTownIdx + 1);
+    const metaRow = $('#live-trip-meta-row');
+    if (metaRow) {
+      metaRow.innerHTML = `<span><i data-lucide="map-pin" style="display:inline-block;width:12px;height:12px;vertical-align:middle;margin-right:3px;"></i>Current: ${towns[currentTownIdx]}</span><span><i data-lucide="flag" style="display:inline-block;width:12px;height:12px;vertical-align:middle;margin-right:3px;"></i>Next: ${towns[nextTownIdx]}</span>`;
+      refreshIcons();
+    }
+  }, 1800);
 }
 function stopLiveProgress() { clearInterval(liveTimer); }
 
@@ -2000,16 +2035,19 @@ function renderLiveTrip() {
   return `
     ${screenHead('Live travel tracking', `Follow ${trip.plate} along the demonstration ${trip.boarding}–${trip.destination} corridor.`, '<button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Travel</button>')}
     <section class="live-layout live-layout--media">
-      <div class="live-map live-map--media" aria-label="Animated Fly Express route preview from Entebbe toward Kampala">
-        <video class="live-map__media" autoplay muted loop playsinline aria-label="Animated map preview showing a vehicle travelling from Entebbe toward Kampala"><source src="assets/fly-express-live-route.mp4" type="video/mp4"></video>
-        <div class="map-media-topbar">
-          <span class="map-live-pill"><span></span>Live preview</span>
-          <span class="map-vehicle-pill"><i data-lucide="bus-front"></i>${trip.plate}</span>
+      <div class="live-map live-map--media" aria-label="Animated Fly Express route preview" style="position: relative; overflow: hidden; min-height: 480px;">
+        <div id="live-travel-map" style="width: 100%; height: 100%; position: absolute; inset: 0; z-index: 1;"></div>
+        <div id="live-travel-map-fallback" class="map-fallback" style="position: absolute; inset: 0; background: #eef3f7; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2;" hidden>
+          <strong style="color: var(--brand-blue-dark);">Preparing Live Map...</strong>
         </div>
-        <div class="live-progress-card live-progress-card--media">
+        <div class="map-media-topbar" style="z-index: 10; position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; pointer-events: none;">
+          <span class="map-live-pill" style="pointer-events: auto;"><span></span>Live preview</span>
+          <span class="map-vehicle-pill" style="pointer-events: auto;"><i data-lucide="bus-front"></i>${trip.plate}</span>
+        </div>
+        <div class="live-progress-card live-progress-card--media" style="z-index: 10; position: absolute; bottom: 12px; left: 12px; right: 12px; pointer-events: auto;">
           <div class="live-progress-row"><strong>${trip.boarding} → ${trip.destination}</strong><strong id="live-progress-value">${state.routeProgress}%</strong></div>
           <div class="live-progress-bar"><span style="width:${state.routeProgress}%"></span></div>
-          <div class="trip-meta"><span><i data-lucide="map-pin"></i>Current: Kajjansi</span><span><i data-lucide="flag"></i>Next: Clock Tower</span></div>
+          <div class="trip-meta" id="live-trip-meta-row"><span><i data-lucide="map-pin"></i>Current: Entebbe</span><span><i data-lucide="flag"></i>Next: Kitooro</span></div>
         </div>
       </div>
       <aside class="grid">
@@ -3520,6 +3558,8 @@ function renderTracking() {
 let tripReviewMap = null;
 let tripReviewScrollFrame = null;
 let bookingStep2Map = null;
+let liveTravelMap = null;
+let liveVehicleMarker = null;
 
 function getCurrentRoutePoints(routeKey, isReverse = false) {
   const outbound = [[0.0606, 32.4435], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
@@ -3780,6 +3820,10 @@ function destroyTripMap() {
     bookingStep2Map.remove();
     bookingStep2Map = null;
   }
+  if (liveTravelMap) {
+    liveTravelMap.remove();
+    liveTravelMap = null;
+  }
 }
 
 function initTripMap() {
@@ -3871,6 +3915,66 @@ function initBookingStep2Map() {
     if (!bookingStep2Map || !target.isConnected) return;
     bookingStep2Map.invalidateSize({ animate: false, pan: false });
     bookingStep2Map.fitBounds(bounds, { animate: false, padding: [40, 40] });
+  };
+  fitMap();
+  requestAnimationFrame(() => requestAnimationFrame(fitMap));
+  setTimeout(fitMap, 320);
+}
+
+function initLiveTravelMap() {
+  const target = $('#live-travel-map');
+  const fallback = $('#live-travel-map-fallback');
+  if (!target) return;
+  if (!window.L) {
+    if (fallback) fallback.hidden = false;
+    return;
+  }
+  
+  let routeKey = state.selectedRoute || 'entebbe';
+  if (state.activeTrip) {
+    const boarding = state.activeTrip.boarding.toLowerCase();
+    const destination = state.activeTrip.destination.toLowerCase();
+    const rc = appData.routeCards.find(r => 
+      (boarding.includes(r.cityA.toLowerCase()) && destination.includes(r.cityB.toLowerCase())) ||
+      (boarding.includes(r.cityB.toLowerCase()) && destination.includes(r.cityA.toLowerCase()))
+    );
+    if (rc) routeKey = rc.key;
+  }
+  
+  const isReverse = state.activeTrip ? state.activeTrip.boarding.toLowerCase().includes('kampala') || state.activeTrip.boarding.toLowerCase().includes('bweyogere') || state.activeTrip.boarding.toLowerCase().includes('busega') || state.activeTrip.boarding.toLowerCase().includes('nambole') || state.activeTrip.boarding.toLowerCase().includes('masaka') || state.activeTrip.boarding.toLowerCase().includes('lyantonde') || state.activeTrip.boarding.toLowerCase().includes('mbarara') : false;
+  
+  const points = getCurrentRoutePoints(routeKey, isReverse);
+  liveTravelMap = L.map(target, { attributionControl: false, boxZoom: false, doubleClickZoom: true, dragging: true, keyboard: false, scrollWheelZoom: true, touchZoom: true, zoomControl: false });
+  
+  let tileErrors = 0;
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: true });
+  tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
+  tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
+  tiles.addTo(liveTravelMap);
+  
+  L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(liveTravelMap);
+  L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(liveTravelMap);
+  
+  const labelFrom = state.activeTrip ? state.activeTrip.boarding : 'Origin';
+  const labelTo = state.activeTrip ? state.activeTrip.destination : 'Destination';
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelFrom, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(liveTravelMap);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelTo, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(liveTravelMap);
+  
+  const startProgressIdx = Math.floor((state.routeProgress / 100) * points.length);
+  const vehiclePoint = points[Math.min(points.length - 1, startProgressIdx)];
+  
+  const plate = state.activeTrip ? state.activeTrip.plate : 'UBM 245K';
+  const countdown = state.activeTrip ? state.activeTrip.countdown : 'Live tracking';
+  
+  liveVehicleMarker = L.circleMarker(vehiclePoint, { color: '#fff', fillColor: '#f2a104', fillOpacity: 1, radius: 10, weight: 4 })
+    .bindTooltip(`Live: ${plate} (${countdown})`, { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' })
+    .addTo(liveTravelMap);
+    
+  const bounds = L.latLngBounds(points);
+  const fitMap = () => {
+    if (!liveTravelMap || !target.isConnected) return;
+    liveTravelMap.invalidateSize({ animate: false, pan: false });
+    liveTravelMap.fitBounds(bounds, { animate: false, padding: [40, 40] });
   };
   fitMap();
   requestAnimationFrame(() => requestAnimationFrame(fitMap));
