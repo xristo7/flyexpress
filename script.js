@@ -27,8 +27,8 @@ const appData = {
   trips: [
     { id: 't1', depart: '8:30 AM', arrive: '9:35 AM', seats: 4, status: 'Available', vehicle: 'Highroof', plate: 'UBM 245K', duration: '1 hr 05 min', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Entebbe Main Stage', comingFrom: 'Kampala Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 0, vansAtStage: 5, vansApproaching: 1, driverName: 'Moses Mukasa', driverPhone: '+256 774 123 456', driverRating: '4.9', countdown: '5 mins until departure' },
     { id: 't2', depart: '9:00 AM', arrive: '10:00 AM', seats: 8, status: 'Available', vehicle: 'Highroof', plate: 'UBP 318F', duration: '1 hr', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kitooro', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 1, vansAtStage: 2, vansApproaching: 2, driverName: 'John Ssekabira', driverPhone: '+256 701 987 654', driverRating: '4.8', countdown: '12 mins until arrival' },
-    { id: 't3', depart: '9:30 AM', arrive: '10:45 AM', seats: 2, status: 'Almost full', vehicle: 'Drone', plate: 'UBN 742D', duration: '1 hr 15 min', fare: 5000, traffic: 'Heavy', boarding: 'Kitooro', destination: 'Clock Tower', currentStage: 'Abayita Ababiri', comingFrom: 'Entebbe Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 2, vansAtStage: 1, vansApproaching: 3, driverName: 'David Okello', driverPhone: '+256 752 456 789', driverRating: '4.7', countdown: '28 mins until arrival' },
-    { id: 't4', depart: '10:00 AM', arrive: '11:00 AM', seats: 11, status: 'Available', vehicle: 'Drone', plate: 'UBQ 915A', duration: '1 hr', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kajjansi', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 3, vansAtStage: 4, vansApproaching: 0, driverName: 'Peter Semwanga', driverPhone: '+256 781 333 444', driverRating: '4.9', countdown: '35 mins until arrival' },
+    { id: 't3', depart: '9:30 AM', arrive: '10:45 AM', seats: 2, status: 'Almost full', vehicle: 'Commuter', plate: 'UBN 742D', duration: '1 hr 15 min', fare: 5000, traffic: 'Heavy', boarding: 'Kitooro', destination: 'Clock Tower', currentStage: 'Abayita Ababiri', comingFrom: 'Entebbe Main Stage', headingTo: 'Kampala Main Stage', markerIndex: 2, vansAtStage: 1, vansApproaching: 3, driverName: 'David Okello', driverPhone: '+256 752 456 789', driverRating: '4.7', countdown: '28 mins until arrival' },
+    { id: 't4', depart: '10:00 AM', arrive: '11:00 AM', seats: 11, status: 'Available', vehicle: 'Commuter', plate: 'UBQ 915A', duration: '1 hr', fare: 5000, traffic: 'Moderate', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Kajjansi', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 3, vansAtStage: 4, vansApproaching: 0, driverName: 'Peter Semwanga', driverPhone: '+256 781 333 444', driverRating: '4.9', countdown: '35 mins until arrival' },
     { id: 't5', depart: '10:30 AM', arrive: '11:35 AM', seats: 6, status: 'Available', vehicle: 'Highroof', plate: 'UBR 104C', duration: '1 hr 05 min', fare: 5000, traffic: 'Light', boarding: 'Entebbe Main Stage', destination: 'Kampala Main Stage', currentStage: 'Clock Tower', comingFrom: 'Kampala Main Stage', headingTo: 'Entebbe Main Stage', markerIndex: 4, vansAtStage: 0, vansApproaching: 2, driverName: 'Arthur Ssewankambo', driverPhone: '+256 702 111 222', driverRating: '4.6', countdown: '45 mins until arrival' }
   ],
   luggage: [
@@ -87,7 +87,7 @@ const driversData = {
     km: '48,200',
     associationTime: '2 years 0 months',
     bio: 'Experienced passenger van driver on the Kampala-Entebbe corridor. Committed to passenger safety and comfort.',
-    vehicle: 'High-roof van',
+    vehicle: 'Highroof',
     plate: 'UBM 245K',
     color: 'White & Blue',
     status: 'idle',
@@ -106,7 +106,7 @@ const driversData = {
     km: '36,500',
     associationTime: '1 year 6 months',
     bio: 'Reliable and friendly driver. Enjoys interacting with commuters and keeping a clean vehicle.',
-    vehicle: '18-seat van',
+    vehicle: 'Highroof',
     plate: 'UBP 318F',
     color: 'White & Blue',
     status: 'idle',
@@ -125,7 +125,7 @@ const driversData = {
     km: '28,100',
     associationTime: '1 year 0 months',
     bio: 'Punctual and focused driver with great knowledge of traffic patterns and alternative routes.',
-    vehicle: '14-seat van',
+    vehicle: 'Commuter',
     plate: 'UBN 742D',
     color: 'White & Blue',
     status: 'idle',
@@ -144,7 +144,7 @@ const driversData = {
     km: '61,200',
     associationTime: '3 years 0 months',
     bio: 'One of the association\'s most senior drivers. Extremely safe records and highly commended by regulars.',
-    vehicle: 'High-roof van',
+    vehicle: 'Commuter',
     plate: 'UBQ 915A',
     color: 'White & Blue',
     status: 'idle',
@@ -163,7 +163,7 @@ const driversData = {
     km: '21,000',
     associationTime: '0 years 9 months',
     bio: 'Courteous driver specializing in morning commutes. Always ready to assist passengers with luggage.',
-    vehicle: 'High-roof van',
+    vehicle: 'Highroof',
     plate: 'UBR 104C',
     color: 'White & Blue',
     status: 'idle',
@@ -353,7 +353,7 @@ function getSearchResults() {
 
 function getVanCapacity(trip) {
   if (trip.vehicle === 'Highroof') return 18;
-  return 14; // Drone
+  return 14; // Commuter
 }
 
 function captureFocusDescriptor(root) {
@@ -1943,7 +1943,7 @@ function renderSpecialHire() {
     noah: 'Toyota Noah (7 Seats)',
     minivan: 'Alphard / Minivan (10 Seats)',
     commuter: 'Toyota HiAce Commuter (14 Seats)',
-    highroof: 'Toyota HiAce High Roof (18 Seats)',
+    highroof: 'Toyota HiAce Highroof (18 Seats)',
     coaster: 'Executive Coaster (30 Seats)'
   };
   
@@ -1996,8 +1996,8 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Toyota HiAce High Roof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce High Roof (18 Seats)</h3>
+              <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Toyota HiAce Highroof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce Highroof (18 Seats)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
                 <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Extra Headroom & AC</span>
@@ -3220,7 +3220,7 @@ function renderSeatMode() {
   const occupiedList = getOccupiedSeatsForTrip(state.activeTrip);
   const isHighroof = state.activeTrip && state.activeTrip.vehicle && state.activeTrip.vehicle.toLowerCase() === 'highroof';
 
-  // 14-seater Drone layout (existing)
+  // 14-seater Commuter layout (existing)
   const seats14 = [
     ['1A',29.2,29.3], ['1B',45.5,29.3],
     ['2A',28.7,43.3], ['2B',53.2,43.3], ['2C',69.6,43.3],
@@ -3245,7 +3245,7 @@ function renderSeatMode() {
 
   const seats = isHighroof ? seats18 : seats14;
   const imgSrc = isHighroof ? 'assets/fly-express-highroof-topdown.png' : 'assets/fly-express-14-seater.png';
-  const imgAlt = isHighroof ? 'Top view of the Fly Express 18-seater high roof vehicle interior' : 'Top view of the Fly Express 14-seater vehicle interior';
+  const imgAlt = isHighroof ? 'Top view of the Fly Express 18-seater Highroof interior' : 'Top view of the Fly Express 14-seater Commuter interior';
   const seatCount = isHighroof ? 18 : 14;
   const driverLeft = isHighroof ? '72.0' : '67.9';
   const driverTop = isHighroof ? '29.5' : '29.4';
@@ -4285,7 +4285,7 @@ function openMoreSheet() {
 }
 
 function showSearchFilters() {
-  openModal('Search filters', `<div class="form-grid"><div class="field"><label>Approximate travel time</label><select><option>Any duration</option><option>Up to 60 minutes</option><option>Up to 90 minutes</option></select></div><div class="field"><label>Vehicle type</label><select><option>All vehicles</option><option>14-seat high-roof van</option><option>18-seat high-roof van</option></select></div><div class="field"><label>Capacity</label><select><option>Any availability</option><option>5+ spaces</option><option>10+ spaces</option></select></div><div class="field"><label>Traffic condition</label><select><option>All conditions</option><option>Light</option><option>Moderate</option></select></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="apply-filters">Apply Filters</button>`);
+  openModal('Search filters', `<div class="form-grid"><div class="field"><label>Approximate travel time</label><select><option>Any duration</option><option>Up to 60 minutes</option><option>Up to 90 minutes</option></select></div><div class="field"><label>Vehicle type</label><select><option>All vehicles</option><option>14-seat Commuter</option><option>18-seat Highroof</option></select></div><div class="field"><label>Capacity</label><select><option>Any availability</option><option>5+ spaces</option><option>10+ spaces</option></select></div><div class="field"><label>Traffic condition</label><select><option>All conditions</option><option>Light</option><option>Moderate</option></select></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="apply-filters">Apply Filters</button>`);
 }
 
 function showShareModal(title = 'Share ticket') {
