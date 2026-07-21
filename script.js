@@ -744,6 +744,7 @@ function renderCurrentScreen(preserveFocus = true) {
     stopLiveProgress();
   }
   if (state.screen === 'home') setTimeout(initHomeCarousel, 50);
+  if (state.screen === 'tracking') setTimeout(initTrackingMiniMaps, 240);
 }
 
 function initHomeCarousel() {
@@ -3364,10 +3365,8 @@ function renderTracking() {
     travelsContent = `
       <div class="grid" style="gap: 14px; margin-top: 16px;">
         ${travels.map(t => `
-          <article class="card trip-card" style="margin: 0;">
-            <div class="trip-date-block" style="background: var(--info-soft); color: var(--brand-blue); display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; flex: 0 0 auto;">
-              <i data-lucide="navigation" style="width: 20px; height: 20px;"></i>
-            </div>
+          <article class="card trip-card" style="margin: 0; display: flex !important; gap: 14px; align-items: flex-start; padding: 16px !important;">
+            <div id="mini-map-travel-${t.id}" class="mini-map-thumbnail" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #eef3f7; border: 1px solid var(--border); flex-shrink: 0; position: relative;"></div>
             <div style="flex: 1; min-width: 0;">
               <div class="card-head" style="padding: 0; border: 0; background: transparent; display: flex; align-items: start; justify-content: space-between; gap: 8px;">
                 <div>
@@ -3429,8 +3428,9 @@ function renderTracking() {
     parcelsContent = `
       <div class="grid" style="gap: 14px; margin-top: 16px;">
         ${parcels.map(p => `
-          <article class="card parcel-list-card" style="margin: 0;">
-            <div class="card-head" style="padding: 0; border: 0; background: transparent; display: flex; align-items: start; justify-content: space-between; gap: 8px;">
+          <article class="card parcel-list-card" style="margin: 0; display: flex !important; gap: 14px; align-items: flex-start; padding: 16px !important;">
+            <div id="mini-map-parcel-${p.id.replace('#', '')}" class="mini-map-thumbnail" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #eef3f7; border: 1px solid var(--border); flex-shrink: 0; position: relative;"></div>
+            <div style="flex: 1; min-width: 0;">
               <div>
                 <p class="section-kicker" style="margin: 0;">Tracking ${p.id}</p>
                 <h3 style="margin: 4px 0 0; font-size: 1.05rem;">${p.title}</h3>
@@ -3481,8 +3481,9 @@ function renderTracking() {
     vehiclesContent = `
       <div class="grid" style="gap: 14px; margin-top: 16px;">
         ${vehicles.map(v => `
-          <article class="card" style="margin: 0; padding: 16px;">
-            <div class="card-head" style="padding: 0; border: 0; background: transparent; display: flex; align-items: start; justify-content: space-between; gap: 8px;">
+          <article class="card" style="margin: 0; display: flex !important; gap: 14px; align-items: flex-start; padding: 16px !important;">
+            <div id="mini-map-vehicle-${v.plate.replace(' ', '-')}" class="mini-map-thumbnail" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #eef3f7; border: 1px solid var(--border); flex-shrink: 0; position: relative;"></div>
+            <div style="flex: 1; min-width: 0;">
               <div>
                 <p class="section-kicker" style="color: var(--brand-blue); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; margin: 0;">${v.plate}</p>
                 <h3 style="margin: 4px 0 0; font-size: 1.05rem;">${v.type}</h3>
@@ -5401,6 +5402,81 @@ function preloadTransparentImages() {
       state.transparentVehicles[imgUrl] = pngUrl;
       renderCurrentScreen();
     });
+  });
+}
+
+function initTrackingMiniMaps() {
+  if (!window.L) return;
+  
+  if (window.trackingMiniMaps && Array.isArray(window.trackingMiniMaps)) {
+    window.trackingMiniMaps.forEach(m => {
+      try { m.remove(); } catch(e) {}
+    });
+  }
+  window.trackingMiniMaps = [];
+
+  const mapTargets = [
+    { id: 'mini-map-travel-FET-884210', route: 'entebbe', isReverse: false, progress: 0.6, type: 'live' },
+    { id: 'mini-map-travel-FET-883109', route: 'entebbe', isReverse: true, progress: 1.0, type: 'completed' },
+    { id: 'mini-map-travel-FET-880291', route: 'entebbe', isReverse: false, progress: 0.0, type: 'cancelled' },
+    { id: 'mini-map-parcel-964201832-DL', route: 'entebbe', isReverse: false, progress: 0.4, type: 'live' },
+    { id: 'mini-map-parcel-964201710-DL', route: 'entebbe', isReverse: false, progress: 1.0, type: 'completed' },
+    { id: 'mini-map-parcel-964200988-DL', route: 'entebbe', isReverse: true, progress: 1.0, type: 'completed' },
+    { id: 'mini-map-vehicle-UBM-245K', route: 'entebbe', isReverse: false, progress: 0.0, type: 'live' },
+    { id: 'mini-map-vehicle-UBN-742D', route: 'entebbe', isReverse: true, progress: 0.8, type: 'live' }
+  ];
+
+  mapTargets.forEach(targetSpec => {
+    const el = document.getElementById(targetSpec.id);
+    if (!el) return;
+
+    try {
+      const map = L.map(el, {
+        attributionControl: false,
+        zoomControl: false,
+        boxZoom: false,
+        doubleClickZoom: false,
+        dragging: false,
+        keyboard: false,
+        scrollWheelZoom: false,
+        touchZoom: false
+      });
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        crossOrigin: false
+      }).addTo(map);
+
+      const points = getCurrentRoutePoints(targetSpec.route, targetSpec.isReverse);
+      
+      // Draw light polyline for path
+      L.polyline(points, { color: '#081b33', opacity: 0.35, weight: 4 }).addTo(map);
+      
+      // Get point location
+      const idx = Math.min(points.length - 1, Math.max(0, Math.floor(points.length * targetSpec.progress)));
+      const activePoint = points[idx];
+      
+      // Choose marker fill color
+      let markerColor = '#1677ff'; // blue
+      if (targetSpec.type === 'completed') {
+        markerColor = '#138a59'; // green
+      } else if (targetSpec.type === 'cancelled') {
+        markerColor = '#e51e2a'; // red
+      }
+
+      L.circleMarker(activePoint, {
+        color: '#fff',
+        fillColor: markerColor,
+        fillOpacity: 1,
+        radius: 6,
+        weight: 2
+      }).addTo(map);
+
+      map.setView(activePoint, 13);
+      window.trackingMiniMaps.push(map);
+    } catch (err) {
+      console.error('Failed to init mini-map:', targetSpec.id, err);
+    }
   });
 }
 
