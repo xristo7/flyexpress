@@ -745,27 +745,6 @@ function renderCurrentScreen(preserveFocus = true) {
   if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
   if (focusDescriptor) setTimeout(() => restoreDescribedFocus(root, focusDescriptor), 20);
   if (state.screen === 'live') startLiveProgress(); else stopLiveProgress();
-  if (state.screen === 'home') setTimeout(initHomeCarousel, 50);
-}
-
-function initHomeCarousel() {
-  const carousel = $('#departureCarousel');
-  if (!carousel) return;
-  let scrollTimer;
-  carousel.addEventListener('scroll', () => {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      const cards = $$('.departure-card', carousel);
-      const center = carousel.scrollLeft + carousel.clientWidth / 2;
-      let nearest = 0, distance = Infinity;
-      cards.forEach((card, index) => {
-        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-        const nextDistance = Math.abs(center - cardCenter);
-        if (nextDistance < distance) { distance = nextDistance; nearest = index; }
-      });
-      $$('.carousel-dot').forEach((dot, index) => dot.classList.toggle('is-active', index === nearest));
-    }, 80);
-  }, { passive: true });
 }
 
 function screenHead(title, description, actions = '') {
@@ -823,284 +802,80 @@ function showSearchShortcuts() {
 }
 
 function renderHome() {
-  const greeting = getGreetingText();
-  const dateStr = new Intl.DateTimeFormat('en-UG', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
-
-  // Carousel Recommended Cards Data
-  const departures = appData.trips.map((trip) => {
-    let img = 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg';
-    if (trip.vehicle === 'Highroof') {
-      img = 'assets/fly-express-hiace-highroof.jpg';
-    } else if (trip.vehicle === 'Coaster') {
-      img = 'assets/fly-express-coaster-2014_1784553048223.jpg';
-    } else if (trip.vehicle === 'Noah') {
-      img = 'assets/fly-express-noah-2014_1784553026735.jpg';
-    } else if (trip.vehicle === 'Minivan') {
-      img = 'assets/fly-express-minivan-2014_1784553037010.jpg';
-    } else if (trip.vehicle === 'Sedan') {
-      img = 'assets/fly-express-sedan-2014_1784553015505.jpg';
-    }
-
-    let badgeClass = 'is-available';
-    if (trip.status === 'Almost full') {
-      badgeClass = 'is-warning';
-    } else if (trip.status === 'Full') {
-      badgeClass = 'is-danger';
-    }
-
-    return {
-      id: trip.id,
-      origin: trip.boarding,
-      dest: trip.destination,
-      time: trip.depart,
-      arrival: trip.arrive,
-      spaces: trip.seats,
-      badge: trip.status === 'Almost full' ? 'Almost full' : `${trip.seats} spaces available`,
-      badgeClass: badgeClass,
-      price: formatUGX(trip.fare),
-      vehicle: trip.vehicle,
-      traffic: `${trip.traffic} traffic`,
-      img: img
-    };
-  });
-
-  const upcomingTrip = state.activeTrip || appData.trips[0];
-  const upcomingBoarding = upcomingTrip.boarding;
-  const upcomingDest = upcomingTrip.destination;
-  const upcomingDepart = upcomingTrip.depart;
-
+  const date = new Intl.DateTimeFormat('en-UG', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   return `
-    <div class="home-redesign app fade-in-up">
-      <!-- 2. MOBILE HEADER -->
-      <header class="topbar">
-        <div class="identity" data-screen="profile" style="cursor: pointer;">
-          <img src="assets/christo-avatar.jpg" alt="Christo avatar" class="avatar" style="width:50px; height:50px; border-radius:18px; object-fit:cover;" />
-          <div class="greeting">
-            <small>Hi ${state.passengerDetails[0]?.name.split(' ')[0] || 'Sarah'}</small>
-            <h1>${greeting}</h1>
-            <p>Where would you like to travel today?</p>
+    <section class="welcome-panel">
+      <div class="welcome-user"><img src="assets/christo-avatar.jpg" alt="Christo I." class="avatar" aria-hidden="true" style="object-fit: cover;"><div><p class="eyebrow">${escapeHtml(date)}</p><h1>Good morning, Christo</h1><p class="muted">Where are you travelling today?</p></div></div>
+      <button class="wallet-shortcut" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><div><small>Wallet balance</small><strong>${formatUGX(state.walletBalance)}</strong></div><i data-lucide="chevron-right"></i></button>
+    </section>
+
+    <section class="card card--blue booking-card" aria-labelledby="quick-book-heading">
+      <div class="trip-kind"><button class="segment-button ${state.tripType === 'oneway' ? 'is-active' : ''}" type="button" data-action="trip-kind" data-value="oneway" aria-pressed="${state.tripType === 'oneway'}">One way</button><button class="segment-button ${state.tripType === 'return' ? 'is-active' : ''}" type="button" data-action="trip-kind" data-value="return" aria-pressed="${state.tripType === 'return'}">Return</button></div>
+      <div class="card-head"><div><p class="section-kicker">Quick booking</p><h2 id="quick-book-heading">Find your next departure</h2></div><span class="status-chip" style="background:rgba(255,255,255,.12);color:white">Demo availability</span></div>
+      <div class="booking-form-grid">
+        <div class="field"><label for="home-from">From</label><select id="home-from" data-field="search-from">${appData.routes.map(route => optionMarkup(route, state.searchFrom)).join('')}</select></div>
+        <button class="swap-button" type="button" data-action="swap-route" aria-label="Swap locations"><i data-lucide="arrow-left-right"></i></button>
+        <div class="field"><label for="home-to">To</label><select id="home-to" data-field="search-to">${appData.routes.map(route => optionMarkup(route, state.searchTo)).join('')}</select></div>
+        <div class="field"><label for="home-date">Travel date</label><input id="home-date" type="date" value="${state.bookingDate}" data-field="booking-date"></div>
+        <div class="field"><label for="home-passengers">Passengers</label><select id="home-passengers" data-field="search-adults">${[1,2,3,4].map(count => optionMarkup(String(count), String(state.passengerCount), `${count} passenger${count === 1 ? '' : 's'}`)).join('')}</select></div>
+        <button class="button button--gold" type="button" data-action="search-trips"><i data-lucide="search"></i>Search Trips</button>
+      </div>
+    </section>
+
+    <div class="section-title"><h2>Quick actions</h2><button class="text-button" type="button" data-action="open-more">View all</button></div>
+    <section class="quick-actions" aria-label="Quick actions">
+      ${quickAction('Book a Seat','ticket-plus','book')}
+      ${quickAction('Private Charter','bus','special-hire')}
+      ${quickAction('Buy Return Ticket','refresh-cw','returns')}
+      ${quickAction('Send Parcel','package-plus','parcel')}
+      ${quickAction('Add Wallet Funds','circle-plus','wallet','open-add-funds')}
+      ${quickAction('Track a Trip','navigation','live')}
+      ${quickAction('Register Luggage','luggage','luggage')}
+    </section>
+
+    <section class="grid grid--sidebar" style="margin-top:22px">
+      <div class="grid">
+        <article class="card card--hover upcoming-trip">
+          <div>
+            <div class="card-head"><div><p class="section-kicker">Upcoming trip</p><h2>Entebbe to Kampala</h2></div><span class="status-chip status-chip--success">Confirmed</span></div>
+            <div class="route-label"><div class="route-points"><span></span><i></i><span></span></div><div><strong>Entebbe Main Stage</strong><p class="muted text-small">Today · Departure 8:30 AM · Boarding 8:15 AM</p><strong>Kampala Main Stage</strong></div></div>
+            <div class="trip-meta"><span><i data-lucide="bus-front"></i>UBM 245K</span><span><i data-lucide="armchair"></i>Capacity position 04</span><span><i data-lucide="ticket-check"></i>Open return included</span></div>
           </div>
-        </div>
-        <div class="header-actions">
-          <button class="icon-button" type="button" data-screen="notifications" aria-label="Open notifications">
-            <svg><use href="#i-bell"></use></svg><span class="badge">5</span>
-          </button>
-        </div>
-      </header>
+          <div class="button-row"><button class="button button--primary" type="button" data-screen="ticket">View Ticket</button><button class="button button--ghost" type="button" data-screen="live">Track</button></div>
+        </article>
 
-      <!-- 3. SEARCH AND FILTER ROW -->
-      <div class="search-row">
-        <button class="search-button" type="button" data-action="open-search-shortcuts" aria-haspopup="dialog">
-          <svg><use href="#i-search"></use></svg><span>Search route, stage or service</span>
-        </button>
-        <button class="filter-button" type="button" data-action="show-search-filters" aria-label="Open trip filters" aria-haspopup="dialog">
-          <svg><use href="#i-sliders"></use></svg>
-        </button>
+        <article class="card card--gold">
+          <div class="card-head"><div><p class="section-kicker">Return ticket offer</p><h2>Travel to Kampala and secure your return for less.</h2></div><span class="status-chip status-chip--success">Save UGX 1,000</span></div>
+          <div class="promo-price"><div class="price-cell"><small>Outbound</small><strong>UGX 5,000</strong></div><div class="price-cell"><small>Return</small><strong>UGX 4,000</strong></div><div class="price-cell"><small>Package total</small><strong>UGX 9,000</strong></div><div class="price-cell"><small>Separate total</small><strong>UGX 10,000</strong></div></div>
+          <button class="button button--primary" type="button" data-screen="returns">Get Return Ticket</button>
+        </article>
       </div>
 
-      <div class="layout">
-        <div class="main-column">
-          <!-- 4. PRIMARY BOOKING CARD -->
-          <section class="card journey-card section" style="animation-delay:.05s">
-            <p class="eyebrow">Plan your journey</p>
-            <div class="journey-head">
-              <h2>Fast, reliable transit between Entebbe and Kampala</h2>
-              <span class="offer-chip">Save 20% on returns</span>
-            </div>
-            
-            <div class="route-toggle">
-              <div class="route-place">
-                <span>BOARDING STAGE</span>
-                <strong id="route-text-origin">${state.searchFrom || 'Entebbe Main Stage'}</strong>
-              </div>
-              <button class="swap-route" type="button" data-action="swap-home-route" aria-label="Swap directions">
-                <svg><use href="#i-swap"></use></svg>
-              </button>
-              <div class="route-place">
-                <span>DESTINATION STAGE</span>
-                <strong id="route-text-dest">${state.searchTo || 'Kampala Main Stage'}</strong>
-              </div>
-            </div>
-            
-            <div class="route-line" aria-hidden="true">
-              <span class="route-dot"></span>
-              <span class="route-van"><svg><use href="#i-van"></use></svg></span>
-              <span class="route-dot"></span>
-            </div>
-            
-            <div class="journey-meta">
-              <span><svg><use href="#i-calendar"></use></svg>${formatDemoDate(state.bookingDate)}</span>
-              <span><svg><use href="#i-user"></use></svg>${passengerTotal()} Passenger${passengerTotal() === 1 ? '' : 's'}</span>
-              <span><svg><use href="#i-ticket"></use></svg>One way</span>
-            </div>
-            
-            <div class="journey-actions">
-              <button class="primary-button" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'>
-                <svg><use href="#i-search"></use></svg>Find Departures
-              </button>
-              <button class="secondary-button" type="button" data-action="show-search-filters">
-                <svg><use href="#i-sliders"></use></svg>Filters
-              </button>
-            </div>
-          </section>
-
-          <!-- 5. POPULAR SERVICES SECTION -->
-          <section class="section" style="animation-delay:.10s" aria-labelledby="servicesTitle">
-            <div class="section-head"><h2 id="servicesTitle">Popular services</h2><button class="text-button" type="button" data-action="open-search-shortcuts">Show all</button></div>
-            <div class="services-scroll">
-              <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Trip</span></button>
-              <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
-              <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
-              <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
-            </div>
-          </section>
-
-          <!-- 6. RECOMMENDED DEPARTURES CAROUSEL -->
-          <section class="section" style="animation-delay:.15s" aria-labelledby="departuresTitle">
-            <div class="section-head">
-              <h2 id="departuresTitle">Recommended departures</h2>
-              <button class="text-button" type="button" data-screen="book">Show all</button>
-            </div>
-            
-            <div class="departure-scroll" id="departureCarousel">
-              ${departures.map((dep, index) => {
-                const isSaved = state.savedDepartures && state.savedDepartures.includes(dep.id);
-                
-                let visualClass = '';
-                let visualDecorations = '';
-                
-                if (index % 3 === 0) {
-                  // Morning departure
-                  visualClass = '';
-                  visualDecorations = `
-                    <span class="visual-label">Morning departure</span>
-                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
-                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
-                    </button>
-                    <span class="sun-shape"></span><span class="city-shape"></span><span class="road-shape"></span>
-                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
-                  `;
-                } else if (index % 3 === 1) {
-                  // Fastest option (Night/Sunset)
-                  visualClass = ' night';
-                  visualDecorations = `
-                    <span class="visual-label">Fastest option</span>
-                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
-                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
-                    </button>
-                    <span class="sun-shape" style="width:34px;height:34px;top:24px;background:#ffd99c"></span><span class="city-shape"></span><span class="road-shape"></span>
-                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
-                  `;
-                } else {
-                  // Airport link (Airport/Plane)
-                  visualClass = ' airport';
-                  visualDecorations = `
-                    <span class="visual-label">Airport link</span>
-                    <button class="save-button ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save ${dep.time} departure">
-                      <svg><use href="${isSaved ? '#i-heart-fill' : '#i-heart'}"></use></svg>
-                    </button>
-                    <span class="terminal-shape"></span>
-                    <span class="plane-shape"><svg><use href="#i-plane"></use></svg></span>
-                    <span class="mini-van"><svg><use href="#i-van"></use></svg></span>
-                  `;
-                }
-
-                const isWarning = dep.spaces <= 2;
-                
-                return `
-                <article class="departure-card" data-card-index="${index}">
-                  <div class="departure-visual${visualClass}">
-                    ${visualDecorations}
-                  </div>
-                  <div class="departure-body">
-                    <div class="departure-title-row">
-                      <div>
-                        <h3>${dep.origin.split(' ')[0]} → ${dep.dest.split(' ')[0]}</h3>
-                        <p>${dep.vehicle} · ${dep.traffic}</p>
-                      </div>
-                      <span class="capacity-chip ${isWarning ? 'warning' : ''}">${dep.spaces} space${dep.spaces === 1 ? '' : 's'}</span>
-                    </div>
-                    <div class="departure-times">
-                      <div class="time"><strong>${dep.time}</strong><span>Departure</span></div>
-                      <div class="time-line"></div>
-                      <div class="time"><strong>${dep.arrival}</strong><span>Arrival</span></div>
-                    </div>
-                    <div class="departure-foot">
-                      <div class="fare"><small>Starting from</small><strong>${dep.price}</strong></div>
-                      <button class="select-button" type="button" data-action="select-departure" data-trip="${dep.time}">Select Trip</button>
-                    </div>
-                  </div>
-                </article>
-                `;
-              }).join('')}
-            </div>
-            <div class="carousel-dots">
-              ${departures.map((_, i) => `<button class="carousel-dot ${i === 0 ? 'is-active' : ''}" type="button" data-dot="${i}" aria-label="Slide ${i + 1}"></button>`).join('')}
-            </div>
-          </section>
-
-          <!-- 7. SAVE-WITH-RETURN-TICKET FEATURE CARD -->
-          <section class="card offer-card section" style="animation-delay:.24s">
-            <span class="offer-label"><svg width="15" height="15"><use href="#i-return"></use></svg>Save UGX 1,000</span>
-            <h2>Travel to Kampala and secure your return for less.</h2>
-            <p>Buy both journeys together and use the return on an eligible departure before it expires.</p>
-            <div class="offer-prices">
-              <div class="offer-price"><small>Outbound</small><strong>UGX 5,000</strong></div>
-              <div class="offer-price"><small>Return</small><strong>UGX 4,000</strong></div>
-              <div class="offer-price"><small>Package total</small><strong>UGX 9,000</strong></div>
-            </div>
-            <button class="primary-button" type="button" data-screen="returns">Get Return Ticket <svg><use href="#i-arrow"></use></svg></button>
-          </section>
-        </div>
-
-        <!-- SIDE COLUMN -->
-        <aside class="side-column">
-          <!-- 8. UPCOMING TRIP CARD -->
-          <section class="card compact-card section" style="animation-delay:.14s">
-            <div class="compact-head"><div><h3>Upcoming trip</h3><p>Today · ${upcomingBoarding.split(' ')[0]} to ${upcomingDest.split(' ')[0]}</p></div><span class="status-chip">Confirmed</span></div>
-            <div class="trip-detail-grid">
-              <div class="detail-box"><small>Boarding</small><strong>8:15 AM</strong></div>
-              <div class="detail-box"><small>Departure</small><strong id="upcomingTime">${upcomingDepart}</strong></div>
-              <div class="detail-box"><small>Vehicle</small><strong>${upcomingTrip.plate}</strong></div>
-              <div class="detail-box"><small>Capacity</small><strong>Seat position 04</strong></div>
-            </div>
-            <div class="compact-actions">
-              <button class="compact-action primary" type="button" data-screen="ticket">View Ticket</button>
-              <button class="compact-action" type="button" data-screen="live">Track Vehicle</button>
-            </div>
-          </section>
-
-          <!-- 9. WALLET CARD -->
-          <section class="card wallet-card section" style="animation-delay:.18s">
-            <small>Fly Express Wallet</small>
-            <div class="wallet-balance">${formatUGX(state.walletBalance)}</div>
-            <p class="wallet-credit">UGX 2,000 promotional credit available</p>
-            <div class="wallet-actions">
-              <button class="wallet-action" type="button" data-action="open-add-funds">Add Funds</button>
-              <button class="wallet-action" type="button" data-screen="wallet">Transactions</button>
-            </div>
-          </section>
-
-          <!-- 10. ACTIVE PARCEL CARD -->
-          <section class="card compact-card section" style="animation-delay:.22s">
-            <div class="compact-head"><div><h3>Active parcel</h3><p>FXP-260718-0842</p></div><span class="status-chip info">In Transit</span></div>
-            <div class="parcel-progress">
-              <div class="parcel-progress-row"><span>Entebbe</span><strong>66%</strong><span>Kampala</span></div>
-              <div class="progress-track"><span></span></div>
-            </div>
-            <div class="trip-detail-grid">
-              <div class="detail-box"><small>Estimated arrival</small><strong>10:45 AM</strong></div>
-              <div class="detail-box"><small>Vehicle</small><strong>UBP 318F</strong></div>
-            </div>
-            <button class="compact-action primary" style="width:100%" type="button" data-screen="trackparcel">Track Parcel</button>
-          </section>
-        </aside>
+      <div class="grid">
+        <article class="card">
+          <div class="card-head"><div><p class="section-kicker">Next departures</p><h3>Entebbe Main Stage</h3></div><button class="text-button" type="button" data-screen="book">See all</button></div>
+          <div class="departure-list">
+            ${departureRow('8:30 AM',4,35,'4 seats available')}
+            ${departureRow('9:00 AM',8,60,'8 seats available')}
+            ${departureRow('9:30 AM',2,88,'Almost full')}
+            ${departureRow('10:00 AM',11,45,'11 seats available')}
+          </div>
+        </article>
+        <article class="card card--blue">
+          <p class="section-kicker">Fly Express Wallet</p><div class="wallet-balance">${formatUGX(state.walletBalance)}</div><p class="muted">Plus UGX 2,000 promotional credit</p><div class="button-row"><button class="button button--gold button--small" type="button" data-action="open-add-funds">Add Funds</button><button class="button button--ghost button--small" type="button" data-screen="wallet">Transactions</button></div>
+        </article>
       </div>
+    </section>
 
-      <!-- Notice Panel -->
-      <div class="notice" style="margin-top:20px"><i data-lucide="triangle-alert"></i><div><strong>Service notice</strong><div>Morning traffic is heavier than usual. Estimated journey times may increase by 15 minutes.</div></div></div>
-    </div>
-  `;
+    <section class="grid grid--2" style="margin-top:18px">
+      <article class="card card--hover" data-screen="trackparcel-list" role="button" tabindex="0">
+        <div class="card-head"><div><p class="section-kicker">Active parcel</p><h3>#964201832-DL</h3></div><span class="status-chip status-chip--gold">On the way</span></div>
+        <div class="route-label"><div class="route-points"><span></span><i></i><span></span></div><div><strong>Entebbe</strong><p class="muted text-small">On the way to destination</p><strong>Kampala</strong></div></div>
+      </article>
+      <article class="card sponsored-card"><div><span class="sponsored-label">Sponsored</span><p class="section-kicker" style="margin-top:18px;color:var(--brand-gold)">Lakeview Business Centre</p><h3>Print, package and send business documents near Kitooro.</h3><p style="color:rgba(255,255,255,.72)">10% off document packaging for Fly Express passengers.</p></div><button class="button button--gold button--small" type="button" data-action="sponsored-details">View Offer</button></article>
+    </section>
+
+    <div class="notice" style="margin-top:18px"><i data-lucide="triangle-alert"></i><div><strong>Service notice</strong><div>Morning traffic is heavier than usual. Estimated journey times may increase by 15 minutes.</div></div></div>`;
 }
 
 function quickAction(label, icon, screen, action = '') {
@@ -3742,14 +3517,6 @@ function handleClick(event) {
     }
   }
 
-  const dotTrigger = event.target.closest('[data-dot]');
-  if (dotTrigger) {
-    const index = Number(dotTrigger.dataset.dot);
-    const carousel = $('#departureCarousel');
-    const card = carousel?.querySelector(`[data-card-index="${index}"]`);
-    card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    return;
-  }
 
   const screenTrigger = event.target.closest('[data-screen]');
   if (screenTrigger) {
