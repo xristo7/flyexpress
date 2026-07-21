@@ -2604,21 +2604,17 @@ function initParcelMap() {
     parcelMap = null;
   }
 
-  const entebbe = [0.0606, 32.4435];
-  const kampala = [0.3122, 32.5883];
+  let routeKey = 'entebbe';
+  const origin = (state.parcel.origin || '').toLowerCase();
+  const destination = (state.parcel.destination || '').toLowerCase();
+  const rc = appData.routeCards.find(r => 
+    (origin.includes(r.cityA.toLowerCase()) && destination.includes(r.cityB.toLowerCase())) ||
+    (origin.includes(r.cityB.toLowerCase()) && destination.includes(r.cityA.toLowerCase()))
+  );
+  if (rc) routeKey = rc.key;
 
-  const points = [
-    [0.0606, 32.4435],
-    [0.0934, 32.4705],
-    [0.1340, 32.5220],
-    [0.1870, 32.5350],
-    [0.2185, 32.5398],
-    [0.2480, 32.5550],
-    [0.2680, 32.5650],
-    [0.2880, 32.5680],
-    [0.2990, 32.5720],
-    [0.3122, 32.5883]
-  ];
+  const isReverse = origin.includes('kampala') || origin.includes('bweyogere') || origin.includes('busega') || origin.includes('nambole') || origin.includes('masaka') || origin.includes('lyantonde') || origin.includes('mbarara');
+  const points = getCurrentRoutePoints(routeKey, isReverse);
 
   parcelMap = L.map(target, { 
     attributionControl: false, 
@@ -2638,13 +2634,14 @@ function initParcelMap() {
 
   // Black route line
   L.polyline(points, { color: '#000000', opacity: 1.0, weight: 3.5 }).addTo(parcelMap);
+  L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 3 }).addTo(parcelMap);
 
-  // Start circle marker (Entebbe / ENTEBBE)
-  L.circleMarker(entebbe, { color: 'rgba(251, 192, 45, 0.4)', fillColor: 'rgba(251, 192, 45, 0.4)', fillOpacity: 1, radius: 18, weight: 0 }).addTo(parcelMap);
-  L.circleMarker(entebbe, { color: '#ffffff', fillColor: '#ffffff', fillOpacity: 1, radius: 8, weight: 0 }).addTo(parcelMap);
-  L.circleMarker(entebbe, { color: '#000000', fillColor: '#000000', fillOpacity: 1, radius: 4, weight: 0 }).addTo(parcelMap);
+  // Start circle marker
+  L.circleMarker(points[0], { color: 'rgba(251, 192, 45, 0.4)', fillColor: 'rgba(251, 192, 45, 0.4)', fillOpacity: 1, radius: 18, weight: 0 }).addTo(parcelMap);
+  L.circleMarker(points[0], { color: '#ffffff', fillColor: '#ffffff', fillOpacity: 1, radius: 8, weight: 0 }).addTo(parcelMap);
+  L.circleMarker(points[0], { color: '#000000', fillColor: '#000000', fillOpacity: 1, radius: 4, weight: 0 }).addTo(parcelMap);
 
-  // End pin marker (Kampala)
+  // End pin marker
   const pinIcon = L.divIcon({
     className: 'custom-pin-marker',
     html: `
@@ -2658,7 +2655,7 @@ function initParcelMap() {
     iconSize: [36, 36],
     iconAnchor: [18, 18]
   });
-  L.marker(kampala, { icon: pinIcon }).addTo(parcelMap);
+  L.marker(points[points.length - 1], { icon: pinIcon }).addTo(parcelMap);
 
   const bounds = L.latLngBounds(points);
   parcelMap.fitBounds(bounds, { padding: [50, 50] });
@@ -3524,6 +3521,26 @@ let tripReviewMap = null;
 let tripReviewScrollFrame = null;
 let bookingStep2Map = null;
 
+function getCurrentRoutePoints(routeKey, isReverse = false) {
+  const outbound = [[0.0606, 32.4435], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
+  let rawPoints = outbound;
+  const route = routeKey || state.selectedRoute || 'entebbe';
+  if (route === 'bweyogere') {
+    rawPoints = [...outbound, [0.3200, 32.6100], [0.3400, 32.6350], [0.3470, 32.6490]];
+  } else if (route === 'busega') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2800, 32.5150], [0.3100, 32.5200]]);
+  } else if (route === 'nambole') {
+    rawPoints = [...outbound, [0.3200, 32.6100], [0.3400, 32.6350], [0.3480, 32.6570]];
+  } else if (route === 'masaka') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400]]);
+  } else if (route === 'lyantonde') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400], [-0.3800, 31.4000], [-0.4000, 31.1550]]);
+  } else if (route === 'mbarara') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400], [-0.3800, 31.4000], [-0.4000, 31.1550], [-0.5000, 30.9000], [-0.6050, 30.6550]]);
+  }
+  return isReverse ? rawPoints.slice().reverse() : rawPoints;
+}
+
 function updateHeaderTheme() {
   const topbar = $('.topbar');
   if (!topbar) return;
@@ -3773,23 +3790,41 @@ function initTripMap() {
     if (fallback) fallback.hidden = false;
     return;
   }
-  const outbound = [[0.0606, 32.4435], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
-  const reverse = state.activeTrip.boarding.toLowerCase().includes('kampala');
-  const points = reverse ? outbound.slice().reverse() : outbound;
+
+  let routeKey = state.selectedRoute || 'entebbe';
+  if (state.activeTrip) {
+    const boarding = state.activeTrip.boarding.toLowerCase();
+    const destination = state.activeTrip.destination.toLowerCase();
+    const rc = appData.routeCards.find(r => 
+      (boarding.includes(r.cityA.toLowerCase()) && destination.includes(r.cityB.toLowerCase())) ||
+      (boarding.includes(r.cityB.toLowerCase()) && destination.includes(r.cityA.toLowerCase()))
+    );
+    if (rc) routeKey = rc.key;
+  }
+  
+  const isReverse = state.activeTrip ? state.activeTrip.boarding.toLowerCase().includes('kampala') || state.activeTrip.boarding.toLowerCase().includes('bweyogere') || state.activeTrip.boarding.toLowerCase().includes('busega') || state.activeTrip.boarding.toLowerCase().includes('nambole') || state.activeTrip.boarding.toLowerCase().includes('masaka') || state.activeTrip.boarding.toLowerCase().includes('lyantonde') || state.activeTrip.boarding.toLowerCase().includes('mbarara') : false;
+  
+  const points = getCurrentRoutePoints(routeKey, isReverse);
   tripReviewMap = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: false, dragging: false, keyboard: false, scrollWheelZoom: false, touchZoom: false, zoomControl: false });
   let tileErrors = 0;
   const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: true, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' });
   tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
   tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
   tiles.addTo(tripReviewMap);
+  
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(tripReviewMap);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(tripReviewMap);
-  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(state.activeTrip.boarding, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
-  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(state.activeTrip.destination, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
   
-  // Live transit van position marker
-  const vehiclePoint = points[state.activeTrip.markerIndex !== undefined ? state.activeTrip.markerIndex : 0];
-  L.circleMarker(vehiclePoint, { color: '#fff', fillColor: '#f2a104', fillOpacity: 1, radius: 10, weight: 4 }).bindTooltip(`Live: ${state.activeTrip.plate} (${state.activeTrip.countdown})`, { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' }).addTo(tripReviewMap);
+  const labelFrom = state.activeTrip ? state.activeTrip.boarding : 'Origin';
+  const labelTo = state.activeTrip ? state.activeTrip.destination : 'Destination';
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelFrom, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelTo, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
+  
+  if (state.activeTrip) {
+    const markerIdx = state.activeTrip.markerIndex !== undefined ? state.activeTrip.markerIndex : 0;
+    const vehiclePoint = points[Math.min(points.length - 1, markerIdx)];
+    L.circleMarker(vehiclePoint, { color: '#fff', fillColor: '#f2a104', fillOpacity: 1, radius: 10, weight: 4 }).bindTooltip(`Live: ${state.activeTrip.plate} (${state.activeTrip.countdown})`, { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' }).addTo(tripReviewMap);
+  }
   
   const bounds = L.latLngBounds(points);
   const fitMap = () => {
@@ -3811,26 +3846,9 @@ function initBookingStep2Map() {
     return;
   }
   
-  const outbound = [[0.0606, 32.4435], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
-  
-  let rawPoints = outbound;
-  const route = state.selectedRoute;
-  if (route === 'bweyogere') {
-    rawPoints = [...outbound, [0.3200, 32.6100], [0.3400, 32.6350], [0.3470, 32.6490]];
-  } else if (route === 'busega') {
-    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2800, 32.5150], [0.3100, 32.5200]]);
-  } else if (route === 'nambole') {
-    rawPoints = [...outbound, [0.3200, 32.6100], [0.3400, 32.6350], [0.3480, 32.6570]];
-  } else if (route === 'masaka') {
-    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400]]);
-  } else if (route === 'lyantonde') {
-    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400], [-0.3800, 31.4000], [-0.4000, 31.1550]]);
-  } else if (route === 'mbarara') {
-    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400], [-0.3800, 31.4000], [-0.4000, 31.1550], [-0.5000, 30.9000], [-0.6050, 30.6550]]);
-  }
-  
+  const route = state.selectedRoute || 'entebbe';
   const isFlipped = !!state.routeFlips[route];
-  const points = isFlipped ? rawPoints.slice().reverse() : rawPoints;
+  const points = getCurrentRoutePoints(route, isFlipped);
   
   bookingStep2Map = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: true, dragging: true, keyboard: true, scrollWheelZoom: false, touchZoom: true, zoomControl: true });
   
