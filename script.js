@@ -4207,6 +4207,33 @@ function showLoading(message, callback, duration = 750) {
 }
 
 function toast(message, type = 'default') {
+  // Only allow key transactional, error, warning, or state change notifications
+  if (type === 'default' || type === 'success' || type === 'info') {
+    const lower = message.toLowerCase();
+    const isKeyAction = 
+      lower.includes('save') || 
+      lower.includes('update') || 
+      lower.includes('submit') || 
+      lower.includes('ready') || 
+      lower.includes('claim') || 
+      lower.includes('add') || 
+      lower.includes('process') || 
+      lower.includes('cancel') || 
+      lower.includes('transfer') || 
+      lower.includes('refund') || 
+      lower.includes('sent') || 
+      lower.includes('prepare') || 
+      lower.includes('register') ||
+      lower.includes('insufficient') ||
+      lower.includes('invalid') ||
+      lower.includes('otp');
+      
+    if (!isKeyAction) {
+      console.log(`Silenced non-essential toast: ${message}`);
+      return;
+    }
+  }
+
   const region = $('#toast-region');
   const icon = type === 'success' ? 'circle-check' : type === 'danger' ? 'circle-x' : type === 'warning' ? 'triangle-alert' : 'info';
   const element = document.createElement('div');
