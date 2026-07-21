@@ -4740,3 +4740,34 @@ body[data-active-screen="driver-profile"] .main-content {
   width: 18.5% !important;
   height: 9.8% !important;
 }
+
+/* ---------- Right Aligned Side Drawer Overrides ---------- */
+.side-drawer__header {
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+}
+.side-drawer__header .drawer-user-info {
+  margin-right: 0 !important;
+  margin-left: 12px !important;
+}
+.drawer-user-info {
+  flex-direction: row-reverse !important;
+  text-align: right !important;
+}
+.drawer-section-title {
+  text-align: right !important;
+  margin: 0 10px 10px 0 !important;
+}
+.drawer-nav-item {
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
+  text-align: right !important;
+  gap: 12px !important;
+}
+.drawer-nav-sub-item {
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
+  text-align: right !important;
+  padding: 6px 38px 6px 14px !important;
+  gap: 10px !important;
+}
