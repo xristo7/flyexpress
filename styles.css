@@ -4366,6 +4366,10 @@ body[data-active-screen="driver-profile"] .main-content {
   }
 }
 
+body[data-active-screen="home"] .desktop-profile-btn {
+  display: none !important;
+}
+
 /* Drawer Dark Mode Text Brightness Enhancements */
 .side-drawer__content {
   color: rgba(255, 255, 255, 0.9) !important;

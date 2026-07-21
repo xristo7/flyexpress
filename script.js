@@ -233,6 +233,7 @@ const state = {
   voucherApplied: false,
   ticketStatus: 'active',
   tripTab: 'upcoming',
+  trackingTab: 'travels',
   walletFilter: 'all',
   notificationFilter: 'all',
   parcelStep: 1,
@@ -286,20 +287,17 @@ const navItems = [
   ['home', 'Home', 'house'],
   ['book', 'Book a Travel', 'ticket-plus'],
   ['special-hire', 'Special Hire', 'bus'],
+  ['tracking', 'Tracking', 'navigation'],
   ['trips', 'My Travels', 'route'],
-  ['returns', 'Return Tickets', 'refresh-cw'],
   ['wallet', 'Wallet', 'wallet-cards'],
   ['parcel', 'Parcels', 'package-plus'],
-  ['trackparcel-list', 'Track Parcel', 'scan-search'],
-  ['luggage', 'Luggage Tags', 'luggage'],
-  ['live', 'Live Travel Tracking', 'navigation'],
   ['offers', 'Offers', 'badge-percent'],
   ['support', 'Help and Support', 'life-buoy'],
   ['about', 'About Fly Express', 'info']
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
+  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express', tracking: 'Tracking'
 };
 
 const onboardingSlides = [
@@ -410,7 +408,7 @@ function init() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetScreen = urlParams.get('screen') || window.location.hash.slice(1);
-  const validScreens = ['home','book','special-hire','trip-details','passengers','returns','luggage','checkout','success','ticket','trips','live','wallet','parcel','parcel-receipt','trackparcel-list','trackparcel','parcel-status','offers','notifications','support','profile','about'];
+  const validScreens = ['home','book','special-hire','trip-details','passengers','returns','luggage','checkout','success','ticket','trips','live','wallet','parcel','parcel-receipt','trackparcel-list','trackparcel','parcel-status','offers','notifications','support','profile','about','tracking'];
 
   if (targetScreen && validScreens.includes(targetScreen)) {
     $('#splash-screen').classList.add('is-hidden');
@@ -598,13 +596,10 @@ function getNavigationHtml(type) {
   const activeHome = state.screen === 'home' ? 'is-active' : '';
   const activeBook = state.screen === 'book' ? 'is-active' : '';
   const activeSpecialHire = state.screen === 'special-hire' ? 'is-active' : '';
-  const activeReturns = state.screen === 'returns' ? 'is-active' : '';
-  const activeLuggage = state.screen === 'luggage' ? 'is-active' : '';
-  const activeLive = state.screen === 'live' ? 'is-active' : '';
+  const activeTracking = state.screen === 'tracking' ? 'is-active' : '';
   const activeTrips = state.screen === 'trips' ? 'is-active' : '';
   const activeWallet = state.screen === 'wallet' ? 'is-active' : '';
   const activeParcel = state.screen === 'parcel' ? 'is-active' : '';
-  const activeTrackParcel = ['trackparcel-list','trackparcel'].includes(state.screen) ? 'is-active' : '';
   const activeOffers = state.screen === 'offers' ? 'is-active' : '';
   const activeSupport = state.screen === 'support' ? 'is-active' : '';
   const activeAbout = state.screen === 'about' ? 'is-active' : '';
@@ -614,25 +609,17 @@ function getNavigationHtml(type) {
       <i data-lucide="house"></i><span>Home</span>
     </button>
     
-    <div class="drawer-nav-group">
-      <button class="${itemClass} ${activeBook}" type="button" data-screen="book">
-        <i data-lucide="ticket-plus"></i><span>Book a Travel</span>
-      </button>
-      <div class="drawer-nav-sub">
-        <button class="${subItemClass} ${activeReturns}" type="button" data-screen="returns">
-          <i data-lucide="refresh-cw"></i><span>Return Tickets</span>
-        </button>
-        <button class="${subItemClass} ${activeSpecialHire}" type="button" data-screen="special-hire">
-          <i data-lucide="bus"></i><span>Special Hire</span>
-        </button>
-        <button class="${subItemClass} ${activeLuggage}" type="button" data-screen="luggage">
-          <i data-lucide="luggage"></i><span>Luggage Tags</span>
-        </button>
-        <button class="${subItemClass} ${activeLive}" type="button" data-screen="live">
-          <i data-lucide="navigation"></i><span>Live Travel Tracking</span>
-        </button>
-      </div>
-    </div>
+    <button class="${itemClass} ${activeBook}" type="button" data-screen="book">
+      <i data-lucide="ticket-plus"></i><span>Book a Travel</span>
+    </button>
+
+    <button class="${itemClass} ${activeSpecialHire}" type="button" data-screen="special-hire">
+      <i data-lucide="bus"></i><span>Special Hire</span>
+    </button>
+
+    <button class="${itemClass} ${activeTracking}" type="button" data-screen="tracking">
+      <i data-lucide="navigation"></i><span>Tracking</span>
+    </button>
 
     <button class="${itemClass} ${activeTrips}" type="button" data-screen="trips">
       <i data-lucide="route"></i><span>My Travels</span>
@@ -647,7 +634,7 @@ function getNavigationHtml(type) {
         <i data-lucide="package-plus"></i><span>Parcels</span>
       </button>
       <div class="drawer-nav-sub">
-        <button class="${subItemClass} ${activeTrackParcel}" type="button" data-screen="trackparcel-list">
+        <button class="${subItemClass} ${activeTracking}" type="button" data-screen="tracking" data-action-payload='{"trackingTab":"parcels"}'>
           <i data-lucide="scan-search"></i><span>Track Parcel</span>
         </button>
       </div>
@@ -739,7 +726,7 @@ function renderCurrentScreen(preserveFocus = true) {
     luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, trips: renderTrips,
     live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
     trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, 'driver-chat': renderDriverChat, 'driver-call': renderDriverCall, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
-    profile: renderProfile, about: renderAbout
+    profile: renderProfile, about: renderAbout, tracking: renderTracking
   };
   root.innerHTML = (renderers[state.screen] || renderHome)();
   refreshIcons();
@@ -3309,6 +3296,216 @@ function renderAbout() {
 function aboutService(title, icon, copy) { return `<article class="service-item"><i data-lucide="${icon}"></i><h3 style="margin:10px 0 7px">${title}</h3><p class="muted text-small" style="margin:0">${copy}</p></article>`; }
 function emptyState(icon, title, copy) { return `<div class="empty-state"><div><div class="empty-state__icon"><i data-lucide="${icon}"></i></div><h3>${title}</h3><p class="muted">${copy}</p></div></div>`; }
 
+function renderTracking() {
+  const currentTab = state.trackingTab || 'travels';
+  
+  // Travels tab
+  let travelsContent = '';
+  if (currentTab === 'travels') {
+    const travels = [
+      {
+        id: 'FET-884210',
+        route: 'Entebbe → Kampala',
+        date: 'Today · 8:30 AM departure',
+        vehicle: 'UBM 245K (Coaster)',
+        status: 'Active',
+        statusClass: 'status-chip--info',
+        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Track Vehicle</button><button class="button button--ghost button--small" type="button" data-screen="ticket">View Ticket</button>`
+      },
+      {
+        id: 'FET-883109',
+        route: 'Kampala → Entebbe',
+        date: '16 Jul 2026 · 6:30 PM departure',
+        vehicle: 'UBP 318F (Highroof)',
+        status: 'Completed',
+        statusClass: 'status-chip--success',
+        actions: `<button class="button button--ghost button--small" type="button" data-action="rate-trip">Rate Travel</button>`
+      },
+      {
+        id: 'FET-880291',
+        route: 'Entebbe → Kampala',
+        date: '8 Jul 2026 · 4:34 PM departure',
+        vehicle: 'UBP 318F (Highroof)',
+        status: 'Cancelled',
+        statusClass: 'status-chip--danger',
+        actions: `<span class="muted text-small">Refunded to wallet</span>`
+      }
+    ];
+
+    travelsContent = `
+      <div class="grid" style="gap: 14px; margin-top: 16px;">
+        ${travels.map(t => `
+          <article class="card trip-card" style="margin: 0;">
+            <div class="trip-date-block" style="background: var(--info-soft); color: var(--brand-blue); display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; flex: 0 0 auto;">
+              <i data-lucide="navigation" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <div class="card-head" style="padding: 0; border: 0; background: transparent; display: flex; align-items: start; justify-content: space-between; gap: 8px;">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem;">${t.route}</h3>
+                  <span class="muted text-small">${t.date}</span>
+                </div>
+                <span class="status-chip ${t.statusClass}">${t.status}</span>
+              </div>
+              <div class="trip-meta" style="margin-top: 8px; font-size: 0.88rem; display: flex; gap: 12px; color: var(--muted); border: 0; padding: 0;">
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="bus-front" style="width:14px; height:14px;"></i>${t.vehicle}</span>
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="hash" style="width:14px; height:14px;"></i>Ref: ${t.id}</span>
+              </div>
+              <div class="trip-card__actions" style="margin-top: 14px; display: flex; gap: 8px; justify-content: flex-start;">
+                ${t.actions}
+              </div>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // Parcels tab
+  let parcelsContent = '';
+  if (currentTab === 'parcels') {
+    const parcels = [
+      {
+        id: '#964201832-DL',
+        title: 'Package from Entebbe',
+        route: 'Entebbe → Kampala',
+        eta: 'Estimated arrival: Today, 2:30 PM',
+        status: 'On the way',
+        statusClass: 'status-chip--gold',
+        details: 'Small box · 520 g · Recipient: Julie Robinson',
+        actions: `<button class="button button--primary button--small" type="button" data-screen="trackparcel">Live Map</button><button class="button button--ghost button--small" type="button" data-screen="parcel-status">View Status</button>`
+      },
+      {
+        id: '#964201710-DL',
+        title: 'Documents to Kampala Office',
+        route: 'Entebbe → Kampala',
+        eta: 'Delivered: 16 Jul, 11:42 AM',
+        status: 'Delivered',
+        statusClass: 'status-chip--success',
+        details: 'Documents · 280 g · Recipient: Mark Ochieng',
+        actions: `<button class="button button--ghost button--small" type="button" data-screen="parcel-status">View Receipt</button>`
+      },
+      {
+        id: '#964200988-DL',
+        title: 'Gift parcel',
+        route: 'Kampala → Entebbe',
+        eta: 'Delivered: 10 Jul, 4:15 PM',
+        status: 'Delivered',
+        statusClass: 'status-chip--success',
+        details: 'Gift box · 1.2 kg · Recipient: Florence A.',
+        actions: `<button class="button button--ghost button--small" type="button" data-screen="parcel-status">View Receipt</button>`
+      }
+    ];
+
+    parcelsContent = `
+      <div class="grid" style="gap: 14px; margin-top: 16px;">
+        ${parcels.map(p => `
+          <article class="card parcel-list-card" style="margin: 0;">
+            <div class="card-head" style="padding: 0; border: 0; background: transparent; display: flex; align-items: start; justify-content: space-between; gap: 8px;">
+              <div>
+                <p class="section-kicker" style="margin: 0;">Tracking ${p.id}</p>
+                <h3 style="margin: 4px 0 0; font-size: 1.05rem;">${p.title}</h3>
+              </div>
+              <span class="status-chip ${p.statusClass}">${p.status}</span>
+            </div>
+            <div class="parcel-list-card__details" style="margin-top: 8px;">
+              <p class="muted text-small" style="margin: 2px 0;">${p.eta}</p>
+              <div class="parcel-list-card__meta" style="margin-top: 8px; font-size: 0.88rem; display: flex; gap: 12px; color: var(--muted); border: 0; padding: 0;">
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="package" style="width:14px; height:14px;"></i>${p.details}</span>
+              </div>
+              <div class="parcel-list-card__footer" style="margin-top: 14px; display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; justify-content: flex-start; background: transparent; height: auto; padding-left: 0; padding-right: 0;">
+                ${p.actions}
+              </div>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // Vehicles tab
+  let vehiclesContent = '';
+  if (currentTab === 'vehicles') {
+    const vehicles = [
+      {
+        plate: 'UBM 245K',
+        type: 'Toyota Coaster (Blue & White)',
+        driver: 'Isaac Muwonge',
+        status: 'Boarding now',
+        statusClass: 'status-chip--info',
+        stage: 'Entebbe Main Stage',
+        eta: 'Departure scheduled: 8:30 AM',
+        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Live Location</button><button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('isaac muwonge')">Driver Profile</button>`
+      },
+      {
+        plate: 'UBN 742D',
+        type: 'Toyota Hiace Highroof',
+        driver: 'David Okello',
+        status: 'Arriving in 8 mins',
+        statusClass: 'status-chip--gold',
+        stage: 'Entebbe Main Stage',
+        eta: 'In transit from Kampala',
+        actions: `<button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('david okello')">Driver Profile</button>`
+      }
+    ];
+
+    vehiclesContent = `
+      <div class="grid" style="gap: 14px; margin-top: 16px;">
+        ${vehicles.map(v => `
+          <article class="card" style="margin: 0; padding: 16px;">
+            <div class="card-head" style="padding: 0; border: 0; background: transparent; display: flex; align-items: start; justify-content: space-between; gap: 8px;">
+              <div>
+                <p class="section-kicker" style="color: var(--brand-blue); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; margin: 0;">${v.plate}</p>
+                <h3 style="margin: 4px 0 0; font-size: 1.05rem;">${v.type}</h3>
+              </div>
+              <span class="status-chip ${v.statusClass}">${v.status}</span>
+            </div>
+            <div class="vehicle-details" style="margin-top: 10px; font-size: 0.9rem;">
+              <div class="detail-row" style="display:flex; justify-content:space-between; margin-bottom: 4px; border: 0; padding: 0;">
+                <span class="muted">Waiting Stage</span>
+                <strong>${v.stage}</strong>
+              </div>
+              <div class="detail-row" style="display:flex; justify-content:space-between; margin-bottom: 4px; border: 0; padding: 0;">
+                <span class="muted">Driver</span>
+                <strong>${v.driver}</strong>
+              </div>
+              <div class="detail-row" style="display:flex; justify-content:space-between; margin-bottom: 4px; border: 0; padding: 0;">
+                <span class="muted">Status Info</span>
+                <strong>${v.eta}</strong>
+              </div>
+              <div style="margin-top: 14px; display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; justify-content: flex-start;">
+                ${v.actions}
+              </div>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  return `
+    ${screenHead('Unified Tracking', 'Track travels, parcel deliveries and assigned vehicles in one place.')}
+    
+    <div class="choice-pills" style="margin-top: 16px;">
+      <button class="choice-pill ${currentTab === 'travels' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="travels">
+        <i data-lucide="navigation" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Travels
+      </button>
+      <button class="choice-pill ${currentTab === 'parcels' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="parcels">
+        <i data-lucide="package" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Parcels
+      </button>
+      <button class="choice-pill ${currentTab === 'vehicles' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="vehicles">
+        <i data-lucide="bus" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Vehicles
+      </button>
+    </div>
+
+    <div class="tracking-tab-content">
+      ${currentTab === 'travels' ? travelsContent : ''}
+      ${currentTab === 'parcels' ? parcelsContent : ''}
+      ${currentTab === 'vehicles' ? vehiclesContent : ''}
+    </div>
+  `;
+}
+
 /* =========================================================
    Streamlined booking review
    Optional choices stay collapsed until a passenger needs them.
@@ -4088,6 +4285,7 @@ function handleClick(event) {
     'ticket-states': showTicketStates,
     'cancel-booking': showCancelBooking,
     'trip-tab': () => { state.tripTab = value; renderCurrentScreen(); },
+    'tracking-tab': () => { state.trackingTab = value; renderCurrentScreen(); },
     'change-return': showReturnDateModal,
     'rate-trip': showRatingModal,
     'lost-item': () => openLostPropertyModal(),

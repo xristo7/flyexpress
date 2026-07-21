@@ -9,12 +9,12 @@
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://tile.openstreetmap.org">
   <link rel="stylesheet" href="leaflet.css">
-  <link class="styles" rel="stylesheet" href="styles.css?v=180">
+  <link class="styles" rel="stylesheet" href="styles.css?v=181">
   <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-  <script defer src="script.js?v=180"></script>
+  <script defer src="script.js?v=181"></script>
 </head>
 <body>
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -212,14 +212,9 @@
           <nav class="drawer-nav">
             <button class="drawer-nav-item" type="button" data-screen="home"><i data-lucide="house"></i><span>Home</span></button>
             
-            <div class="drawer-nav-group">
-              <button class="drawer-nav-item drawer-nav-item--parent" type="button" data-screen="book"><i data-lucide="ticket-plus"></i><span>Book a Travel</span></button>
-              <div class="drawer-nav-sub">
-                <button class="drawer-nav-sub-item" type="button" data-screen="returns"><i data-lucide="refresh-cw"></i><span>Return Tickets</span></button>
-                <button class="drawer-nav-sub-item" type="button" data-screen="luggage"><i data-lucide="luggage"></i><span>Luggage Tags</span></button>
-                <button class="drawer-nav-sub-item" type="button" data-screen="live"><i data-lucide="navigation"></i><span>Live Travel Tracking</span></button>
-              </div>
-            </div>
+            <button class="drawer-nav-item" type="button" data-screen="book"><i data-lucide="ticket-plus"></i><span>Book a Travel</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="special-hire"><i data-lucide="bus"></i><span>Special Hire</span></button>
+            <button class="drawer-nav-item" type="button" data-screen="tracking"><i data-lucide="navigation"></i><span>Tracking</span></button>
 
             <button class="drawer-nav-item" type="button" data-screen="trips"><i data-lucide="route"></i><span>My Travels</span></button>
             <button class="drawer-nav-item" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><span>Wallet</span></button>
@@ -227,7 +222,7 @@
             <div class="drawer-nav-group">
               <button class="drawer-nav-item drawer-nav-item--parent" type="button" data-screen="parcel"><i data-lucide="package-plus"></i><span>Parcels</span></button>
               <div class="drawer-nav-sub">
-                <button class="drawer-nav-sub-item" type="button" data-screen="trackparcel-list"><i data-lucide="scan-search"></i><span>Track Parcel</span></button>
+                <button class="drawer-nav-sub-item" type="button" data-screen="tracking" data-action-payload='{"trackingTab":"parcels"}'><i data-lucide="scan-search"></i><span>Track Parcel</span></button>
               </div>
             </div>
 
