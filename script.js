@@ -3806,6 +3806,7 @@ function handleClick(event) {
         state.searchTo = flipped ? rc.stageA : rc.stageB;
       }
       renderCurrentScreen();
+      renderNavigation();
       toast('Route selected.', 'success');
     },
     'flip-route-direction': () => {
@@ -3819,6 +3820,7 @@ function handleClick(event) {
         state.searchTo = flipped ? rc.stageA : rc.stageB;
       }
       renderCurrentScreen();
+      renderNavigation();
       const flipped = !!state.routeFlips[route];
       toast(`Direction: ${flipped ? rc.cityB : rc.cityA} → ${flipped ? rc.cityA : rc.cityB}`, 'success');
     },
