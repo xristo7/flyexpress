@@ -284,28 +284,28 @@ const state = {
 
 const navItems = [
   ['home', 'Home', 'house'],
-  ['book', 'Book a Trip', 'ticket-plus'],
+  ['book', 'Book a Travel', 'ticket-plus'],
   ['special-hire', 'Special Hire', 'bus'],
-  ['trips', 'My Trips', 'route'],
+  ['trips', 'My Travels', 'route'],
   ['returns', 'Return Tickets', 'refresh-cw'],
   ['wallet', 'Wallet', 'wallet-cards'],
   ['parcel', 'Parcels', 'package-plus'],
   ['trackparcel-list', 'Track Parcel', 'scan-search'],
   ['luggage', 'Luggage Tags', 'luggage'],
-  ['live', 'Live Trip Tracking', 'navigation'],
+  ['live', 'Live Travel Tracking', 'navigation'],
   ['offers', 'Offers', 'badge-percent'],
   ['support', 'Help and Support', 'life-buoy'],
   ['about', 'About Fly Express', 'info']
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Trip', 'special-hire': 'Special Van Hire', 'trip-details': 'Trip Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Trips', live: 'Live Trip', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
+  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express'
 };
 
 const onboardingSlides = [
   {
     title: 'Your Journey Starts Here',
-    message: 'Book your Fly Express trip between Entebbe and Kampala, choose your preferred departure, and secure your seat in seconds.'
+    message: 'Book your Fly Express travel between Entebbe and Kampala, choose your preferred departure, and secure your seat in seconds.'
   },
   {
     title: 'Pay Easily. Travel for Less.',
@@ -616,7 +616,7 @@ function getNavigationHtml(type) {
     
     <div class="drawer-nav-group">
       <button class="${itemClass} ${activeBook}" type="button" data-screen="book">
-        <i data-lucide="ticket-plus"></i><span>Book a Trip</span>
+        <i data-lucide="ticket-plus"></i><span>Book a Travel</span>
       </button>
       <div class="drawer-nav-sub">
         <button class="${subItemClass} ${activeReturns}" type="button" data-screen="returns">
@@ -629,13 +629,13 @@ function getNavigationHtml(type) {
           <i data-lucide="luggage"></i><span>Luggage Tags</span>
         </button>
         <button class="${subItemClass} ${activeLive}" type="button" data-screen="live">
-          <i data-lucide="navigation"></i><span>Live Trip Tracking</span>
+          <i data-lucide="navigation"></i><span>Live Travel Tracking</span>
         </button>
       </div>
     </div>
 
     <button class="${itemClass} ${activeTrips}" type="button" data-screen="trips">
-      <i data-lucide="route"></i><span>My Trips</span>
+      <i data-lucide="route"></i><span>My Travels</span>
     </button>
 
     <button class="${itemClass} ${activeWallet}" type="button" data-screen="wallet">
@@ -688,7 +688,7 @@ function renderNavigation() {
     } else {
       mobile.classList.remove('is-hidden');
     }
-    const items = [['home','Home','house'],['book','Book','ticket-plus'],['trips','Trips','route'],['wallet','Wallet','wallet-cards']];
+    const items = [['home','Home','house'],['book','Book','ticket-plus'],['trips','Travels','route'],['wallet','Wallet','wallet-cards']];
     mobile.innerHTML = items.map(([screen,label,icon]) => {
       const active = state.screen === screen;
       return `
@@ -929,7 +929,7 @@ function renderHome() {
           <section class="section" style="animation-delay:.10s" aria-labelledby="servicesTitle">
             <div class="section-head"><h2 id="servicesTitle">Popular services</h2><button class="text-button" type="button" data-action="open-search-shortcuts">Show all</button></div>
             <div class="services-scroll">
-              <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Trip</span></button>
+              <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Travel</span></button>
               <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
               <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
               <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
@@ -981,7 +981,7 @@ function renderHome() {
                     </div>
                     <div class="departure-foot">
                       <div class="fare"><small>Starting from</small><strong>${dep.price}</strong></div>
-                      <button class="select-button" type="button" data-action="select-departure" data-trip="${dep.time}">Select Trip</button>
+                      <button class="select-button" type="button" data-action="select-departure" data-trip="${dep.time}">Select Travel</button>
                     </div>
                   </div>
                 </article>
@@ -1011,7 +1011,7 @@ function renderHome() {
         <aside class="side-column">
           <!-- 8. UPCOMING TRIP CARD -->
           <section class="card compact-card section" style="animation-delay:.14s">
-            <div class="compact-head"><div><h3>Upcoming trip</h3><p>Today · ${upcomingBoarding.split(' ')[0]} to ${upcomingDest.split(' ')[0]}</p></div><span class="status-chip">Confirmed</span></div>
+            <div class="compact-head"><div><h3>Upcoming travel</h3><p>Today · ${upcomingBoarding.split(' ')[0]} to ${upcomingDest.split(' ')[0]}</p></div><span class="status-chip">Confirmed</span></div>
             <div class="trip-detail-grid">
               <div class="detail-box"><small>Boarding</small><strong>8:15 AM</strong></div>
               <div class="detail-box"><small>Departure</small><strong id="upcomingTime">${upcomingDepart}</strong></div>
@@ -1954,7 +1954,7 @@ function generateQr() {
 
 function renderTrips() {
   return `
-    ${screenHead('My Trips', 'View upcoming, completed and cancelled passenger journeys.', '<button class="button button--primary" type="button" data-screen="book"><i data-lucide="plus"></i>Book a Trip</button>')}
+    ${screenHead('My Travels', 'View upcoming, completed and cancelled passenger journeys.', '<button class="button button--primary" type="button" data-screen="book"><i data-lucide="plus"></i>Book a Travel</button>')}
     <div class="tabs" role="tablist"><button class="tab ${state.tripTab === 'upcoming' ? 'is-active' : ''}" type="button" data-action="trip-tab" data-value="upcoming">Upcoming</button><button class="tab ${state.tripTab === 'completed' ? 'is-active' : ''}" type="button" data-action="trip-tab" data-value="completed">Completed</button><button class="tab ${state.tripTab === 'cancelled' ? 'is-active' : ''}" type="button" data-action="trip-tab" data-value="cancelled">Cancelled</button></div>
     <section class="trip-list" style="margin-top:16px">${renderTripTabContent()}</section>`;
 }
@@ -1974,7 +1974,7 @@ function renderTripTabContent() {
       ${tripCard('16','JUL','Kampala → Entebbe','16 July 2026 · 6:30 PM','UBP 318F','Completed','One Way','UGX 5,000','completed')}
       ${tripCard('12','JUL','Entebbe → Kampala','12 July 2026 · 7:00 AM','UBN 742D','Completed','Return Package','UGX 9,000','completed')}`;
   }
-  return `${tripCard('08','JUL','Entebbe → Kampala','Cancelled 8 July 2026','UBM 245K','Cancelled','One Way','Refund pending','cancelled')}<article class="card empty-state"><div><div class="empty-state__icon"><i data-lucide="calendar-x"></i></div><h3>No other cancelled trips</h3><p class="muted">Cancelled bookings and refund progress appear here.</p></div></article>`;
+  return `${tripCard('08','JUL','Entebbe → Kampala','Cancelled 8 July 2026','UBM 245K','Cancelled','One Way','Refund pending','cancelled')}<article class="card empty-state"><div><div class="empty-state__icon"><i data-lucide="calendar-x"></i></div><h3>No other cancelled travels</h3><p class="muted">Cancelled bookings and refund progress appear here.</p></div></article>`;
 }
 
 function tripCard(day, month, route, date, vehicle, status, type, payment, mode) {
