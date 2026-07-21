@@ -754,6 +754,23 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 .empty-state__icon { width: 74px; height: 74px; border-radius: 22px; display: grid; place-items: center; background: var(--surface-alt); color: var(--brand-blue); margin: 0 auto 14px; }
 .empty-state__icon svg { width: 34px; height: 34px; }
 
+.booking-map-wrapper {
+  position: relative;
+  height: 240px;
+  margin: -22px -20px 16px -20px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: #eef3f7;
+  z-index: 10;
+}
+
+@media (min-width: 901px) {
+  .booking-map-wrapper {
+    margin: -30px -32px 16px -32px;
+    border-radius: 0 0 16px 16px;
+  }
+}
+
 /* ---------- Live trip ---------- */
 .live-layout { display: grid; grid-template-columns: 1.5fr .8fr; gap: 18px; align-items: start; }
 .live-map { min-height: 500px; border-radius: 22px; overflow: hidden; background: #e8f2f7; border: 1px solid var(--border); position: relative; }

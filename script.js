@@ -733,6 +733,7 @@ function renderCurrentScreen(preserveFocus = true) {
   updateHeaderTheme();
   renderNavigation();
   if (state.screen === 'trip-details') setTimeout(() => { if (state.screen === 'trip-details') initTripMap(); }, 240);
+  if (state.screen === 'book' && (state.bookingStep || 1) === 2) setTimeout(() => { if (state.screen === 'book' && state.bookingStep === 2) initBookingStep2Map(); }, 240);
   if (state.screen === 'ticket') setTimeout(initTicketQr, 0);
   if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
   if (focusDescriptor) setTimeout(() => restoreDescribedFocus(root, focusDescriptor), 20);
@@ -1107,9 +1108,16 @@ function renderBook() {
     const allowedTo = allowedFrom;
 
     return `
-      ${screenHead('Configure Route Details', 'Step 2 of 6: Set stages, travel date, time period and passenger counts.')}
+      <div class="booking-map-wrapper">
+        <div id="booking-step2-map" style="width: 100%; height: 100%; z-index: 1;"></div>
+        <div id="booking-step2-map-fallback" class="map-fallback" style="position: absolute; inset: 0; background: #eef3f7; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; gap: 8px;" hidden>
+          <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;">
+          <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Preparing Route Map...</strong>
+          <span style="font-size: 0.8rem; color: var(--muted);">Connecting to map tiles...</span>
+        </div>
+      </div>
 
-      <div style="margin-top: 16px;">
+      <div style="margin-top: 0px;">
         <section class="card" style="margin: 0; overflow: hidden; padding: 0;">
           <!-- Booking-for header banner -->
           <div class="booking-for-header ${state.isBookingForSomeoneElse ? 'is-other' : ''}">
@@ -3514,6 +3522,7 @@ function renderTracking() {
 
 let tripReviewMap = null;
 let tripReviewScrollFrame = null;
+let bookingStep2Map = null;
 
 function updateHeaderTheme() {
   const topbar = $('.topbar');
@@ -3750,6 +3759,10 @@ function destroyTripMap() {
     parcelMap.remove();
     parcelMap = null;
   }
+  if (bookingStep2Map) {
+    bookingStep2Map.remove();
+    bookingStep2Map = null;
+  }
 }
 
 function initTripMap() {
@@ -3783,6 +3796,63 @@ function initTripMap() {
     if (!tripReviewMap || !target.isConnected) return;
     tripReviewMap.invalidateSize({ animate: false, pan: false });
     tripReviewMap.fitBounds(bounds, { animate: false, paddingTopLeft: [40, 86], paddingBottomRight: [40, 72] });
+  };
+  fitMap();
+  requestAnimationFrame(() => requestAnimationFrame(fitMap));
+  setTimeout(fitMap, 320);
+}
+
+function initBookingStep2Map() {
+  const target = $('#booking-step2-map');
+  const fallback = $('#booking-step2-map-fallback');
+  if (!target) return;
+  if (!window.L) {
+    if (fallback) fallback.hidden = false;
+    return;
+  }
+  
+  const outbound = [[0.0606, 32.4435], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
+  
+  let rawPoints = outbound;
+  const route = state.selectedRoute;
+  if (route === 'bweyogere') {
+    rawPoints = [...outbound, [0.3200, 32.6100], [0.3400, 32.6350], [0.3470, 32.6490]];
+  } else if (route === 'busega') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2800, 32.5150], [0.3100, 32.5200]]);
+  } else if (route === 'nambole') {
+    rawPoints = [...outbound, [0.3200, 32.6100], [0.3400, 32.6350], [0.3480, 32.6570]];
+  } else if (route === 'masaka') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400]]);
+  } else if (route === 'lyantonde') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400], [-0.3800, 31.4000], [-0.4000, 31.1550]]);
+  } else if (route === 'mbarara') {
+    rawPoints = outbound.slice(0, 5).concat([[0.2500, 32.5250], [0.2200, 32.4500], [0.1500, 32.2000], [0.0200, 32.0000], [-0.1500, 31.9000], [-0.3400, 31.7400], [-0.3800, 31.4000], [-0.4000, 31.1550], [-0.5000, 30.9000], [-0.6050, 30.6550]]);
+  }
+  
+  const isFlipped = !!state.routeFlips[route];
+  const points = isFlipped ? rawPoints.slice().reverse() : rawPoints;
+  
+  bookingStep2Map = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: true, dragging: true, keyboard: true, scrollWheelZoom: false, touchZoom: true, zoomControl: true });
+  
+  let tileErrors = 0;
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: true, attribution: '&copy; OpenStreetMap contributors' });
+  tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
+  tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
+  tiles.addTo(bookingStep2Map);
+  
+  L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(bookingStep2Map);
+  L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(bookingStep2Map);
+  
+  const labelFrom = state.searchFrom || 'Origin';
+  const labelTo = state.searchTo || 'Destination';
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelFrom, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(bookingStep2Map);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelTo, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(bookingStep2Map);
+  
+  const bounds = L.latLngBounds(points);
+  const fitMap = () => {
+    if (!bookingStep2Map || !target.isConnected) return;
+    bookingStep2Map.invalidateSize({ animate: false, pan: false });
+    bookingStep2Map.fitBounds(bounds, { animate: false, padding: [40, 40] });
   };
   fitMap();
   requestAnimationFrame(() => requestAnimationFrame(fitMap));
