@@ -777,8 +777,36 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 @media (max-width: 600px) {
   .wallet-actions { grid-template-columns: repeat(2,1fr); gap: 8px; }
 }
-.wallet-action { border: 1px solid rgba(255,255,255,.20); background: rgba(255,255,255,.10); color: white; border-radius: 13px; min-height: 86px; padding: 10px; display: grid; justify-items: center; align-content: center; gap: 7px; cursor: pointer; text-align: center; }
-.wallet-action svg { width: 20px; }
+.wallet-action {
+  background: #ffffff !important;
+  color: var(--brand-blue-dark) !important;
+  border: none !important;
+  border-radius: 14px !important;
+  min-height: 86px !important;
+  padding: 10px !important;
+  display: grid !important;
+  justify-items: center !important;
+  align-content: center !important;
+  gap: 7px !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06) !important;
+  transition: all 0.22s ease !important;
+  font-weight: 800 !important;
+}
+.wallet-action:hover {
+  background: #f5f8ff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 14px rgba(7, 90, 168, 0.12) !important;
+}
+.wallet-action:active {
+  transform: translateY(0) !important;
+}
+.wallet-action svg,
+.wallet-action i {
+  width: 20px !important;
+  color: var(--brand-blue) !important;
+}
 .balance-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 18px; }
 @media (max-width: 600px) {
   .balance-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
