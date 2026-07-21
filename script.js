@@ -15,10 +15,11 @@ const appData = {
     email: 'christo.i@example.com',
     preferredRoute: 'Entebbe Main Stage → Kampala Main Stage'
   },
-  routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Nambole', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
+  routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Nambole', 'Bweyogere', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
   routeCards: [
     { key: 'kajansi', cityA: 'Entebbe', cityB: 'Kampala', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', via: 'Via Kajansi Expressway', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe \u2022 Kitooro \u2022 Abayita Ababiri \u2022 Kajjansi \u2022 Clock Tower \u2022 Kampala', coordA: [0.0512, 32.4637], coordB: [0.3136, 32.5811] },
     { key: 'busega', cityA: 'Entebbe', cityB: 'Kampala', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', via: 'Via Busega Expressway', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe \u2022 Kitooro \u2022 Abayita Ababiri \u2022 Busega \u2022 Clock Tower \u2022 Kampala', coordA: [0.0512, 32.4637], coordB: [0.3136, 32.5811] },
+    { key: 'bweyogere', cityA: 'Entebbe', cityB: 'Bweyogere', stageA: 'Entebbe Main Stage', stageB: 'Bweyogere', via: 'Via Northern Bypass', price: 'UGX 6,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/bweyogere.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Busega \u2022 Bwaise \u2022 Kalerwe \u2022 Kyebando \u2022 Kiwatule \u2022 Naalya \u2022 Bweyogere', coordA: [0.0512, 32.4637], coordB: [0.3667, 32.6500] },
     { key: 'nambole', cityA: 'Entebbe', cityB: 'Nambole', stageA: 'Entebbe Main Stage', stageB: 'Nambole', via: 'Via Kajansi Expressway', price: 'UGX 7,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/nambole.jpg', corridor: 'Entebbe \u2022 Kitooro \u2022 Abayita Ababiri \u2022 Kajjansi \u2022 Nambole', coordA: [0.0512, 32.4637], coordB: [0.3475, 32.6281] },
     { key: 'masaka', cityA: 'Entebbe', cityB: 'Masaka', stageA: 'Entebbe Main Stage', stageB: 'Masaka', via: 'Via Masaka Road', price: 'UGX 20,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/masaka.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Mpigi \u2022 Buwama \u2022 Masaka', coordA: [0.0512, 32.4637], coordB: [-0.3375, 31.7350] },
     { key: 'lyantonde', cityA: 'Entebbe', cityB: 'Lyantonde', stageA: 'Entebbe Main Stage', stageB: 'Lyantonde', via: 'Via Masaka Road', price: 'UGX 25,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/lyantonde.jpg', corridor: 'Entebbe \u2022 Kajjansi \u2022 Mpigi \u2022 Masaka \u2022 Lyantonde', coordA: [0.0512, 32.4637], coordB: [-0.4047, 31.1597] },
@@ -1163,6 +1164,7 @@ function renderBook() {
 
   if (step === 2) {
     const allowedFrom = appData.routes.filter(r => {
+      if (state.selectedRoute === 'bweyogere') return ['Entebbe Main Stage', 'Bweyogere'].includes(r);
       if (state.selectedRoute === 'busega') return ['Entebbe Main Stage', 'Kampala Main Stage'].includes(r);
       if (state.selectedRoute === 'nambole') return ['Entebbe Main Stage', 'Nambole'].includes(r);
       if (state.selectedRoute === 'masaka') return ['Entebbe Main Stage', 'Masaka'].includes(r);
