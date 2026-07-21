@@ -405,9 +405,9 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgba(245,247,250,.9);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(229,234,240,.88);
+  background: linear-gradient(to bottom, var(--page) 0%, rgba(242, 246, 251, 0.98) 40%, rgba(242, 246, 251, 0) 100%) !important;
+  backdrop-filter: none !important;
+  border-bottom: none !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -978,7 +978,7 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   .app-shell { display: block; }
   .sidebar { display: none; }
   .workspace { min-height: 100vh; }
-  .topbar { height: calc(66px + var(--safe-top)); padding-top: var(--safe-top); background: rgba(255,255,255,.94); }
+  .topbar { height: calc(66px + var(--safe-top)); padding-top: var(--safe-top); background: linear-gradient(to bottom, var(--page) 0%, rgba(242, 246, 251, 0.98) 40%, rgba(242, 246, 251, 0) 100%) !important; border-bottom: none !important; backdrop-filter: none !important; }
   .topbar__eyebrow { display: none; }
   .mobile-brand { display: block; }
   .main-content { padding: 22px 20px calc(var(--mobile-nav-height) + 30px + var(--safe-bottom)); }
@@ -5837,6 +5837,7 @@ body[data-active-screen="home"] .desktop-profile-btn {
 body[data-active-screen="home"] .main-content {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  padding-top: 0 !important;
   max-width: 100% !important;
   width: 100% !important;
 }
@@ -5845,6 +5846,12 @@ body[data-active-screen="home"] .main-content {
 .home-redesign.app {
   padding-left: 20px !important;
   padding-right: 20px !important;
+}
+
+@media (max-width: 900px) {
+  .home-redesign.app {
+    padding-top: calc(66px + var(--safe-top) + 24px) !important;
+  }
 }
 
 .home-redesign .services-scroll,
@@ -5925,7 +5932,7 @@ body[data-active-screen="home"] .main-content {
       max-width: 100%;
       overflow: clip;
       margin: 0 auto;
-      padding: 24px clamp(16px, 3vw, 34px) calc(118px + var(--safe-bottom));
+      padding: calc(var(--topbar-height) + 24px) clamp(16px, 3vw, 34px) calc(118px + var(--safe-bottom));
     }.home-redesign .topbar{
       display: flex;
       align-items: center;
