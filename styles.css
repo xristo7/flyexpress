@@ -6694,9 +6694,12 @@ body[data-active-screen="home"] .workspace > .topbar {
     display: flex;
     flex-direction: column;
     gap: 28px;
-    position: relative;
+    position: sticky;
+    top: 96px;
+    align-self: start;
     padding-top: 8px;
     padding-bottom: 20px;
+    z-index: 10;
   }
 
   .vertical-step-rail::before {
