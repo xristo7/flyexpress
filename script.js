@@ -902,49 +902,6 @@ function renderHome() {
 
       <div class="layout">
         <div class="main-column">
-          <!-- 4. PRIMARY BOOKING CARD -->
-          <section class="card journey-card section" style="animation-delay:.05s">
-            <p class="eyebrow">Plan your journey</p>
-            <div class="journey-head">
-              <h2>Fast, reliable transit between Entebbe and Kampala</h2>
-              <span class="offer-chip">Save 20% on returns</span>
-            </div>
-            
-            <div class="route-toggle">
-              <div class="route-place">
-                <span>BOARDING STAGE</span>
-                <strong id="route-text-origin">${state.searchFrom || 'Entebbe Main Stage'}</strong>
-              </div>
-              <button class="swap-route" type="button" data-action="swap-route" aria-label="Swap directions">
-                <svg><use href="#i-swap"></use></svg>
-              </button>
-              <div class="route-place">
-                <span>DESTINATION STAGE</span>
-                <strong id="route-text-dest">${state.searchTo || 'Kampala Main Stage'}</strong>
-              </div>
-            </div>
-            
-            <div class="route-line" aria-hidden="true">
-              <span class="route-dot"></span>
-              <span class="route-van"><svg><use href="#i-van"></use></svg></span>
-              <span class="route-dot"></span>
-            </div>
-            
-            <div class="journey-meta">
-              <span><svg><use href="#i-calendar"></use></svg>${formatDemoDate(state.bookingDate)}</span>
-              <span><svg><use href="#i-user"></use></svg>${passengerTotal()} Passenger${passengerTotal() === 1 ? '' : 's'}</span>
-              <span><svg><use href="#i-ticket"></use></svg>One way</span>
-            </div>
-            
-            <div class="journey-actions">
-              <button class="primary-button" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'>
-                <svg><use href="#i-search"></use></svg>Find Departures
-              </button>
-              <button class="secondary-button" type="button" data-action="show-search-filters">
-                <svg><use href="#i-sliders"></use></svg>Filters
-              </button>
-            </div>
-          </section>
 
           <!-- 5. POPULAR SERVICES SECTION -->
           <section class="section" style="animation-delay:.10s" aria-labelledby="servicesTitle">
