@@ -806,50 +806,42 @@ function renderHome() {
   const dateStr = new Intl.DateTimeFormat('en-UG', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
 
   // Carousel Recommended Cards Data
-  const departures = [
-    {
-      id: 'dep-1',
-      origin: 'Entebbe Main Stage',
-      dest: 'Kampala Main Stage',
-      time: '8:30 AM',
-      arrival: '9:35 AM',
-      spaces: 4,
-      badge: '4 spaces available',
-      badgeClass: 'is-warning',
-      price: 'UGX 5,000',
-      vehicle: 'Highroof',
-      traffic: 'Moderate traffic',
-      img: 'assets/fly-express-hiace-highroof.jpg'
-    },
-    {
-      id: 'dep-2',
-      origin: 'Kampala Main Stage',
-      dest: 'Entebbe Main Stage',
-      time: '9:00 AM',
-      arrival: '10:00 AM',
-      spaces: 8,
-      badge: '8 spaces available',
-      badgeClass: 'is-available',
-      price: 'UGX 5,000',
-      vehicle: 'Commuter',
-      traffic: 'Light traffic',
-      img: 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg'
-    },
-    {
-      id: 'dep-3',
-      origin: 'Entebbe Main Stage',
-      dest: 'Kitooro Stage',
-      time: '9:30 AM',
-      arrival: '9:50 AM',
-      spaces: 2,
-      badge: 'Almost full',
-      badgeClass: 'is-warning',
-      price: 'UGX 3,000',
-      vehicle: 'Commuter',
-      traffic: 'Light traffic',
-      img: 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg'
+  const departures = appData.trips.map((trip) => {
+    let img = 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg';
+    if (trip.vehicle === 'Highroof') {
+      img = 'assets/fly-express-hiace-highroof.jpg';
+    } else if (trip.vehicle === 'Coaster') {
+      img = 'assets/fly-express-coaster-2014_1784553048223.jpg';
+    } else if (trip.vehicle === 'Noah') {
+      img = 'assets/fly-express-noah-2014_1784553026735.jpg';
+    } else if (trip.vehicle === 'Minivan') {
+      img = 'assets/fly-express-minivan-2014_1784553037010.jpg';
+    } else if (trip.vehicle === 'Sedan') {
+      img = 'assets/fly-express-sedan-2014_1784553015505.jpg';
     }
-  ];
+
+    let badgeClass = 'is-available';
+    if (trip.status === 'Almost full') {
+      badgeClass = 'is-warning';
+    } else if (trip.status === 'Full') {
+      badgeClass = 'is-danger';
+    }
+
+    return {
+      id: trip.id,
+      origin: trip.boarding,
+      dest: trip.destination,
+      time: trip.depart,
+      arrival: trip.arrive,
+      spaces: trip.seats,
+      badge: trip.status === 'Almost full' ? 'Almost full' : `${trip.seats} spaces available`,
+      badgeClass: badgeClass,
+      price: formatUGX(trip.fare),
+      vehicle: trip.vehicle,
+      traffic: `${trip.traffic} traffic`,
+      img: img
+    };
+  });
 
   return `
     <div class="fade-in-up">
