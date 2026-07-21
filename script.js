@@ -685,11 +685,17 @@ function renderNavigation() {
     } else {
       mobile.classList.remove('is-hidden');
     }
-    const items = [['home','Home','house'],['book','Book','ticket-plus'],['trips','Trips','route'],['wallet','Wallet','wallet-cards']];
-    mobile.innerHTML = items.map(([screen,label,icon]) => {
+    const items = [
+      ['home', 'Home', 'house'],
+      ['book', 'Book', 'ticket-plus'],
+      ['trips', 'Trips', 'route'],
+      ['wallet', 'Wallet', 'wallet-cards'],
+      ['more', 'More', 'menu', 'data-action="open-more"']
+    ];
+    mobile.innerHTML = items.map(([screen, label, icon, extraAttr]) => {
       const active = state.screen === screen;
       return `
-      <button class="mobile-nav-item ${active ? 'is-active' : ''}" type="button" data-screen="${screen}" ${active ? 'aria-current="page"' : ''}>
+      <button class="mobile-nav-item ${active ? 'is-active' : ''}" type="button" ${extraAttr || `data-screen="${screen}"`} ${active ? 'aria-current="page"' : ''}>
         <i data-lucide="${icon}"></i><span>${label}</span>
       </button>`;
     }).join('');
@@ -742,6 +748,23 @@ function renderCurrentScreen(preserveFocus = true) {
   if (state.screen === 'trip-details') setTimeout(() => { if (state.screen === 'trip-details') initTripMap(); }, 240);
   if (state.screen === 'ticket') setTimeout(initTicketQr, 0);
   if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
+  
+  // Custom Carousel horizontal snap scroll listener
+  if (state.screen === 'home') {
+    const scroller = $('#departures-carousel');
+    if (scroller) {
+      scroller.addEventListener('scroll', () => {
+        const width = scroller.offsetWidth;
+        const scrollLeft = scroller.scrollLeft;
+        const index = Math.round(scrollLeft / (width * 0.88));
+        const dots = document.querySelectorAll('.recommended-dot');
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('is-active', idx === index);
+        });
+      }, { passive: true });
+    }
+  }
+
   if (focusDescriptor) setTimeout(() => restoreDescribedFocus(root, focusDescriptor), 20);
   if (state.screen === 'live') startLiveProgress(); else stopLiveProgress();
 }
@@ -750,85 +773,371 @@ function screenHead(title, description, actions = '') {
   return `<header class="screen-head"><div><h1>${title}</h1><p>${description}</p></div>${actions ? `<div class="button-row">${actions}</div>` : ''}</header>`;
 }
 
+function getGreetingText() {
+  const hr = new Date().getHours();
+  if (hr < 12) return 'Good morning';
+  if (hr < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
+function showSearchShortcuts() {
+  openModal('Quick Services', `
+    <div class="grid grid--2" style="gap:12px; margin-top:8px;">
+      <button class="card card--compact card--hover" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'>
+        <i data-lucide="ticket-plus" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Book Entebbe to Kampala</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'>
+        <i data-lucide="ticket-plus" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Book Kampala to Entebbe</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="book">
+        <i data-lucide="search" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Find a departure</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="live">
+        <i data-lucide="navigation" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Track my vehicle</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="parcel">
+        <i data-lucide="package-plus" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Send a parcel</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="trackparcel-list">
+        <i data-lucide="package" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Track a parcel</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="luggage">
+        <i data-lucide="luggage" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Register luggage</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="wallet">
+        <i data-lucide="wallet-cards" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">Open wallet</strong>
+      </button>
+      <button class="card card--compact card--hover" type="button" data-screen="returns">
+        <i data-lucide="refresh-cw" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">View return tickets</strong>
+      </button>
+    </div>
+  `, `<button class="button button--ghost" type="button" data-action="close-modal">Close</button>`);
+}
+
 function renderHome() {
-  const date = new Intl.DateTimeFormat('en-UG', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
+  const greeting = getGreetingText();
+  const dateStr = new Intl.DateTimeFormat('en-UG', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
+
+  // Carousel Recommended Cards Data
+  const departures = [
+    {
+      id: 'dep-1',
+      origin: 'Entebbe Main Stage',
+      dest: 'Kampala Main Stage',
+      time: '8:30 AM',
+      arrival: '9:35 AM',
+      spaces: 4,
+      badge: '4 spaces available',
+      badgeClass: 'is-warning',
+      price: 'UGX 5,000',
+      vehicle: 'Highroof',
+      traffic: 'Moderate traffic',
+      img: 'assets/fly-express-hiace-highroof.jpg'
+    },
+    {
+      id: 'dep-2',
+      origin: 'Kampala Main Stage',
+      dest: 'Entebbe Main Stage',
+      time: '9:00 AM',
+      arrival: '10:00 AM',
+      spaces: 8,
+      badge: '8 spaces available',
+      badgeClass: 'is-available',
+      price: 'UGX 5,000',
+      vehicle: 'Commuter',
+      traffic: 'Light traffic',
+      img: 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg'
+    },
+    {
+      id: 'dep-3',
+      origin: 'Entebbe Main Stage',
+      dest: 'Kitooro Stage',
+      time: '9:30 AM',
+      arrival: '9:50 AM',
+      spaces: 2,
+      badge: 'Almost full',
+      badgeClass: 'is-warning',
+      price: 'UGX 3,000',
+      vehicle: 'Commuter',
+      traffic: 'Light traffic',
+      img: 'assets/fly-express-hiace-commuter-2014_1784553286560.jpg'
+    }
+  ];
+
   return `
-    <section class="welcome-panel">
-      <div class="welcome-user"><img src="assets/christo-avatar.jpg" alt="Christo I." class="avatar" aria-hidden="true" style="object-fit: cover;"><div><p class="eyebrow">${escapeHtml(date)}</p><h1>Good morning, Christo</h1><p class="muted">Where are you travelling today?</p></div></div>
-      <button class="wallet-shortcut" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><div><small>Wallet balance</small><strong>${formatUGX(state.walletBalance)}</strong></div><i data-lucide="chevron-right"></i></button>
-    </section>
+    <div class="fade-in-up">
+      <!-- 2. MOBILE HEADER -->
+      <header class="home-header">
+        <div class="home-header-left">
+          <img src="assets/christo-avatar.jpg" alt="Christo avatar" class="home-header-avatar" />
+          <div class="home-header-greet">
+            <small>Hi Sarah</small>
+            <h1>${greeting}</h1>
+            <p>Where would you like to travel today?</p>
+          </div>
+        </div>
+        <button class="home-header-bell-btn" type="button" data-screen="notifications" aria-label="Open notifications menu">
+          <i data-lucide="bell"></i>
+          <span class="bell-badge">3</span>
+        </button>
+      </header>
 
-    <section class="card card--blue booking-card" aria-labelledby="quick-book-heading">
-      <div class="trip-kind"><button class="segment-button ${state.tripType === 'oneway' ? 'is-active' : ''}" type="button" data-action="trip-kind" data-value="oneway" aria-pressed="${state.tripType === 'oneway'}">One way</button><button class="segment-button ${state.tripType === 'return' ? 'is-active' : ''}" type="button" data-action="trip-kind" data-value="return" aria-pressed="${state.tripType === 'return'}">Return</button></div>
-      <div class="card-head"><div><p class="section-kicker">Quick booking</p><h2 id="quick-book-heading">Find your next departure</h2></div><span class="status-chip" style="background:rgba(255,255,255,.12);color:white">Demo availability</span></div>
-      <div class="booking-form-grid">
-        <div class="field"><label for="home-from">From</label><select id="home-from" data-field="search-from">${appData.routes.map(route => optionMarkup(route, state.searchFrom)).join('')}</select></div>
-        <button class="swap-button" type="button" data-action="swap-route" aria-label="Swap locations"><i data-lucide="arrow-left-right"></i></button>
-        <div class="field"><label for="home-to">To</label><select id="home-to" data-field="search-to">${appData.routes.map(route => optionMarkup(route, state.searchTo)).join('')}</select></div>
-        <div class="field"><label for="home-date">Travel date</label><input id="home-date" type="date" value="${state.bookingDate}" data-field="booking-date"></div>
-        <div class="field"><label for="home-passengers">Passengers</label><select id="home-passengers" data-field="search-adults">${[1,2,3,4].map(count => optionMarkup(String(count), String(state.passengerCount), `${count} passenger${count === 1 ? '' : 's'}`)).join('')}</select></div>
-        <button class="button button--gold" type="button" data-action="search-trips"><i data-lucide="search"></i>Search Trips</button>
+      <!-- 3. SEARCH AND FILTER ROW -->
+      <div class="home-search-row">
+        <div class="home-search-bar" role="button" tabindex="0" data-action="open-search-shortcuts">
+          <i data-lucide="search"></i>
+          <span>Search route, stage or service</span>
+        </div>
+        <button class="home-filter-btn" type="button" data-action="show-search-filters" aria-label="Open filters sheet">
+          <i data-lucide="sliders-horizontal"></i>
+        </button>
       </div>
-    </section>
 
-    <div class="section-title"><h2>Quick actions</h2><button class="text-button" type="button" data-action="open-more">View all</button></div>
-    <section class="quick-actions" aria-label="Quick actions">
-      ${quickAction('Book a Seat','ticket-plus','book')}
-      ${quickAction('Private Charter','bus','special-hire')}
-      ${quickAction('Buy Return Ticket','refresh-cw','returns')}
-      ${quickAction('Send Parcel','package-plus','parcel')}
-      ${quickAction('Add Wallet Funds','circle-plus','wallet','open-add-funds')}
-      ${quickAction('Track a Trip','navigation','live')}
-      ${quickAction('Register Luggage','luggage','luggage')}
-    </section>
+      <div class="grid grid--sidebar">
+        <div>
+          <!-- 4. PRIMARY BOOKING CARD -->
+          <section class="home-booking-card" aria-labelledby="journey-card-title">
+            <p class="card-kicker" id="journey-card-title">Plan your journey</p>
+            
+            <div class="home-booking-route-row">
+              <div class="home-booking-route-texts">
+                <h2>
+                  <span id="route-text-origin">${state.searchFrom || 'Entebbe'}</span>
+                  <i data-lucide="arrow-right" style="width:18px;height:18px;margin:0 4px;color:var(--slate)"></i>
+                  <span id="route-text-dest">${state.searchTo || 'Kampala'}</span>
+                </h2>
+                <p>Today · 1 passenger · One way</p>
+              </div>
+              <button class="home-swap-circle-btn" type="button" data-action="swap-home-route" aria-label="Swap source and destination directions">
+                <i data-lucide="arrow-left-right"></i>
+              </button>
+            </div>
 
-    <section class="grid grid--sidebar" style="margin-top:22px">
-      <div class="grid">
-        <article class="card card--hover upcoming-trip">
+            <!-- Route visual line component -->
+            <div class="home-route-line-box">
+              <span class="home-route-dot home-route-dot--origin"></span>
+              <span class="home-route-line-connect"></span>
+              <span class="home-route-dot home-route-dot--dest"></span>
+            </div>
+            <div class="home-route-labels">
+              <span>${state.searchFrom || 'Entebbe'}</span>
+              <span>${state.searchTo || 'Kampala'}</span>
+            </div>
+
+            <div class="home-booking-meta-grid">
+              <div class="home-booking-meta-cell">
+                <small>Departure</small>
+                <strong>Today</strong>
+              </div>
+              <div class="home-booking-meta-cell">
+                <small>Passengers</small>
+                <strong>1 Person</strong>
+              </div>
+              <div class="home-booking-meta-cell">
+                <small>Fare from</small>
+                <strong>UGX 5,000</strong>
+              </div>
+            </div>
+
+            <button class="button button--primary w-full" type="button" data-screen="book" data-action-payload='{"bookingStep":1}' style="height: 52px; border-radius: 16px;">
+              <i data-lucide="search" style="margin-right:8px"></i>Find Departures
+            </button>
+          </section>
+
+          <!-- 5. POPULAR SERVICES SECTION -->
+          <div class="home-section-header">
+            <h2>Popular services</h2>
+            <button class="show-all-btn" type="button" data-action="open-more">Show all</button>
+          </div>
+          <section class="popular-services-scroller">
+            <div class="popular-service-item" data-screen="book" data-action-payload='{"bookingStep":1}'>
+              <div class="popular-tile"><i data-lucide="ticket-plus"></i></div>
+              <span>Book Trip</span>
+            </div>
+            <div class="popular-service-item" data-screen="returns">
+              <div class="popular-tile"><i data-lucide="refresh-cw"></i></div>
+              <span>Return Ticket</span>
+            </div>
+            <div class="popular-service-item" data-screen="parcel">
+              <div class="popular-tile"><i data-lucide="package-plus"></i></div>
+              <span>Send Parcel</span>
+            </div>
+            <div class="popular-service-item" data-screen="wallet">
+              <div class="popular-tile"><i data-lucide="wallet"></i></div>
+              <span>Wallet</span>
+            </div>
+          </section>
+        </div>
+
+        <div>
+          <!-- 6. RECOMMENDED DEPARTURES CAROUSEL -->
+          <div class="home-section-header">
+            <h2>Recommended departures</h2>
+            <button class="show-all-btn" type="button" data-screen="book">Show all</button>
+          </div>
+          <div class="carousel-viewport">
+            <div class="carousel-scroller" id="departures-carousel">
+              ${departures.map((dep, index) => {
+                const isSaved = state.savedDepartures && state.savedDepartures.includes(dep.id);
+                return `
+                <article class="recommended-departure-card" data-index="${index}">
+                  <div class="recommended-card-img-panel">
+                    <img src="${dep.img}" alt="Fly Express ${dep.vehicle} van image" />
+                    <button class="recommended-card-save-btn ${isSaved ? 'is-saved' : ''}" type="button" data-action="toggle-save-departure" data-dep-id="${dep.id}" aria-label="Save this departure to favorites">
+                      <i data-lucide="${isSaved ? 'heart-handshake' : 'heart'}"></i>
+                    </button>
+                    <span class="recommended-card-price-overlay">${dep.price}</span>
+                    <span class="recommended-card-badge-overlay ${dep.badgeClass}">${dep.badge}</span>
+                  </div>
+                  <div class="recommended-card-meta">
+                    <h3>${dep.origin} → ${dep.dest}</h3>
+                    <p style="display:flex; align-items:center; gap:6px;">
+                      <i data-lucide="clock" style="width:14px;color:var(--slate)"></i>
+                      <span>${dep.time} (Est. arrival ${dep.arrival})</span>
+                    </p>
+                    <p style="display:flex; align-items:center; gap:6px; margin-top:2px;">
+                      <i data-lucide="bus" style="width:14px;color:var(--slate)"></i>
+                      <span>${dep.vehicle} Passenger Van · ${dep.traffic}</span>
+                    </p>
+                  </div>
+                  <div class="recommended-card-footer">
+                    <div class="recommended-card-footer-info">
+                      <small>Standard Fare</small>
+                      <strong>${dep.price}</strong>
+                    </div>
+                    <button class="button button--secondary button--small" type="button" data-action="select-departure" data-trip="${dep.time}">
+                      Select Trip
+                    </button>
+                  </div>
+                </article>
+                `;
+              }).join('')}
+            </div>
+            <div class="recommended-dots">
+              ${departures.map((_, i) => `<span class="recommended-dot ${i === 0 ? 'is-active' : ''}" data-dot-index="${i}"></span>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid--2" style="margin-top:20px; gap:20px;">
+        <!-- 7. RETURN-TICKET FEATURE CARD -->
+        <article class="premium-gradient-card">
+          <p class="card-kicker">Save with a return ticket</p>
+          <h3>Travel to Kampala and secure your return for less.</h3>
+          <div class="price-row">
+            <div class="price-cell">
+              <small>Outbound</small>
+              <strong>UGX 5,000</strong>
+            </div>
+            <div class="price-cell">
+              <small>Return</small>
+              <strong>UGX 4,000</strong>
+            </div>
+            <div class="price-cell">
+              <small>Total Package</small>
+              <strong style="color:var(--brand-gold)">UGX 9,000</strong>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <span class="gold-savings-badge">Save UGX 1,000</span>
+            <button class="button button--primary button--small" type="button" data-screen="returns">
+              Get Return Ticket
+            </button>
+          </div>
+        </article>
+
+        <!-- 9. WALLET SUMMARY CARD -->
+        <article class="card" style="border-radius:28px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(135deg, #10233b, #1b3d64); color:white; border:none; box-shadow:var(--shadow-md);">
           <div>
-            <div class="card-head"><div><p class="section-kicker">Upcoming trip</p><h2>Entebbe to Kampala</h2></div><span class="status-chip status-chip--success">Confirmed</span></div>
-            <div class="route-label"><div class="route-points"><span></span><i></i><span></span></div><div><strong>Entebbe Main Stage</strong><p class="muted text-small">Today · Departure 8:30 AM · Boarding 8:15 AM</p><strong>Kampala Main Stage</strong></div></div>
-            <div class="trip-meta"><span><i data-lucide="bus-front"></i>UBM 245K</span><span><i data-lucide="armchair"></i>Capacity position 04</span><span><i data-lucide="ticket-check"></i>Open return included</span></div>
+            <p class="section-kicker" style="color:rgba(255,255,255,0.7)">Fly Express Wallet</p>
+            <h2 style="font-size:2rem; font-weight:900; color:white; margin:8px 0 4px 0">${formatUGX(state.walletBalance)}</h2>
+            <p style="font-size:0.85rem; color:rgba(255,255,255,0.85); margin:0 0 20px 0; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="sparkles" style="width:14px;color:var(--brand-gold)"></i>
+              <span>UGX 2,000 promotional credit available</span>
+            </p>
           </div>
-          <div class="button-row"><button class="button button--primary" type="button" data-screen="ticket">View Ticket</button><button class="button button--ghost" type="button" data-screen="live">Track</button></div>
-        </article>
-
-        <article class="card card--gold">
-          <div class="card-head"><div><p class="section-kicker">Return ticket offer</p><h2>Travel to Kampala and secure your return for less.</h2></div><span class="status-chip status-chip--success">Save UGX 1,000</span></div>
-          <div class="promo-price"><div class="price-cell"><small>Outbound</small><strong>UGX 5,000</strong></div><div class="price-cell"><small>Return</small><strong>UGX 4,000</strong></div><div class="price-cell"><small>Package total</small><strong>UGX 9,000</strong></div><div class="price-cell"><small>Separate total</small><strong>UGX 10,000</strong></div></div>
-          <button class="button button--primary" type="button" data-screen="returns">Get Return Ticket</button>
+          <div style="display:flex; gap:10px;">
+            <button class="button button--gold button--small" style="flex:1" type="button" data-action="open-add-funds">Add Funds</button>
+            <button class="button button--ghost button--small" style="flex:1; border-color:rgba(255,255,255,0.2); color:white;" type="button" data-screen="wallet">Transactions</button>
+          </div>
         </article>
       </div>
 
-      <div class="grid">
-        <article class="card">
-          <div class="card-head"><div><p class="section-kicker">Next departures</p><h3>Entebbe Main Stage</h3></div><button class="text-button" type="button" data-screen="book">See all</button></div>
-          <div class="departure-list">
-            ${departureRow('8:30 AM',4,35,'4 seats available')}
-            ${departureRow('9:00 AM',8,60,'8 seats available')}
-            ${departureRow('9:30 AM',2,88,'Almost full')}
-            ${departureRow('10:00 AM',11,45,'11 seats available')}
+      <div class="grid grid--2" style="margin-top:20px; gap:20px;">
+        <!-- 8. UPCOMING TRIP CARD -->
+        <article class="upcoming-trip-clean-card">
+          <p class="card-kicker">Upcoming trip</p>
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div>
+              <h3 style="margin:0; font-size:1.15rem; font-weight:850">Entebbe to Kampala</h3>
+              <p style="margin:4px 0 0; font-size:0.8rem; color:var(--slate)">Today · Boarding 8:15 AM · Depart 8:30 AM</p>
+            </div>
+            <span class="status-chip status-chip--success" style="background:#eafcf3; color:#138a59">Confirmed</span>
+          </div>
+          <div class="route-label" style="margin-bottom:14px;">
+            <div class="route-points" style="margin-top: 4px;"><span></span><i></i><span></span></div>
+            <div>
+              <strong style="font-size:0.85rem">Entebbe Main Stage</strong>
+              <div style="height:12px"></div>
+              <strong style="font-size:0.85rem">Kampala Main Stage</strong>
+            </div>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:16px; font-size:0.78rem; color:var(--slate);">
+            <span style="display:flex;align-items:center;gap:4px"><i data-lucide="bus-front" style="width:14px"></i>UBM 245K</span>
+            <span style="display:flex;align-items:center;gap:4px"><i data-lucide="armchair" style="width:14px"></i>Seat position 04</span>
+            <span style="display:flex;align-items:center;gap:4px"><i data-lucide="ticket-check" style="width:14px"></i>Return included</span>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="button button--primary button--small" style="flex:1" type="button" data-screen="ticket">View Ticket</button>
+            <button class="button button--ghost button--small" style="flex:1" type="button" data-screen="live">Track Vehicle</button>
           </div>
         </article>
-        <article class="card card--blue">
-          <p class="section-kicker">Fly Express Wallet</p><div class="wallet-balance">${formatUGX(state.walletBalance)}</div><p class="muted">Plus UGX 2,000 promotional credit</p><div class="button-row"><button class="button button--gold button--small" type="button" data-action="open-add-funds">Add Funds</button><button class="button button--ghost button--small" type="button" data-screen="wallet">Transactions</button></div>
+
+        <!-- 10. ACTIVE PARCEL CARD -->
+        <article class="active-parcel-clean-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+              <div>
+                <p class="section-kicker" style="color:var(--brand-blue); margin:0">Active parcel</p>
+                <h3 style="margin:4px 0 0; font-size:1.1rem; font-weight:850">#964201832-DL</h3>
+              </div>
+              <span class="status-chip status-chip--gold" style="background:#fffcf0; color:#b76700">In Transit</span>
+            </div>
+            <div class="route-label" style="margin-bottom:12px;">
+              <div class="route-points" style="margin-top: 4px;"><span></span><i></i><span></span></div>
+              <div>
+                <strong style="font-size:0.85rem">Entebbe Depot</strong>
+                <div style="height:12px"></div>
+                <strong style="font-size:0.85rem">Kampala Main Stage</strong>
+              </div>
+            </div>
+            <p style="margin:0 0 16px 0; font-size:0.8rem; color:var(--slate)">Estimated arrival: 10:45 AM today</p>
+          </div>
+          <button class="button button--ghost button--small w-full" type="button" data-screen="trackparcel">
+            <i data-lucide="navigation" style="margin-right:6px"></i>Track Parcel
+          </button>
         </article>
       </div>
-    </section>
 
-    <section class="grid grid--2" style="margin-top:18px">
-      <article class="card card--hover" data-screen="trackparcel-list" role="button" tabindex="0">
-        <div class="card-head"><div><p class="section-kicker">Active parcel</p><h3>#964201832-DL</h3></div><span class="status-chip status-chip--gold">On the way</span></div>
-        <div class="route-label"><div class="route-points"><span></span><i></i><span></span></div><div><strong>Entebbe</strong><p class="muted text-small">On the way to destination</p><strong>Kampala</strong></div></div>
-      </article>
-      <article class="card sponsored-card"><div><span class="sponsored-label">Sponsored</span><p class="section-kicker" style="margin-top:18px;color:var(--brand-gold)">Lakeview Business Centre</p><h3>Print, package and send business documents near Kitooro.</h3><p style="color:rgba(255,255,255,.72)">10% off document packaging for Fly Express passengers.</p></div><button class="button button--gold button--small" type="button" data-action="sponsored-details">View Offer</button></article>
-    </section>
-
-    <div class="notice" style="margin-top:18px"><i data-lucide="triangle-alert"></i><div><strong>Service notice</strong><div>Morning traffic is heavier than usual. Estimated journey times may increase by 15 minutes.</div></div></div>`;
+      <!-- Notice Panel -->
+      <div class="notice" style="margin-top:20px"><i data-lucide="triangle-alert"></i><div><strong>Service notice</strong><div>Morning traffic is heavier than usual. Estimated journey times may increase by 15 minutes.</div></div></div>
+    </div>
+  `;
 }
 
 function quickAction(label, icon, screen, action = '') {
   return `<button class="quick-action" type="button" ${action ? `data-action="${action}"` : `data-screen="${screen}"`}><span class="quick-action__icon"><i data-lucide="${icon}"></i></span><span>${label}</span></button>`;
+
 }
 
 function departureRow(time, seats, width, label) {
@@ -3468,6 +3777,12 @@ function handleClick(event) {
   const screenTrigger = event.target.closest('[data-screen]');
   if (screenTrigger) {
     const screen = screenTrigger.dataset.screen;
+    if (screenTrigger.dataset.actionPayload) {
+      try {
+        const payload = JSON.parse(screenTrigger.dataset.actionPayload);
+        Object.assign(state, payload);
+      } catch (e) {}
+    }
     if (screenTrigger.dataset.driver) {
       state.viewingDriverName = screenTrigger.dataset.driver.toLowerCase();
     }
@@ -3727,6 +4042,65 @@ function handleClick(event) {
     'confirm-booking-step': () => {
       confirmBooking();
     },
+    'swap-home-route': () => {
+      const btn = $('.home-swap-circle-btn');
+      if (btn) btn.classList.toggle('is-rotated');
+      
+      const originNode = $('#route-text-origin');
+      const destNode = $('#route-text-dest');
+      if (originNode && destNode) {
+        originNode.style.transition = 'opacity 0.2s, transform 0.2s';
+        destNode.style.transition = 'opacity 0.2s, transform 0.2s';
+        originNode.style.opacity = '0';
+        destNode.style.opacity = '0';
+        originNode.style.transform = 'translateY(-4px)';
+        destNode.style.transform = 'translateY(4px)';
+        
+        setTimeout(() => {
+          const temp = state.searchFrom;
+          state.searchFrom = state.searchTo;
+          state.searchTo = temp;
+          originNode.innerText = state.searchFrom || 'Entebbe';
+          destNode.innerText = state.searchTo || 'Kampala';
+          
+          originNode.style.opacity = '1';
+          destNode.style.opacity = '1';
+          originNode.style.transform = 'translateY(0)';
+          destNode.style.transform = 'translateY(0)';
+        }, 200);
+      } else {
+        const temp = state.searchFrom;
+        state.searchFrom = state.searchTo;
+        state.searchTo = temp;
+        renderCurrentScreen();
+      }
+      toast('Route direction swapped.', 'success');
+    },
+    'toggle-save-departure': () => {
+      const depId = actionTrigger.dataset.depId;
+      state.savedDepartures = state.savedDepartures || [];
+      const idx = state.savedDepartures.indexOf(depId);
+      let isSavedNow = false;
+      if (idx > -1) {
+        state.savedDepartures.splice(idx, 1);
+      } else {
+        state.savedDepartures.push(depId);
+        isSavedNow = true;
+      }
+      
+      const heartBtn = actionTrigger;
+      if (heartBtn) {
+        heartBtn.classList.toggle('is-saved');
+        const icon = heartBtn.querySelector('i, svg');
+        if (icon) {
+          icon.setAttribute('data-lucide', isSavedNow ? 'heart-handshake' : 'heart');
+          refreshIcons();
+        }
+      }
+      
+      toast(isSavedNow ? 'Departure saved to favorites.' : 'Departure removed from favorites.', 'success');
+    },
+    'open-search-shortcuts': showSearchShortcuts,
     'swap-route': swapRoute,
     'search-trips': () => simulateNavigation('Searching demonstration departures…', 'book'),
     'select-departure': () => { const trip = appData.trips.find(t => t.depart === actionTrigger.dataset.trip) || appData.trips[0]; state.activeTrip = trip; navigate('trip-details'); },
