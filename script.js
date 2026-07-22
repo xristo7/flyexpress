@@ -817,16 +817,9 @@ function getNavigationHtml(type) {
       <i data-lucide="wallet-cards"></i><span>Wallet</span>
     </button>
 
-    <div class="drawer-nav-group">
-      <button class="${itemClass} ${activeParcel}" type="button" data-screen="parcel">
-        <i data-lucide="package-plus"></i><span>Parcels</span>
-      </button>
-      <div class="drawer-nav-sub">
-        <button class="${subItemClass} ${activeTracking}" type="button" data-screen="tracking" data-action-payload='{"trackingTab":"parcels"}'>
-          <i data-lucide="scan-search"></i><span>Track Parcel</span>
-        </button>
-      </div>
-    </div>
+    <button class="${itemClass} ${activeParcel}" type="button" data-screen="parcel">
+      <i data-lucide="package-plus"></i><span>Parcels</span>
+    </button>
 
     <button class="${itemClass} ${activeOffers}" type="button" data-screen="offers">
       <i data-lucide="badge-percent"></i><span>Offers</span>
