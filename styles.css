@@ -6301,7 +6301,8 @@ body[data-active-screen="home"] .main-content {
     }.home-redesign .save-button:hover{ transform: scale(1.06); }.home-redesign .save-button.is-saved{ color: var(--red); background: #fff; }.home-redesign .save-button.pop{ animation: pop .36s var(--ease); }.home-redesign .save-button svg{ width: 19px; height: 19px; }.home-redesign .visual-label{
       position: absolute;
       left: 12px;
-      top: 12px;
+      bottom: 12px;
+      top: auto;
       min-height: 29px;
       padding: 6px 9px;
       border-radius: 99px;
@@ -6888,7 +6889,8 @@ body[data-active-screen="home"] .main-content {
 .departure-visual--photo .visual-label {
   z-index: 2;
   position: absolute;
-  top: 12px;
+  bottom: 12px;
+  top: auto;
   left: 12px;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
