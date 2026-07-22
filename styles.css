@@ -7379,4 +7379,10 @@ body[data-active-screen="home"] .main-content {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
   }
+
+  /* 3rd onboarding slide button left-aligned on desktop */
+  .onboarding-last-buttons {
+    margin: 32px 0 0 0 !important;
+    align-self: flex-start !important;
+  }
 }
