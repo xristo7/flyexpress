@@ -5826,10 +5826,12 @@ function renderAvailableVansScreen() {
             <div style="padding: 18px; display: flex; flex-direction: column; gap: 14px;">
               <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
                 <div>
-                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 400; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
-                  <h3 style="margin: 3px 0 0 0; font-size: 1.2rem; font-weight: 600; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
+                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 600; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
+                  <h3 style="margin: 3px 0 0 0; font-size: 1.2rem; font-weight: 800; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
                 </div>
-                <strong style="font-size: 1.15rem; color: var(--brand-blue); font-weight: 600;">${trip.price}</strong>
+                <span class="capacity-chip ${isWarning ? 'warning' : ''}" style="font-size: 0.78rem; padding: 4px 10px; flex-shrink: 0; margin-top: 2px;">
+                  ${trip.seats} space${trip.seats === 1 ? '' : 's'} available
+                </span>
               </div>
               
               <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--slate); font-weight: 400; padding-bottom: 2px;">
@@ -5843,19 +5845,17 @@ function renderAvailableVansScreen() {
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; background: var(--page); padding: 10px 16px; border-radius: 12px; text-align: center; border: 1px solid rgba(0,0,0,0.02);">
                 <div>
-                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 400; display: block;">Boarding</span>
-                  <strong style="font-size: 0.92rem; color: ${idx === 0 ? 'var(--brand-blue-dark)' : 'var(--charcoal)'}; font-weight: 600;">${idx === 0 ? 'Now' : trip.depart}</strong>
+                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Boarding</span>
+                  <strong style="font-size: 0.92rem; color: ${idx === 0 ? 'var(--brand-blue-dark)' : 'var(--charcoal)'}; font-weight: 800;">${idx === 0 ? 'Now' : trip.depart}</strong>
                 </div>
                 <div>
-                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 400; display: block;">Duration</span>
-                  <strong style="font-size: 0.92rem; color: var(--charcoal); font-weight: 600;">${trip.duration}</strong>
+                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Duration</span>
+                  <strong style="font-size: 0.92rem; color: var(--charcoal); font-weight: 800;">${trip.duration}</strong>
                 </div>
               </div>
 
               <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
-                <span class="capacity-chip ${isWarning ? 'warning' : ''}" style="font-size: 0.8rem; padding: 4px 10px;">
-                  ${trip.seats} space${trip.seats === 1 ? '' : 's'} available
-                </span>
+                <strong style="font-size: 1.25rem; color: var(--brand-blue); font-weight: 850;">${trip.price}</strong>
                 <button class="button button--primary button--small" type="button" data-action="select-departure-direct" data-trip-id="${trip.id}">
                   Select &amp; Book
                 </button>
