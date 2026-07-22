@@ -2197,6 +2197,17 @@ body.drawer-open .app-shell {
   box-shadow: -15px 0 35px rgba(8, 27, 51, 0.22) !important;
 }
 
+.topbar {
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 280ms ease, background 250ms ease, color 250ms ease, box-shadow 250ms ease !important;
+}
+
+body.drawer-open .topbar,
+body.drawer-open .home-redesign .topbar {
+  transform: translateY(-140%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .mobile-nav {
   transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 280ms ease !important;
 }
