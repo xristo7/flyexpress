@@ -1255,7 +1255,7 @@ function renderBook() {
     return `
       ${screenHead('Book for Later & Scheduled Travel', 'Schedule an advance journey for any upcoming date or time. Select your corridor, choose preferred vehicles & drivers, and configure real-time vehicle alerts.')}
       
-      <div class="route-selector-cards" style="margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+      <div class="route-selector-cards" style="margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; align-items: start;">
         ${appData.routeCards.map(rc => {
           const flipped = !!state.routeFlips[rc.key];
           const origin = flipped ? rc.cityB : rc.cityA;

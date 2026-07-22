@@ -3677,6 +3677,7 @@ body[data-active-screen="driver-profile"] .main-content {
 
 .route-selector-cards {
   display: grid;
+  align-items: start;
   grid-template-columns: 1fr;
   gap: 16px;
   margin-bottom: 20px;
