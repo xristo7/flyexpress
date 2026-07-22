@@ -235,7 +235,7 @@ const driversData = {
     km: '28,100',
     associationTime: '1 year 0 months',
     bio: 'Punctual and focused driver with great knowledge of traffic patterns and alternative routes.',
-    vehicle: 'Commuter',
+    vehicle: 'Commuter (14)',
     plate: 'UBN 742D',
     color: 'White & Blue',
     status: 'idle',
@@ -254,7 +254,7 @@ const driversData = {
     km: '61,200',
     associationTime: '3 years 0 months',
     bio: 'One of the association\'s most senior drivers. Extremely safe records and highly commended by regulars.',
-    vehicle: 'Commuter',
+    vehicle: 'Commuter (14)',
     plate: 'UBQ 915A',
     color: 'White & Blue',
     status: 'idle',
@@ -273,7 +273,7 @@ const driversData = {
     km: '21,000',
     associationTime: '0 years 9 months',
     bio: 'Courteous driver specializing in morning commutes. Always ready to assist passengers with luggage.',
-    vehicle: 'Highroof',
+    vehicle: 'Highroof (18)',
     plate: 'UBR 104C',
     color: 'White & Blue',
     status: 'idle',
@@ -292,7 +292,7 @@ const driversData = {
     km: '44,600',
     associationTime: '1 year 9 months',
     bio: 'Professional driver dedicated to passenger safety, luggage care, and smooth journeys.',
-    vehicle: 'Toyota HiAce Van',
+    vehicle: 'Commuter (14)',
     plate: 'UBM 245K',
     color: 'White & Blue',
     status: 'idle',
@@ -1383,11 +1383,11 @@ function renderBook() {
               <strong style="font-size: 0.9rem; color: var(--brand-blue-dark);">Advance Travel Alert Preferences</strong>
             </div>
             <p style="font-size: 0.8rem; color: var(--slate); margin: 0 0 10px 0; line-height: 1.4;">
-              Since you are scheduling for later, get automated SMS &amp; app alerts as your van enters stage:
+              Since you are scheduling for later, get automated SMS &amp; app alerts as your vehicle enters stage:
             </p>
             <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
               <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
-                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me when my van becomes active on stage
+                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me when my vehicle becomes active on stage
               </label>
               <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
                 <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me 15 minutes before scheduled departure
@@ -1442,10 +1442,10 @@ function renderBook() {
                 <div class="taxi-card-main-layout">
                   <!-- LEFT COLUMN -->
                   <div class="taxi-card-left-col">
-                    <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
+                    <span class="taxi-van-type-label">${trip.vehicle}</span>
                     <div class="taxi-van-img-wrapper">
                       <div class="taxi-van-img-box">
-                        <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
+                        <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Vehicle" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
                       </div>
                       <!-- Ugandan Plate -->
                       <div class="ug-plate-badge">
@@ -1533,7 +1533,7 @@ function renderBook() {
               <div>
                 <i data-lucide="info" style="width: 32px; height: 32px; color: var(--brand-blue); margin-bottom: 12px; margin-left: auto; margin-right: auto;"></i>
                 <strong style="display: block; font-size: 0.95rem; color: var(--charcoal);">No vehicle selected yet</strong>
-                <p class="muted" style="font-size: 0.78rem; margin: 6px 0 0 0;">Select an available van on the left to configure seat allocation options.</p>
+                <p class="muted" style="font-size: 0.78rem; margin: 6px 0 0 0;">Select an available vehicle on the left to configure seat allocation options.</p>
               </div>
             </div>
           `}
@@ -1549,7 +1549,7 @@ function renderBook() {
             <span style="font-size: 0.6rem; font-weight: 400; opacity: 0.8; display: block; white-space: nowrap; margin-top: -1px;">best available seat</span>
           </button>
         ` : `
-          <button class="button button--primary" style="flex: 1; opacity: 0.6; cursor: not-allowed;" type="button" disabled>Select a Van to Proceed</button>
+          <button class="button button--primary" style="flex: 1; opacity: 0.6; cursor: not-allowed;" type="button" disabled>Select a Vehicle to Proceed</button>
         `}
       </div>
     `;
@@ -1558,7 +1558,7 @@ function renderBook() {
   if (step === '3b') {
     const required = passengerTotal();
     return `
-      ${screenHead('Select Preferred Seat', 'Step 3b: Choose your seat number in the passenger van layout.')}
+      ${screenHead('Select Preferred Seat', 'Step 3b: Choose your seat number in the passenger vehicle layout.')}
 
       <div class="booking-desktop-split" style="margin-top: 16px;">
         <section class="card" style="margin: 0; text-align: center; padding: 20px;">
@@ -1567,7 +1567,7 @@ function renderBook() {
 
         <section class="card" style="margin: 0; display: flex; flex-direction: column; justify-content: center; text-align: left; padding: 24px;">
           <p class="section-kicker">Seat Booking Info</p>
-          <h2 style="margin: 0 0 12px 0;">Van Seat Selection</h2>
+          <h2 style="margin: 0 0 12px 0;">Seat Selection</h2>
           <p class="muted" style="font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;">
             Choose preferred seats from the vehicle layout. Seat availability is updated in real time based on active stage occupancy.
           </p>
@@ -1773,7 +1773,7 @@ function renderTripResult(trip) {
         <!-- Proximity Row -->
         <div class="taxi-proximity-row">
           <span class="proximity-countdown"><i data-lucide="clock"></i> ${trip.countdown}</span>
-          <span class="proximity-stage">${trip.currentStage} · ${trip.vansAtStage} vans at stage</span>
+          <span class="proximity-stage">${trip.currentStage} · ${trip.vansAtStage || 4} departures at stage</span>
         </div>
         
         <!-- Desktop-only Divider and Bottom Row -->
@@ -1842,9 +1842,9 @@ function renderTripDetails() {
       <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.15); padding: 14px 16px; border-radius: 16px; margin-bottom: 16px; display: flex; align-items: start; gap: 12px; text-align: left;">
         <i data-lucide="zap" style="width: 22px; height: 22px; color: var(--brand-blue); flex-shrink: 0; margin-top: 1px;"></i>
         <div>
-          <strong style="font-size: 0.92rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Van)</strong>
+          <strong style="font-size: 0.92rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Vehicle)</strong>
           <span style="font-size: 0.82rem; line-height: 1.4; color: var(--slate); font-weight: 500;">
-            This van is currently on stage or departing shortly. Your seat is held immediately upon booking — you do not need to be at the stage right now; you can board at stage or meet your van along the corridor route!
+            This vehicle is currently on stage or departing shortly. Your seat is held immediately upon booking — you do not need to be at the stage right now; you can board at stage or meet your vehicle along the corridor route!
           </span>
         </div>
       </div>
@@ -1866,7 +1866,7 @@ function renderTripDetails() {
       <article class="card transit-status-card">
         <div class="transit-info-grid">
           <div class="transit-van-visual">
-            <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Van" class="transit-van-img">
+            <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Vehicle" class="transit-van-img">
             <span class="van-plate-tag">${trip.plate}</span>
           </div>
           <div class="transit-details">
@@ -1887,7 +1887,7 @@ function renderTripDetails() {
               <i data-lucide="clock"></i> <strong>${trip.countdown}</strong>
             </div>
             <p class="proximity-summary">
-              Proximity: ${trip.vansAtStage} vans currently waiting at stage, ${trip.vansApproaching} on the road approaching.
+              Proximity: ${trip.vansAtStage || 4} vehicles currently waiting at stage, ${trip.vansApproaching || 1} on the road approaching.
             </p>
           </div>
         </div>
@@ -2411,9 +2411,9 @@ function renderSpecialHire() {
   const vehicleLabels = {
     sedan: 'Saloon Car / Sedan (4 Seats)',
     noah: 'Toyota Noah (7 Seats)',
-    minivan: 'Alphard / Minivan (10 Seats)',
-    commuter: 'Toyota HiAce Commuter (14 Seats)',
-    highroof: 'Toyota HiAce Highroof (18 Seats)',
+    minivan: 'Alphard / Multi-Seater (10 Seats)',
+    commuter: 'Commuter (14)',
+    highroof: 'Highroof (18)',
     coaster: 'Executive Coaster (30 Seats)'
   };
   
@@ -2438,7 +2438,7 @@ function renderSpecialHire() {
             <div class="card vehicle-card ${sh.vehicleType === 'noah' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="noah" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'noah' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'noah' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
               <img src="${state.transparentVehicles['assets/fly-express-noah.jpg'] || 'assets/fly-express-noah.jpg'}" alt="Toyota Noah" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota Noah (7 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Versatile and spacious mid-size minivan for family or small groups.</p>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Versatile and spacious mid-size vehicle for family or small groups.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
                 <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">WiFi & AC Included</span>
                 <strong style="color: var(--success); font-size: 0.9rem;">UGX 150K/day</strong>
@@ -2446,9 +2446,9 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'minivan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="minivan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'minivan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'minivan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-minivan.jpg'] || 'assets/fly-express-minivan.jpg'}" alt="Alphard Minivan" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Alphard / Minivan (10 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Comfortable minivan for family travel or small business delegates.</p>
+              <img src="${state.transparentVehicles['assets/fly-express-minivan.jpg'] || 'assets/fly-express-minivan.jpg'}" alt="Alphard Multi-Seater" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Alphard / Multi-Seater (10 Seats)</h3>
+              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Comfortable vehicle for family travel or small business delegates.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
                 <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">AC & WiFi</span>
                 <strong style="color: var(--success); font-size: 0.9rem;">UGX 180K/day</strong>
@@ -2456,8 +2456,8 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'commuter' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="commuter" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'commuter' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'commuter' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-hiace-commuter.jpg'] || 'assets/fly-express-hiace-commuter.jpg'}" alt="Toyota HiAce Commuter" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce Commuter (14 Seats)</h3>
+              <img src="${state.transparentVehicles['assets/fly-express-hiace-commuter.jpg'] || 'assets/fly-express-hiace-commuter.jpg'}" alt="Commuter (14)" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Commuter (14)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Standard roof, spacious, ideal for daily commutes or standard group travel.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
                 <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Standard Commute</span>
@@ -2466,8 +2466,8 @@ function renderSpecialHire() {
             </div>
 
             <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Toyota HiAce Highroof" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota HiAce Highroof (18 Seats)</h3>
+              <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Highroof (18)" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Highroof (18)</h3>
               <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
                 <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Extra Headroom & AC</span>
@@ -3660,7 +3660,7 @@ function renderTracking() {
         id: 'UBM-245K',
         name: 'Isaac Muwonge',
         phone: '+256 772 104 932',
-        vehicle: 'UBM 245K (Toyota Coaster)',
+        vehicle: 'UBM 245K (Commuter (14))',
         visibility: 'Visibility On',
         visibilityClass: 'status-chip--success',
         stage: 'Entebbe Main Stage',
@@ -3671,7 +3671,7 @@ function renderTracking() {
         id: 'UBN-742D',
         name: 'David Okello',
         phone: '+256 701 883 412',
-        vehicle: 'UBN 742D (Toyota Hiace)',
+        vehicle: 'UBN 742D (Highroof (18))',
         visibility: 'Visibility On',
         visibilityClass: 'status-chip--success',
         stage: 'Entebbe Main Stage',
@@ -4852,7 +4852,7 @@ function handleClick(event) {
         state.walletBalance -= priceDetails.total;
         appData.transactions.unshift({
           type: 'booking',
-          title: 'Special Van Hire',
+          title: 'Special Vehicle Hire',
           date: 'Today, ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
           amount: priceDetails.total,
           direction: 'out',
@@ -5242,7 +5242,7 @@ function openMoreSheet() {
 }
 
 function showSearchFilters() {
-  openModal('Search filters', `<div class="form-grid"><div class="field"><label>Approximate travel time</label><select><option>Any duration</option><option>Up to 60 minutes</option><option>Up to 90 minutes</option></select></div><div class="field"><label>Vehicle type</label><select><option>All vehicles</option><option>14-seat Commuter</option><option>18-seat Highroof</option></select></div><div class="field"><label>Capacity</label><select><option>Any availability</option><option>5+ spaces</option><option>10+ spaces</option></select></div><div class="field"><label>Traffic condition</label><select><option>All conditions</option><option>Light</option><option>Moderate</option></select></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="apply-filters">Apply Filters</button>`);
+  openModal('Search filters', `<div class="form-grid"><div class="field"><label>Approximate travel time</label><select><option>Any duration</option><option>Up to 60 minutes</option><option>Up to 90 minutes</option></select></div><div class="field"><label>Vehicle type</label><select><option>All vehicles</option><option>Commuter (14)</option><option>Highroof (18)</option></select></div><div class="field"><label>Capacity</label><select><option>Any availability</option><option>5+ spaces</option><option>10+ spaces</option></select></div><div class="field"><label>Traffic condition</label><select><option>All conditions</option><option>Light</option><option>Moderate</option></select></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="apply-filters">Apply Filters</button>`);
 }
 
 function showShareModal(title = 'Share ticket') {
