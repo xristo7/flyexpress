@@ -1525,7 +1525,7 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   .splash-content { padding: 20px; }
   .splash-brand-lockup { flex-direction: column; text-align: center; gap: 12px; }
   .splash-brand-lockup .logo-frame--large,
-  .splash-screen .logo-frame--large { width: 96px !important; height: 96px !important; border-radius: 24px !important; padding: 8px !important; }
+  .splash-screen .logo-frame--large { width: 96px !important; height: 96px !important; border-radius: 24px !important; padding: 4px !important; }
   .splash-brand-lockup h1 { font-size: clamp(2rem, 11vw, 3.15rem); }
   .splash-vehicle-stage { min-height: 240px; margin-top: 0; }
   .splash-vehicle { max-height: 235px; }
@@ -7345,12 +7345,12 @@ body[data-active-screen="home"] .main-content {
     display: none !important;
   }
 
-  /* Reduced splash screen logo by 2 points down on desktop */
+  /* Reduced splash screen logo padding on desktop */
   .splash-screen .logo-frame--large {
     width: 140px !important;
     height: 140px !important;
     border-radius: 34px !important;
-    padding: 12px !important;
+    padding: 6px !important;
   }
 
   .splash-vehicle-stage {
