@@ -781,18 +781,16 @@ function enterApp(message = 'Welcome to the Fly Express passenger preview.') {
   toast(message, 'success');
 }
 
-function getNavigationHtml(type) {
-  const isDesktop = type === 'desktop';
-  const itemClass = isDesktop ? 'nav-item' : 'drawer-nav-item';
-  const subItemClass = isDesktop ? 'drawer-nav-sub-item nav-item' : 'drawer-nav-sub-item';
-
+function getNavigationHtml(context) {
+  const itemClass = context === 'drawer' ? 'drawer-nav-item' : 'nav-item';
   const activeHome = state.screen === 'home' ? 'is-active' : '';
+  const activeDepartures = state.screen === 'available-vans' ? 'is-active' : '';
   const activeBook = state.screen === 'book' ? 'is-active' : '';
   const activeSpecialHire = state.screen === 'special-hire' ? 'is-active' : '';
-  const activeTracking = state.screen === 'tracking' ? 'is-active' : '';
   const activeTrips = state.screen === 'trips' ? 'is-active' : '';
   const activeWallet = state.screen === 'wallet' ? 'is-active' : '';
   const activeParcel = state.screen === 'parcel' ? 'is-active' : '';
+  const activeTracking = state.screen === 'tracking' ? 'is-active' : '';
   const activeOffers = state.screen === 'offers' ? 'is-active' : '';
   const activeSupport = state.screen === 'support' ? 'is-active' : '';
   const activeAbout = state.screen === 'about' ? 'is-active' : '';
@@ -802,20 +800,16 @@ function getNavigationHtml(type) {
       <i data-lucide="house"></i><span>Home</span>
     </button>
     
+    <button class="${itemClass} ${activeDepartures}" type="button" data-screen="available-vans">
+      <i data-lucide="clock-arrow-up"></i><span>Departures</span>
+    </button>
+
     <button class="${itemClass} ${activeBook}" type="button" data-screen="book">
       <i data-lucide="ticket-plus"></i><span>Book a Travel</span>
     </button>
 
-    <button class="${itemClass} ${state.screen === 'available-vans' ? 'is-active' : ''}" type="button" data-screen="available-vans">
-      <i data-lucide="clock-arrow-up"></i><span>Departures</span>
-    </button>
-
     <button class="${itemClass} ${activeSpecialHire}" type="button" data-screen="special-hire">
       <i data-lucide="bus"></i><span>Special Hire</span>
-    </button>
-
-    <button class="${itemClass} ${activeTracking}" type="button" data-screen="tracking">
-      <i data-lucide="navigation"></i><span>Tracking</span>
     </button>
 
     <button class="${itemClass} ${activeTrips}" type="button" data-screen="trips">
@@ -828,6 +822,10 @@ function getNavigationHtml(type) {
 
     <button class="${itemClass} ${activeParcel}" type="button" data-screen="parcel">
       <i data-lucide="package-plus"></i><span>Parcels</span>
+    </button>
+
+    <button class="${itemClass} ${activeTracking}" type="button" data-screen="tracking">
+      <i data-lucide="navigation"></i><span>Tracking</span>
     </button>
 
     <button class="${itemClass} ${activeOffers}" type="button" data-screen="offers">
