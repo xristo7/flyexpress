@@ -2610,59 +2610,173 @@ function renderSpecialHire() {
   }
   
   if (step === 2) {
+    const chosenVehicle = appData.specialHireVehicles.find(v => v.id === sh.vehicleId) || appData.specialHireVehicles[0];
+    const days = Math.max(1, Number(sh.durationDays) || 1);
+    const driverSupplement = sh.driverType === 'tour' ? 30000 : 0;
+    const subtotal = (chosenVehicle.dailyRate + driverSupplement) * days;
+
     return `
-      ${screenHead('Private Charter & Special Hire', 'Step 2 of 3: Enter charter and duration details.')}
+      ${screenHead('Private Charter & Special Hire', 'Step 2 of 3: Enter charter specifications and driver preferences.')}
       
-      <div class="special-hire-flow-container" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
-        <section class="card" style="margin: 0; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
-          <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--brand-blue-dark);">Charter Specifications</h2>
-          
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div class="field">
-              <label>Charter Date</label>
-              <input type="date" data-hire-field="date" value="${sh.date}" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
-            </div>
-            
-            <div class="field">
-              <label>Duration of Hire (Days)</label>
-              <input type="number" data-hire-field="durationDays" value="${sh.durationDays}" min="1" max="30" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+      <!-- Stepper Breadcrumb Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; background: white; border: 1px solid var(--border); border-radius: 16px; padding: 12px 18px; margin-bottom: 20px; box-shadow: var(--shadow-xs); flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 600; color: var(--green);">
+          <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--green-soft); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800;"><i data-lucide="check" style="width: 14px; height: 14px; color: var(--green);"></i></span>
+          <span>1. Vehicle &amp; Route</span>
+        </div>
+        <div style="width: 24px; height: 1px; background: var(--border);"></div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 800; color: var(--brand-blue-dark);">
+          <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--brand-blue); color: white; display: grid; place-items: center; font-size: 0.75rem; font-weight: 800;">2</span>
+          <span>2. Charter Details</span>
+        </div>
+        <div style="width: 24px; height: 1px; background: var(--border);"></div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 600; color: var(--muted);">
+          <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--page); border: 1px solid var(--border); display: grid; place-items: center; font-size: 0.75rem; font-weight: 700;">3</span>
+          <span>3. Review &amp; Pay</span>
+        </div>
+      </div>
+
+      <div class="special-hire-flow-container" style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Selection Summary Bar -->
+        <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.12); padding: 14px 18px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="${chosenVehicle.img}" alt="${chosenVehicle.name}" style="width: 52px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);" />
+            <div>
+              <strong style="font-size: 0.94rem; color: var(--brand-blue-dark); display: block;">${chosenVehicle.name} (${chosenVehicle.seats} Seats)</strong>
+              <span style="font-size: 0.8rem; color: var(--slate); font-weight: 500;">Route: <strong>${sh.destinationType === 'custom' ? (sh.customDestination || 'Custom Corridor') : (sh.route || 'Entebbe Corridor')}</strong></span>
             </div>
           </div>
+          <button class="button button--ghost button--small" type="button" data-action="special-hire-back" style="font-weight: 700; font-size: 0.8rem;">Change Vehicle</button>
+        </div>
+
+        <!-- Main Specifications Card -->
+        <section class="card" style="margin: 0; padding: 24px; display: flex; flex-direction: column; gap: 24px; border-radius: 20px;">
           
+          <!-- 1. Charter Date & Duration Row -->
           <div>
-            <label style="font-weight: 750; font-size: 0.85rem; margin-bottom: 6px; display: block;">Charter Client Type</label>
-            <div class="choice-pills" style="display: flex; gap: 8px; margin-bottom: 12px;">
-              <button class="choice-pill ${sh.hireType === 'individual' ? 'is-active' : ''}" type="button" data-action="select-hire-user-type" data-value="individual">Individual / Family</button>
-              <button class="choice-pill ${sh.hireType === 'company' ? 'is-active' : ''}" type="button" data-action="select-hire-user-type" data-value="company">Company / Corporate</button>
-            </div>
+            <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--brand-red); letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Schedule</span>
+            <h2 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 16px 0; color: var(--brand-blue-dark);">Date &amp; Hire Duration</h2>
             
-            ${sh.hireType === 'company' ? `
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                <div class="field">
-                  <label for="hire-company-name">Company Name</label>
-                  <input id="hire-company-name" type="text" data-hire-field="companyName" value="${escapeHtml(sh.companyName)}" placeholder="e.g. Acme Tours Ltd" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; align-items: start;">
+              <!-- Date Input -->
+              <div class="field" style="margin: 0;">
+                <label style="font-weight: 750; font-size: 0.85rem; color: var(--charcoal); margin-bottom: 6px; display: block;">Start Charter Date</label>
+                <div style="position: relative;">
+                  <input type="date" data-hire-field="date" value="${sh.date}" style="padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-strong); width: 100%; font-weight: 700; color: var(--brand-blue-dark); font-size: 0.95rem; outline: none; background: white;">
                 </div>
-                <div class="field">
-                  <label for="hire-company-tax">Corporate Tax ID (optional)</label>
-                  <input id="hire-company-tax" type="text" data-hire-field="companyTaxId" value="${escapeHtml(sh.companyTaxId)}" placeholder="e.g. URA-9824-A" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+              </div>
+
+              <!-- Duration Numeric Stepper -->
+              <div class="field" style="margin: 0;">
+                <label style="font-weight: 750; font-size: 0.85rem; color: var(--charcoal); margin-bottom: 6px; display: block;">Duration of Hire</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="display: flex; align-items: center; border: 1px solid var(--border-strong); border-radius: 12px; background: white; padding: 4px; width: 100%; justify-content: space-between;">
+                    <button class="button button--ghost" type="button" data-action="decrement-hire-days" style="width: 38px; height: 38px; border-radius: 8px; font-weight: 800; font-size: 1.2rem; display: grid; place-items: center; padding: 0;">-</button>
+                    <span style="font-weight: 850; font-size: 1.05rem; color: var(--brand-blue-dark);">${days} Day${days === 1 ? '' : 's'}</span>
+                    <button class="button button--ghost" type="button" data-action="increment-hire-days" style="width: 38px; height: 38px; border-radius: 8px; font-weight: 800; font-size: 1.2rem; display: grid; place-items: center; padding: 0;">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid var(--border); margin: 0;" />
+
+          <!-- 2. Client Category (Rich Interactive Choice Tiles) -->
+          <div>
+            <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--brand-red); letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Account Category</span>
+            <h2 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 14px 0; color: var(--brand-blue-dark);">Charter Client Type</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
+              <!-- Option A: Individual -->
+              <div class="choice-tile ${sh.hireType === 'individual' ? 'is-selected' : ''}" data-action="select-hire-user-type" data-value="individual" style="padding: 16px; border-radius: 16px; border: 2px solid ${sh.hireType === 'individual' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.hireType === 'individual' ? 'rgba(22,119,255,0.03)' : 'white'}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: flex-start; gap: 12px;">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: ${sh.hireType === 'individual' ? 'var(--brand-blue)' : 'var(--surface-alt)'}; color: ${sh.hireType === 'individual' ? 'white' : 'var(--slate)'}; display: grid; place-items: center; flex-shrink: 0;">
+                  <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div style="flex: 1;">
+                  <strong style="font-size: 0.98rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Individual &amp; Family</strong>
+                  <span style="font-size: 0.8rem; color: var(--slate); line-height: 1.35; display: block;">Personal trips, family functions, airport transfers</span>
+                </div>
+              </div>
+
+              <!-- Option B: Corporate -->
+              <div class="choice-tile ${sh.hireType === 'company' ? 'is-selected' : ''}" data-action="select-hire-user-type" data-value="company" style="padding: 16px; border-radius: 16px; border: 2px solid ${sh.hireType === 'company' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.hireType === 'company' ? 'rgba(22,119,255,0.03)' : 'white'}; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: flex-start; gap: 12px;">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: ${sh.hireType === 'company' ? 'var(--brand-blue)' : 'var(--surface-alt)'}; color: ${sh.hireType === 'company' ? 'white' : 'var(--slate)'}; display: grid; place-items: center; flex-shrink: 0;">
+                  <i data-lucide="building-2" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div style="flex: 1;">
+                  <strong style="font-size: 0.98rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Company / Corporate</strong>
+                  <span style="font-size: 0.8rem; color: var(--slate); line-height: 1.35; display: block;">Business travel, corporate events, tax invoices</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Conditional Corporate Details Block -->
+            ${sh.hireType === 'company' ? `
+              <div style="margin-top: 16px; padding: 16px; background: var(--page); border-radius: 14px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; animation: fadeIn 0.2s ease both;">
+                <div class="field" style="margin: 0;">
+                  <label for="hire-company-name" style="font-weight: 750; font-size: 0.82rem; color: var(--charcoal); margin-bottom: 4px; display: block;">Company Name</label>
+                  <input id="hire-company-name" type="text" data-hire-field="companyName" value="${escapeHtml(sh.companyName)}" placeholder="e.g. Acme Tours Ltd" style="padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-strong); width: 100%; font-weight: 600;">
+                </div>
+                <div class="field" style="margin: 0;">
+                  <label for="hire-company-tax" style="font-weight: 750; font-size: 0.82rem; color: var(--charcoal); margin-bottom: 4px; display: block;">Corporate Tax ID / TIN (Optional)</label>
+                  <input id="hire-company-tax" type="text" data-hire-field="companyTaxId" value="${escapeHtml(sh.companyTaxId)}" placeholder="e.g. URA-9824-A" style="padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-strong); width: 100%; font-weight: 600;">
                 </div>
               </div>
             ` : ''}
           </div>
-          
+
+          <hr style="border: 0; border-top: 1px solid var(--border); margin: 0;" />
+
+          <!-- 3. Driver Profile Selection (Rich Interactive Cards) -->
           <div>
-            <label style="font-weight: 750; font-size: 0.85rem; margin-bottom: 6px; display: block;">Driver Profile Preference</label>
-            <div class="choice-pills" style="display: flex; gap: 8px;">
-              <button class="choice-pill ${sh.driverType === 'standard' ? 'is-active' : ''}" type="button" data-action="select-hire-driver" data-value="standard">Standard Route Driver</button>
-              <button class="choice-pill ${sh.driverType === 'tour' ? 'is-active' : ''}" type="button" data-action="select-hire-driver" data-value="tour">Certified Tour Guide Driver (+UGX 30K/day)</button>
+            <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--brand-red); letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Staffing</span>
+            <h2 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 14px 0; color: var(--brand-blue-dark);">Driver Profile Preference</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+              <!-- Option A: Standard Driver -->
+              <div class="choice-tile ${sh.driverType === 'standard' ? 'is-selected' : ''}" data-action="select-hire-driver" data-value="standard" style="padding: 16px; border-radius: 16px; border: 2px solid ${sh.driverType === 'standard' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.driverType === 'standard' ? 'rgba(22,119,255,0.03)' : 'white'}; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; gap: 10px; justify-content: space-between;">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                  <div style="width: 42px; height: 42px; border-radius: 12px; background: ${sh.driverType === 'standard' ? 'var(--brand-blue)' : 'var(--surface-alt)'}; color: ${sh.driverType === 'standard' ? 'white' : 'var(--slate)'}; display: grid; place-items: center; flex-shrink: 0;">
+                    <i data-lucide="user-check" style="width: 20px; height: 20px;"></i>
+                  </div>
+                  <div>
+                    <strong style="font-size: 0.98rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Standard Route Driver</strong>
+                    <span style="font-size: 0.8rem; color: var(--slate); line-height: 1.35; display: block;">Licensed, experienced corridor driver</span>
+                  </div>
+                </div>
+                <span style="background: var(--green-soft); color: var(--green); font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; align-self: flex-start;">Included</span>
+              </div>
+
+              <!-- Option B: Tour Guide Driver -->
+              <div class="choice-tile ${sh.driverType === 'tour' ? 'is-selected' : ''}" data-action="select-hire-driver" data-value="tour" style="padding: 16px; border-radius: 16px; border: 2px solid ${sh.driverType === 'tour' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.driverType === 'tour' ? 'rgba(22,119,255,0.03)' : 'white'}; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; gap: 10px; justify-content: space-between;">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                  <div style="width: 42px; height: 42px; border-radius: 12px; background: ${sh.driverType === 'tour' ? 'var(--brand-blue)' : 'var(--surface-alt)'}; color: ${sh.driverType === 'tour' ? 'white' : 'var(--slate)'}; display: grid; place-items: center; flex-shrink: 0;">
+                    <i data-lucide="compass" style="width: 20px; height: 20px;"></i>
+                  </div>
+                  <div>
+                    <strong style="font-size: 0.98rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Certified Tour Guide Driver</strong>
+                    <span style="font-size: 0.8rem; color: var(--slate); line-height: 1.35; display: block;">Fluent in English/local languages with extensive regional tourist guiding expertise</span>
+                  </div>
+                </div>
+                <span style="background: var(--gold-soft); color: #8a6f00; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; align-self: flex-start;">+UGX 30,000 / day</span>
+              </div>
             </div>
-            <p class="muted" style="font-size: 0.8rem; margin: 6px 0 0;">Tour Guide Drivers speak fluent English/local languages and have extensive tourist guiding experience.</p>
           </div>
         </section>
-        
-        <div class="button-row" style="margin-top: 16px; display: flex; gap: 12px;">
-          <button class="button button--ghost" type="button" data-action="special-hire-back" style="flex: 1;">Back</button>
-          <button class="button button--primary" type="button" data-action="special-hire-next" style="flex: 2;">Continue to Payment</button>
+
+        <!-- Live Estimate Breakdown Card -->
+        <div style="background: var(--surface-alt); border: 1px solid var(--border-strong); padding: 18px; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <span style="font-size: 0.74rem; text-transform: uppercase; font-weight: 750; color: var(--muted); letter-spacing: 0.05em; display: block;">Charter Subtotal Estimate</span>
+            <div style="font-size: 1.45rem; font-weight: 850; color: var(--brand-blue-dark); margin-top: 2px;">${formatUGX(subtotal)}</div>
+            <span style="font-size: 0.78rem; color: var(--slate); font-weight: 500;">Includes vehicle, driver allowance &amp; corridor toll access for <strong>${days} day(s)</strong></span>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="button button--ghost" type="button" data-action="special-hire-back" style="padding-inline: 18px; font-weight: 700;">Back</button>
+            <button class="button button--primary" type="button" data-action="special-hire-next" style="padding-inline: 24px; font-weight: 800;">Continue to Payment →</button>
+          </div>
         </div>
       </div>
     `;
@@ -4894,6 +5008,14 @@ function handleClick(event) {
     },
     'select-hire-dest-type': () => {
       state.specialHire.destinationType = value;
+      renderCurrentScreen();
+    },
+    'decrement-hire-days': () => {
+      state.specialHire.durationDays = Math.max(1, (Number(state.specialHire.durationDays) || 1) - 1);
+      renderCurrentScreen();
+    },
+    'increment-hire-days': () => {
+      state.specialHire.durationDays = Math.min(30, (Number(state.specialHire.durationDays) || 1) + 1);
       renderCurrentScreen();
     },
     'select-hire-driver': () => {
