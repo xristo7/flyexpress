@@ -1295,11 +1295,8 @@ function renderBook() {
               <!-- Revealed Cities & Action Section (Shown when user clicks card) -->
               ${isExpanded ? `
                 <div class="popular-place-details" style="padding: 18px; background: white; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; text-align: left; animation: fadeIn 0.22s var(--ease) both;">
-                  <div>
-                    <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--brand-red); letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Corridor Cities &amp; Stages</span>
-                    <div style="font-size: 0.86rem; color: var(--charcoal); font-weight: 600; line-height: 1.5; background: var(--page); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border);">
-                      ${corridor}
-                    </div>
+                  <div style="font-size: 0.86rem; color: var(--charcoal); font-weight: 600; line-height: 1.5; background: var(--page); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border);">
+                    ${corridor}
                   </div>
                   <button class="button button--primary w-full" type="button" data-action="booking-next-step" style="padding: 12px; font-size: 0.95rem; font-weight: 800;">
                     Configure Schedule &amp; Book →
