@@ -7562,7 +7562,7 @@ body[data-active-screen="home"] .main-content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px;
+  padding: 17px;
   transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
