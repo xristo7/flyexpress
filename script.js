@@ -1909,34 +1909,34 @@ function renderTripDetails() {
     : 'Best available (Standard rate)';
 
   return `<section class="smart-review" aria-label="Review your trip">
-    <!-- Top Hero Vehicle & Driver Photo Area (where Map was) -->
+    <!-- Top Hero Vehicle & Driver Photo Visual Area -->
     <div class="smart-review__map-card" style="background-image: url('${trip.img}'); background-size: cover; background-position: center; position: relative;">
-      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%); pointer-events: none;"></div>
-      
-      <!-- Photo Visual Banner Content Overlay -->
-      <div style="position: absolute; bottom: 84px; left: 24px; right: 24px; z-index: 3; color: white; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;">
-        <div>
-          <span style="background: rgba(229, 30, 42, 0.95); color: white; font-weight: 850; font-size: 0.74rem; text-transform: uppercase; padding: 5px 12px; border-radius: 8px; letter-spacing: 0.06em; backdrop-filter: blur(6px);">
-            Active Vehicle &amp; Driver
-          </span>
-          <h1 style="margin: 8px 0 3px 0; font-size: clamp(1.6rem, 3.8vw, 2.2rem); font-weight: 850; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
-            ${trip.boarding} → ${trip.destination}
-          </h1>
-          <p style="margin: 0; font-size: 0.9rem; color: rgba(255,255,255,0.92); font-weight: 600;">
-            ${trip.vehicle} · Driver: <strong>${trip.driverName}</strong> (${trip.plate})
-          </p>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.65); padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(8px);">
-          <span style="width: 9px; height: 9px; border-radius: 50%; background: #4caf50; display: inline-block;"></span>
-          <span style="color: white; font-size: 0.82rem; font-weight: 750;">Live Tracked</span>
-        </div>
-      </div>
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 100%); pointer-events: none;"></div>
     </div>
 
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
       
+      <!-- Route Title & Driver Meta Header Block (inside Content Section) -->
+      <div class="smart-review__header-block" style="margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border);">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+          <span style="background: rgba(229, 30, 42, 0.08); color: var(--brand-red); font-weight: 850; font-size: 0.74rem; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; letter-spacing: 0.06em;">
+            Active Vehicle &amp; Driver
+          </span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(76, 175, 80, 0.1); color: var(--green); padding: 4px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 750;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #4caf50; display: inline-block;"></span> Live Tracked
+          </span>
+        </div>
+
+        <h1 style="margin: 4px 0 3px 0; font-size: clamp(1.4rem, 3.8vw, 1.85rem); font-weight: 850; color: var(--brand-blue-dark); line-height: 1.25;">
+          ${trip.boarding} → ${trip.destination}
+        </h1>
+
+        <p style="margin: 0; font-size: 0.88rem; color: var(--slate); font-weight: 600;">
+          ${trip.vehicle} · Driver: <strong>${trip.driverName}</strong> (${trip.plate})
+        </p>
+      </div>
+
       <!-- Immediate Travel Notice Banner -->
       <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.15); padding: 14px 16px; border-radius: 16px; margin-bottom: 16px; display: flex; align-items: start; gap: 12px; text-align: left;">
         <i data-lucide="zap" style="width: 22px; height: 22px; color: var(--brand-blue); flex-shrink: 0; margin-top: 1px;"></i>

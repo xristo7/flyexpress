@@ -1571,7 +1571,7 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 }
 .smart-review__map-card {
   position: relative;
-  min-height: 430px;
+  min-height: 280px;
   overflow: hidden;
   border-radius: 30px;
   background: #081b33;
@@ -1964,7 +1964,7 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 
 @media (max-width: 900px) {
   .smart-review { width: auto; margin: -22px -20px 0; }
-  .smart-review__map-card { min-height: 390px; border-radius: 0; border-inline: 0; transition: min-height 220ms ease, box-shadow 220ms ease; }
+  .smart-review__map-card { min-height: 250px; border-radius: 0; border-inline: 0; transition: min-height 220ms ease, box-shadow 220ms ease; }
   .smart-review.is-condensed .smart-review__map-card { position: sticky; z-index: 6; top: calc(66px + var(--safe-top)); min-height: 164px; box-shadow: 0 12px 30px rgba(8,27,51,.22); }
   .smart-review.is-condensed .smart-review__map-copy { top: 10px; left: 12px; right: auto; max-width: calc(100% - 24px); padding: 9px 12px; border-radius: 13px; }
   .smart-review.is-condensed .smart-review__map-copy .eyebrow,
@@ -1972,13 +1972,13 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   .smart-review.is-condensed .smart-review__map-copy h1 { margin: 0; font-size: 1rem; }
   .smart-review.is-condensed .trip-map-label { display: none; }
   .smart-review.is-condensed .smart-review__sheet { margin-top: -28px; }
-  .smart-review__sheet { width: calc(100% - 20px); margin: -62px auto 120px; padding: 15px 16px 22px; border-radius: 28px; }
+  .smart-review__sheet { width: calc(100% - 20px); margin: -42px auto 120px; padding: 18px 16px 22px; border-radius: 28px; }
   .review-sticky-cta { position: fixed; z-index: 49; left: 10px; right: 10px; bottom: calc(var(--mobile-nav-height) + var(--safe-bottom) + 8px); width: auto; margin: 0; }
 }
 
 @media (max-width: 700px) {
   .smart-review { margin-left: -15px; margin-right: -15px; }
-  .smart-review__map-card { min-height: 365px; }
+  .smart-review__map-card { min-height: 230px; }
   .smart-review__map-copy { top: 18px; left: 18px; right: 18px; max-width: none; padding: 14px 15px; border-radius: 17px; }
   .smart-review__map-copy h1 { font-size: 1.75rem; }
   .review-route-row { grid-template-columns: minmax(0,1fr) 36px minmax(0,1fr); gap: 7px; }
