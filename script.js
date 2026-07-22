@@ -95,7 +95,7 @@ function getAvailableTrips() {
       arrive: arriveTime,
       seats: seats,
       status: status,
-      vehicle: rc.key === 'kajansi' || rc.key === 'busega' ? 'Commuter Van' : 'Express Van',
+      vehicle: i % 2 === 0 ? 'Commuter' : 'Highroof',
       plate: plate,
       duration: '1 hr 05 min',
       fare: parseInt(rc.price.replace(/[^\d]/g, '')) || 5000,
@@ -459,8 +459,8 @@ function getSearchResults() {
   return appData.trips.map(trip => ({ ...trip, boarding: state.searchFrom, destination: state.searchTo }));
 }
 
-function getVanCapacity(trip) {
-  if (trip.vehicle === 'Highroof') return 18;
+function getVehicleCapacity(trip) {
+  if (trip && trip.vehicle && (trip.vehicle.toLowerCase().includes('highroof') || trip.vehicle.includes('18'))) return 18;
   return 14; // Commuter
 }
 
@@ -1434,7 +1434,7 @@ function renderBook() {
           ${sortedTrips.length ? sortedTrips.map(trip => {
             const isSelected = state.activeTrip && state.activeTrip.id === trip.id;
             const hasEnoughSeats = trip.seats >= passengerTotal();
-            const capacity = getVanCapacity(trip);
+            const capacity = getVehicleCapacity(trip);
             return `
               <article class="card card--hover result-card taxi-result-card ${isSelected ? 'is-active' : ''} ${!hasEnoughSeats ? 'is-disabled' : ''}" data-action="${hasEnoughSeats ? 'select-booking-vehicle' : ''}" data-trip-id="${trip.id}" role="button" tabindex="${hasEnoughSeats ? '0' : '-1'}" style="${isSelected ? 'border-color: var(--brand-blue); background: var(--info-soft); margin: 0; position: relative;' : 'margin: 0; position: relative;'} ${!hasEnoughSeats ? 'opacity: 0.55; cursor: not-allowed;' : ''}">
                 ${hasEnoughSeats ? `<div class="card-selection-indicator ${isSelected ? 'is-selected' : ''}"></div>` : ''}
@@ -1735,7 +1735,7 @@ function renderBook() {
 
 function renderTripResult(trip) {
   const hasEnoughSeats = trip.seats >= passengerTotal();
-  const capacity = getVanCapacity(trip);
+  const capacity = getVehicleCapacity(trip);
   return `<article class="card card--hover result-card taxi-result-card ${!hasEnoughSeats ? 'is-disabled' : ''}" style="${!hasEnoughSeats ? 'opacity: 0.55; cursor: not-allowed;' : ''}">
     
     <div class="taxi-card-main-layout">
@@ -5794,12 +5794,12 @@ function renderAvailableVansScreen() {
   });
 
   return `
-    ${screenHead('Available Departures', 'Real-time schedule of active passenger vans leaving Entebbe within a 3-hour window.')}
+    ${screenHead('Available Departures', 'Real-time schedule of active departures leaving Entebbe within a 3-hour window.')}
 
     <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.08); padding: 14px 16px; border-radius: 16px; margin-bottom: 22px; display: flex; align-items: start; gap: 12px; animation: enter .4s var(--ease) both;">
       <i data-lucide="info" style="width: 20px; height: 20px; color: var(--brand-blue); flex-shrink: 0; margin-top: 2px;"></i>
       <div style="font-size: 0.88rem; line-height: 1.45; color: var(--brand-blue-dark); font-weight: 600;">
-        Vans exit the window automatically after departure. Tap "Select &amp; Book" to secure your seat.
+        Vehicles exit the window automatically after departure. Tap "Select &amp; Book" to secure your seat.
       </div>
     </div>
 
