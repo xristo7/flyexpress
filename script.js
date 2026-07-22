@@ -505,6 +505,7 @@ function init() {
   setTodayDefaults();
   renderOnboarding();
   renderNavigation();
+  initOnboardingSwipe();
   
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
@@ -548,6 +549,77 @@ function showOnboarding() {
   }, 300);
 }
 
+let onboardingSwipeInitialized = false;
+
+function initOnboardingSwipe() {
+  if (onboardingSwipeInitialized) return;
+  const onboardingEl = $('#onboarding');
+  if (!onboardingEl) return;
+
+  onboardingSwipeInitialized = true;
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+
+  const getContent = () => $('#onboarding-content');
+
+  const handleStart = (e) => {
+    if (onboardingEl.classList.contains('is-hidden')) return;
+    isDragging = true;
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    currentX = startX;
+    const content = getContent();
+    if (content) content.style.transition = 'none';
+  };
+
+  const handleMove = (e) => {
+    if (!isDragging) return;
+    currentX = e.touches ? e.touches[0].clientX : e.clientX;
+    const diffX = currentX - startX;
+    const content = getContent();
+    if (content) {
+      let clamped = diffX;
+      if ((state.onboardingIndex === 0 && diffX > 0) || (state.onboardingIndex === 2 && diffX < 0)) {
+        clamped = diffX * 0.25;
+      }
+      content.style.transform = `translateX(${clamped}px)`;
+    }
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    const diffX = currentX - startX;
+    const content = getContent();
+    if (content) {
+      content.style.transition = 'transform 0.28s cubic-bezier(0.25, 1, 0.5, 1)';
+      content.style.transform = 'translateX(0)';
+    }
+
+    if (diffX < -45) {
+      if (state.onboardingIndex < onboardingSlides.length - 1) {
+        state.onboardingIndex += 1;
+        renderOnboarding();
+      } else if (state.onboardingIndex === 2) {
+        showAuth('signin');
+      }
+    } else if (diffX > 45) {
+      if (state.onboardingIndex > 0) {
+        state.onboardingIndex -= 1;
+        renderOnboarding();
+      }
+    }
+  };
+
+  onboardingEl.addEventListener('touchstart', handleStart, { passive: true });
+  onboardingEl.addEventListener('touchmove', handleMove, { passive: true });
+  onboardingEl.addEventListener('touchend', handleEnd, { passive: true });
+
+  onboardingEl.addEventListener('mousedown', handleStart);
+  window.addEventListener('mousemove', handleMove);
+  window.addEventListener('mouseup', handleEnd);
+}
+
 function renderOnboarding() {
   const slide = onboardingSlides[state.onboardingIndex];
   const content = $('#onboarding-content');
@@ -561,6 +633,13 @@ function renderOnboarding() {
       <h2 style="margin-top: 24px; font-weight: 850;">${slide.title}</h2>
       <p style="margin-top: 12px; color: var(--slate); line-height: 1.5; font-size: 1rem;">${slide.message}</p>
       
+      ${state.onboardingIndex < 2 ? `
+        <div class="mobile-swipe-hint" style="margin-top: 14px; font-size: 0.78rem; color: var(--slate); opacity: 0.75; display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <i data-lucide="hand" style="width: 14px; height: 14px; color: var(--brand-blue);"></i>
+          <span>Swipe left to continue</span>
+        </div>
+      ` : ''}
+
       ${state.onboardingIndex === 2 ? `
         <div class="onboarding-last-buttons">
           <button class="button button--primary w-full" type="button" data-action="skip-onboarding" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
