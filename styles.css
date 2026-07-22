@@ -2861,9 +2861,16 @@ body:not([data-active-screen="home"]) .mobile-brand {
   display: none !important;
 }
 
-/* On Mobile (< 980px):
-   - HIDE profile image from ALL pages
-   - SHOW hamburger menu on ALL pages */
+/* ─── Header Responsiveness & Control Visibility Rules ─── */
+#topbar-share-button {
+  display: none !important;
+}
+
+body:not([data-active-screen="home"]) .mobile-brand {
+  display: none !important;
+}
+
+/* 1. On Mobile (< 980px): HIDE profile image from ALL pages; SHOW hamburger menu on ALL pages */
 @media (max-width: 979px) {
   .desktop-profile-btn {
     display: none !important;
@@ -2873,9 +2880,7 @@ body:not([data-active-screen="home"]) .mobile-brand {
   }
 }
 
-/* On Desktop (>= 980px):
-   - SHOW profile image on ALL pages
-   - HIDE hamburger menu & side drawer from ALL pages */
+/* 2. On Desktop (>= 980px): SHOW profile image on ALL pages; HIDE hamburger menu from ALL pages */
 @media (min-width: 980px) {
   .hamburger-menu-btn,
   .side-drawer,
@@ -2883,6 +2888,7 @@ body:not([data-active-screen="home"]) .mobile-brand {
     display: none !important;
   }
 
+  .desktop-profile-btn,
   .topbar .desktop-profile-btn {
     display: flex !important;
   }
