@@ -806,6 +806,10 @@ function getNavigationHtml(type) {
       <i data-lucide="ticket-plus"></i><span>Book a Travel</span>
     </button>
 
+    <button class="${itemClass} ${state.screen === 'available-vans' ? 'is-active' : ''}" type="button" data-screen="available-vans">
+      <i data-lucide="clock-arrow-up"></i><span>Departures</span>
+    </button>
+
     <button class="${itemClass} ${activeSpecialHire}" type="button" data-screen="special-hire">
       <i data-lucide="bus"></i><span>Special Hire</span>
     </button>

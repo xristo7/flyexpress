@@ -2880,11 +2880,12 @@ body:not([data-active-screen="home"]) .mobile-brand {
   }
 }
 
-/* 2. On Desktop (>= 901px): SHOW profile image on ALL pages; HIDE hamburger menu from ALL pages */
+/* 2. On Desktop (>= 901px): SHOW profile image on ALL pages; HIDE hamburger menu and topbar duplicate text from ALL pages */
 @media (min-width: 901px) {
   .hamburger-menu-btn,
   .side-drawer,
-  .side-drawer__backdrop {
+  .side-drawer__backdrop,
+  .topbar__left > div {
     display: none !important;
   }
 
