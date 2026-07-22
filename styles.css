@@ -313,7 +313,7 @@ select::-ms-expand { display: none; }
   box-sizing: border-box !important;
 }
 .onboarding-slide h2 {
-  font-size: clamp(1.4rem, 4vh, 2rem) !important;
+  font-size: clamp(1.2rem, 3.2vh, 1.7rem) !important;
   margin-top: 12px !important;
   margin-bottom: 8px !important;
   font-weight: 850 !important;

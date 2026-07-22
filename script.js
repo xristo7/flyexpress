@@ -411,15 +411,15 @@ const screenTitles = {
 
 const onboardingSlides = [
   {
-    title: 'Your Journey Starts Here',
+    title: 'Your Journey<br>Starts Here',
     message: 'Book your Fly Express travel between Entebbe and Kampala, choose your preferred departure, and secure your seat in seconds.'
   },
   {
-    title: 'Pay Easily. Travel for Less.',
+    title: 'Pay Easily.<br>Travel for Less.',
     message: 'Use your Fly Express Wallet, buy discounted return tickets, and keep all your travel payments and tickets in one place.'
   },
   {
-    title: 'More Than Passenger Travel',
+    title: 'More Than<br>Passenger Travel',
     message: 'Send parcels, register your luggage, and follow every journey from dispatch to safe collection.'
   }
 ];
