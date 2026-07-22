@@ -7368,4 +7368,10 @@ body[data-active-screen="home"] .main-content {
     max-width: 580px !important;
     object-fit: contain !important;
   }
+
+  /* Luggage options 2-column grid on desktop */
+  .compact-luggage-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
 }
