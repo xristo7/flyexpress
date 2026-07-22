@@ -1999,12 +1999,12 @@ function renderTripDetails() {
       <div class="review-route-row">
         <div>
           <small>FROM</small>
-          <strong>${trip.boarding}</strong>
+          <strong>${trip.boarding.replace(' Main Stage', '')}</strong>
         </div>
         <span class="review-swap"><i data-lucide="arrow-down-up" style="width: 18px; height: 18px; color: var(--brand-blue-dark);"></i></span>
         <div>
           <small>TO</small>
-          <strong>${trip.destination}</strong>
+          <strong>${trip.destination.replace(' Main Stage', '')}</strong>
         </div>
       </div>
       <div class="review-section-label">Selected departure</div>
