@@ -6838,12 +6838,15 @@ body[data-active-screen="home"] .main-content {
         content: "" !important;
         position: absolute !important;
         top: 0 !important;
-        left: 0 !important;
+        left: auto !important;
         right: 0 !important;
+        width: 480px !important;
         height: calc(var(--topbar-height) + 30px) !important;
         pointer-events: none !important;
         z-index: -1 !important;
         background: linear-gradient(to bottom, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.85) 50%, rgba(255, 255, 255, 0) 100%) !important;
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%) !important;
+        mask-image: linear-gradient(to right, transparent 0%, black 35%) !important;
         opacity: 1 !important;
       }
 
