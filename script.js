@@ -95,7 +95,7 @@ function getAvailableTrips() {
       arrive: arriveTime,
       seats: seats,
       status: status,
-      vehicle: i % 2 === 0 ? 'Commuter' : 'Highroof',
+      vehicle: i % 2 === 0 ? 'Commuter (14)' : 'Highroof (18)',
       plate: plate,
       duration: '1 hr 05 min',
       fare: parseInt(rc.price.replace(/[^\d]/g, '')) || 5000,
@@ -5576,7 +5576,7 @@ function makeImageTransparent(imgUrl, callback) {
 }
 
 function getTripVehicleImage(vehicleName) {
-  const isHighroof = vehicleName && vehicleName.toLowerCase() === 'highroof';
+  const isHighroof = vehicleName && vehicleName.toLowerCase().includes('highroof');
   const imgUrl = isHighroof ? 'assets/fly-express-hiace-highroof.jpg' : 'assets/fly-express-hiace-commuter.jpg';
   return state.transparentVehicles[imgUrl] || imgUrl;
 }
