@@ -3564,23 +3564,23 @@ function renderTracking() {
     ];
 
     travelsContent = `
-      <div class="grid" style="gap: 14px; margin-top: 16px;">
+      <div class="tracking-grid">
         ${travels.map(t => `
-          <article class="card trip-card" style="margin: 0; display: flex !important; gap: 14px; align-items: flex-start; padding: 16px !important;">
-            <div id="mini-map-travel-${t.id}" class="mini-map-thumbnail" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #eef3f7; border: 1px solid var(--border); flex-shrink: 0; position: relative;"></div>
-            <div style="flex: 1; min-width: 0;">
-              <div class="card-head" style="padding: 0; border: 0; background: transparent; display: flex; align-items: start; justify-content: space-between; gap: 8px;">
+          <article class="card tracking-card">
+            <div id="mini-map-travel-${t.id}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
+            <div class="tracking-card__body">
+              <div class="tracking-card__header">
                 <div>
-                  <h3 style="margin: 0; font-size: 1.05rem;">${t.route}</h3>
+                  <h3>${t.route}</h3>
                   <span class="muted text-small">${t.date}</span>
                 </div>
                 <span class="status-chip ${t.statusClass}">${t.status}</span>
               </div>
-              <div class="trip-meta" style="margin-top: 8px; font-size: 0.88rem; display: flex; gap: 12px; color: var(--muted); border: 0; padding: 0;">
-                <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="bus-front" style="width:14px; height:14px;"></i>${t.vehicle}</span>
-                <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="hash" style="width:14px; height:14px;"></i>Ref: ${t.id}</span>
+              <div class="tracking-card__meta">
+                <span><i data-lucide="bus-front" style="width:14px; height:14px;"></i>${t.vehicle}</span>
+                <span><i data-lucide="hash" style="width:14px; height:14px;"></i>Ref: ${t.id}</span>
               </div>
-              <div class="trip-card__actions" style="margin-top: 14px; display: flex; gap: 8px; justify-content: flex-start;">
+              <div class="tracking-card__actions">
                 ${t.actions}
               </div>
             </div>
@@ -3627,23 +3627,23 @@ function renderTracking() {
     ];
 
     parcelsContent = `
-      <div class="grid" style="gap: 14px; margin-top: 16px;">
+      <div class="tracking-grid">
         ${parcels.map(p => `
-          <article class="card parcel-list-card" style="margin: 0; display: flex !important; gap: 14px; align-items: flex-start; padding: 16px !important;">
-            <div id="mini-map-parcel-${p.id.replace('#', '')}" class="mini-map-thumbnail" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #eef3f7; border: 1px solid var(--border); flex-shrink: 0; position: relative;"></div>
-            <div style="flex: 1; min-width: 0;">
-              <div>
-                <p class="section-kicker" style="margin: 0;">Tracking ${p.id}</p>
-                <h3 style="margin: 4px 0 0; font-size: 1.05rem;">${p.title}</h3>
+          <article class="card tracking-card">
+            <div id="mini-map-parcel-${p.id.replace('#', '')}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
+            <div class="tracking-card__body">
+              <div class="tracking-card__header">
+                <div>
+                  <p class="section-kicker" style="margin: 0;">Tracking ${p.id}</p>
+                  <h3 style="margin: 2px 0 0;">${p.title}</h3>
+                  <p class="muted text-small" style="margin: 2px 0 0;">${p.eta}</p>
+                </div>
+                <span class="status-chip ${p.statusClass}">${p.status}</span>
               </div>
-              <span class="status-chip ${p.statusClass}">${p.status}</span>
-            </div>
-            <div class="parcel-list-card__details" style="margin-top: 8px;">
-              <p class="muted text-small" style="margin: 2px 0;">${p.eta}</p>
-              <div class="parcel-list-card__meta" style="margin-top: 8px; font-size: 0.88rem; display: flex; gap: 12px; color: var(--muted); border: 0; padding: 0;">
-                <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="package" style="width:14px; height:14px;"></i>${p.details}</span>
+              <div class="tracking-card__meta">
+                <span><i data-lucide="package" style="width:14px; height:14px;"></i>${p.details}</span>
               </div>
-              <div class="parcel-list-card__footer" style="margin-top: 14px; display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; justify-content: flex-start; background: transparent; height: auto; padding-left: 0; padding-right: 0;">
+              <div class="tracking-card__actions">
                 ${p.actions}
               </div>
             </div>
@@ -3680,31 +3680,24 @@ function renderTracking() {
     ];
 
     vehiclesContent = `
-      <div class="grid" style="gap: 14px; margin-top: 16px;">
+      <div class="tracking-grid">
         ${vehicles.map(v => `
-          <article class="card" style="margin: 0; display: flex !important; gap: 14px; align-items: flex-start; padding: 16px !important;">
-            <div id="mini-map-vehicle-${v.plate.replace(' ', '-')}" class="mini-map-thumbnail" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #eef3f7; border: 1px solid var(--border); flex-shrink: 0; position: relative;"></div>
-            <div style="flex: 1; min-width: 0;">
-              <div>
-                <p class="section-kicker" style="color: var(--brand-blue); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; margin: 0;">${v.plate}</p>
-                <h3 style="margin: 4px 0 0; font-size: 1.05rem;">${v.type}</h3>
+          <article class="card tracking-card">
+            <div id="mini-map-vehicle-${v.plate.replace(' ', '-')}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
+            <div class="tracking-card__body">
+              <div class="tracking-card__header">
+                <div>
+                  <p class="section-kicker" style="color: var(--brand-blue); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; margin: 0;">${v.plate}</p>
+                  <h3 style="margin: 2px 0 0;">${v.type}</h3>
+                </div>
+                <span class="status-chip ${v.statusClass}">${v.status}</span>
               </div>
-              <span class="status-chip ${v.statusClass}">${v.status}</span>
-            </div>
-            <div class="vehicle-details" style="margin-top: 10px; font-size: 0.9rem;">
-              <div class="detail-row" style="display:flex; justify-content:space-between; margin-bottom: 4px; border: 0; padding: 0;">
-                <span class="muted">Waiting Stage</span>
-                <strong>${v.stage}</strong>
+              <div class="tracking-card__meta" style="flex-direction: column; gap: 4px;">
+                <span><strong class="muted">Stage:</strong> ${v.stage}</span>
+                <span><strong class="muted">Driver:</strong> ${v.driver}</span>
+                <span><strong class="muted">Status:</strong> ${v.eta}</span>
               </div>
-              <div class="detail-row" style="display:flex; justify-content:space-between; margin-bottom: 4px; border: 0; padding: 0;">
-                <span class="muted">Driver</span>
-                <strong>${v.driver}</strong>
-              </div>
-              <div class="detail-row" style="display:flex; justify-content:space-between; margin-bottom: 4px; border: 0; padding: 0;">
-                <span class="muted">Status Info</span>
-                <strong>${v.eta}</strong>
-              </div>
-              <div style="margin-top: 14px; display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; justify-content: flex-start;">
+              <div class="tracking-card__actions">
                 ${v.actions}
               </div>
             </div>

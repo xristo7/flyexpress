@@ -6614,6 +6614,95 @@ body[data-active-screen="home"] .main-content {
     @keyframes toastIn { from { opacity:0; transform:translateX(28px); } }
     @keyframes toastOut { to { opacity:0; transform:translateX(28px); } }
 
+/* ─── Tracking Page Grid & Card Redesign ─── */
+.tracking-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (min-width: 980px) {
+  .tracking-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+.tracking-card {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border: 1px solid var(--border);
+  border-radius: 18px !important;
+  background: white;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--ease), box-shadow var(--ease);
+}
+
+.tracking-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.tracking-card__map-thumb {
+  width: 100% !important;
+  height: 160px !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+  background: #eef3f7;
+  border-bottom: 1px solid var(--border) !important;
+  position: relative !important;
+  flex-shrink: 0;
+}
+
+.tracking-card__body {
+  padding: 16px 18px 18px !important;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tracking-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.tracking-card__header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--brand-blue-dark);
+}
+
+.tracking-card__meta {
+  font-size: 0.86rem;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.tracking-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tracking-card__actions {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
     @media (min-width: 720px) {
       .home-redesign .services-scroll{ grid-auto-flow: initial; grid-template-columns: repeat(4,1fr); overflow:visible; }
       .home-redesign .departure-scroll{ grid-auto-columns: min(45vw,390px); }
