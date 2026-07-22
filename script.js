@@ -1749,7 +1749,9 @@ function renderTripDetails() {
   const bookingDate = new Date(`${state.bookingDate}T12:00:00`);
   const reviewDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(bookingDate);
   const returnSummary = state.ticketType === 'return' ? `${state.returnMode === 'date-specific' ? 'Date-specific' : state.returnMode.replace('-', ' ')} · Added` : 'Not added';
-  const seatSummary = state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available';
+  const seatSummary = state.capacityMode === 'seats'
+    ? `${state.selectedSeats.join(', ') || 'Choose seats'} (+ ${formatUGX(seatReservationFee())} fee)`
+    : 'Best available (Standard rate)';
 
   return `<section class="smart-review" aria-label="Review your trip">
     <div class="smart-review__map-card">
@@ -1948,12 +1950,18 @@ function renderLuggage() {
     </section>`;
 }
 
+function seatReservationFee() {
+  if (state.capacityMode !== 'seats') return 0;
+  const count = state.selectedSeats.length > 0 ? state.selectedSeats.length : passengerTotal();
+  return 1000 * count;
+}
+
 function checkoutBaseFare() {
   return (state.ticketType === 'return' ? 9000 : 5000) * passengerTotal();
 }
 
 function checkoutTotal() {
-  return Math.max(0, checkoutBaseFare() + luggageTotal() - (state.voucherApplied ? 2000 : 0));
+  return Math.max(0, checkoutBaseFare() + seatReservationFee() + luggageTotal() - (state.voucherApplied ? 2000 : 0));
 }
 
 function renderCheckout() {
@@ -1979,7 +1987,7 @@ function renderCheckout() {
       </div>
       <aside class="card checkout-summary">
         <p class="section-kicker">Order summary</p><h2>${state.activeTrip.boarding} to ${state.activeTrip.destination}</h2>
-        <div class="detail-list"><div class="detail-row"><span>Travel date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.activeTrip.depart}</strong></div><div class="detail-row"><span>Ticket type</span><strong>${state.ticketType === 'return' ? `${state.returnMode.replace('-', ' ')} return` : 'One way'}</strong></div><div class="detail-row"><span>Passenger count</span><strong>${passengerTotal()}</strong></div><div class="detail-row"><span>Seat preference</span><strong>${state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available'} <button class="text-button" type="button" data-action="change-seats-checkout">Change</button></strong></div><div class="detail-row"><span>Ticket fare</span><strong>${formatUGX(checkoutBaseFare())}</strong></div><div class="detail-row"><span>Return saving</span><strong class="text-success">${state.ticketType === 'return' ? `− ${formatUGX(1000 * passengerTotal())}` : 'Not applied'}</strong></div><div class="detail-row"><span>Luggage charges</span><strong>${formatUGX(luggageTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Voucher discount</span><strong class="text-success">${state.voucherApplied ? '− UGX 2,000' : 'Not applied'}</strong></div><div class="detail-row"><span>Service fee</span><strong>Included</strong></div></div>
+        <div class="detail-list"><div class="detail-row"><span>Travel date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.activeTrip.depart}</strong></div><div class="detail-row"><span>Ticket type</span><strong>${state.ticketType === 'return' ? `${state.returnMode.replace('-', ' ')} return` : 'One way'}</strong></div><div class="detail-row"><span>Passenger count</span><strong>${passengerTotal()}</strong></div><div class="detail-row"><span>Seat preference</span><strong>${state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available'} <button class="text-button" type="button" data-action="change-seats-checkout">Change</button></strong></div><div class="detail-row"><span>Base ticket fare</span><strong>${formatUGX(checkoutBaseFare())}</strong></div><div class="detail-row"><span>Seat reservation fee</span><strong>${state.capacityMode === 'seats' ? `+ ${formatUGX(seatReservationFee())} (${seatReservationFee() / 1000} seat${seatReservationFee() / 1000 === 1 ? '' : 's'} reserved)` : 'Included (Best available)'}</strong></div><div class="detail-row"><span>Return saving</span><strong class="text-success">${state.ticketType === 'return' ? `− ${formatUGX(1000 * passengerTotal())}` : 'Not applied'}</strong></div><div class="detail-row"><span>Luggage charges</span><strong>${formatUGX(luggageTotal())}${state.luggageQuantities.commercial ? ' + stage assessment' : ''}</strong></div><div class="detail-row"><span>Voucher discount</span><strong class="text-success">${state.voucherApplied ? '− UGX 2,000' : 'Not applied'}</strong></div><div class="detail-row"><span>Service fee</span><strong>Included</strong></div></div>
         <div class="total-row"><strong>Final total</strong><strong>${formatUGX(total)}</strong></div>
         <div class="floating-cta-container">
           <button class="button button--red w-full" type="button" data-action="confirm-booking"><i data-lucide="shield-check"></i>Confirm Demo Booking</button>
@@ -3759,7 +3767,8 @@ function getMaxAvailableSeats() {
 }
 
 function tripReviewFare() {
-  return (state.ticketType === 'return' ? 9000 : 5000) * passengerTotal() + luggageTotal();
+  const baseFare = (state.ticketType === 'return' ? 9000 : 5000) * passengerTotal();
+  return baseFare + seatReservationFee() + luggageTotal();
 }
 
 function luggageSummary() {
@@ -3817,8 +3826,23 @@ function reviewLuggageOptions() {
 }
 
 function reviewSeatOptions() {
-  return `<div class="mode-switch compact-mode-switch"><button class="${state.capacityMode === 'capacity' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="capacity" aria-pressed="${state.capacityMode === 'capacity'}">Best available</button><button class="${state.capacityMode === 'seats' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="seats" aria-pressed="${state.capacityMode === 'seats'}">Choose seats</button></div>
-    ${state.capacityMode === 'capacity' ? `<div class="compact-note"><i data-lucide="badge-check"></i><span>${passengerTotal()} place${passengerTotal() === 1 ? '' : 's'} reserved. The crew assigns the best available position at boarding.</span></div>` : renderSeatMode()}`;
+  const fee = seatReservationFee();
+  return `<div class="mode-switch compact-mode-switch">
+    <button class="${state.capacityMode === 'capacity' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="capacity" aria-pressed="${state.capacityMode === 'capacity'}">Best available (Normal UGX 5,000)</button>
+    <button class="${state.capacityMode === 'seats' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="seats" aria-pressed="${state.capacityMode === 'seats'}">Choose seats (+UGX 1,000/seat)</button>
+  </div>
+  ${state.capacityMode === 'capacity' ? `
+    <div class="compact-note" style="background: var(--surface-alt); border-radius: 12px; padding: 12px 14px; text-align: left;">
+      <i data-lucide="badge-check" style="color: var(--success);"></i>
+      <span>Normal rate (UGX 5,000/seat). ${passengerTotal()} place${passengerTotal() === 1 ? '' : 's'} assigned as best available position by stage crew at boarding.</span>
+    </div>
+  ` : `
+    <div class="compact-note" style="background: var(--info-soft); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; text-align: left;">
+      <i data-lucide="info" style="color: var(--brand-blue);"></i>
+      <span>Specific seat reservation adds an extra fee of <strong>UGX 1,000 per seat</strong>. Current seat reservation fee: <strong>+ ${formatUGX(fee)}</strong></span>
+    </div>
+    ${renderSeatMode()}
+  `}`;
 }
 
 function renderSeatMode() {
