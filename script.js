@@ -651,7 +651,6 @@ function renderOnboarding() {
               <span>Get Started</span>
               <i data-lucide="arrow-right"></i>
             </button>
-            <button class="button--guest" type="button" data-action="continue-guest">Continue as Guest</button>
           </div>
         ` : ''}
       </div>
