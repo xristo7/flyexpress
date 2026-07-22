@@ -7424,4 +7424,17 @@ body[data-active-screen="home"] .main-content {
     overflow-x: auto !important;
     overflow-y: visible !important;
   }
+
+  /* Smooth horizontal scroll on desktop (disable step snap scroll) */
+  .home-redesign .services-scroll,
+  .home-redesign .departure-scroll,
+  .horizontal-scroll {
+    scroll-snap-type: none !important;
+    scroll-behavior: smooth !important;
+  }
+
+  .home-redesign .service,
+  .home-redesign .departure-card {
+    scroll-snap-align: none !important;
+  }
 }
