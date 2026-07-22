@@ -1937,17 +1937,6 @@ function renderTripDetails() {
         </p>
       </div>
 
-      <!-- Immediate Travel Notice Banner -->
-      <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.15); padding: 14px 16px; border-radius: 16px; margin-bottom: 16px; display: flex; align-items: start; gap: 12px; text-align: left;">
-        <i data-lucide="zap" style="width: 22px; height: 22px; color: var(--brand-blue); flex-shrink: 0; margin-top: 1px;"></i>
-        <div>
-          <strong style="font-size: 0.92rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Vehicle)</strong>
-          <span style="font-size: 0.82rem; line-height: 1.4; color: var(--slate); font-weight: 500;">
-            This vehicle is currently on stage or departing shortly. Your seat is held immediately upon booking — you do not need to be at the stage right now; you can board at stage or meet your vehicle along the corridor route!
-          </span>
-        </div>
-      </div>
-
       <!-- Unified Driver Card -->
       <article class="card unified-driver-transit-card" style="margin: 0 0 16px 0; padding: 16px 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: flex; flex-direction: column; gap: 14px;">
         <div style="display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
@@ -2048,6 +2037,17 @@ function renderTripDetails() {
         ${bookingAccordion('seats','armchair','Seat preference',seatSummary,reviewSeatOptions())}
       </div>
       <div class="review-reassurance"><i data-lucide="shield-check"></i><span>Personal item included</span><span>•</span><span>Change anything before payment.</span></div>
+      
+      <!-- Immediate Travel Notice Banner (Moved to End) -->
+      <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.15); padding: 14px 16px; border-radius: 16px; margin-top: 18px; margin-bottom: 8px; display: flex; align-items: start; gap: 12px; text-text: left;">
+        <i data-lucide="zap" style="width: 22px; height: 22px; color: var(--brand-blue); flex-shrink: 0; margin-top: 1px;"></i>
+        <div>
+          <strong style="font-size: 0.92rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Vehicle)</strong>
+          <span style="font-size: 0.82rem; line-height: 1.4; color: var(--slate); font-weight: 500;">
+            This vehicle is currently on stage or departing shortly. Your seat is held immediately upon booking — you do not need to be at the stage right now; you can board at stage or meet your vehicle along the corridor route!
+          </span>
+        </div>
+      </div>
     </div>
   </section>
   <div class="review-sticky-cta">
