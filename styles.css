@@ -4656,8 +4656,8 @@ body[data-active-screen="driver-profile"] .main-content {
 
 /* Custom Onboarding Visual Container (No Shape Masks) */
 .onboarding-image-container {
-  max-height: 40vh !important;
-  max-height: 40dvh !important;
+  max-height: 44vh !important;
+  max-height: 44dvh !important;
   width: auto !important;
   border-radius: 0 !important;
   overflow: visible !important;
@@ -4671,9 +4671,10 @@ body[data-active-screen="driver-profile"] .main-content {
 }
 
 .onboarding-image-container img {
-  max-height: 40vh !important;
-  max-height: 40dvh !important;
+  max-height: 44vh !important;
+  max-height: 44dvh !important;
   width: auto !important;
+  max-width: calc(100% + 20px) !important;
   object-fit: contain !important;
 }
 
