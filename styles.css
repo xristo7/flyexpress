@@ -7338,4 +7338,34 @@ body[data-active-screen="home"] .main-content {
   .home-redesign .hamburger-menu-btn {
     display: none !important;
   }
+
+  /* Larger splash screen logo & onboarding slide images on desktop */
+  .splash-screen .logo-frame--large {
+    width: 240px !important;
+    height: 240px !important;
+    border-radius: 52px !important;
+    padding: 20px !important;
+  }
+
+  .splash-vehicle-stage {
+    width: 880px !important;
+    min-height: 420px !important;
+  }
+
+  .splash-vehicle {
+    width: 800px !important;
+    max-height: 420px !important;
+  }
+
+  .onboarding-slide .onboarding-image-container {
+    width: 100% !important;
+    max-height: 560px !important;
+  }
+
+  .onboarding-image-container img {
+    max-height: 560px !important;
+    width: 100% !important;
+    max-width: 580px !important;
+    object-fit: contain !important;
+  }
 }
