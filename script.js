@@ -1131,7 +1131,7 @@ function renderBook() {
 
   if (step === 1) {
     return `
-      ${screenHead('Find a departure', 'Step 1 of 6: Choose your route to begin booking.')}
+      ${screenHead('Book for Later & Scheduled Travel', 'Schedule an advance journey for any upcoming date or time. Select your corridor, choose preferred vehicles & drivers, and configure real-time vehicle alerts.')}
       
       <div class="route-selector-cards" style="margin-top: 16px;">
         ${appData.routeCards.map(rc => {
@@ -1298,6 +1298,28 @@ function renderBook() {
               </div>
             </div>
           ` : ''}
+
+          <!-- Advance Travel Notifications Section -->
+          <div style="margin-top: 16px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <i data-lucide="bell" style="width: 18px; height: 18px; color: var(--brand-blue);"></i>
+              <strong style="font-size: 0.9rem; color: var(--brand-blue-dark);">Advance Travel Alert Preferences</strong>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--slate); margin: 0 0 10px 0; line-height: 1.4;">
+              Since you are scheduling for later, get automated SMS &amp; app alerts as your van enters stage:
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me when my van becomes active on stage
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me 15 minutes before scheduled departure
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me if driver goes off-road or changes timeline
+              </label>
+            </div>
+          </div>
 
           </div>
         </section>
@@ -1737,6 +1759,17 @@ function renderTripDetails() {
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
       
+      <!-- Immediate Travel Notice Banner -->
+      <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.15); padding: 14px 16px; border-radius: 16px; margin-bottom: 16px; display: flex; align-items: start; gap: 12px; text-align: left;">
+        <i data-lucide="zap" style="width: 22px; height: 22px; color: var(--brand-blue); flex-shrink: 0; margin-top: 1px;"></i>
+        <div>
+          <strong style="font-size: 0.92rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Van)</strong>
+          <span style="font-size: 0.82rem; line-height: 1.4; color: var(--slate); font-weight: 500;">
+            This van is currently on stage or departing shortly. Your seat is held immediately upon booking — you do not need to be at the stage right now; you can board at stage or meet your van along the corridor route!
+          </span>
+        </div>
+      </div>
+
       <!-- Driver Profile Card -->
       <article class="card driver-profile-card" role="button" tabindex="0" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');" style="cursor: pointer;">
         <div class="driver-profile-header">
@@ -3841,39 +3874,6 @@ function renderSeatMode() {
   <p class="seat-selection-count" role="status" aria-live="polite"><strong>${state.selectedSeats.length} of ${passengerTotal()}</strong> passenger seat${passengerTotal() === 1 ? '' : 's'} selected</p>`;
 }
 
-function renderTripDetails() {
-  const trip = state.activeTrip;
-  const bookingDate = new Date(`${state.bookingDate}T12:00:00`);
-  const reviewDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(bookingDate);
-  const returnSummary = state.ticketType === 'return' ? `${state.returnMode === 'date-specific' ? 'Date-specific' : state.returnMode.replace('-', ' ')} · Added` : 'Not added';
-  const seatSummary = state.capacityMode === 'seats' ? (state.selectedSeats.join(', ') || 'Choose seats') : 'Best available';
-  return `<section class="smart-review" aria-label="Review your trip">
-    <div class="smart-review__map-card">
-      <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
-      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
-    </div>
-    <div class="smart-review__sheet">
-      <div class="sheet-handle" aria-hidden="true"></div>
-      <div class="review-route-row"><div><span class="review-route-icon review-route-icon--from"><i data-lucide="map-pin"></i></span><span><small>From</small><strong>${trip.boarding}</strong></span></div><span class="review-swap"><i data-lucide="arrow-left-right"></i></span><div><span><small>To</small><strong>${trip.destination}</strong></span><span class="review-route-icon review-route-icon--to"><i data-lucide="map-pin"></i></span></div></div>
-      <div class="review-date-row"><span class="review-date-icon"><i data-lucide="calendar-days"></i></span><span><small>Date</small><strong>${reviewDate}</strong></span><button class="text-button" type="button" data-screen="book">Change</button></div>
-      <div class="review-section-label">Selected departure</div>
-      <article class="review-departure"><div class="review-departure__time"><strong>${trip.depart.replace(' AM','').replace(' PM','')}</strong><span>${trip.depart.includes('AM') ? 'AM' : 'PM'}</span></div><div class="review-departure__service"><span class="review-vehicle-icon"><i data-lucide="bus-front"></i></span><span><strong>${trip.vehicle}</strong><small>${trip.duration} · ${trip.traffic} traffic · ${trip.plate}</small></span></div><div class="review-departure__price"><span>${trip.seats} seats left</span><strong>${formatUGX(trip.fare)}</strong></div><span class="review-check"><i data-lucide="check"></i></span></article>
-      <div class="review-section-label review-section-label--options">Make it yours <span>Only open what you need</span></div>
-      <div class="booking-accordions">
-        ${bookingAccordion('return','refresh-cw','Return trip',returnSummary,reviewReturnOptions())}
-        ${bookingAccordion('passengers','users-round','Passengers',`${state.passengerCount} adult${state.passengerCount === 1 ? '' : 's'}${state.childCount ? `, ${state.childCount} child${state.childCount === 1 ? '' : 'ren'}` : ''}`,reviewPassengerOptions())}
-        ${bookingAccordion('assistance','headphones','Assistance & language',`${state.assistance} · ${state.language}`,reviewAssistanceOptions())}
-        ${bookingAccordion('luggage','luggage','Luggage',luggageSummary(),reviewLuggageOptions())}
-        ${bookingAccordion('seats','armchair','Seat preference',seatSummary,reviewSeatOptions())}
-      </div>
-      <div class="review-reassurance"><i data-lucide="shield-check"></i><span>Personal item included</span><span>•</span><span>Change anything before payment.</span></div>
-    </div>
-  </section>
-  <div class="review-sticky-cta">
-    <button class="return-quick-toggle ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="quick-return-toggle" aria-pressed="${state.ticketType === 'return'}"><span class="return-quick-toggle__icon"><i data-lucide="refresh-cw"></i></span><span><small>Return</small><strong>${state.ticketType === 'return' ? 'Added' : 'Add'}</strong></span><span class="switch ${state.ticketType === 'return' ? 'is-on' : ''}" aria-hidden="true"><span></span></span></button>
-    <button class="button button--primary review-pay-button" type="button" data-action="continue-to-checkout"><span>Continue</span><strong>${formatUGX(tripReviewFare())}</strong><i data-lucide="arrow-right"></i></button>
-  </div>`;
-}
 
 function destroyTripMap() {
   if (tripReviewMap) {
@@ -4559,15 +4559,9 @@ function handleClick(event) {
     'select-departure': () => { const trip = appData.trips.find(t => t.depart === actionTrigger.dataset.trip) || appData.trips[0]; state.activeTrip = trip; navigate('trip-details'); },
     'select-departure-direct': () => {
       const tripId = actionTrigger.dataset.tripId;
-      const trip = appData.trips.find(t => t.id === tripId);
-      if (trip) {
-        state.activeTrip = trip;
-        state.selectedRoute = appData.routeCards.find(rc => rc.stageA === trip.boarding && rc.stageB === trip.destination)?.key || 'kajansi';
-        state.searchFrom = trip.boarding;
-        state.searchTo = trip.destination;
-        state.bookingStep = 2;
-        navigate('book');
-      }
+      const trip = appData.trips.find(t => t.id === tripId) || appData.trips[0];
+      state.activeTrip = trip;
+      navigate('trip-details');
     },
     'choose-trip': () => { state.activeTrip = getSearchResults().find(t => t.id === actionTrigger.dataset.tripId) || getSearchResults()[0] || appData.trips[0]; navigate('trip-details'); },
     'show-search-filters': showSearchFilters,
