@@ -813,6 +813,7 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   z-index: 20;
   overflow: hidden;
   box-shadow: var(--shadow-lg) !important;
+  padding: 0 !important;
 }
 
 @media (min-width: 901px) {
