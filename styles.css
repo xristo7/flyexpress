@@ -7544,6 +7544,35 @@ body[data-active-screen="home"] .main-content {
   margin-top: 2px;
 }
 
+/* Popular Places 3-Column Masonry Layout (Desktop) */
+.popular-places-column-layout {
+  column-count: 3;
+  column-gap: 20px;
+  width: 100%;
+}
+
+.popular-places-column-layout > .popular-place-card {
+  break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 20px;
+  vertical-align: top;
+}
+
+@media (max-width: 1050px) and (min-width: 651px) {
+  .popular-places-column-layout {
+    column-count: 2;
+    column-gap: 16px;
+  }
+}
+
+@media (max-width: 650px) {
+  .popular-places-column-layout {
+    column-count: 1;
+    column-gap: 0;
+  }
+}
+
 /* Popular Place Card Sizing & Growth Animation */
 .popular-place-card {
   border-radius: 24px;
