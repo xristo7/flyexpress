@@ -641,18 +641,20 @@ function renderOnboarding() {
       <div class="onboarding-image-container">
         <img src="assets/onboarding-${state.onboardingIndex + 1}.${state.onboardingIndex === 1 ? 'webp' : 'jpg'}" alt="${escapeHtml(slide.title)} visual">
       </div>
-      <h2 style="margin-top: 24px; font-weight: 850;">${slide.title}</h2>
-      <p style="margin-top: 12px; color: var(--slate); line-height: 1.5; font-size: 1rem;">${slide.message}</p>
+      <div class="onboarding-copy">
+        <h2>${slide.title}</h2>
+        <p>${slide.message}</p>
 
-      ${state.onboardingIndex === 2 ? `
-        <div class="onboarding-last-buttons">
-          <button class="button button--primary w-full" type="button" data-action="skip-onboarding" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span>Get Started</span>
-            <i data-lucide="arrow-right"></i>
-          </button>
-          <button class="button--guest" type="button" data-action="continue-guest">Continue as Guest</button>
-        </div>
-      ` : ''}
+        ${state.onboardingIndex === 2 ? `
+          <div class="onboarding-last-buttons">
+            <button class="button button--primary w-full" type="button" data-action="skip-onboarding" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <span>Get Started</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+            <button class="button--guest" type="button" data-action="continue-guest">Continue as Guest</button>
+          </div>
+        ` : ''}
+      </div>
     </article>
   `;
 
