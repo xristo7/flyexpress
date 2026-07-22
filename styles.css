@@ -2198,11 +2198,14 @@ body.drawer-open .app-shell {
 }
 
 .mobile-nav {
-  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 280ms ease !important;
 }
 
-body.drawer-open .mobile-nav {
-  transform: translateX(max(-280px, -80vw)) !important;
+body.drawer-open .mobile-nav,
+body.drawer-open .home-redesign .mobile-nav {
+  transform: translateY(140%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Drawer Reveal Behind Workspace */
