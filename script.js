@@ -3708,7 +3708,7 @@ function renderTracking() {
   }
 
   return `
-    ${screenHead('Unified Tracking', 'Track travels, parcel deliveries and assigned vehicles in one place.')}
+    ${screenHead('Tracking', 'Track travels, parcel deliveries and assigned vehicles in one place.')}
     
     <div class="choice-pills" style="margin-top: 16px;">
       <button class="choice-pill ${currentTab === 'travels' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="travels">
