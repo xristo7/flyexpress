@@ -5867,14 +5867,14 @@ function renderAvailableVansScreen() {
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 14px;">
-              <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
-                <div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
                   <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 600; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
-                  <h3 style="margin: 3px 0 0 0; font-size: 1.2rem; font-weight: 800; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
+                  <span class="capacity-chip ${isWarning ? 'warning' : ''}" style="font-size: 0.78rem; padding: 4px 10px; flex-shrink: 0;">
+                    ${trip.seats} space${trip.seats === 1 ? '' : 's'} available
+                  </span>
                 </div>
-                <span class="capacity-chip ${isWarning ? 'warning' : ''}" style="font-size: 0.78rem; padding: 4px 10px; flex-shrink: 0; margin-top: 2px;">
-                  ${trip.seats} space${trip.seats === 1 ? '' : 's'} available
-                </span>
+                <h3 style="margin: 2px 0 0 0; font-size: 1.25rem; font-weight: 800; color: var(--brand-blue-dark); width: 100%;">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
               </div>
               
               <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--slate); font-weight: 400; padding-bottom: 2px;">
