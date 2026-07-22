@@ -1341,11 +1341,22 @@ function renderBook() {
             ` : ''}
           </div>
 
-          <div style="padding: 20px;">
-          <div class="form-grid" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: end;">
-            <div class="field"><label for="book-from">Departure stage</label><select id="book-from" data-field="search-from">${allowedFrom.map(route => optionMarkup(route, state.searchFrom)).join('')}</select></div>
-            <button class="swap-button" type="button" data-action="swap-route" aria-label="Swap locations" style="margin-bottom: 4px; border: 1px solid var(--border); width: 46px; height: 46px; border-radius: 11px; display: grid; place-items: center; background: white; cursor: pointer; transition: var(--ease);"><i data-lucide="arrow-left-right" style="width: 18px; height: 18px; color: var(--brand-blue);"></i></button>
-            <div class="field"><label for="book-to">Destination</label><select id="book-to" data-field="search-to">${allowedTo.map(route => optionMarkup(route, state.searchTo)).join('')}</select></div>
+          <div class="route-interchange-card">
+            <div class="route-field-box">
+              <label for="book-from">FROM</label>
+              <select id="book-from" data-field="search-from">
+                ${allowedFrom.map(route => optionMarkup(route, state.searchFrom)).join('')}
+              </select>
+            </div>
+            <button class="swap-button vertical-swap-btn" type="button" data-action="swap-route" aria-label="Swap locations">
+              <i data-lucide="arrow-down-up" style="width: 18px; height: 18px; color: var(--brand-blue-dark);"></i>
+            </button>
+            <div class="route-field-box">
+              <label for="book-to">TO</label>
+              <select id="book-to" data-field="search-to">
+                ${allowedTo.map(route => optionMarkup(route, state.searchTo)).join('')}
+              </select>
+            </div>
           </div>
           
           <div class="form-grid form-grid--2" style="margin-top: 16px; align-items: start;">
@@ -1962,7 +1973,17 @@ function renderTripDetails() {
         </div>
       </article>
 
-      <div class="review-route-row"><div><span class="review-route-icon review-route-icon--from"><i data-lucide="map-pin"></i></span><span><small>From</small><strong>${trip.boarding}</strong></span></div><span class="review-swap"><i data-lucide="arrow-left-right"></i></span><div><span><small>To</small><strong>${trip.destination}</strong></span><span class="review-route-icon review-route-icon--to"><i data-lucide="map-pin"></i></span></div></div>
+      <div class="review-route-row">
+        <div>
+          <small>FROM</small>
+          <strong>${trip.boarding}</strong>
+        </div>
+        <span class="review-swap"><i data-lucide="arrow-down-up" style="width: 18px; height: 18px; color: var(--brand-blue-dark);"></i></span>
+        <div>
+          <small>TO</small>
+          <strong>${trip.destination}</strong>
+        </div>
+      </div>
       <div class="review-section-label">Selected departure</div>
       <article class="review-departure"><div class="review-departure__time"><strong>${trip.depart.replace(' AM','').replace(' PM','')}</strong><span>${trip.depart.includes('AM') ? 'AM' : 'PM'}</span></div><div class="review-departure__service"><span class="review-vehicle-icon"><i data-lucide="bus-front"></i></span><span><strong>${trip.vehicle}</strong><small>${trip.duration} · ${trip.traffic} traffic · ${trip.plate}</small></span></div><div class="review-departure__price"><span>${trip.seats} seats left</span><strong>${formatUGX(trip.fare)}</strong></div><span class="review-check"><i data-lucide="check"></i></span></article>
       

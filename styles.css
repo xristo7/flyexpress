@@ -7438,3 +7438,132 @@ body[data-active-screen="home"] .main-content {
     scroll-snap-align: none !important;
   }
 }
+
+/* Route Interchange Layout (Stacked boxes with right-floating vertical swap button) */
+.route-interchange-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.route-interchange-card .route-field-box {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 54px 12px 16px;
+  text-align: left;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.route-interchange-card label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin: 0;
+  display: block;
+}
+
+.route-interchange-card select {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--brand-blue-dark);
+  padding: 2px 0 0 0;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  text-overflow: ellipsis;
+}
+
+.route-interchange-card .vertical-swap-btn,
+.review-route-row .review-swap {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: white;
+  color: var(--brand-blue-dark);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+  z-index: 10;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.route-interchange-card .vertical-swap-btn:hover,
+.review-route-row .review-swap:hover {
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 6px 18px rgba(7, 90, 168, 0.15);
+}
+
+@media (max-width: 900px) {
+  .review-route-row {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    padding: 0 !important;
+    border-bottom: 0 !important;
+  }
+
+  .review-route-row > div {
+    background: white !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 16px !important;
+    padding: 12px 54px 12px 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    text-align: left !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .review-route-row > div:last-child {
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  .review-route-row small {
+    font-size: 0.68rem !important;
+    text-transform: uppercase !important;
+    font-weight: 800 !important;
+    color: var(--muted) !important;
+    letter-spacing: 0.05em !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  .review-route-row strong {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    color: var(--brand-blue-dark) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+  }
+
+  .review-route-icon {
+    display: none !important;
+  }
+}
