@@ -501,11 +501,24 @@ function setTodayDefaults() {
   document.documentElement.style.setProperty('--today', `'${iso}'`);
 }
 
+function initHorizontalMouseWheelScroll() {
+  document.body.addEventListener('wheel', (e) => {
+    const scrollContainer = e.target.closest('.departure-scroll, .services-scroll, .horizontal-scroll, [data-horizontal-scroll]');
+    if (!scrollContainer) return;
+
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      scrollContainer.scrollLeft += e.deltaY * 1.25;
+    }
+  }, { passive: false });
+}
+
 function init() {
   setTodayDefaults();
   renderOnboarding();
   renderNavigation();
   initOnboardingSwipe();
+  initHorizontalMouseWheelScroll();
   
   document.addEventListener('click', handleClick);
   document.addEventListener('change', handleChange);
