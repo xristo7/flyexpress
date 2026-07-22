@@ -2095,21 +2095,56 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   }
 }
 
-/* Back arrow replaces logo position in topbar on mobile */
-#back-button,
-button[data-action="go-back"] {
+/* Uniform Topbar Buttons (Back, Logo, Notifications, Hamburger) - 42px Rounded Shapes */
+.topbar #back-button,
+.topbar button[data-action="go-back"],
+.topbar .icon-button,
+.topbar .hamburger-menu-btn,
+.topbar .mobile-brand,
+.topbar .desktop-profile-btn {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  border-radius: 12px !important;
   background: #ffffff !important;
   color: var(--brand-blue-dark) !important;
   border: 1px solid rgba(8, 49, 83, 0.14) !important;
   box-shadow: 0 3px 10px rgba(8, 49, 83, 0.09) !important;
-  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease) !important;
 }
 
-#back-button svg,
-#back-button i,
-button[data-action="go-back"] svg,
-button[data-action="go-back"] i {
+.topbar #back-button svg,
+.topbar #back-button i,
+.topbar .icon-button svg,
+.topbar .icon-button i {
   color: var(--brand-blue-dark) !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.topbar .mobile-brand .logo-frame,
+.topbar .mobile-brand .logo-frame--mobile {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 9px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.topbar .mobile-brand img,
+.topbar .desktop-profile-btn img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 9px !important;
 }
 
 @media (max-width: 900px) {
@@ -2121,18 +2156,13 @@ button[data-action="go-back"] i {
     background: #ffffff !important;
     color: var(--brand-blue-dark) !important;
     box-shadow: 0 3px 10px rgba(8, 49, 83, 0.09) !important;
-    border-radius: 50% !important;
+    border-radius: 12px !important;
     width: 42px !important;
     height: 42px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     border: 1px solid rgba(8, 49, 83, 0.14) !important;
-  }
-  #back-button:not(.is-hidden):hover {
-    border-color: var(--brand-blue) !important;
-    color: var(--brand-blue) !important;
-    background: #ffffff !important;
   }
 }
 
@@ -2143,17 +2173,17 @@ button[data-action="go-back"] i {
   justify-content: center !important;
   align-items: center !important;
   gap: 4px !important;
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  border: 1px solid var(--border) !important;
-  background: var(--surface) !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(8, 49, 83, 0.14) !important;
+  background: #ffffff !important;
   cursor: pointer !important;
   position: relative !important;
   z-index: 1100 !important;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
   padding: 0 !important;
-  box-shadow: var(--shadow-sm) !important;
+  box-shadow: 0 3px 10px rgba(8, 49, 83, 0.09) !important;
 }
 .hamburger-menu-btn:hover {
   background: var(--surface-alt) !important;
@@ -6772,14 +6802,23 @@ body[data-active-screen="home"] .main-content {
         font-weight: 700 !important;
       }
 
-      .topbar .icon-button {
-        width: 44px !important;
-        height: 44px !important;
-        border-radius: 50% !important;
+      .topbar .icon-button,
+      .topbar .desktop-profile-btn,
+      .topbar .hamburger-menu-btn,
+      .topbar .mobile-brand,
+      .topbar #back-button {
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+        min-height: 42px !important;
+        border-radius: 12px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         position: relative !important;
+        background: #ffffff !important;
+        border: 1px solid rgba(8, 49, 83, 0.14) !important;
+        box-shadow: 0 3px 10px rgba(8, 49, 83, 0.09) !important;
       }
 
       .topbar .icon-button svg,
@@ -6789,22 +6828,11 @@ body[data-active-screen="home"] .main-content {
         height: 20px !important;
       }
 
-      .topbar .desktop-profile-btn {
-        width: 44px !important;
-        height: 44px !important;
-        border-radius: 50% !important;
-        padding: 3px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        cursor: pointer !important;
-        transition: transform var(--ease), box-shadow var(--ease) !important;
-      }
-
-      .topbar .desktop-profile-btn img {
+      .topbar .desktop-profile-btn img,
+      .topbar .mobile-brand img {
         width: 100% !important;
         height: 100% !important;
-        border-radius: 50% !important;
+        border-radius: 9px !important;
         object-fit: cover !important;
       }
 
