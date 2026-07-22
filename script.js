@@ -1255,36 +1255,59 @@ function renderBook() {
     return `
       ${screenHead('Book for Later & Scheduled Travel', 'Schedule an advance journey for any upcoming date or time. Select your corridor, choose preferred vehicles & drivers, and configure real-time vehicle alerts.')}
       
-      <div class="route-selector-cards" style="margin-top: 16px;">
+      <div class="route-selector-cards" style="margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
         ${appData.routeCards.map(rc => {
           const flipped = !!state.routeFlips[rc.key];
           const origin = flipped ? rc.cityB : rc.cityA;
           const dest = flipped ? rc.cityA : rc.cityB;
           const img = flipped ? rc.imageA : rc.imageB;
-          const corridor = flipped ? rc.corridor.split(' \u2022 ').reverse().join(' \u2022 ') : rc.corridor;
+          const corridor = flipped ? rc.corridor.split(' • ').reverse().join(' • ') : rc.corridor;
+          const isExpanded = state.selectedRoute === rc.key;
+
           return `
-        <div class="route-card ${state.selectedRoute === rc.key ? 'is-active' : ''}" style="position: relative;">
-          <div class="route-card-main-row" data-action="select-route-card-step" data-route="${rc.key}" role="button" tabindex="0">
-            <div class="card-selection-indicator ${state.selectedRoute === rc.key ? 'is-selected' : ''}"></div>
-            <img src="${img}" alt="${dest}" class="route-card__icon" style="object-fit: cover;">
-            <div class="route-card__info">
-              <div class="route-card__title-row">
-                <h3>${dest}</h3>
-                <div class="route-card__price">${rc.price}</div>
+            <div class="popular-place-card ${isExpanded ? 'is-expanded' : ''}" style="border-radius: 24px; overflow: hidden; background: white; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);">
+              
+              <!-- Hero Photo Visual Area -->
+              <div class="popular-place-hero" data-action="select-route-card-step" data-route="${rc.key}" role="button" tabindex="0" style="position: relative; height: 230px; background-image: url('${img}'); background-size: cover; background-position: center; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; padding: 16px;">
+                <!-- Dark Overlay for Contrast -->
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.15) 100%); pointer-events: none;"></div>
+                
+                <!-- Top Row: Price Tag & Direction Swap Button -->
+                <div style="position: relative; z-index: 5; display: flex; justify-content: space-between; align-items: center;">
+                  <span style="background: rgba(255, 255, 255, 0.94); color: var(--brand-blue-dark); font-weight: 850; font-size: 0.85rem; padding: 6px 14px; border-radius: 12px; backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                    ${rc.price}
+                  </span>
+                  <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction" onclick="event.stopPropagation();" style="width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.3); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px);">
+                    <i data-lucide="arrow-down-up" style="width: 16px; height: 16px;"></i>
+                  </button>
+                </div>
+
+                <!-- Bottom Row: Title & Subtitle -->
+                <div style="position: relative; z-index: 5; text-align: left; color: white;">
+                  <h3 style="margin: 0 0 4px 0; font-size: 1.45rem; font-weight: 850; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.4);">${dest}</h3>
+                  <p style="margin: 0; font-size: 0.86rem; color: rgba(255,255,255,0.92); font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="map-pin" style="width: 14px; height: 14px; color: #ffeb3b;"></i>
+                    From ${origin} · ${rc.via}
+                  </p>
+                </div>
               </div>
-              <p>From ${origin} \u2022 ${rc.via}</p>
-              <div class="corridor-towns">
-                ${corridor}
-              </div>
+
+              <!-- Revealed Cities & Action Section (Shown when user clicks card) -->
+              ${isExpanded ? `
+                <div class="popular-place-details" style="padding: 18px; background: white; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; text-align: left; animation: fadeIn 0.22s var(--ease) both;">
+                  <div>
+                    <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--brand-red); letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Corridor Cities &amp; Stages</span>
+                    <div style="font-size: 0.86rem; color: var(--charcoal); font-weight: 600; line-height: 1.5; background: var(--page); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border);">
+                      ${corridor}
+                    </div>
+                  </div>
+                  <button class="button button--primary w-full" type="button" data-action="booking-next-step" style="padding: 12px; font-size: 0.95rem; font-weight: 800;">
+                    Configure Schedule &amp; Book →
+                  </button>
+                </div>
+              ` : ''}
             </div>
-            <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction">
-              <i data-lucide="arrow-left-right"></i>
-            </button>
-          </div>
-          <div class="route-card-expand-section">
-            <button class="button button--primary w-full" type="button" data-action="booking-next-step">Continue</button>
-          </div>
-        </div>`;
+          `;
         }).join('')}
       </div>
     `;
