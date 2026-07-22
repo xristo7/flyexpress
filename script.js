@@ -2512,64 +2512,70 @@ function renderSpecialHire() {
       <div class="special-hire-flow-container" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
         <div>
           <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
-          <div class="vehicle-card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
-            <div class="card vehicle-card ${sh.vehicleType === 'sedan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="sedan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'sedan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'sedan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-sedan.jpg'] || 'assets/fly-express-sedan.jpg'}" alt="Saloon Car" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Saloon Car / Sedan (4 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Perfect for solo business travelers, couples, or small private trips.</p>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Chauffeur Included</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 100K/day</strong>
+          <div class="vehicle-card-grid">
+            <div class="card vehicle-card ${sh.vehicleType === 'sedan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="sedan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'sedan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'sedan' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <img src="${state.transparentVehicles['assets/fly-express-sedan.jpg'] || 'assets/fly-express-sedan.jpg'}" alt="Saloon Car" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Saloon Car / Sedan (4 Seats)</h3>
+                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Perfect for solo business travelers, couples, or small private trips.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 100,000 / day</strong>
               </div>
             </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'noah' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="noah" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'noah' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'noah' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-noah.jpg'] || 'assets/fly-express-noah.jpg'}" alt="Toyota Noah" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Toyota Noah (7 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Versatile and spacious mid-size vehicle for family or small groups.</p>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">WiFi & AC Included</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 150K/day</strong>
+            <div class="card vehicle-card ${sh.vehicleType === 'noah' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="noah" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'noah' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'noah' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <img src="${state.transparentVehicles['assets/fly-express-noah.jpg'] || 'assets/fly-express-noah.jpg'}" alt="Toyota Noah" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Toyota Noah (7 Seats)</h3>
+                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Versatile and spacious mid-size vehicle for family or small groups.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 150,000 / day</strong>
               </div>
             </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'minivan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="minivan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'minivan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'minivan' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-minivan.jpg'] || 'assets/fly-express-minivan.jpg'}" alt="Alphard Multi-Seater" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Alphard / Multi-Seater (10 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Comfortable vehicle for family travel or small business delegates.</p>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">AC & WiFi</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 180K/day</strong>
+            <div class="card vehicle-card ${sh.vehicleType === 'minivan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="minivan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'minivan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'minivan' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <img src="${state.transparentVehicles['assets/fly-express-minivan.jpg'] || 'assets/fly-express-minivan.jpg'}" alt="Alphard Multi-Seater" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Alphard / Multi-Seater (10 Seats)</h3>
+                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Comfortable vehicle for family travel or small business delegates.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 180,000 / day</strong>
               </div>
             </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'commuter' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="commuter" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'commuter' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'commuter' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-hiace-commuter.jpg'] || 'assets/fly-express-hiace-commuter.jpg'}" alt="Commuter (14)" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Commuter (14)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Standard roof, spacious, ideal for daily commutes or standard group travel.</p>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Standard Commute</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 220K/day</strong>
+            <div class="card vehicle-card ${sh.vehicleType === 'commuter' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="commuter" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'commuter' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'commuter' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <img src="${state.transparentVehicles['assets/fly-express-hiace-commuter.jpg'] || 'assets/fly-express-hiace-commuter.jpg'}" alt="Commuter (14)" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Commuter (14)</h3>
+                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Standard roof, spacious, ideal for daily commutes or standard group travel.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 220,000 / day</strong>
               </div>
             </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Highroof (18)" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Highroof (18)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">Extra Headroom & AC</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 300K/day</strong>
+            <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Highroof (18)" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Highroof (18)</h3>
+                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 300,000 / day</strong>
               </div>
             </div>
             
-            <div class="card vehicle-card ${sh.vehicleType === 'coaster' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="coaster" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'coaster' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'coaster' ? 'var(--info-soft)' : 'white'}; padding: 16px; border-radius: 16px; transition: all 0.22s ease;">
-              <img src="${state.transparentVehicles['assets/fly-express-coaster.jpg'] || 'assets/fly-express-coaster.jpg'}" alt="Executive Coaster" style="width: 100%; height: 120px; object-fit: contain; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Executive Coaster (30 Seats)</h3>
-              <p class="muted" style="font-size: 0.8rem; margin: 4px 0 12px;">Spacious luxury coaster for big company excursions or large events.</p>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="status-chip" style="background: rgba(7,90,168,0.1); color: var(--brand-blue); font-size: 0.75rem; font-weight: 750;">TV & PA System</span>
-                <strong style="color: var(--success); font-size: 0.9rem;">UGX 600K/day</strong>
+            <div class="card vehicle-card ${sh.vehicleType === 'coaster' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="coaster" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'coaster' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'coaster' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <img src="${state.transparentVehicles['assets/fly-express-coaster.jpg'] || 'assets/fly-express-coaster.jpg'}" alt="Executive Coaster" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Executive Coaster (30 Seats)</h3>
+                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Spacious luxury coaster for big company excursions or large events.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 600,000 / day</strong>
               </div>
             </div>
           </div>
