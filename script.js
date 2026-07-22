@@ -5809,10 +5809,10 @@ function renderAvailableVansScreen() {
       ${availableVans.length ? availableVans.map((trip, idx) => {
         const isWarning = trip.seats <= 2;
         return `
-          <article class="card" style="margin: 0; padding: 0; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; text-align: left; background: white; overflow: hidden; border-radius: 20px;">
-            <div style="position: relative; width: 100%; height: 160px; overflow: hidden; background: var(--surface-alt);">
-              <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
-              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%);"></div>
+          <article class="card" style="margin: 0; padding: 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; text-align: left; background: white; border-radius: 20px; gap: 14px;">
+            <div style="position: relative; width: 100%; height: 160px; overflow: hidden; background: var(--surface-alt); border-radius: 14px;">
+              <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 14px;" />
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%); border-radius: 14px;"></div>
               <span style="position: absolute; bottom: 12px; left: 12px; font-size: 0.72rem; font-weight: 750; color: white; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; backdrop-filter: blur(4px); display: inline-flex; align-items: center; gap: 4px;">
                 <i data-lucide="info" style="width: 12px; height: 12px;"></i> ${trip.vehicle} ${idx === 0 ? '· Boarding Now' : `· ${trip.countdown}`}
               </span>
@@ -5823,7 +5823,7 @@ function renderAvailableVansScreen() {
               `}
             </div>
             
-            <div style="padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
               <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
                 <div>
                   <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 600; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
