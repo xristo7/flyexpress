@@ -5814,9 +5814,9 @@ function renderAvailableVansScreen() {
                 <i data-lucide="info" style="width: 12px; height: 12px;"></i> ${trip.vehicle} · ${trip.countdown}
               </span>
               ${idx === 0 ? `
-                <span style="position: absolute; top: 12px; right: 12px; background: var(--brand-blue); color: white; font-size: 0.68rem; text-align: center; font-weight: 850; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; box-shadow: var(--shadow-sm);">ACTIVE</span>
+                <span style="position: absolute; top: 12px; right: 12px; background: var(--brand-blue); color: white; font-size: 0.68rem; text-align: center; font-weight: 850; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; box-shadow: var(--shadow-sm);">BOARDING</span>
               ` : `
-                <span style="position: absolute; top: 12px; right: 12px; background: var(--muted); color: white; font-size: 0.68rem; text-align: center; font-weight: 850; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; box-shadow: var(--shadow-sm);">STAGE</span>
+                <span style="position: absolute; top: 12px; right: 12px; background: var(--slate); color: white; font-size: 0.68rem; text-align: center; font-weight: 850; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; box-shadow: var(--shadow-sm);">WAITING</span>
               `}
             </div>
             
