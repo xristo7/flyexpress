@@ -5827,29 +5827,29 @@ function renderAvailableVansScreen() {
             <div style="padding: 18px; display: flex; flex-direction: column; gap: 14px;">
               <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
                 <div>
-                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 750; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
-                  <h3 style="margin: 3px 0 0 0; font-size: 1.2rem; font-weight: 850; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
+                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 400; color: var(--muted); letter-spacing: 0.05em;">${trip.via}</span>
+                  <h3 style="margin: 3px 0 0 0; font-size: 1.2rem; font-weight: 600; color: var(--brand-blue-dark);">${trip.boarding.split(' ')[0]} &rarr; ${trip.destination.split(' ')[0]}</h3>
                 </div>
-                <strong style="font-size: 1.15rem; color: var(--brand-blue); font-weight: 800;">${trip.price}</strong>
+                <strong style="font-size: 1.15rem; color: var(--brand-blue); font-weight: 600;">${trip.price}</strong>
               </div>
               
-              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--slate); font-weight: 600; padding-bottom: 2px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--slate); font-weight: 400; padding-bottom: 2px;">
                 <span style="display: flex; align-items: center; gap: 4px;">
-                  <i data-lucide="user" style="width: 14px; height: 14px; color: var(--muted);"></i> Driver: <strong>${trip.driverName}</strong>
+                  <i data-lucide="user" style="width: 14px; height: 14px; color: var(--muted);"></i> Driver: <span style="font-weight: 600; color: var(--charcoal);">${trip.driverName}</span>
                 </span>
                 <span style="display: flex; align-items: center; gap: 3px;">
-                  <i data-lucide="star" style="width: 13px; height: 13px; fill: var(--brand-gold); color: var(--brand-gold);"></i> <strong>${trip.driverRating}</strong>
+                  <i data-lucide="star" style="width: 13px; height: 13px; fill: var(--brand-gold); color: var(--brand-gold);"></i> <span style="font-weight: 600;">${trip.driverRating}</span>
                 </span>
               </div>
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; background: var(--page); padding: 10px 16px; border-radius: 12px; text-align: center; border: 1px solid rgba(0,0,0,0.02);">
                 <div>
-                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Boarding</span>
-                  <strong style="font-size: 0.92rem; color: ${idx === 0 ? 'var(--brand-blue-dark)' : 'var(--charcoal)'}; font-weight: 850;">${idx === 0 ? 'Now' : trip.depart}</strong>
+                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 400; display: block;">Boarding</span>
+                  <strong style="font-size: 0.92rem; color: ${idx === 0 ? 'var(--brand-blue-dark)' : 'var(--charcoal)'}; font-weight: 600;">${idx === 0 ? 'Now' : trip.depart}</strong>
                 </div>
                 <div>
-                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Duration</span>
-                  <strong style="font-size: 0.92rem; color: var(--charcoal); font-weight: 800;">${trip.duration}</strong>
+                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 400; display: block;">Duration</span>
+                  <strong style="font-size: 0.92rem; color: var(--charcoal); font-weight: 600;">${trip.duration}</strong>
                 </div>
               </div>
 
