@@ -6521,6 +6521,93 @@ body[data-active-screen="home"] .main-content {
         width:min(100%,690px);
       }
       .home-redesign .side-column{ position:sticky; top:20px; }
+
+      /* Desktop Transparent Header & Solid White Icon Background Shapes */
+      .topbar,
+      .topbar--light-bg,
+      .topbar--dark-bg {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border-bottom: none !important;
+        box-shadow: none !important;
+      }
+
+      .topbar::after,
+      .topbar--light-bg::after,
+      .topbar--dark-bg::after {
+        display: none !important;
+        background: none !important;
+        content: none !important;
+        opacity: 0 !important;
+      }
+
+      .topbar .connection-pill,
+      .topbar .icon-button,
+      .topbar .desktop-profile-btn,
+      .topbar #back-button {
+        background: #ffffff !important;
+        border: 1px solid rgba(8, 49, 83, 0.12) !important;
+        box-shadow: 0 4px 12px rgba(8, 49, 83, 0.09) !important;
+        color: var(--brand-blue-dark) !important;
+      }
+
+      .topbar .connection-pill {
+        padding: 7px 14px !important;
+        min-height: 40px !important;
+        border-radius: 99px !important;
+        font-weight: 700 !important;
+      }
+
+      .topbar .connection-pill .connection-label {
+        color: var(--brand-blue-dark) !important;
+        font-weight: 700 !important;
+      }
+
+      .topbar .icon-button {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: relative !important;
+      }
+
+      .topbar .icon-button svg,
+      .topbar .icon-button i {
+        color: var(--brand-blue-dark) !important;
+        width: 20px !important;
+        height: 20px !important;
+      }
+
+      .topbar .desktop-profile-btn {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        padding: 3px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: transform var(--ease), box-shadow var(--ease) !important;
+      }
+
+      .topbar .desktop-profile-btn img {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+      }
+
+      .topbar .badge-count {
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+      }
+
+      .topbar h2,
+      .topbar .topbar__eyebrow {
+        color: var(--brand-blue-dark) !important;
+      }
     }
     
 
