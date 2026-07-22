@@ -698,7 +698,7 @@ function renderAuth() {
   const copy = `
     <div class="auth-copy">
       <p class="eyebrow">Travel Smart. Move Faster.</p>
-      <h1>A more reliable way to travel between Entebbe and Kampala.</h1>
+      <h1>A more reliable way to travel.</h1>
       <p>Preview passenger booking, digital tickets, wallet payments, return travel, luggage handling and same-corridor parcel delivery.</p>
       <div class="auth-trust">
         <div class="auth-trust-item"><span><i data-lucide="route"></i></span>Scheduled and stage-based travel</div>
