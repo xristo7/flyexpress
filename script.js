@@ -1898,9 +1898,8 @@ function renderTripDetails() {
       <div class="review-section-label">Selected departure</div>
       <article class="review-departure"><div class="review-departure__time"><strong>${trip.depart.replace(' AM','').replace(' PM','')}</strong><span>${trip.depart.includes('AM') ? 'AM' : 'PM'}</span></div><div class="review-departure__service"><span class="review-vehicle-icon"><i data-lucide="bus-front"></i></span><span><strong>${trip.vehicle}</strong><small>${trip.duration} · ${trip.traffic} traffic · ${trip.plate}</small></span></div><div class="review-departure__price"><span>${trip.seats} seats left</span><strong>${formatUGX(trip.fare)}</strong></div><span class="review-check"><i data-lucide="check"></i></span></article>
       
-      <div class="review-section-label review-section-label--options">Make it yours <span>Only open what you need</span></div>
+      <div class="review-section-label review-section-label--options">Make it yours <span>Customize your experience</span></div>
       <div class="booking-accordions">
-        ${bookingAccordion('return','refresh-cw','Return trip',returnSummary,reviewReturnOptions())}
         ${bookingAccordion('passengers','users-round','Passengers',`${state.passengerCount} adult${state.passengerCount === 1 ? '' : 's'}${state.childCount ? `, ${state.childCount} child${state.childCount === 1 ? '' : 'ren'}` : ''}`,reviewPassengerOptions())}
         ${bookingAccordion('assistance','headphones','Assistance & language',`${state.assistance} · ${state.language}`,reviewAssistanceOptions())}
         ${bookingAccordion('luggage','luggage','Luggage',luggageSummary(),reviewLuggageOptions())}
