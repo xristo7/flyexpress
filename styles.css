@@ -7385,4 +7385,31 @@ body[data-active-screen="home"] .main-content {
     margin: 32px 0 0 0 !important;
     align-self: flex-start !important;
   }
+
+  /* 60px left & right padding for desktop content and cards (background remains full bleed) */
+  .main-content {
+    padding-left: 60px !important;
+    padding-right: 60px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .home-redesign.app {
+    padding-left: 60px !important;
+    padding-right: 60px !important;
+  }
+
+  .topbar {
+    padding-left: 60px !important;
+    padding-right: 60px !important;
+  }
+
+  .home-redesign .services-scroll,
+  .home-redesign .departure-scroll {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
