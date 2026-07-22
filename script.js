@@ -748,7 +748,6 @@ function renderAuth() {
           <div class="field field--full"><label for="reg-name">Full name</label><input id="reg-name" value="Christo I."></div>
           <div class="field field--full"><label for="reg-phone">Telephone number</label><input id="reg-phone" value="+256 772 345 678"></div>
           <div class="field field--full"><label for="reg-email">Email address <span class="muted">(optional)</span></label><input id="reg-email" type="email" value="christo.i@example.com"></div>
-          <div class="field field--full"><label for="reg-route">Preferred route</label><select id="reg-route"><option>Entebbe to Kampala</option><option>Kampala to Entebbe</option></select></div>
           <div class="field field--full"><label for="reg-pin">Four-digit wallet PIN</label><input id="reg-pin" inputmode="numeric" maxlength="4" value="2580" type="password"></div>
         </div>
         <label class="checkbox-row" style="margin-top:14px"><input type="checkbox" checked><span>I accept the demonstration terms and conditions.</span></label>
