@@ -3653,52 +3653,54 @@ function renderTracking() {
     `;
   }
 
-  // Vehicles tab
-  let vehiclesContent = '';
-  if (currentTab === 'vehicles') {
-    const vehicles = [
+  // Drivers tab
+  let driversContent = '';
+  if (currentTab === 'drivers' || currentTab === 'vehicles') {
+    const drivers = [
       {
-        plate: 'UBM 245K',
-        type: 'Toyota Coaster (Blue & White)',
-        driver: 'Isaac Muwonge',
-        status: 'Boarding now',
-        statusClass: 'status-chip--info',
+        id: 'UBM-245K',
+        name: 'Isaac Muwonge',
+        phone: '+256 772 104 932',
+        vehicle: 'UBM 245K (Toyota Coaster)',
+        visibility: 'Visibility On',
+        visibilityClass: 'status-chip--success',
         stage: 'Entebbe Main Stage',
-        eta: 'Departure scheduled: 8:30 AM',
-        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Live Location</button><button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('isaac muwonge')">Driver Profile</button>`
+        eta: 'Active on route • Boarding now',
+        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Track Driver</button><button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('isaac muwonge')">Driver Profile</button>`
       },
       {
-        plate: 'UBN 742D',
-        type: 'Toyota Hiace Highroof',
-        driver: 'David Okello',
-        status: 'Arriving in 8 mins',
-        statusClass: 'status-chip--gold',
+        id: 'UBN-742D',
+        name: 'David Okello',
+        phone: '+256 701 883 412',
+        vehicle: 'UBN 742D (Toyota Hiace)',
+        visibility: 'Visibility On',
+        visibilityClass: 'status-chip--success',
         stage: 'Entebbe Main Stage',
-        eta: 'In transit from Kampala',
-        actions: `<button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('david okello')">Driver Profile</button>`
+        eta: 'Arriving in 8 mins from Kampala',
+        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Track Driver</button><button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('david okello')">Driver Profile</button>`
       }
     ];
 
-    vehiclesContent = `
+    driversContent = `
       <div class="tracking-grid">
-        ${vehicles.map(v => `
+        ${drivers.map(d => `
           <article class="card tracking-card">
-            <div id="mini-map-vehicle-${v.plate.replace(' ', '-')}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
+            <div id="mini-map-vehicle-${d.id}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
             <div class="tracking-card__body">
               <div class="tracking-card__header">
                 <div>
-                  <p class="section-kicker" style="color: var(--brand-blue); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; margin: 0;">${v.plate}</p>
-                  <h3 style="margin: 2px 0 0;">${v.type}</h3>
+                  <h3 style="margin: 0; font-size: 1.05rem;">${d.name}</h3>
+                  <span class="muted text-small">${d.vehicle}</span>
                 </div>
-                <span class="status-chip ${v.statusClass}">${v.status}</span>
+                <span class="status-chip ${d.visibilityClass}"><span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#0e6e49; margin-right:4px;"></span>${d.visibility}</span>
               </div>
-              <div class="tracking-card__meta" style="flex-direction: column; gap: 4px;">
-                <span><strong class="muted">Stage:</strong> ${v.stage}</span>
-                <span><strong class="muted">Driver:</strong> ${v.driver}</span>
-                <span><strong class="muted">Status:</strong> ${v.eta}</span>
+              <div class="tracking-card__meta" style="flex-direction: column; gap: 4px; margin-top: 8px;">
+                <span><i data-lucide="phone" style="width:13px; height:13px;"></i>${d.phone}</span>
+                <span><i data-lucide="map-pin" style="width:13px; height:13px;"></i>${d.stage}</span>
+                <span><i data-lucide="navigation" style="width:13px; height:13px;"></i>${d.eta}</span>
               </div>
               <div class="tracking-card__actions">
-                ${v.actions}
+                ${d.actions}
               </div>
             </div>
           </article>
@@ -3708,7 +3710,7 @@ function renderTracking() {
   }
 
   return `
-    ${screenHead('Tracking', 'Track travels, parcel deliveries and assigned vehicles in one place.')}
+    ${screenHead('Tracking', 'Track travels, parcel deliveries and visible drivers in real-time.')}
     
     <div class="choice-pills" style="margin-top: 16px;">
       <button class="choice-pill ${currentTab === 'travels' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="travels">
@@ -3717,15 +3719,15 @@ function renderTracking() {
       <button class="choice-pill ${currentTab === 'parcels' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="parcels">
         <i data-lucide="package" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Parcels
       </button>
-      <button class="choice-pill ${currentTab === 'vehicles' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="vehicles">
-        <i data-lucide="bus" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Vehicles
+      <button class="choice-pill ${['drivers','vehicles'].includes(currentTab) ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="drivers">
+        <i data-lucide="user-check" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Drivers
       </button>
     </div>
 
     <div class="tracking-tab-content">
       ${currentTab === 'travels' ? travelsContent : ''}
       ${currentTab === 'parcels' ? parcelsContent : ''}
-      ${currentTab === 'vehicles' ? vehiclesContent : ''}
+      ${['drivers','vehicles'].includes(currentTab) ? driversContent : ''}
     </div>
   `;
 }
