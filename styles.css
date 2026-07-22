@@ -5053,6 +5053,7 @@ body[data-active-screen="driver-profile"] .main-content {
   .driver-rating-badge {
     font-size: 0.82rem !important;
     padding: 2px 7px !important;
+    font-weight: 600 !important;
   }
 
   .proximity-countdown,
