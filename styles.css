@@ -2852,28 +2852,7 @@ body.drawer-open .home-redesign .mobile-nav {
   display: none !important;
 }
 
-/* Header customization when tracking screens are active on mobile */
-@media (max-width: 979px) {
-  body[data-active-screen="trackparcel"] .mobile-brand,
-  body[data-active-screen="trackparcel"] .topbar__eyebrow,
-  body[data-active-screen="trackparcel"] .topbar__actions .connection-pill,
-  body[data-active-screen="trackparcel"] .topbar__actions .icon-button,
-  body[data-active-screen="trackparcel"] .topbar__actions .hamburger-menu-btn,
-  body[data-active-screen="parcel-status"] .mobile-brand,
-  body[data-active-screen="parcel-status"] .topbar__eyebrow,
-  body[data-active-screen="parcel-status"] .topbar__actions .connection-pill,
-  body[data-active-screen="parcel-status"] .topbar__actions .icon-button,
-  body[data-active-screen="parcel-status"] .topbar__actions .hamburger-menu-btn,
-  body[data-active-screen="driver-profile"] .mobile-brand,
-  body[data-active-screen="driver-profile"] .topbar__eyebrow,
-  body[data-active-screen="driver-profile"] .topbar__actions .connection-pill,
-  body[data-active-screen="driver-profile"] .topbar__actions .icon-button,
-  body[data-active-screen="driver-profile"] .topbar__actions .hamburger-menu-btn {
-    display: none !important;
-  }
-}
-
-/* ─── Global Topbar Visibility Rules ─── */
+/* ─── Global Topbar Visibility & Responsiveness Rules ─── */
 #topbar-share-button {
   display: none !important;
 }
@@ -2882,12 +2861,21 @@ body:not([data-active-screen="home"]) .mobile-brand {
   display: none !important;
 }
 
+/* On Mobile (< 980px):
+   - HIDE profile image from ALL pages
+   - SHOW hamburger menu on ALL pages */
 @media (max-width: 979px) {
   .desktop-profile-btn {
     display: none !important;
   }
+  .hamburger-menu-btn {
+    display: flex !important;
+  }
 }
 
+/* On Desktop (>= 980px):
+   - SHOW profile image on ALL pages
+   - HIDE hamburger menu & side drawer from ALL pages */
 @media (min-width: 980px) {
   .hamburger-menu-btn,
   .side-drawer,
@@ -2895,8 +2883,7 @@ body:not([data-active-screen="home"]) .mobile-brand {
     display: none !important;
   }
 
-  .topbar .desktop-profile-btn,
-  .topbar .icon-button[data-screen="notifications"] {
+  .topbar .desktop-profile-btn {
     display: flex !important;
   }
 }
@@ -4591,32 +4578,6 @@ body[data-active-screen="driver-profile"] .main-content {
 .topbar--dark-bg .desktop-profile-btn span {
   background: white !important;
   color: var(--brand-blue-dark) !important;
-}
-
-@media (min-width: 901px) {
-  .hamburger-menu-btn {
-    display: none !important;
-  }
-  .desktop-profile-btn {
-    display: flex !important;
-  }
-  body.drawer-open .app-shell {
-    transform: none !important;
-    box-shadow: none !important;
-  }
-}
-
-@media (max-width: 900px) {
-  .hamburger-menu-btn {
-    display: flex !important;
-  }
-  .desktop-profile-btn {
-    display: none !important;
-  }
-}
-
-body[data-active-screen="home"] .desktop-profile-btn {
-  display: none !important;
 }
 
 /* Drawer Dark Mode Text Brightness Enhancements */
