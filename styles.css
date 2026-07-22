@@ -2139,12 +2139,25 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   background: transparent !important;
 }
 
-.topbar .mobile-brand img,
+.topbar .mobile-brand img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  border-radius: 8px !important;
+  padding: 3px !important;
+  box-sizing: border-box !important;
+}
+
 .topbar .desktop-profile-btn img {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   border-radius: 9px !important;
+}
+
+#back-button.is-hidden,
+body[data-active-screen="home"] #back-button {
+  display: none !important;
 }
 
 @media (max-width: 900px) {
@@ -6828,8 +6841,16 @@ body[data-active-screen="home"] .main-content {
         height: 20px !important;
       }
 
-      .topbar .desktop-profile-btn img,
       .topbar .mobile-brand img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        border-radius: 8px !important;
+        padding: 3px !important;
+        box-sizing: border-box !important;
+      }
+
+      .topbar .desktop-profile-btn img {
         width: 100% !important;
         height: 100% !important;
         border-radius: 9px !important;
