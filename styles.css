@@ -6867,7 +6867,6 @@ body[data-active-screen="home"] .main-content {
 
       .topbar .icon-button,
       .topbar .desktop-profile-btn,
-      .topbar .hamburger-menu-btn,
       .topbar .mobile-brand,
       .topbar #back-button {
         width: 42px !important;
@@ -7330,5 +7329,11 @@ body[data-active-screen="home"] .main-content {
 @media (min-width: 901px) {
   .available-vans-list {
     grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .hamburger-menu-btn,
+  .topbar .hamburger-menu-btn,
+  .home-redesign .hamburger-menu-btn {
+    display: none !important;
   }
 }
