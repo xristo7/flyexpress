@@ -986,21 +986,10 @@ function renderHome() {
             </button>
           </form>
 
-          <!-- 5. POPULAR SERVICES SECTION -->
-          <section class="section" style="animation-delay:.10s" aria-labelledby="servicesTitle">
-            <div class="section-head"><h2 id="servicesTitle">Popular services</h2><button class="text-button" type="button" data-action="open-search-shortcuts">Show all</button></div>
-            <div class="services-scroll">
-              <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Travel</span></button>
-              <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
-              <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
-              <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
-            </div>
-          </section>
-
-          <!-- 6. RECOMMENDED DEPARTURES CAROUSEL -->
-          <section class="section" style="animation-delay:.15s" aria-labelledby="departuresTitle">
+          <!-- 6. FLY NOW CAROUSEL -->
+          <section class="section" style="animation-delay:.10s" aria-labelledby="departuresTitle">
             <div class="section-head">
-              <h2 id="departuresTitle">Recommended departures</h2>
+              <h2 id="departuresTitle">Fly now</h2>
               <button class="text-button" type="button" data-screen="available-vans">Show all</button>
             </div>
             
@@ -1051,6 +1040,17 @@ function renderHome() {
             </div>
             <div class="carousel-dots">
               ${departures.map((_, i) => `<button class="carousel-dot ${i === 0 ? 'is-active' : ''}" type="button" data-dot="${i}" aria-label="Slide ${i + 1}"></button>`).join('')}
+            </div>
+          </section>
+
+          <!-- 5. POPULAR SERVICES SECTION -->
+          <section class="section" style="animation-delay:.15s" aria-labelledby="servicesTitle">
+            <div class="section-head"><h2 id="servicesTitle">Popular services</h2><button class="text-button" type="button" data-action="open-search-shortcuts">Show all</button></div>
+            <div class="services-scroll">
+              <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Travel</span></button>
+              <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
+              <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
+              <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
             </div>
           </section>
 
