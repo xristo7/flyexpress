@@ -412,7 +412,7 @@ const screenTitles = {
 const onboardingSlides = [
   {
     title: 'Your Journey<br>Starts Here',
-    message: 'Book your Fly Express travel between Entebbe and Kampala, choose your preferred departure, and secure your seat in seconds.'
+    message: 'Book your Fly Express travel, choose your preferred departure, and secure your seat in seconds.'
   },
   {
     title: 'Pay Easily.<br>Travel for Less.',
