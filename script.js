@@ -1909,10 +1909,31 @@ function renderTripDetails() {
     : 'Best available (Standard rate)';
 
   return `<section class="smart-review" aria-label="Review your trip">
-    <div class="smart-review__map-card">
-      <div id="trip-review-map" class="trip-review-map" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
-      <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
+    <!-- Top Hero Vehicle & Driver Photo Area (where Map was) -->
+    <div class="smart-review__map-card" style="background-image: url('${trip.img}'); background-size: cover; background-position: center; position: relative;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%); pointer-events: none;"></div>
+      
+      <!-- Photo Visual Banner Content Overlay -->
+      <div style="position: absolute; bottom: 84px; left: 24px; right: 24px; z-index: 3; color: white; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <span style="background: rgba(229, 30, 42, 0.95); color: white; font-weight: 850; font-size: 0.74rem; text-transform: uppercase; padding: 5px 12px; border-radius: 8px; letter-spacing: 0.06em; backdrop-filter: blur(6px);">
+            Active Vehicle &amp; Driver
+          </span>
+          <h1 style="margin: 8px 0 3px 0; font-size: clamp(1.6rem, 3.8vw, 2.2rem); font-weight: 850; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+            ${trip.boarding} → ${trip.destination}
+          </h1>
+          <p style="margin: 0; font-size: 0.9rem; color: rgba(255,255,255,0.92); font-weight: 600;">
+            ${trip.vehicle} · Driver: <strong>${trip.driverName}</strong> (${trip.plate})
+          </p>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.65); padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(8px);">
+          <span style="width: 9px; height: 9px; border-radius: 50%; background: #4caf50; display: inline-block;"></span>
+          <span style="color: white; font-size: 0.82rem; font-weight: 750;">Live Tracked</span>
+        </div>
+      </div>
     </div>
+
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
       
@@ -1927,73 +1948,83 @@ function renderTripDetails() {
         </div>
       </div>
 
-      <!-- Unified Driver & Transit Status Card -->
-      <article class="card unified-driver-transit-card" style="margin: 0; padding: 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: flex; flex-direction: column; gap: 16px;">
-        <!-- Driver & Vehicle Image Header + Meta -->
-        <div style="display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap;">
-          <!-- Large Driver standing with vehicle image -->
-          <div style="position: relative; width: 140px; height: 110px; border-radius: 14px; overflow: hidden; flex-shrink: 0; background: var(--surface-alt); border: 1px solid var(--border-strong); cursor: pointer;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
-            <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
-            <span style="position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.8); color: #ffeb3b; font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 6px; letter-spacing: 0.05em;">${trip.plate}</span>
+      <!-- Unified Driver Card -->
+      <article class="card unified-driver-transit-card" style="margin: 0 0 16px 0; padding: 16px 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <div style="display: flex; gap: 14px; align-items: center;">
+            <div style="position: relative; width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: var(--surface-alt); border: 2px solid var(--brand-blue); cursor: pointer;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+              <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+
+            <div>
+              <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--brand-red); letter-spacing: 0.05em;">Your Driver (Tap profile)</span>
+              <h2 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: var(--brand-blue-dark); cursor: pointer;" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');">${trip.driverName}</h2>
+              <div style="font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-top: 2px;">
+                ${trip.vehicle} · <span class="text-success" style="font-weight: 700;">${trip.plate}</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Driver & Vehicle Information -->
-          <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 3px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-              <div>
-                <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--brand-red); letter-spacing: 0.05em;">Your Driver (Tap to view profile)</span>
-                <h2 style="margin: 2px 0 0 0; font-size: 1.25rem; font-weight: 800; color: var(--brand-blue-dark); cursor: pointer;" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');">${trip.driverName}</h2>
-              </div>
-              <span style="display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-size: 0.86rem; color: var(--charcoal); flex-shrink: 0;">
-                <i data-lucide="star" style="width: 14px; height: 14px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
-              </span>
-            </div>
-
-            <div style="font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-top: 2px;">
-              ${trip.vehicle} · <span class="text-success" style="font-weight: 700;">Active Vehicle</span>
-            </div>
-
-            <!-- Action Buttons: Call & Send Message -->
-            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
-              <a class="button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.82rem;">
-                <i data-lucide="phone" style="width: 14px; height: 14px;"></i> Call
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+            <span style="display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-size: 0.86rem; color: var(--charcoal);">
+              <i data-lucide="star" style="width: 14px; height: 14px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
+            </span>
+            <div style="display: flex; gap: 8px;">
+              <a class="button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;">
+                <i data-lucide="phone" style="width: 13px; height: 13px;"></i> Call
               </a>
-              <button class="button button--secondary button--small" type="button" onclick="event.stopPropagation(); toast('Messaging ${trip.driverName} via SMS...', 'info');" aria-label="Send Message to Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.82rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark);">
-                <i data-lucide="message-square" style="width: 14px; height: 14px;"></i> Send Message
+              <button class="button button--secondary button--small" type="button" onclick="event.stopPropagation(); toast('Messaging ${trip.driverName} via SMS...', 'info');" aria-label="Send Message to Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark);">
+                <i data-lucide="message-square" style="width: 13px; height: 13px;"></i> Send Message
               </button>
             </div>
           </div>
         </div>
-
-        <!-- Transit & Proximity Status Details Box -->
-        <div style="background: var(--page); padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 10px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-            <h3 style="margin: 0; font-size: 0.96rem; font-weight: 800; color: var(--brand-blue-dark);">Transit &amp; Proximity Status</h3>
-            <span style="background: rgba(229, 30, 42, 0.08); color: var(--brand-red); font-weight: 750; font-size: 0.78rem; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px;">
-              <i data-lucide="clock" style="width: 13px; height: 13px;"></i> ${trip.countdown}
-            </span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: left; font-size: 0.82rem; padding-top: 2px;">
-            <div>
-              <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">From</span>
-              <strong style="color: var(--charcoal); font-weight: 700; display: block; margin-top: 2px;">${trip.comingFrom}</strong>
-            </div>
-            <div>
-              <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Current</span>
-              <strong style="color: var(--green); font-weight: 800; display: block; margin-top: 2px;">${trip.currentStage}</strong>
-            </div>
-            <div>
-              <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Heading to</span>
-              <strong style="color: var(--charcoal); font-weight: 700; display: block; margin-top: 2px;">${trip.headingTo}</strong>
-            </div>
-          </div>
-
-          <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: var(--slate); line-height: 1.4; border-top: 1px dashed var(--border); padding-top: 8px;">
-            Proximity: ${trip.vansAtStage || 4} vehicles currently waiting at stage, ${trip.vansApproaching || 1} on the road approaching.
-          </p>
-        </div>
       </article>
+
+      <!-- Embedded Interactive Route Map (Moved inside sheet) -->
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h3 style="margin: 0; font-size: 0.96rem; font-weight: 800; color: var(--brand-blue-dark); display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="map-pin" style="width: 17px; height: 17px; color: var(--brand-red);"></i> Interactive Corridor Map
+          </h3>
+          <span style="font-size: 0.78rem; font-weight: 700; color: var(--brand-blue); background: var(--info-soft); padding: 4px 10px; border-radius: 8px;">
+            Live Corridor Route
+          </span>
+        </div>
+        <div style="position: relative; height: 260px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+          <div id="trip-review-map" class="trip-review-map" style="position: absolute; inset: 0;" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
+          <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
+        </div>
+      </div>
+
+      <!-- Transit & Proximity Status Details Box -->
+      <div style="background: var(--page); padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+          <h3 style="margin: 0; font-size: 0.94rem; font-weight: 800; color: var(--brand-blue-dark);">Transit &amp; Proximity Status</h3>
+          <span style="background: rgba(229, 30, 42, 0.08); color: var(--brand-red); font-weight: 750; font-size: 0.78rem; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px;">
+            <i data-lucide="clock" style="width: 13px; height: 13px;"></i> ${trip.countdown}
+          </span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: left; font-size: 0.82rem; padding-top: 2px;">
+          <div>
+            <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">From</span>
+            <strong style="color: var(--charcoal); font-weight: 700; display: block; margin-top: 2px;">${trip.comingFrom}</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Current</span>
+            <strong style="color: var(--green); font-weight: 800; display: block; margin-top: 2px;">${trip.currentStage}</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Heading to</span>
+            <strong style="color: var(--charcoal); font-weight: 700; display: block; margin-top: 2px;">${trip.headingTo}</strong>
+          </div>
+        </div>
+
+        <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: var(--slate); line-height: 1.4; border-top: 1px dashed var(--border); padding-top: 8px;">
+          Proximity: ${trip.vansAtStage || 4} vehicles currently waiting at stage, ${trip.vansApproaching || 1} on the road approaching.
+        </p>
+      </div>
 
       <div class="review-route-row">
         <div>
