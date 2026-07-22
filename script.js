@@ -1292,9 +1292,9 @@ function renderBook() {
                 </div>
               </div>
 
-              <!-- Revealed Cities & Action Section (Shown when user clicks card) -->
-              ${isExpanded ? `
-                <div class="popular-place-details" style="padding: 18px; background: white; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; text-align: left; animation: fadeIn 0.22s var(--ease) both;">
+              <!-- Revealed Cities & Action Drawer (Smooth accordion transition) -->
+              <div class="popular-place-drawer">
+                <div class="popular-place-details-inner">
                   <div style="font-size: 0.86rem; color: var(--charcoal); font-weight: 600; line-height: 1.5; background: var(--page); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border);">
                     ${corridor}
                   </div>
@@ -1302,7 +1302,7 @@ function renderBook() {
                     Configure Schedule &amp; Book →
                   </button>
                 </div>
-              ` : ''}
+              </div>
             </div>
           `;
         }).join('')}
