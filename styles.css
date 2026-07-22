@@ -2100,8 +2100,7 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 .topbar button[data-action="go-back"],
 .topbar .icon-button,
 .topbar .hamburger-menu-btn,
-.topbar .mobile-brand,
-.topbar .desktop-profile-btn {
+.topbar .mobile-brand {
   width: 42px !important;
   height: 42px !important;
   min-width: 42px !important;
@@ -2872,7 +2871,8 @@ body:not([data-active-screen="home"]) .mobile-brand {
 
 /* 1. On Mobile (<= 900px): HIDE profile image from ALL pages; SHOW hamburger menu on ALL pages */
 @media (max-width: 900px) {
-  .desktop-profile-btn {
+  .desktop-profile-btn,
+  .topbar .desktop-profile-btn {
     display: none !important;
   }
   .hamburger-menu-btn {
