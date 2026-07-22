@@ -7270,3 +7270,10 @@ body[data-active-screen="home"] .main-content {
   top: 10px;
   right: 10px;
 }
+
+/* ─── Available Departures: 3-column grid on desktop ─── */
+@media (min-width: 901px) {
+  .available-vans-list {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
