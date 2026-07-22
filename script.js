@@ -1430,7 +1430,7 @@ function renderBook() {
       ${screenHead('Available Vehicles', 'Step 3 of 6: Select your preferred transit vehicle from active departures.')}
 
       <div class="booking-desktop-split booking-desktop-split--60-40" style="margin-top: 16px;">
-        <section class="grid" style="gap: 20px; margin: 0;">
+        <section class="taxi-results-grid">
           ${sortedTrips.length ? sortedTrips.map(trip => {
             const isSelected = state.activeTrip && state.activeTrip.id === trip.id;
             const hasEnoughSeats = trip.seats >= passengerTotal();

@@ -4981,41 +4981,94 @@ body[data-active-screen="driver-profile"] .main-content {
   color: var(--slate) !important;
 }
 
-/* Responsive Desktop Rules */
+/* Responsive Desktop Rules for Departure Cards & Grid */
+.taxi-results-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+}
+
 @media (min-width: 901px) {
+  .taxi-results-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
   .taxi-result-card {
-    padding: 15px !important;
+    padding: 24px !important; /* Equal padding top, right, bottom, left */
+    border-radius: 20px !important;
+  }
+  
+  .card-selection-indicator {
+    top: 24px !important;
+    right: 24px !important;
+  }
+
+  .taxi-card-main-layout {
+    display: flex !important;
+    gap: 20px !important;
+    align-items: stretch !important;
   }
   
   .taxi-card-left-col {
-    align-self: stretch !important;
-    justify-content: flex-start !important;
-    gap: 6px !important;
-    padding-bottom: 0px !important;
+    width: 124px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   
+  .taxi-van-type-label {
+    font-size: 0.85rem !important;
+    font-weight: 750 !important;
+    color: var(--slate) !important;
+  }
+
   .taxi-van-img-wrapper {
-    width: 108px !important;
-    height: 88px !important;
-    flex-grow: 1 !important;
-  }
-  
-  .taxi-depart-time-desktop {
-    display: block !important;
-    color: var(--brand-blue-dark) !important;
-    font-size: 1.15rem !important;
-    font-weight: 800 !important;
+    width: 124px !important;
+    height: 92px !important;
+    flex-grow: 0 !important;
   }
   
   .taxi-card-right-col {
     flex: 1 !important;
     display: flex !important;
     flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .driver-name-text {
+    font-size: 1.08rem !important;
+    font-weight: 800 !important;
+  }
+
+  .driver-rating-badge {
+    font-size: 0.82rem !important;
+    padding: 2px 7px !important;
+  }
+
+  .proximity-countdown,
+  .proximity-stage {
+    font-size: 0.88rem !important;
+  }
+  
+  .taxi-depart-time-desktop {
+    display: block !important;
+    color: var(--brand-blue-dark) !important;
+    font-size: 1.25rem !important;
+    font-weight: 850 !important;
   }
   
   .taxi-desktop-divider-group {
     display: block !important;
-    margin-top: auto !important;
+    margin-top: 6px !important;
   }
   
   .taxi-desktop-bottom-row {
@@ -5023,10 +5076,11 @@ body[data-active-screen="driver-profile"] .main-content {
     justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
+    gap: 8px !important;
   }
   
   .taxi-duration-text {
-    font-size: 0.82rem !important;
+    font-size: 0.85rem !important;
     color: var(--slate) !important;
   }
   
@@ -5035,9 +5089,10 @@ body[data-active-screen="driver-profile"] .main-content {
   }
 
   .taxi-result-actions {
-    margin-left: 124px !important;
-    border-top: 1.5px dotted #ccd6e1 !important;
-    padding-top: 12px !important;
+    margin-left: 0 !important;
+    border-top: 1px dashed var(--border) !important;
+    padding-top: 14px !important;
+    margin-top: 14px !important;
   }
 }
 
