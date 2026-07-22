@@ -7441,6 +7441,105 @@ body[data-active-screen="home"] .main-content {
   .vehicle-card-grid {
     grid-template-columns: repeat(3, 1fr) !important;
   }
+
+  .special-hire-step1-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 340px !important;
+    align-items: start !important;
+    gap: 24px !important;
+  }
+
+  .special-hire-sidebar-card {
+    position: sticky !important;
+    top: 90px !important;
+  }
+}
+
+.special-hire-step1-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.special-hire-sidebar-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.sidebar-vehicle-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--info-soft);
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(22, 119, 255, 0.12);
+}
+
+.sidebar-vehicle-preview img {
+  width: 62px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidebar-vehicle-preview h4 {
+  margin: 2px 0 0 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--brand-blue-dark);
+}
+
+.sidebar-vehicle-preview .price-tag {
+  font-size: 0.84rem;
+  color: var(--success);
+  font-weight: 850;
+  display: block;
+  margin-top: 2px;
+}
+
+.sidebar-qr-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--page);
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px dashed var(--border-strong);
+}
+
+.qr-visual-box {
+  width: 52px;
+  height: 52px;
+  background: white;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  color: var(--brand-blue-dark);
+}
+
+.qr-copy strong {
+  display: block;
+  font-size: 0.84rem;
+  color: var(--brand-blue-dark);
+  font-weight: 800;
+}
+
+.qr-copy span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--slate);
+  line-height: 1.35;
+  margin-top: 2px;
 }
 
 /* Route Interchange Layout (Stacked boxes with right-floating vertical swap button) */
