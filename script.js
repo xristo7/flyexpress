@@ -1265,7 +1265,7 @@ function renderBook() {
           const isExpanded = state.selectedRoute === rc.key;
 
           return `
-            <div class="popular-place-card ${isExpanded ? 'is-expanded' : ''}" style="border-radius: 24px; overflow: hidden; background: white; border: 5px solid #ffffff; outline: 1px solid var(--border); box-shadow: 0 10px 28px rgba(0,0,0,0.1); transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);">
+            <div class="popular-place-card ${isExpanded ? 'is-expanded' : ''}" style="border-radius: 24px; overflow: hidden; background: white; border: 5px solid #ffffff; box-shadow: 0 14px 36px rgba(0, 0, 0, 0.11), 0 4px 12px rgba(0, 0, 0, 0.05); transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);">
               
               <!-- Hero Photo Visual Area -->
               <div class="popular-place-hero" data-action="select-route-card-step" data-route="${rc.key}" role="button" tabindex="0" style="position: relative; height: 230px; background-image: url('${img}'); background-size: cover; background-position: center; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; padding: 16px;">
