@@ -178,7 +178,7 @@ const driversData = {
     km: '58,400',
     associationTime: '2 years 4 months',
     bio: 'Friendly, professional driver from Uganda with over 2 years driving with the Association. Highly rated for punctuality, route knowledge along the Entebbe-Kampala Expressway, and safe handling of parcels.',
-    vehicle: 'Toyota HiAce (Fly Express Van)',
+    vehicle: 'Commuter (14)',
     plate: 'UBM 245K',
     color: 'White & Blue',
     status: 'driving', // active on road
@@ -196,14 +196,14 @@ const driversData = {
     routes: '1,280',
     km: '48,200',
     associationTime: '2 years 0 months',
-    bio: 'Experienced passenger van driver on the Kampala-Entebbe corridor. Committed to passenger safety and comfort.',
-    vehicle: 'Highroof',
+    bio: 'Experienced passenger driver on the Kampala-Entebbe corridor. Committed to passenger safety and comfort.',
+    vehicle: 'Highroof (18)',
     plate: 'UBM 245K',
     color: 'White & Blue',
     status: 'idle',
     compliments: ['Gentle Driver', 'Helpful', 'Polite'],
     reviews: [
-      { author: 'Andrew O.', rating: 5, date: '2 days ago', comment: 'Friendly and keeps the van well ventilated.' },
+      { author: 'Andrew O.', rating: 5, date: '2 days ago', comment: 'Friendly and keeps the vehicle well ventilated.' },
       { author: 'Jack B.', rating: 4, date: '5 days ago', comment: 'Safe driving but started 5 mins late.' }
     ]
   },
@@ -216,11 +216,11 @@ const driversData = {
     km: '36,500',
     associationTime: '1 year 6 months',
     bio: 'Reliable and friendly driver. Enjoys interacting with commuters and keeping a clean vehicle.',
-    vehicle: 'Highroof',
+    vehicle: 'Highroof (18)',
     plate: 'UBP 318F',
     color: 'White & Blue',
     status: 'idle',
-    compliments: ['Great Music', 'Clean Van', 'Friendly'],
+    compliments: ['Great Music', 'Clean Vehicle', 'Friendly'],
     reviews: [
       { author: 'Maria N.', rating: 5, date: 'Yesterday', comment: 'Great playlist playing during the travel, loved the music!' },
       { author: 'Brian L.', rating: 5, date: '4 days ago', comment: 'Very clean seats and polite driver.' }
@@ -406,7 +406,7 @@ const navItems = [
 ];
 
 const screenTitles = {
-  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Van Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express', tracking: 'Tracking', 'search-results': 'Search Results', 'available-vans': 'Available Departures'
+  home: 'Home', book: 'Book a Travel', 'special-hire': 'Special Hire', 'trip-details': 'Travel Details', passengers: 'Passengers & Capacity', returns: 'Return Tickets', luggage: 'Luggage', checkout: 'Checkout', success: 'Booking Confirmed', ticket: 'Digital Ticket', trips: 'My Travels', live: 'Live Travel', wallet: 'Fly Express Wallet', parcel: 'Send a Parcel', 'parcel-receipt': 'Parcel Receipt', 'trackparcel-list': 'Track Parcel', trackparcel: 'Live tracking', 'parcel-status': '#964201832-DL', 'driver-profile': 'Driver profile', 'driver-chat': 'Chat with Driver', 'driver-call': 'Call Driver', offers: 'Offers', notifications: 'Notifications', support: 'Help and Support', profile: 'Profile & Settings', about: 'About Fly Express', tracking: 'Tracking', 'search-results': 'Search Results', 'available-vans': 'Available Departures'
 };
 
 const onboardingSlides = [
@@ -1741,10 +1741,10 @@ function renderTripResult(trip) {
     <div class="taxi-card-main-layout">
       <!-- LEFT COLUMN -->
       <div class="taxi-card-left-col">
-        <span class="taxi-van-type-label">${trip.vehicle} (${capacity} seats)</span>
+        <span class="taxi-van-type-label">${trip.vehicle} (${capacity})</span>
         <div class="taxi-van-img-wrapper">
           <div class="taxi-van-img-box">
-            <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Van" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
+            <img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express Vehicle" class="${!hasEnoughSeats ? 'is-grayscale' : ''}">
           </div>
           <!-- Ugandan Plate -->
           <div class="ug-plate-badge">
@@ -2238,7 +2238,7 @@ function renderLiveTrip() {
       </div>
       <aside class="grid">
         <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express passenger van" style="padding:4px;"></div><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
+        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express passenger vehicle" style="padding:4px;"></div><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
         <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
         <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
       </aside>
