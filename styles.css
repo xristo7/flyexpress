@@ -2078,26 +2078,43 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 }
 
 /* Back arrow replaces logo position in topbar on mobile */
+#back-button,
+button[data-action="go-back"] {
+  background: #ffffff !important;
+  color: var(--brand-blue-dark) !important;
+  border: 1px solid rgba(8, 49, 83, 0.14) !important;
+  box-shadow: 0 3px 10px rgba(8, 49, 83, 0.09) !important;
+  border-radius: 50% !important;
+}
+
+#back-button svg,
+#back-button i,
+button[data-action="go-back"] svg,
+button[data-action="go-back"] i {
+  color: var(--brand-blue-dark) !important;
+}
+
 @media (max-width: 900px) {
   #back-button:not(.is-hidden) {
     position: relative !important;
     top: auto !important;
     left: auto !important;
     z-index: auto !important;
-    background: transparent !important;
-    color: var(--text) !important;
-    box-shadow: none !important;
-    border-radius: 12px !important;
-    width: 38px !important;
-    height: 38px !important;
-    display: grid !important;
-    place-items: center !important;
-    border: 1px solid var(--border) !important;
+    background: #ffffff !important;
+    color: var(--brand-blue-dark) !important;
+    box-shadow: 0 3px 10px rgba(8, 49, 83, 0.09) !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid rgba(8, 49, 83, 0.14) !important;
   }
   #back-button:not(.is-hidden):hover {
     border-color: var(--brand-blue) !important;
     color: var(--brand-blue) !important;
-    background: var(--info-soft) !important;
+    background: #ffffff !important;
   }
 }
 
