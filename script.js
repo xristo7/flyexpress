@@ -721,6 +721,8 @@ function renderAuth() {
     </div>`;
 
   let card = '';
+  const googleBtnSvg = `<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l-.02.13 2.67 2.07.18.02c1.7-1.57 2.69-3.88 2.69-6.64z" fill="#4285F4"/><path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.72l-.14.01-2.73 2.11-.04.13C2.45 16.03 5.49 18 9 18z" fill="#34A853"/><path d="M3.87 10.8c-.2-.58-.31-1.2-.31-1.8s.11-1.22.31-1.8v-.14L1.1 4.92l-.12.06C.35 6.27 0 7.59 0 9s.35 2.73.98 4.02l2.89-2.22z" fill="#FBBC05"/><path d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.49 0 2.45 1.97.98 4.98l2.89 2.24C4.59 5.07 6.62 3.58 9 3.58z" fill="#EA4335"/></svg>`;
+
   if (state.authView === 'signin') {
     card = `
       <div class="auth-card">
@@ -732,8 +734,11 @@ function renderAuth() {
           <div class="input-group"><span class="input-prefix">+256</span><input id="signin-phone" inputmode="tel" value="772 345 678" aria-describedby="phone-help"></div>
           <small id="phone-help" class="field-help">Demo only. No SMS will be sent.</small>
         </div>
-        <div class="button-row" style="margin-top:18px"><button class="button button--primary w-full" type="button" data-action="continue-signin">Continue</button></div>
-        <button class="button button--ghost w-full" style="margin-top:10px" type="button" data-action="continue-guest"><i data-lucide="user-round"></i>Continue as Guest</button>
+        <div class="button-row" style="margin-top:16px"><button class="button button--primary w-full" type="button" data-action="continue-signin">Continue</button></div>
+        <button class="button button--secondary w-full" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; background: white; border: 1px solid var(--border-strong); color: var(--charcoal); font-weight: 700; height: 44px; border-radius: 14px;" type="button" data-action="continue-google">
+          ${googleBtnSvg} Continue with Google
+        </button>
+        <button class="button button--ghost w-full" style="margin-top:8px" type="button" data-action="continue-guest"><i data-lucide="user-round"></i>Continue as Guest</button>
         <p class="center text-small" style="margin:16px 0 0">New passenger? <button class="text-button" type="button" data-action="show-registration">Create Account</button></p>
         <p class="privacy-note">By continuing, you acknowledge this is a front-end presentation prototype. It does not authenticate, store data, or contact a mobile network.</p>
       </div>`;
@@ -751,20 +756,46 @@ function renderAuth() {
         <button class="button button--primary w-full" style="margin-top:18px" type="button" data-action="verify-otp">Verify and Continue</button>
         <div class="button-row" style="justify-content:space-between;margin-top:10px"><button class="text-button" type="button" data-action="change-number">Change number</button><button class="text-button" type="button" data-action="resend-otp">Resend in <span id="otp-countdown">30</span>s</button></div>
       </div>`;
+  } else if (state.authView === 'create-verify') {
+    card = `
+      <div class="auth-card">
+        <button class="text-button" type="button" data-action="show-registration">← Back to details</button>
+        <p class="eyebrow">Step 2 of 2 · Verification & Security</p>
+        <h2>Verify Account & Set PIN</h2>
+        <div class="notice" style="background: var(--info-soft); border-left: 4px solid var(--brand-blue); padding: 12px 14px; border-radius: 12px; margin: 12px 0 16px; font-size: 0.86rem; color: var(--brand-blue-dark); display: flex; align-items: flex-start; gap: 10px;">
+          <i data-lucide="bell-ring" style="width: 20px; height: 20px; flex-shrink: 0; color: var(--brand-blue); margin-top: 2px;"></i>
+          <div>
+            <strong>Verification message sent!</strong>
+            <div style="font-size: 0.8rem; color: var(--slate); margin-top: 2px;">We sent a verification SMS to <strong>+256 772 345 678</strong>.</div>
+          </div>
+        </div>
+        <div class="field field--full" style="margin-bottom: 14px;">
+          <label for="reg-pin" style="font-weight: 700;">Set your 4-digit Wallet PIN</label>
+          <input id="reg-pin" inputmode="numeric" maxlength="4" value="2580" type="password" style="font-size: 1.25rem; letter-spacing: 0.3em; text-align: center; font-weight: 800; border-radius: 12px;">
+          <small class="field-help">Used to authorize Fly Express Wallet transactions.</small>
+        </div>
+        <p class="muted text-small" style="margin-bottom: 8px; font-weight: 600;">6-Digit SMS Verification Code:</p>
+        <div class="otp-grid" aria-label="One-time password">
+          ${[1,2,3,4,5,6].map((n, i) => `<input class="otp-input" maxlength="1" inputmode="numeric" value="${i + 1}" aria-label="Digit ${n}">`).join('')}
+        </div>
+        <button class="button button--primary w-full" style="margin-top:18px" type="button" data-action="create-account">Verify &amp; Create Account</button>
+      </div>`;
   } else {
     card = `
       <div class="auth-card">
         <button class="text-button" type="button" data-action="auth-back">← Back</button>
-        <p class="eyebrow">Passenger registration</p>
+        <p class="eyebrow">Step 1 of 2 · Passenger registration</p>
         <h2>Create account preview</h2>
         <div class="form-grid">
           <div class="field field--full"><label for="reg-name">Full name</label><input id="reg-name" value="Christo I."></div>
           <div class="field field--full"><label for="reg-phone">Telephone number</label><input id="reg-phone" value="+256 772 345 678"></div>
           <div class="field field--full"><label for="reg-email">Email address <span class="muted">(optional)</span></label><input id="reg-email" type="email" value="christo.i@example.com"></div>
-          <div class="field field--full"><label for="reg-pin">Four-digit wallet PIN</label><input id="reg-pin" inputmode="numeric" maxlength="4" value="2580" type="password"></div>
         </div>
+        <button class="button button--secondary w-full" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; background: white; border: 1px solid var(--border-strong); color: var(--charcoal); font-weight: 700; height: 44px; border-radius: 14px;" type="button" data-action="continue-google">
+          ${googleBtnSvg} Sign up with Google
+        </button>
         <label class="checkbox-row" style="margin-top:14px"><input type="checkbox" checked><span>I accept the demonstration terms and conditions.</span></label>
-        <button class="button button--primary w-full" style="margin-top:18px" type="button" data-action="create-account">Create Demo Account</button>
+        <button class="button button--primary w-full" style="margin-top:18px" type="button" data-action="proceed-reg-verification">Continue to Verification →</button>
       </div>`;
   }
   root.innerHTML = `<div class="auth-grid">${copy}${card}</div>`;
@@ -4371,6 +4402,8 @@ function handleClick(event) {
     'onboarding-back': () => { state.onboardingIndex = Math.max(0, state.onboardingIndex - 1); renderOnboarding(); },
     'onboarding-go': () => { state.onboardingIndex = Number(actionTrigger.dataset.index); renderOnboarding(); },
     'continue-signin': () => { state.authView = 'otp'; renderAuth(); },
+    'continue-google': () => { showLoading('Authenticating with Google…', () => enterApp('Signed in with Google as Christo I.')); },
+    'proceed-reg-verification': () => { state.authView = 'create-verify'; renderAuth(); toast('Verification code sent via SMS to +256 772 345 678.', 'info'); },
     'continue-guest': () => enterApp('Guest preview opened. No account was created.'),
     'show-registration': () => { state.authView = 'register'; renderAuth(); },
     'auth-back': () => { state.authView = 'signin'; renderAuth(); },
