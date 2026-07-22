@@ -1277,7 +1277,7 @@ function renderBook() {
                   <span style="background: rgba(255, 255, 255, 0.94); color: var(--brand-blue-dark); font-weight: 850; font-size: 0.85rem; padding: 6px 14px; border-radius: 12px; backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                     ${rc.price}
                   </span>
-                  <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction" onclick="event.stopPropagation();" style="position: absolute; top: 0px; right: 0px; z-index: 10; width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.55); color: white; border: 1px solid rgba(255,255,255,0.35); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px);">
+                  <button class="route-card__flip-btn" type="button" data-action="flip-route-direction" data-route="${rc.key}" title="Swap direction" aria-label="Swap direction" style="position: absolute; top: 0px; right: 0px; z-index: 10; width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.55); color: white; border: 1px solid rgba(255,255,255,0.35); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px);">
                     <i data-lucide="arrow-down-up" style="width: 16px; height: 16px;"></i>
                   </button>
                 </div>
