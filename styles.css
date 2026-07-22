@@ -2852,26 +2852,53 @@ body.drawer-open .home-redesign .mobile-nav {
   display: none !important;
 }
 
-/* Header customization when tracking screens are active */
-body[data-active-screen="trackparcel"] .mobile-brand,
-body[data-active-screen="trackparcel"] .topbar__eyebrow,
-body[data-active-screen="trackparcel"] .topbar__actions .connection-pill,
-body[data-active-screen="trackparcel"] .topbar__actions .icon-button,
-body[data-active-screen="trackparcel"] .topbar__actions .hamburger-menu-btn,
-body[data-active-screen="trackparcel"] .topbar__actions .desktop-profile-btn,
-body[data-active-screen="parcel-status"] .mobile-brand,
-body[data-active-screen="parcel-status"] .topbar__eyebrow,
-body[data-active-screen="parcel-status"] .topbar__actions .connection-pill,
-body[data-active-screen="parcel-status"] .topbar__actions .icon-button:not(#topbar-share-button),
-body[data-active-screen="parcel-status"] .topbar__actions .hamburger-menu-btn,
-body[data-active-screen="parcel-status"] .topbar__actions .desktop-profile-btn,
-body[data-active-screen="driver-profile"] .mobile-brand,
-body[data-active-screen="driver-profile"] .topbar__eyebrow,
-body[data-active-screen="driver-profile"] .topbar__actions .connection-pill,
-body[data-active-screen="driver-profile"] .topbar__actions .icon-button,
-body[data-active-screen="driver-profile"] .topbar__actions .hamburger-menu-btn,
-body[data-active-screen="driver-profile"] .topbar__actions .desktop-profile-btn {
+/* Header customization when tracking screens are active on mobile */
+@media (max-width: 979px) {
+  body[data-active-screen="trackparcel"] .mobile-brand,
+  body[data-active-screen="trackparcel"] .topbar__eyebrow,
+  body[data-active-screen="trackparcel"] .topbar__actions .connection-pill,
+  body[data-active-screen="trackparcel"] .topbar__actions .icon-button,
+  body[data-active-screen="trackparcel"] .topbar__actions .hamburger-menu-btn,
+  body[data-active-screen="parcel-status"] .mobile-brand,
+  body[data-active-screen="parcel-status"] .topbar__eyebrow,
+  body[data-active-screen="parcel-status"] .topbar__actions .connection-pill,
+  body[data-active-screen="parcel-status"] .topbar__actions .icon-button,
+  body[data-active-screen="parcel-status"] .topbar__actions .hamburger-menu-btn,
+  body[data-active-screen="driver-profile"] .mobile-brand,
+  body[data-active-screen="driver-profile"] .topbar__eyebrow,
+  body[data-active-screen="driver-profile"] .topbar__actions .connection-pill,
+  body[data-active-screen="driver-profile"] .topbar__actions .icon-button,
+  body[data-active-screen="driver-profile"] .topbar__actions .hamburger-menu-btn {
+    display: none !important;
+  }
+}
+
+/* ─── Global Topbar Visibility Rules ─── */
+#topbar-share-button {
   display: none !important;
+}
+
+body:not([data-active-screen="home"]) .mobile-brand {
+  display: none !important;
+}
+
+@media (max-width: 979px) {
+  .desktop-profile-btn {
+    display: none !important;
+  }
+}
+
+@media (min-width: 980px) {
+  .hamburger-menu-btn,
+  .side-drawer,
+  .side-drawer__backdrop {
+    display: none !important;
+  }
+
+  .topbar .desktop-profile-btn,
+  .topbar .icon-button[data-screen="notifications"] {
+    display: flex !important;
+  }
 }
 
 body[data-active-screen="trackparcel"] .topbar,
