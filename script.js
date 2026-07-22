@@ -582,7 +582,12 @@ function initOnboardingSwipe() {
       if ((state.onboardingIndex === 0 && diffX > 0) || (state.onboardingIndex === 2 && diffX < 0)) {
         clamped = diffX * 0.25;
       }
-      content.style.transform = `translateX(${clamped}px)`;
+      const progress = Math.min(1, Math.abs(clamped) / 320);
+      const scale = Math.max(0.85, 1 - progress * 0.15);
+      const opacity = Math.max(0.2, 1 - progress * 0.75);
+
+      content.style.transform = `translateX(${clamped}px) scale(${scale})`;
+      content.style.opacity = opacity;
     }
   };
 
@@ -591,10 +596,6 @@ function initOnboardingSwipe() {
     isDragging = false;
     const diffX = currentX - startX;
     const content = getContent();
-    if (content) {
-      content.style.transition = 'transform 0.28s cubic-bezier(0.25, 1, 0.5, 1)';
-      content.style.transform = 'translateX(0)';
-    }
 
     if (diffX < -45) {
       if (state.onboardingIndex < onboardingSlides.length - 1) {
@@ -607,6 +608,12 @@ function initOnboardingSwipe() {
       if (state.onboardingIndex > 0) {
         state.onboardingIndex -= 1;
         renderOnboarding();
+      }
+    } else {
+      if (content) {
+        content.style.transition = 'transform 0.28s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.28s ease';
+        content.style.transform = 'translateX(0) scale(1)';
+        content.style.opacity = '1';
       }
     }
   };
@@ -625,6 +632,10 @@ function renderOnboarding() {
   const content = $('#onboarding-content');
   if (!content) return;
 
+  content.style.transition = 'none';
+  content.style.transform = '';
+  content.style.opacity = '1';
+
   content.innerHTML = `
     <article class="onboarding-slide">
       <div class="onboarding-image-container">
@@ -632,13 +643,6 @@ function renderOnboarding() {
       </div>
       <h2 style="margin-top: 24px; font-weight: 850;">${slide.title}</h2>
       <p style="margin-top: 12px; color: var(--slate); line-height: 1.5; font-size: 1rem;">${slide.message}</p>
-      
-      ${state.onboardingIndex < 2 ? `
-        <div class="mobile-swipe-hint" style="margin-top: 14px; font-size: 0.78rem; color: var(--slate); opacity: 0.75; display: flex; align-items: center; justify-content: center; gap: 6px;">
-          <i data-lucide="hand" style="width: 14px; height: 14px; color: var(--brand-blue);"></i>
-          <span>Swipe left to continue</span>
-        </div>
-      ` : ''}
 
       ${state.onboardingIndex === 2 ? `
         <div class="onboarding-last-buttons">
