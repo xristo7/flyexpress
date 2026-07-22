@@ -5811,7 +5811,7 @@ function renderAvailableVansScreen() {
               <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
               <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%);"></div>
               <span style="position: absolute; bottom: 12px; left: 12px; font-size: 0.72rem; font-weight: 750; color: white; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; backdrop-filter: blur(4px); display: inline-flex; align-items: center; gap: 4px;">
-                <i data-lucide="info" style="width: 12px; height: 12px;"></i> ${trip.vehicle} · ${trip.countdown}
+                <i data-lucide="info" style="width: 12px; height: 12px;"></i> ${trip.vehicle} ${idx === 0 ? '· Boarding Now' : `· ${trip.countdown}`}
               </span>
               ${idx === 0 ? `
                 <span style="position: absolute; top: 12px; right: 12px; background: var(--brand-blue); color: white; font-size: 0.68rem; text-align: center; font-weight: 850; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; box-shadow: var(--shadow-sm);">BOARDING</span>
@@ -5838,18 +5838,14 @@ function renderAvailableVansScreen() {
                 </span>
               </div>
 
-              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--page); padding: 10px 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(0,0,0,0.02);">
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; background: var(--page); padding: 10px 16px; border-radius: 12px; text-align: center; border: 1px solid rgba(0,0,0,0.02);">
                 <div>
                   <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Boarding</span>
-                  <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.depart}</strong>
+                  <strong style="font-size: 0.92rem; color: ${idx === 0 ? 'var(--brand-blue-dark)' : 'var(--charcoal)'}; font-weight: 850;">${idx === 0 ? 'Now' : trip.depart}</strong>
                 </div>
                 <div>
                   <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Duration</span>
-                  <strong style="font-size: 0.9rem; color: var(--charcoal); font-weight: 800;">${trip.duration}</strong>
-                </div>
-                <div>
-                  <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 750; display: block;">Plate</span>
-                  <span class="van-plate-tag" style="display: inline-block; padding: 2px 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #000; border-radius: 4px; background: #fff; color: #000; margin-top: 1px;">${trip.plate}</span>
+                  <strong style="font-size: 0.92rem; color: var(--charcoal); font-weight: 800;">${trip.duration}</strong>
                 </div>
               </div>
 
