@@ -2873,15 +2873,13 @@ function renderTransaction(tx) {
 function renderParcelBooking() {
   const steps = ['Sender', 'Recipient', 'Parcel', 'Delivery'];
   const isWizardStep = state.parcelStep <= 4;
-  const pickupDisp = state.parcel.pickupLocation ? (state.parcel.pickupLocation === '__other__' ? (state.parcel.customPickup || 'Custom') : state.parcel.pickupLocation) : '';
-  const dropoffDisp = state.parcel.dropoffLocation ? (state.parcel.dropoffLocation === '__other__' ? (state.parcel.customDropoff || 'Custom') : state.parcel.dropoffLocation) : '';
 
   return `
     ${screenHead('Send a parcel', 'Book a traceable stage-to-stage parcel delivery using demonstration data.')}
     
     ${isWizardStep ? `
       <!-- Horizontal progress bar for desktop -->
-      <div class="flow-progress" aria-label="Parcel booking progress">
+      <div class="flow-progress" aria-label="Parcel booking progress" style="max-width: 700px; margin: 0 auto 20px;">
         ${steps.map((label, index) => `
           <div class="flow-step ${state.parcelStep === index + 1 ? 'is-active' : state.parcelStep > index + 1 ? 'is-complete' : ''}">
             <span class="flow-step__number">${state.parcelStep > index + 1 ? '<i data-lucide="check"></i>' : index + 1}</span>
@@ -2890,49 +2888,18 @@ function renderParcelBooking() {
         `).join('')}
       </div>
       
-      <div class="parcel-booking-flow-container">
-        <!-- Vertical rail progress step indicator for mobile -->
-        <div class="vertical-step-rail" aria-hidden="true">
-          ${steps.map((label, index) => {
-            const isActive = state.parcelStep === index + 1;
-            const isComplete = state.parcelStep > index + 1;
-            const statusClass = isActive ? 'is-active' : isComplete ? 'is-complete' : '';
-            return `
-              <div class="rail-step ${statusClass}">
-                <span class="rail-step__number">${isComplete ? '<i data-lucide="check" style="width:14px;height:14px;"></i>' : index + 1}</span>
-                <span class="rail-step__label">${label}</span>
-              </div>
-            `;
-          }).join('')}
+      <div class="parcel-booking-flow-container" style="max-width: 700px; margin: 0 auto;">
+        <div class="card">${renderParcelStep()}</div>
+        <div class="notice" style="margin-top: 16px;">
+          <i data-lucide="package-check"></i>
+          <div>
+            <strong>Parcel safety</strong>
+            <div>Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div>
+          </div>
         </div>
-        
-        <section class="grid grid--sidebar parcel-booking-main-grid">
-          <div class="card">${renderParcelStep()}</div>
-          <aside class="grid">
-            <article class="card">
-              <p class="section-kicker">Live estimate</p>
-              <h2>${state.parcelDelivery}</h2>
-              <div class="detail-list">
-                <div class="detail-row"><span>Origin stage</span><strong>${escapeHtml(state.parcel.origin)}${pickupDisp ? ` · ${escapeHtml(pickupDisp)}` : ''}</strong></div>
-                <div class="detail-row"><span>Destination stage</span><strong>${escapeHtml(state.parcel.destination)}${dropoffDisp ? ` · ${escapeHtml(dropoffDisp)}` : ''}</strong></div>
-                <div class="detail-row"><span>Category</span><strong>${state.parcelCategory}</strong></div>
-                <div class="detail-row"><span>Departure</span><strong>${escapeHtml(state.parcel.departure || 'Next available vehicle')}</strong></div>
-                <div class="detail-row"><span>Delivery time</span><strong>${state.parcelDelivery === 'Priority Stage-to-Stage' ? 'Next eligible departure' : state.parcelDelivery === 'Hold for Collection' ? '1–2 hours, then held' : state.parcelDelivery === 'Future Last-Mile Delivery' ? 'Same-day concept preview' : '1–2 hours'}</strong></div>
-                <div class="detail-row"><span>Estimated price</span><strong>${formatUGX(parcelPrice())}</strong></div>
-              </div>
-            </article>
-            <div class="notice">
-              <i data-lucide="package-check"></i>
-              <div>
-                <strong>Parcel safety</strong>
-                <div>Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div>
-              </div>
-            </div>
-          </aside>
-        </section>
       </div>
     ` : `
-      <div class="parcel-checkout-flow-container">
+      <div class="parcel-checkout-flow-container" style="max-width: 700px; margin: 0 auto;">
         ${renderParcelStep()}
       </div>
     `}
@@ -2949,11 +2916,11 @@ function renderParcelStep() {
       <div class="form-grid">
         <div class="field"><label for="parcel-sender-name">Full name</label><input id="parcel-sender-name" data-parcel-field="senderName" value="${escapeHtml(state.parcel.senderName)}"></div>
         <div class="field"><label for="parcel-sender-phone">Telephone number</label><input id="parcel-sender-phone" data-parcel-field="senderPhone" value="${escapeHtml(state.parcel.senderPhone)}"></div>
-        <div class="field field--full"><label for="parcel-pickup">Origin stage</label><select id="parcel-pickup" data-parcel-field="origin">${appData.routes.map(route => optionMarkup(route, state.parcel.origin)).join('')}</select></div>
+        <div class="field"><label for="parcel-pickup">Origin stage</label><select id="parcel-pickup" data-parcel-field="origin">${appData.routes.map(route => optionMarkup(route, state.parcel.origin)).join('')}</select></div>
         
         <!-- Pickup location along corridor -->
-        <div class="field field--full">
-          <label for="parcel-pickup-location">Specific pickup point along corridor (Optional)</label>
+        <div class="field">
+          <label for="parcel-pickup-location">Specific pickup point (Optional)</label>
           <select id="parcel-pickup-location" data-parcel-field="pickupLocation">
             <option value="" ${!state.parcel.pickupLocation ? 'selected' : ''}>Standard Stage Pickup (${escapeHtml(state.parcel.origin)})</option>
             ${appData.routes.filter(r => r !== state.parcel.origin).map(r => optionMarkup(r, state.parcel.pickupLocation)).join('')}
@@ -2961,7 +2928,7 @@ function renderParcelStep() {
           </select>
         </div>
         ${state.parcel.pickupLocation === '__other__' ? `
-          <div class="field field--full" style="margin-top:-8px; animation: slideDown 0.2s ease;">
+          <div class="field field--full" style="animation: slideDown 0.2s ease;">
             <label for="parcel-custom-pickup">Specify your pickup location</label>
             <input id="parcel-custom-pickup" data-parcel-field="customPickup" placeholder="e.g. Total Petrol Station, Entebbe Road" value="${escapeHtml(state.parcel.customPickup || '')}">
           </div>
@@ -2976,11 +2943,11 @@ function renderParcelStep() {
       <div class="form-grid">
         <div class="field"><label for="parcel-recipient-name">Full name</label><input id="parcel-recipient-name" data-parcel-field="recipientName" value="${escapeHtml(state.parcel.recipientName)}"></div>
         <div class="field"><label for="parcel-recipient-phone">Telephone number</label><input id="parcel-recipient-phone" data-parcel-field="recipientPhone" value="${escapeHtml(state.parcel.recipientPhone)}"></div>
-        <div class="field field--full"><label for="parcel-destination">Destination stage</label><select id="parcel-destination" data-parcel-field="destination">${appData.routes.slice().reverse().map(route => optionMarkup(route, state.parcel.destination)).join('')}</select></div>
+        <div class="field"><label for="parcel-destination">Destination stage</label><select id="parcel-destination" data-parcel-field="destination">${appData.routes.slice().reverse().map(route => optionMarkup(route, state.parcel.destination)).join('')}</select></div>
         
         <!-- Drop-off location along corridor -->
-        <div class="field field--full">
-          <label for="parcel-dropoff-location">Specific drop-off point along corridor (Optional)</label>
+        <div class="field">
+          <label for="parcel-dropoff-location">Specific drop-off point (Optional)</label>
           <select id="parcel-dropoff-location" data-parcel-field="dropoffLocation">
             <option value="" ${!state.parcel.dropoffLocation ? 'selected' : ''}>Standard Stage Drop-off (${escapeHtml(state.parcel.destination)})</option>
             ${appData.routes.filter(r => r !== state.parcel.destination).map(r => optionMarkup(r, state.parcel.dropoffLocation)).join('')}
@@ -2988,7 +2955,7 @@ function renderParcelStep() {
           </select>
         </div>
         ${state.parcel.dropoffLocation === '__other__' ? `
-          <div class="field field--full" style="margin-top:-8px; animation: slideDown 0.2s ease;">
+          <div class="field field--full" style="animation: slideDown 0.2s ease;">
             <label for="parcel-custom-dropoff">Specify your drop-off location</label>
             <input id="parcel-custom-dropoff" data-parcel-field="customDropoff" placeholder="e.g. Shell Petrol Station, Jinja Road" value="${escapeHtml(state.parcel.customDropoff || '')}">
           </div>
