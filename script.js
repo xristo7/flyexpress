@@ -2751,7 +2751,7 @@ function renderSpecialHire() {
   };
   
   if (step === 1) {
-    const chosenVehicle = appData.specialHireVehicles.find(v => v.id === sh.vehicleId) || appData.specialHireVehicles[0];
+    const chosenVehicle = appData.specialHireVehicles.find(v => v.id === (sh.vehicleType || sh.vehicleId)) || appData.specialHireVehicles[0];
 
     return `
       ${screenHead('Private Charter & Special Hire', 'Step 1 of 3: Choose your vehicle and destination.')}
@@ -2873,19 +2873,8 @@ function renderSpecialHire() {
               `}
             </div>
 
-            <!-- Modern QR Code Card -->
-            <div class="sidebar-qr-card" style="margin-top: 4px;">
-              <div class="qr-visual-box">
-                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="9" y="9" width="2" height="2"></rect><rect x="13" y="9" width="2" height="2"></rect><rect x="9" y="13" width="2" height="2"></rect></svg>
-              </div>
-              <div class="qr-copy">
-                <strong>Charter Booking Pass QR</strong>
-                <span>Scan to view charter details or sync on mobile</span>
-              </div>
-            </div>
-
             <!-- Primary Action CTA Button -->
-            <button class="button button--primary w-full" type="button" data-action="special-hire-next" style="margin-top: 6px; padding: 12px; font-weight: 800; font-size: 0.95rem;">
+            <button class="button button--primary w-full" type="button" data-action="special-hire-next" style="margin-top: 14px; padding: 12px; font-weight: 800; font-size: 0.95rem;">
               Continue to Details →
             </button>
           </div>
@@ -2895,7 +2884,7 @@ function renderSpecialHire() {
   }
   
   if (step === 2) {
-    const chosenVehicle = appData.specialHireVehicles.find(v => v.id === sh.vehicleId) || appData.specialHireVehicles[0];
+    const chosenVehicle = appData.specialHireVehicles.find(v => v.id === (sh.vehicleType || sh.vehicleId)) || appData.specialHireVehicles[0];
     const days = Math.max(1, Number(sh.durationDays) || 1);
     const driverSupplement = sh.driverType === 'tour' ? 30000 : 0;
     const subtotal = (chosenVehicle.dailyRate + driverSupplement) * days;
@@ -5331,6 +5320,7 @@ function handleClick(event) {
     'submit-lost-item': () => { closeModal(); toast('Lost-property report LP-1842 submitted.', 'success'); },
     'select-hire-vehicle': () => {
       state.specialHire.vehicleType = value;
+      state.specialHire.vehicleId = value;
       renderCurrentScreen();
     },
     'select-hire-dest-type': () => {
