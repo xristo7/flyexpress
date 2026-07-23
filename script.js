@@ -5597,9 +5597,25 @@ function updateBackgroundInert() {
   }
 }
 
-function openModal(title, body, footer = '', wide = false) {
+function openModal(title, body, footer = '', wide = false, customClass = '') {
   if (!$('#modal-root [role="dialog"]')) modalOpener = document.activeElement;
-  $('#modal-root').innerHTML = `<div class="modal-backdrop" data-action="close-modal"><section class="modal ${wide ? 'modal--wide' : ''}" role="dialog" aria-modal="true" aria-labelledby="modal-title"><header class="modal__head"><div><p class="eyebrow">Fly Express Prototype</p><h2 id="modal-title">${title}</h2></div><button class="icon-button icon-button--plain" type="button" data-action="close-modal" aria-label="Close dialog"><i data-lucide="x"></i></button></header><div>${body}</div>${footer ? `<footer class="modal__foot">${footer}</footer>` : ''}</section></div>`;
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal">
+      <section class="modal ${wide ? 'modal--wide' : ''} ${customClass}" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="event.stopPropagation()">
+        <header class="modal__head">
+          <div>
+            <span class="modal__eyebrow"><i data-lucide="sparkles"></i> Fly Express</span>
+            <h2 id="modal-title">${title}</h2>
+          </div>
+          <button class="modal__close-btn" type="button" data-action="close-modal" aria-label="Close dialog">
+            <i data-lucide="x"></i>
+          </button>
+        </header>
+        <div class="modal__body">${body}</div>
+        ${footer ? `<footer class="modal__foot">${footer}</footer>` : ''}
+      </section>
+    </div>
+  `;
   updateBackgroundInert();
   refreshIcons();
   setTimeout(() => $('.modal button, .modal input, .modal select')?.focus(), 20);
