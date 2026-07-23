@@ -1633,6 +1633,14 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   border: 1px solid rgba(8,27,51,.08);
   box-shadow: 0 28px 60px rgba(8,27,51,.18);
 }
+.smart-review__header-block {
+  margin-bottom: 16px;
+}
+@media (max-width: 768px) {
+  .smart-review__header-block {
+    text-align: center;
+  }
+}
 
 /* Notice Text Outside Sheet (Native Text on Page Background) */
 .smart-review__notice-outside {
