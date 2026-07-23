@@ -4299,8 +4299,8 @@ function initTripMap() {
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(tripReviewMap);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(tripReviewMap);
   
-  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).addTo(tripReviewMap);
-  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).addTo(tripReviewMap);
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#10b981', fillOpacity: 1, radius: 9, weight: 4 }).addTo(tripReviewMap);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#ef4444', fillOpacity: 1, radius: 9, weight: 4 }).addTo(tripReviewMap);
   
   if (state.activeTrip) {
     const markerIdx = state.activeTrip.markerIndex !== undefined ? state.activeTrip.markerIndex : 0;
@@ -4312,7 +4312,7 @@ function initTripMap() {
   const fitMap = () => {
     if (!tripReviewMap || !target.isConnected) return;
     tripReviewMap.invalidateSize({ animate: false, pan: false });
-    tripReviewMap.fitBounds(bounds, { animate: false, paddingTopLeft: [40, 86], paddingBottomRight: [40, 72] });
+    tripReviewMap.fitBounds(bounds, { animate: false, padding: [20, 20] });
   };
   fitMap();
   requestAnimationFrame(() => requestAnimationFrame(fitMap));
@@ -4350,14 +4350,14 @@ function initBookingStep2Map() {
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(bookingStep2Map);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(bookingStep2Map);
   
-  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).addTo(bookingStep2Map);
-  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).addTo(bookingStep2Map);
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#10b981', fillOpacity: 1, radius: 9, weight: 4 }).addTo(bookingStep2Map);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#ef4444', fillOpacity: 1, radius: 9, weight: 4 }).addTo(bookingStep2Map);
   
   const bounds = L.latLngBounds(points);
   const fitMap = () => {
     if (!bookingStep2Map || !target.isConnected) return;
     bookingStep2Map.invalidateSize({ animate: false, pan: false });
-    bookingStep2Map.fitBounds(bounds, { animate: false, padding: [40, 40] });
+    bookingStep2Map.fitBounds(bounds, { animate: false, padding: [20, 20] });
   };
   fitMap();
   requestAnimationFrame(() => requestAnimationFrame(fitMap));
@@ -4416,8 +4416,8 @@ function initLiveTravelMap() {
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(liveTravelMap);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(liveTravelMap);
   
-  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).addTo(liveTravelMap);
-  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).addTo(liveTravelMap);
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#10b981', fillOpacity: 1, radius: 9, weight: 4 }).addTo(liveTravelMap);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#ef4444', fillOpacity: 1, radius: 9, weight: 4 }).addTo(liveTravelMap);
   
   const startProgressIdx = Math.floor((state.routeProgress / 100) * points.length);
   const vehiclePoint = points[Math.min(points.length - 1, startProgressIdx)];
