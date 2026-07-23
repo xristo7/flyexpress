@@ -2891,11 +2891,11 @@ function renderParcelBooking() {
       
       <div class="parcel-booking-flow-container" style="max-width: 700px; margin: 0 auto;">
         <div class="card">${renderParcelStep()}</div>
-        <div class="notice" style="margin-top: 16px;">
-          <i data-lucide="package-check"></i>
+        <div class="notice" style="margin: 16px auto 0; max-width: 400px; font-size: 0.8rem; padding: 10px 14px;">
+          <i data-lucide="package-check" style="width: 18px; height: 18px;"></i>
           <div>
-            <strong>Parcel safety</strong>
-            <div>Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div>
+            <strong style="font-size: 0.82rem;">Parcel safety</strong>
+            <div style="font-size: 0.78rem;">Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div>
           </div>
         </div>
       </div>
