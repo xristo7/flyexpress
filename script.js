@@ -3025,7 +3025,14 @@ function renderParcelStep() {
               ${parcelPaymentChoice('cash','Cash at Stage','Pay the parcel desk before dispatch','banknote')}
             </div>
             ${renderParcelPaymentPanel()}
-            <div class="notice" style="margin-top:16px"><i data-lucide="info"></i><div>No real payment is processed. Confirming completes your parcel booking.</div></div>
+            <!-- Checkout action buttons placed inside left column -->
+            <div class="button-row" style="margin-top:20px; display: flex; gap: 12px;">
+              <button class="button button--ghost" type="button" data-action="parcel-back" style="flex: 0 0 80px;">Back</button>
+              <button class="button button--golden-orange checkout-pay-btn" type="button" data-action="parcel-next" style="flex: 1;">
+                <i data-lucide="package-check" style="width: 20px; height: 20px;"></i>
+                <span>Complete Parcel Dispatch — ${formatUGX(total)}</span>
+              </button>
+            </div>
           </div>
 
           <aside class="checkout-sidebar-col">
@@ -3081,20 +3088,12 @@ function renderParcelStep() {
     `;
   }
 
-  const buttons = step <= 5 ? (step === 5 ? `
-    <div class="button-row" style="margin-top:20px; display: flex; gap: 12px;">
-      <button class="button button--ghost" type="button" data-action="parcel-back" style="flex: 0 0 80px;">Back</button>
-      <button class="button button--golden-orange checkout-pay-btn" type="button" data-action="parcel-next" style="flex: 1;">
-        <i data-lucide="package-check" style="width: 20px; height: 20px;"></i>
-        <span>Complete Parcel Dispatch — ${formatUGX(parcelPrice())}</span>
-      </button>
-    </div>
-  ` : `
+  const buttons = step <= 4 ? `
     <div class="button-row button-row--end" style="margin-top:20px">
       <button class="button button--ghost" type="button" data-action="parcel-back" ${step === 1 ? 'disabled' : ''}>Back</button>
       <button class="button button--primary" type="button" data-action="parcel-next">Continue</button>
     </div>
-  `) : '';
+  ` : '';
 
   return `${body}${buttons}`;
 }
