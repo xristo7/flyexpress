@@ -1919,7 +1919,7 @@ function renderBook() {
     });
 
     return `
-      ${screenHead('Available Vehicles', 'Step 3 of 6: Select your preferred transit vehicle from active departures.')}
+      ${screenHead('Available Vehicles', 'Select your preferred transit vehicle from active departures.')}
 
       <div class="booking-desktop-split booking-desktop-split--60-40" style="margin-top: 16px;">
         <section class="taxi-results-grid">
@@ -2044,7 +2044,7 @@ function renderBook() {
   if (step === '3b') {
     const required = passengerTotal();
     return `
-      ${screenHead('Select Preferred Seat', 'Step 3b: Choose your seat number in the passenger vehicle layout.')}
+      ${screenHead('Select Preferred Seat', 'Choose your seat number in the passenger vehicle layout.')}
 
       <div class="booking-desktop-split" style="margin-top: 16px;">
         <section class="card" style="margin: 0; text-align: center; padding: 20px;">
@@ -2081,7 +2081,7 @@ function renderBook() {
     const totalLuggagePrice = luggageTotal();
 
     return `
-      ${screenHead('Luggage Registry', 'Step 4 of 6: Declare larger luggage bags in advance to secure loading space.')}
+      ${screenHead('Luggage Registry', 'Declare larger luggage bags in advance to secure loading space.')}
 
       <div class="booking-desktop-split booking-desktop-split--sidebar" style="margin-top: 16px;">
         <section class="card" style="margin: 0; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
@@ -3038,7 +3038,7 @@ function renderSpecialHire() {
     const chosenVehicle = appData.specialHireVehicles.find(v => v.id === (sh.vehicleType || sh.vehicleId)) || appData.specialHireVehicles[0];
 
     return `
-      ${screenHead('Private Charter & Special Hire', 'Step 1 of 3: Choose your vehicle and destination.')}
+      ${screenHead('Private Charter & Special Hire', 'Choose your vehicle type and enter your charter destination.')}
       
       <div class="special-hire-step1-layout" style="margin-top: 16px; max-width: 700px;">
         <!-- Left Main Column: Vehicle Selection Grid -->
@@ -3173,26 +3173,8 @@ function renderSpecialHire() {
     const priceDetails = calculateSpecialHirePrice();
 
     return `
-      ${screenHead('Private Charter & Special Hire', 'Step 2 of 3: Enter charter specifications and driver preferences.')}
+      ${screenHead('Private Charter & Special Hire', 'Enter your charter specifications and driver preferences.')}
       
-      <!-- Stepper Breadcrumb Header -->
-      <div style="display: flex; align-items: center; justify-content: space-between; background: white; border: 1px solid var(--border); border-radius: 16px; padding: 12px 18px; margin-bottom: 20px; box-shadow: var(--shadow-xs); flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 600; color: var(--green);">
-          <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--green-soft); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800;"><i data-lucide="check" style="width: 14px; height: 14px; color: var(--green);"></i></span>
-          <span>1. Vehicle &amp; Route</span>
-        </div>
-        <div style="width: 24px; height: 1px; background: var(--border);"></div>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 800; color: var(--brand-blue-dark);">
-          <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--brand-blue); color: white; display: grid; place-items: center; font-size: 0.75rem; font-weight: 800;">2</span>
-          <span>2. Charter Details</span>
-        </div>
-        <div style="width: 24px; height: 1px; background: var(--border);"></div>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 600; color: var(--muted);">
-          <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--page); border: 1px solid var(--border); display: grid; place-items: center; font-size: 0.75rem; font-weight: 700;">3</span>
-          <span>3. Review &amp; Pay</span>
-        </div>
-      </div>
-
       <div class="special-hire-flow-container" style="display: flex; flex-direction: column; gap: 20px; max-width: 700px;">
         
         <!-- Selection Summary Bar -->
@@ -3369,7 +3351,7 @@ function renderSpecialHire() {
     `;
     
     return `
-      ${screenHead('Private Charter & Special Hire', 'Step 3 of 3: Review pricing and authorize payment.')}
+      ${screenHead('Private Charter & Special Hire', 'Review your charter summary and authorize payment.')}
       
       <div class="checkout-unified-layout" style="margin-top: 16px; max-width: 700px;">
         
