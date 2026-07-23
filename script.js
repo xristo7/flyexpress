@@ -179,7 +179,7 @@ const appData = {
 const driversData = {
   'isaac muwonge': {
     name: 'Isaac Muwonge',
-    avatar: 'assets/sam-mcalen.png',
+    avatar: 'assets/driver_1.jpg',
     role: 'Fly Express Driver',
     rating: '4.95',
     routes: '1,420',
@@ -198,7 +198,7 @@ const driversData = {
   },
   'moses mukasa': {
     name: 'Moses Mukasa',
-    avatar: '',
+    avatar: 'assets/driver_2.jpg',
     role: 'Fly Express Driver',
     rating: '4.90',
     routes: '1,280',
@@ -217,7 +217,7 @@ const driversData = {
   },
   'john ssekabira': {
     name: 'John Ssekabira',
-    avatar: '',
+    avatar: 'assets/driver_3.jpg',
     role: 'Fly Express Driver',
     rating: '4.80',
     routes: '980',
@@ -236,7 +236,7 @@ const driversData = {
   },
   'david okello': {
     name: 'David Okello',
-    avatar: '',
+    avatar: 'assets/driver_4.jpg',
     role: 'Fly Express Driver',
     rating: '4.70',
     routes: '760',
@@ -255,7 +255,7 @@ const driversData = {
   },
   'peter semwanga': {
     name: 'Peter Semwanga',
-    avatar: '',
+    avatar: 'assets/driver_5.jpg',
     role: 'Fly Express Driver',
     rating: '4.90',
     routes: '1,510',
@@ -274,7 +274,7 @@ const driversData = {
   },
   'arthur ssewankambo': {
     name: 'Arthur Ssewankambo',
-    avatar: '',
+    avatar: 'assets/driver_1.jpg',
     role: 'Fly Express Driver',
     rating: '4.60',
     routes: '540',
@@ -3872,7 +3872,7 @@ function renderParcelList() {
           </div>
         </div>
         <div class="parcel-list-card__footer" onclick="event.stopPropagation();">
-          <span class="parcel-list-card__driver" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('isaac muwonge');" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="View Driver Profile"><img src="assets/sam-mcalen.png" alt="Isaac Muwonge" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">Isaac Muwonge · UBM 245K</span>
+          <span class="parcel-list-card__driver" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('isaac muwonge');" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="View Driver Profile"><img src="assets/driver_1.jpg" alt="Isaac Muwonge" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">Isaac Muwonge · UBM 245K</span>
           <span class="muted text-small">Updated 3 min ago</span>
         </div>
       </article>
@@ -3964,7 +3964,7 @@ function renderParcelTracking() {
         
         <div class="parcel-live-card__driver" role="button" tabindex="0" onclick="event.stopPropagation(); showDriverProfileModal('isaac muwonge');" style="cursor: pointer;">
           <div class="parcel-live-card__driver-left">
-            <img src="assets/sam-mcalen.png" alt="Isaac Muwonge" class="parcel-live-card__avatar">
+            <img src="assets/driver_1.jpg" alt="Isaac Muwonge" class="parcel-live-card__avatar">
             <div class="parcel-live-card__driver-info">
               <strong>Isaac Muwonge</strong>
               <span>Driver</span>
@@ -4060,7 +4060,7 @@ function renderDriverProfile() {
   const driver = driversData[driverNameKey] || driversData['isaac muwonge'];
   
   const isDriving = driver.status === 'driving';
-  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+  const avatarUrl = driver.avatar || 'assets/driver_1.jpg';
 
   return `
     <div class="driver-profile-container">
@@ -4168,7 +4168,7 @@ function showDriverProfileModal(driverNameKey) {
   const driverNameClean = (driverNameKey || 'isaac muwonge').toLowerCase().trim();
   const driver = driversData[driverNameClean] || driversData['isaac muwonge'];
   const isDriving = driver.status === 'driving';
-  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+  const avatarUrl = driver.avatar || 'assets/driver_1.jpg';
   const initials = driver.name.split(' ').map(n => n[0]).join('');
 
   const bodyHtml = `
@@ -4281,7 +4281,7 @@ window.showDriverProfileModal = showDriverProfileModal;
 function renderDriverChat() {
   const driverNameKey = state.viewingDriverName || 'isaac muwonge';
   const driver = driversData[driverNameKey] || driversData['isaac muwonge'];
-  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+  const avatarUrl = driver.avatar || 'assets/driver_1.jpg';
   const firstName = driver.name.split(' ')[0];
   const initials = driver.name.split(' ').map(n => n[0]).join('');
 
@@ -4357,7 +4357,7 @@ function renderDriverChat() {
 function renderDriverCall() {
   const driverNameKey = state.viewingDriverName || 'isaac muwonge';
   const driver = driversData[driverNameKey] || driversData['isaac muwonge'];
-  const avatarUrl = driver.avatar || 'assets/sam-mcalen.png';
+  const avatarUrl = driver.avatar || 'assets/driver_1.jpg';
   const firstName = driver.name.split(' ')[0];
   const initials = driver.name.split(' ').map(n => n[0]).join('');
   const phone = driver.plate ? `+256 7XX XXX XXX` : '+256 700 000 000';
