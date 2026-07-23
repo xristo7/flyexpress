@@ -3040,7 +3040,7 @@ function renderSpecialHire() {
     return `
       ${screenHead('Private Charter & Special Hire', 'Choose your vehicle type and enter your charter destination.')}
       
-      <div class="special-hire-step1-layout" style="margin-top: 16px; max-width: 700px;">
+      <div class="special-hire-step1-layout" style="margin-top: 16px;">
         <!-- Left Main Column: Vehicle Selection Grid -->
         <div class="special-hire-main-col">
           <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 14px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
@@ -3353,7 +3353,7 @@ function renderSpecialHire() {
     return `
       ${screenHead('Private Charter & Special Hire', 'Review your charter summary and authorize payment.')}
       
-      <div class="checkout-unified-layout" style="margin-top: 16px; max-width: 700px;">
+      <div class="checkout-unified-layout" style="margin-top: 16px;">
         
         <!-- Mobile-only Shopify Order Summary Accordion -->
         <div class="shopify-summary-card mobile-summary-accordion ${isOpen ? 'is-open' : ''}">
