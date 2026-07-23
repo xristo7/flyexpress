@@ -60,7 +60,7 @@ function getAvailableTrips() {
     const departTime = minutesToTimeStr(slot);
     const arriveTime = minutesToTimeStr(slot + 65);
     
-    const rc = routeCards[i % routeCards.length] || { key: 'kajansi', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', price: 'UGX 5,000', via: 'Via Kajansi', imageB: 'assets/kampala.jpg' };
+    const rc = routeCards[i % routeCards.length] || { key: 'kajansi', stageA: 'Entebbe Bus Park', stageB: 'Kampala Railway Stage', price: 'UGX 5,000', via: 'Via Kajansi', imageB: 'assets/kampala.jpg' };
     
     const driverKey = driverKeys[i % driverKeys.length] || 'isaac muwonge';
     const driver = (driversData && driversData[driverKey]) || { name: 'Isaac Muwonge', rating: '4.95' };
@@ -126,17 +126,17 @@ const appData = {
     name: 'Christo I.',
     phone: '+256 772 345 678',
     email: 'christo.i@example.com',
-    preferredRoute: 'Entebbe Main Stage → Kampala Main Stage'
+    preferredRoute: 'Entebbe Bus Park → Kampala Railway Stage'
   },
-  routes: ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage', 'Nambole', 'Bweyogere', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
+  routes: ['Entebbe Bus Park', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Railway Stage', 'Nambole', 'Bweyogere', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
   routeCards: [
-    { key: 'kajansi', cityA: 'Entebbe', cityB: 'Kampala City', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', via: 'Via Kajansi', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala City', coordA: [0.0618, 32.4742], coordB: [0.3136, 32.5811] },
-    { key: 'busega', cityA: 'Entebbe', cityB: 'Kampala City', stageA: 'Entebbe Main Stage', stageB: 'Kampala Main Stage', via: 'Via Busega', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala City', coordA: [0.0618, 32.4742], coordB: [0.3136, 32.5811] },
-    { key: 'bweyogere', cityA: 'Entebbe', cityB: 'Bweyogere', stageA: 'Entebbe Main Stage', stageB: 'Bweyogere', via: 'Via Northern Bypass', price: 'UGX 6,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/bweyogere.jpg', corridor: 'Entebbe • Kajjansi • Busega • Bwaise • Kalerwe • Kyebando • Kiwatule • Naalya • Bweyogere', coordA: [0.0618, 32.4742], coordB: [0.3667, 32.6500] },
-    { key: 'nambole', cityA: 'Entebbe', cityB: 'Nambole', stageA: 'Entebbe Main Stage', stageB: 'Nambole', via: 'Via Kajansi', price: 'UGX 7,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/nambole.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Nambole', coordA: [0.0618, 32.4742], coordB: [0.3475, 32.6281] },
-    { key: 'masaka', cityA: 'Entebbe', cityB: 'Masaka', stageA: 'Entebbe Main Stage', stageB: 'Masaka', via: 'Via Masaka Road', price: 'UGX 20,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/masaka.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Buwama • Masaka', coordA: [0.0618, 32.4742], coordB: [-0.3375, 31.7350] },
-    { key: 'lyantonde', cityA: 'Entebbe', cityB: 'Lyantonde', stageA: 'Entebbe Main Stage', stageB: 'Lyantonde', via: 'Via Masaka Road', price: 'UGX 25,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/lyantonde.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde', coordA: [0.0618, 32.4742], coordB: [-0.4047, 31.1597] },
-    { key: 'mbarara', cityA: 'Entebbe', cityB: 'Mbarara', stageA: 'Entebbe Main Stage', stageB: 'Mbarara', via: 'Via Masaka Road', price: 'UGX 30,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/mbarara.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde • Mbarara', coordA: [0.0618, 32.4742], coordB: [-0.6071, 30.6545] }
+    { key: 'kajansi', cityA: 'Entebbe', cityB: 'Kampala City', stageA: 'Entebbe Bus Park', stageB: 'Kampala Railway Stage', via: 'Via Kajansi', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala City', coordA: [0.0618, 32.4742], coordB: [0.3136, 32.5811] },
+    { key: 'busega', cityA: 'Entebbe', cityB: 'Kampala City', stageA: 'Entebbe Bus Park', stageB: 'Kampala Railway Stage', via: 'Via Busega', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala City', coordA: [0.0618, 32.4742], coordB: [0.3136, 32.5811] },
+    { key: 'bweyogere', cityA: 'Entebbe', cityB: 'Bweyogere', stageA: 'Entebbe Bus Park', stageB: 'Bweyogere', via: 'Via Northern Bypass', price: 'UGX 6,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/bweyogere.jpg', corridor: 'Entebbe • Kajjansi • Busega • Bwaise • Kalerwe • Kyebando • Kiwatule • Naalya • Bweyogere', coordA: [0.0618, 32.4742], coordB: [0.3667, 32.6500] },
+    { key: 'nambole', cityA: 'Entebbe', cityB: 'Nambole', stageA: 'Entebbe Bus Park', stageB: 'Nambole', via: 'Via Kajansi', price: 'UGX 7,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/nambole.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Nambole', coordA: [0.0618, 32.4742], coordB: [0.3475, 32.6281] },
+    { key: 'masaka', cityA: 'Entebbe', cityB: 'Masaka', stageA: 'Entebbe Bus Park', stageB: 'Masaka', via: 'Via Masaka Road', price: 'UGX 20,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/masaka.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Buwama • Masaka', coordA: [0.0618, 32.4742], coordB: [-0.3375, 31.7350] },
+    { key: 'lyantonde', cityA: 'Entebbe', cityB: 'Lyantonde', stageA: 'Entebbe Bus Park', stageB: 'Lyantonde', via: 'Via Masaka Road', price: 'UGX 25,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/lyantonde.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde', coordA: [0.0618, 32.4742], coordB: [-0.4047, 31.1597] },
+    { key: 'mbarara', cityA: 'Entebbe', cityB: 'Mbarara', stageA: 'Entebbe Bus Park', stageB: 'Mbarara', via: 'Via Masaka Road', price: 'UGX 30,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/mbarara.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde • Mbarara', coordA: [0.0618, 32.4742], coordB: [-0.6071, 30.6545] }
   ],
   get trips() {
     return getAvailableTrips();
@@ -319,9 +319,9 @@ const state = {
   returnMode: 'open',
   returnDate: '2026-07-21',
   bookingDate: '2026-07-18',
-  searchFrom: 'Entebbe Main Stage',
-  searchTo: 'Kampala Main Stage',
-  dropOffLocation: 'Kampala Main Stage',
+  searchFrom: 'Entebbe Bus Park',
+  searchTo: 'Kampala Railway Stage',
+  dropOffLocation: 'Kampala Railway Stage',
   searchPeriod: 'Morning',
   bookingOption: '',
   assistance: 'None required',
@@ -1314,13 +1314,13 @@ function renderBook() {
 
   if (step === 2) {
     const allowedFrom = appData.routes.filter(r => {
-      if (state.selectedRoute === 'bweyogere') return ['Entebbe Main Stage', 'Bweyogere'].includes(r);
-      if (state.selectedRoute === 'busega') return ['Entebbe Main Stage', 'Kampala Main Stage'].includes(r);
-      if (state.selectedRoute === 'nambole') return ['Entebbe Main Stage', 'Nambole'].includes(r);
-      if (state.selectedRoute === 'masaka') return ['Entebbe Main Stage', 'Masaka'].includes(r);
-      if (state.selectedRoute === 'lyantonde') return ['Entebbe Main Stage', 'Lyantonde'].includes(r);
-      if (state.selectedRoute === 'mbarara') return ['Entebbe Main Stage', 'Mbarara'].includes(r);
-      return ['Entebbe Main Stage', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Main Stage'].includes(r);
+      if (state.selectedRoute === 'bweyogere') return ['Entebbe Bus Park', 'Bweyogere'].includes(r);
+      if (state.selectedRoute === 'busega') return ['Entebbe Bus Park', 'Kampala Railway Stage'].includes(r);
+      if (state.selectedRoute === 'nambole') return ['Entebbe Bus Park', 'Nambole'].includes(r);
+      if (state.selectedRoute === 'masaka') return ['Entebbe Bus Park', 'Masaka'].includes(r);
+      if (state.selectedRoute === 'lyantonde') return ['Entebbe Bus Park', 'Lyantonde'].includes(r);
+      if (state.selectedRoute === 'mbarara') return ['Entebbe Bus Park', 'Mbarara'].includes(r);
+      return ['Entebbe Bus Park', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Railway Stage'].includes(r);
     });
     const allowedTo = allowedFrom;
 
@@ -1964,23 +1964,19 @@ function renderTripDetails() {
         </div>
       </div>
 
-      <!-- Transit & Proximity Status Details Box -->
+      <!-- Route Details Box -->
       <div style="background: var(--page); padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-          <h3 style="margin: 0; font-size: 0.94rem; font-weight: 800; color: var(--brand-blue-dark);">Transit &amp; Proximity Status</h3>
+          <h3 style="margin: 0; font-size: 0.94rem; font-weight: 800; color: var(--brand-blue-dark);">Route Details</h3>
           <span style="background: rgba(229, 30, 42, 0.08); color: var(--brand-red); font-weight: 750; font-size: 0.78rem; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px;">
             <i data-lucide="clock" style="width: 13px; height: 13px;"></i> ${trip.countdown}
           </span>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: left; font-size: 0.82rem; padding-top: 2px;">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: left; font-size: 0.82rem; padding-top: 2px;">
           <div>
             <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">From</span>
             <strong style="color: var(--charcoal); font-weight: 700; display: block; margin-top: 2px;">${trip.comingFrom}</strong>
-          </div>
-          <div>
-            <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Current</span>
-            <strong style="color: var(--green); font-weight: 800; display: block; margin-top: 2px;">${trip.currentStage}</strong>
           </div>
           <div>
             <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">Heading to</span>
@@ -4292,15 +4288,13 @@ function initTripMap() {
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(tripReviewMap);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(tripReviewMap);
   
-  const labelFrom = state.activeTrip ? state.activeTrip.boarding : 'Origin';
-  const labelTo = state.activeTrip ? state.activeTrip.destination : 'Destination';
-  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelFrom, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
-  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelTo, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(tripReviewMap);
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).addTo(tripReviewMap);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).addTo(tripReviewMap);
   
   if (state.activeTrip) {
     const markerIdx = state.activeTrip.markerIndex !== undefined ? state.activeTrip.markerIndex : 0;
     const vehiclePoint = points[Math.min(points.length - 1, markerIdx)];
-    L.circleMarker(vehiclePoint, { color: '#fff', fillColor: '#f2a104', fillOpacity: 1, radius: 10, weight: 4 }).bindTooltip(`Live: ${state.activeTrip.plate} (${state.activeTrip.countdown})`, { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' }).addTo(tripReviewMap);
+    L.circleMarker(vehiclePoint, { color: '#fff', fillColor: '#f2a104', fillOpacity: 1, radius: 10, weight: 4 }).addTo(tripReviewMap);
   }
   
   const bounds = L.latLngBounds(points);
@@ -4333,10 +4327,10 @@ function initBookingStep2Map() {
     bookingStep2Map = null;
   }
   
-  bookingStep2Map = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: true, dragging: true, keyboard: true, scrollWheelZoom: false, touchZoom: true, zoomControl: true });
+  bookingStep2Map = L.map(target, { attributionControl: false, boxZoom: false, doubleClickZoom: false, dragging: false, keyboard: false, scrollWheelZoom: false, touchZoom: false, zoomControl: false });
   
   let tileErrors = 0;
-  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false, attribution: '&copy; OpenStreetMap contributors' });
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false });
   tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
   tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
   tiles.addTo(bookingStep2Map);
@@ -4345,10 +4339,8 @@ function initBookingStep2Map() {
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(bookingStep2Map);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(bookingStep2Map);
   
-  const labelFrom = state.searchFrom || 'Origin';
-  const labelTo = state.searchTo || 'Destination';
-  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelFrom, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(bookingStep2Map);
-  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelTo, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(bookingStep2Map);
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).addTo(bookingStep2Map);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).addTo(bookingStep2Map);
   
   const bounds = L.latLngBounds(points);
   const fitMap = () => {
@@ -4413,10 +4405,8 @@ function initLiveTravelMap() {
   L.polyline(points, { color: '#081b33', opacity: .55, weight: 8 }).addTo(liveTravelMap);
   L.polyline(points, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(liveTravelMap);
   
-  const labelFrom = state.activeTrip ? state.activeTrip.boarding : 'Origin';
-  const labelTo = state.activeTrip ? state.activeTrip.destination : 'Destination';
-  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelFrom, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(liveTravelMap);
-  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip(labelTo, { permanent: true, direction: 'bottom', offset: [0, 14], className: 'trip-map-label' }).addTo(liveTravelMap);
+  L.circleMarker(points[0], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 9, weight: 4 }).addTo(liveTravelMap);
+  L.circleMarker(points[points.length - 1], { color: '#fff', fillColor: '#e51e2a', fillOpacity: 1, radius: 9, weight: 4 }).addTo(liveTravelMap);
   
   const startProgressIdx = Math.floor((state.routeProgress / 100) * points.length);
   const vehiclePoint = points[Math.min(points.length - 1, startProgressIdx)];
