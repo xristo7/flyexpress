@@ -1917,24 +1917,11 @@ function renderTripDetails() {
     <div class="smart-review__sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
       
-      <!-- Route Title & Driver Meta Header Block (inside Content Section) -->
-      <div class="smart-review__header-block" style="margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border);">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-          <span style="background: rgba(229, 30, 42, 0.08); color: var(--brand-red); font-weight: 850; font-size: 0.74rem; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; letter-spacing: 0.06em;">
-            Active Vehicle &amp; Driver
-          </span>
-          <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(76, 175, 80, 0.1); color: var(--green); padding: 4px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 750;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #4caf50; display: inline-block;"></span> Live Tracked
-          </span>
-        </div>
-
-        <h1 style="margin: 4px 0 3px 0; font-size: clamp(1.4rem, 3.8vw, 1.85rem); font-weight: 850; color: var(--brand-blue-dark); line-height: 1.25;">
+      <!-- Route Title Header Block -->
+      <div class="smart-review__header-block" style="margin-bottom: 16px;">
+        <h1 style="margin: 0; font-size: clamp(1.4rem, 3.8vw, 1.85rem); font-weight: 850; color: var(--brand-blue-dark); line-height: 1.25;">
           ${trip.boarding} → ${trip.destination}
         </h1>
-
-        <p style="margin: 0; font-size: 0.88rem; color: var(--slate); font-weight: 600;">
-          ${trip.vehicle} · Driver: <strong>${trip.driverName}</strong> (${trip.plate})
-        </p>
       </div>
 
       <!-- Unified Driver Card -->

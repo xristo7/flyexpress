@@ -2026,13 +2026,13 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   .review-check { width: 23px; height: 23px; }
   .booking-accordion__panel { padding-left: 14px; }
   .compact-steppers { grid-template-columns: 1fr; }
-  .review-sticky-cta { grid-template-columns: minmax(124px, .72fr) 1.28fr; min-height: 70px; padding: 7px; border-radius: 19px; }
-  .return-quick-toggle { min-height: 54px; grid-template-columns: 28px 1fr auto; padding-inline: 8px; }
-  .return-quick-toggle__icon { width: 28px; height: 28px; }
-  .return-quick-toggle .switch { width: 38px; height: 22px; }
-  .return-quick-toggle .switch span { width: 16px; height: 16px; }
+  .review-sticky-cta { grid-template-columns: minmax(148px, 1fr) auto; min-height: 68px; padding: 6px; border-radius: 19px; gap: 8px; }
+  .return-quick-toggle { min-height: 52px; grid-template-columns: 28px 1fr auto; padding-inline: 10px 8px; gap: 6px; }
+  .return-quick-toggle__icon { width: 28px; height: 28px; flex-shrink: 0; }
+  .return-quick-toggle .switch { width: 36px; height: 20px; flex-shrink: 0; }
+  .return-quick-toggle .switch span { width: 14px; height: 14px; }
   .return-quick-toggle .switch.is-on span { transform: translateX(16px); }
-  .review-pay-button { min-height: 54px; padding-inline: 13px; }
+  .review-pay-button { min-height: 52px; padding-inline: 14px; flex-shrink: 0; }
 }
 
 @media (max-width: 430px) {
@@ -2045,10 +2045,12 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   .photo-seat-selector { width: 100%; border-radius: 22px; }
   .photo-seat > span { top: 3px; left: 3px; min-width: 23px; padding: 2px 4px; }
   .photo-seat > svg { right: 3px; bottom: 3px; width: 21px; height: 21px; }
-  .review-sticky-cta { left: 6px; right: 6px; gap: 6px; }
-  .return-quick-toggle { grid-template-columns: 26px 1fr auto; gap: 5px; }
-  .return-quick-toggle__icon { width: 26px; height: 26px; }
-  .review-pay-button span { display: none; }
+  .review-sticky-cta { left: 6px; right: 6px; gap: 6px; grid-template-columns: minmax(140px, 1fr) auto; }
+  .return-quick-toggle { grid-template-columns: 24px 1fr auto; gap: 4px; padding-inline: 7px 5px; }
+  .return-quick-toggle__icon { width: 24px; height: 24px; }
+  .return-quick-toggle small { font-size: 0.65rem; }
+  .return-quick-toggle strong { font-size: 0.76rem; }
+  .review-pay-button { padding-inline: 10px; }
 }
 
 /* ---------- Redesign Extensions ---------- */
