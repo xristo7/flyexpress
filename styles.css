@@ -1626,38 +1626,30 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   position: relative;
   z-index: 5;
   width: min(calc(100% - 56px), 820px);
-  margin: -82px auto 112px;
+  margin: -82px auto 20px;
   padding: 18px 28px 26px;
   border-radius: 30px;
   background: white;
   border: 1px solid rgba(8,27,51,.08);
   box-shadow: 0 28px 60px rgba(8,27,51,.18);
-  overflow: hidden;
 }
 
-/* Seamless Native Card Footer Notice Banner */
-.smart-review__notice-footer {
+/* Notice Banner Outside Sheet (on Page Background) */
+.smart-review__notice-outside {
+  position: relative;
+  z-index: 5;
+  width: min(calc(100% - 56px), 820px);
+  margin: 0 auto 112px;
   background: var(--info-soft);
-  border-top: 1px solid rgba(22, 119, 255, 0.15);
-  margin-top: 24px;
-  margin-left: -28px;
-  margin-right: -28px;
-  margin-bottom: -26px;
-  padding: 16px 24px;
-  border-bottom-left-radius: 28px;
-  border-bottom-right-radius: 28px;
+  border: 1px solid rgba(22, 119, 255, 0.18);
+  box-shadow: var(--shadow-sm);
+  padding: 16px 20px;
+  border-radius: 22px;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   text-align: left;
 }
-
-@media (max-width: 900px) {
-  .smart-review__notice-footer {
-    margin-left: -16px;
-    margin-right: -16px;
-    margin-bottom: -22px;
-    padding: 14px 18px;
     border-bottom-left-radius: 26px;
     border-bottom-right-radius: 26px;
   }
@@ -2001,7 +1993,8 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   .smart-review.is-condensed .smart-review__map-copy h1 { margin: 0; font-size: 1rem; }
   .smart-review.is-condensed .trip-map-label { display: none; }
   .smart-review.is-condensed .smart-review__sheet { margin-top: -28px; }
-  .smart-review__sheet { width: calc(100% - 20px); margin: -42px auto 120px; padding: 18px 16px 22px; border-radius: 28px; }
+  .smart-review__sheet { width: calc(100% - 20px); margin: -42px auto 14px; padding: 18px 16px 22px; border-radius: 28px; }
+  .smart-review__notice-outside { width: calc(100% - 20px); margin: 0 auto 120px; padding: 14px 16px; border-radius: 20px; }
   .review-sticky-cta { position: fixed; z-index: 49; left: 10px; right: 10px; bottom: calc(var(--mobile-nav-height) + var(--safe-bottom) + 8px); width: auto; margin: 0; }
 }
 
