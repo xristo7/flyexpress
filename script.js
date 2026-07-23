@@ -933,13 +933,35 @@ function init() {
     return;
   }
 
-  setTimeout(() => {
+  // Preload all splash/onboarding images during initial splash page
+  const minSplashDelay = new Promise(resolve => setTimeout(resolve, 1800));
+  Promise.all([preloadSplashImages(), minSplashDelay]).then(() => {
     const splash = $('#splash-screen');
-    if (!splash.classList.contains('is-hidden')) showOnboarding();
-  }, 2200);
+    if (!splash.classList.contains('is-hidden')) {
+      showOnboarding();
+    }
+  });
 
   // Auto-detect nearest city after initial render
   detectNearestCity();
+}
+
+function preloadSplashImages() {
+  const splashImages = [
+    'assets/fly-express-logo.jpg',
+    'assets/onboarding-1.jpg',
+    'assets/onboarding-2.webp',
+    'assets/onboarding-3.jpg'
+  ];
+
+  return Promise.all(splashImages.map(src => {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(src);
+      img.onerror = () => resolve(src);
+      img.src = src;
+    });
+  }));
 }
 
 document.addEventListener('DOMContentLoaded', init);
