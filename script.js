@@ -3617,57 +3617,59 @@ function renderDriverChat() {
 
   return `
     <div class="driver-chat-screen">
-      <div class="chat-driver-header">
-        <button class="icon-button" type="button" data-action="back-from-chat" aria-label="Close Chat" style="color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.12); border-radius: 50%; width: 36px; height: 36px; display: grid; place-items: center; border: none; cursor: pointer; flex-shrink: 0;"><i data-lucide="arrow-left"></i></button>
-        <div class="chat-driver-header__info">
-          ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="chat-driver-avatar">` : `<div class="chat-driver-avatar chat-driver-avatar--initials">${initials}</div>`}
-          <div>
-            <strong>${driver.name}</strong>
-            <span class="chat-driver-status"><span class="chat-driver-status__dot"></span>Online</span>
+      <div class="driver-chat-card">
+        <div class="chat-driver-header">
+          <button class="icon-button" type="button" data-action="back-from-chat" aria-label="Close Chat" style="color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.12); border-radius: 50%; width: 36px; height: 36px; display: grid; place-items: center; border: none; cursor: pointer; flex-shrink: 0;"><i data-lucide="arrow-left"></i></button>
+          <div class="chat-driver-header__info">
+            ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="chat-driver-avatar">` : `<div class="chat-driver-avatar chat-driver-avatar--initials">${initials}</div>`}
+            <div>
+              <strong>${driver.name}</strong>
+              <span class="chat-driver-status"><span class="chat-driver-status__dot"></span>Online</span>
+            </div>
+          </div>
+          <div class="chat-driver-header__actions">
+            <button class="icon-button" type="button" data-action="call-driver" aria-label="Call driver"><i data-lucide="phone"></i></button>
+            <button class="icon-button" type="button" onclick="showDriverProfileModal('${driverNameKey.replace(/'/g, "\\'")}')" aria-label="View profile"><i data-lucide="user-round"></i></button>
           </div>
         </div>
-        <div class="chat-driver-header__actions">
-          <button class="icon-button" type="button" data-action="call-driver" aria-label="Call driver"><i data-lucide="phone"></i></button>
-          <button class="icon-button" type="button" onclick="showDriverProfileModal('${driverNameKey.replace(/'/g, "\\'")}')" aria-label="View profile"><i data-lucide="user-round"></i></button>
-        </div>
-      </div>
 
-      <div class="chat-date-divider"><span>Today</span></div>
+        <div class="chat-date-divider"><span>Today</span></div>
 
-      <div class="chat-messages-container">
-        <div class="chat-notice">
-          <i data-lucide="shield-check"></i>
-          <span>Messages are only available for your active trip. Chat history is cleared after the trip ends.</span>
-        </div>
+        <div class="chat-messages-container">
+          <div class="chat-notice">
+            <i data-lucide="shield-check"></i>
+            <span>Messages are only available for your active trip. Chat history is cleared after the trip ends.</span>
+          </div>
 
-        ${demoMessages.map(msg => `
-          <div class="chat-bubble ${msg.from === 'passenger' ? 'chat-bubble--sent' : 'chat-bubble--received'}">
-            ${msg.from === 'driver' ? `
+          ${demoMessages.map(msg => `
+            <div class="chat-bubble ${msg.from === 'passenger' ? 'chat-bubble--sent' : 'chat-bubble--received'}">
+              ${msg.from === 'driver' ? `
+                ${avatarUrl ? `<img src="${avatarUrl}" alt="" class="chat-bubble__avatar">` : `<div class="chat-bubble__avatar chat-bubble__avatar--initials">${initials}</div>`}
+              ` : ''}
+              <div class="chat-bubble__body">
+                <p>${msg.text}</p>
+                <span class="chat-bubble__time">${msg.time}${msg.from === 'passenger' ? ' <i data-lucide="check-check" style="width:12px;height:12px;display:inline;vertical-align:-2px;color:var(--brand-blue);"></i>' : ''}</span>
+              </div>
+            </div>
+          `).join('')}
+
+          <div class="chat-typing-indicator">
+            <div class="chat-bubble chat-bubble--received">
               ${avatarUrl ? `<img src="${avatarUrl}" alt="" class="chat-bubble__avatar">` : `<div class="chat-bubble__avatar chat-bubble__avatar--initials">${initials}</div>`}
-            ` : ''}
-            <div class="chat-bubble__body">
-              <p>${msg.text}</p>
-              <span class="chat-bubble__time">${msg.time}${msg.from === 'passenger' ? ' <i data-lucide="check-check" style="width:12px;height:12px;display:inline;vertical-align:-2px;color:var(--brand-blue);"></i>' : ''}</span>
-            </div>
-          </div>
-        `).join('')}
-
-        <div class="chat-typing-indicator">
-          <div class="chat-bubble chat-bubble--received">
-            ${avatarUrl ? `<img src="${avatarUrl}" alt="" class="chat-bubble__avatar">` : `<div class="chat-bubble__avatar chat-bubble__avatar--initials">${initials}</div>`}
-            <div class="chat-bubble__body chat-bubble__body--typing">
-              <span class="typing-dot"></span>
-              <span class="typing-dot"></span>
-              <span class="typing-dot"></span>
+              <div class="chat-bubble__body chat-bubble__body--typing">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="chat-compose-bar">
-        <button class="chat-compose-btn" type="button" data-action="upload-demo" aria-label="Attach file"><i data-lucide="paperclip"></i></button>
-        <input class="chat-compose-input" type="text" placeholder="Type a message..." value="">
-        <button class="chat-compose-btn chat-compose-btn--primary" type="button" data-action="send-chat-demo" aria-label="Send message"><i data-lucide="send-horizontal"></i></button>
+        <div class="chat-compose-bar">
+          <button class="chat-compose-btn" type="button" data-action="upload-demo" aria-label="Attach file"><i data-lucide="paperclip"></i></button>
+          <input class="chat-compose-input" type="text" placeholder="Type a message..." value="">
+          <button class="chat-compose-btn chat-compose-btn--primary" type="button" data-action="send-chat-demo" aria-label="Send message"><i data-lucide="send-horizontal"></i></button>
+        </div>
       </div>
     </div>
   `;
@@ -3683,55 +3685,57 @@ function renderDriverCall() {
 
   return `
     <div class="driver-call-screen">
-      <button class="icon-button" type="button" data-action="end-call-demo" aria-label="Close Call" style="position: absolute; top: 20px; left: 20px; z-index: 10; color: white; background: rgba(255,255,255,0.15); border: none; border-radius: 50%; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer;">
-        <i data-lucide="arrow-left"></i>
-      </button>
+      <div class="driver-call-card">
+        <button class="icon-button" type="button" data-action="end-call-demo" aria-label="Close Call" style="position: absolute; top: 20px; left: 20px; z-index: 10; color: white; background: rgba(255,255,255,0.15); border: none; border-radius: 50%; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer;">
+          <i data-lucide="arrow-left"></i>
+        </button>
 
-      <div class="call-background">
-        <div class="call-bg-circle call-bg-circle--1"></div>
-        <div class="call-bg-circle call-bg-circle--2"></div>
-        <div class="call-bg-circle call-bg-circle--3"></div>
-      </div>
+        <div class="call-background">
+          <div class="call-bg-circle call-bg-circle--1"></div>
+          <div class="call-bg-circle call-bg-circle--2"></div>
+          <div class="call-bg-circle call-bg-circle--3"></div>
+        </div>
 
-      <div class="call-content">
-        <div class="call-avatar-section">
-          <div class="call-avatar-ring">
-            ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="call-avatar-img">` : `<div class="call-avatar-initials">${initials}</div>`}
+        <div class="call-content">
+          <div class="call-avatar-section">
+            <div class="call-avatar-ring">
+              ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="call-avatar-img">` : `<div class="call-avatar-initials">${initials}</div>`}
+            </div>
+            <h2 class="call-name">${driver.name}</h2>
+            <p class="call-role">${driver.role} · ${driver.plate}</p>
+            <div class="call-status-indicator">
+              <span class="call-pulse"></span>
+              <span class="call-status-text">Calling...</span>
+            </div>
+            <p class="call-timer">00:00</p>
           </div>
-          <h2 class="call-name">${driver.name}</h2>
-          <p class="call-role">${driver.role} · ${driver.plate}</p>
-          <div class="call-status-indicator">
-            <span class="call-pulse"></span>
-            <span class="call-status-text">Calling...</span>
+
+          <div class="call-notice">
+            <i data-lucide="info"></i>
+            <span>This is a prototype preview. No real call is being placed.</span>
           </div>
-          <p class="call-timer">00:00</p>
-        </div>
 
-        <div class="call-notice">
-          <i data-lucide="info"></i>
-          <span>This is a prototype preview. No real call is being placed.</span>
-        </div>
+          <div class="call-actions">
+            <button class="call-action-btn" type="button" data-action="toggle-mute-demo" aria-label="Mute">
+              <span class="call-action-icon"><i data-lucide="mic-off"></i></span>
+              <span>Mute</span>
+            </button>
+            <button class="call-action-btn" type="button" data-action="toggle-speaker-demo" aria-label="Speaker">
+              <span class="call-action-icon"><i data-lucide="volume-2"></i></span>
+              <span>Speaker</span>
+            </button>
+            <button class="call-action-btn" type="button" data-action="chat-driver" aria-label="Message">
+              <span class="call-action-icon"><i data-lucide="message-square"></i></span>
+              <span>Message</span>
+            </button>
+          </div>
 
-        <div class="call-actions">
-          <button class="call-action-btn" type="button" data-action="toggle-mute-demo" aria-label="Mute">
-            <span class="call-action-icon"><i data-lucide="mic-off"></i></span>
-            <span>Mute</span>
-          </button>
-          <button class="call-action-btn" type="button" data-action="toggle-speaker-demo" aria-label="Speaker">
-            <span class="call-action-icon"><i data-lucide="volume-2"></i></span>
-            <span>Speaker</span>
-          </button>
-          <button class="call-action-btn" type="button" data-action="chat-driver" aria-label="Message">
-            <span class="call-action-icon"><i data-lucide="message-square"></i></span>
-            <span>Message</span>
-          </button>
-        </div>
-
-        <div class="call-end-section">
-          <button class="call-end-btn" type="button" data-action="end-call-demo" aria-label="End call">
-            <i data-lucide="phone-off"></i>
-          </button>
-          <span class="call-end-label">End Call</span>
+          <div class="call-end-section">
+            <button class="call-end-btn" type="button" data-action="end-call-demo" aria-label="End call">
+              <i data-lucide="phone-off"></i>
+            </button>
+            <span class="call-end-label">End Call</span>
+          </div>
         </div>
       </div>
     </div>
