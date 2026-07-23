@@ -8125,3 +8125,30 @@ body[data-active-screen="home"] .main-content {
     box-shadow: var(--shadow-sm) !important;
   }
 }
+
+/* ─── Notification Popups, Toasts & Modals Max-Width on Desktop (400px) ─── */
+@media (min-width: 769px) {
+  .toast-region,
+  .toast-container,
+  .home-redesign .toast-region {
+    max-width: 400px !important;
+    width: min(400px, calc(100vw - 40px)) !important;
+  }
+
+  .toast,
+  .toast-container .toast,
+  .home-redesign .toast {
+    max-width: 400px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .modal:not(.modal--wide),
+  .modal--notification,
+  .notification-popup-modal,
+  .notification-card-popup {
+    max-width: 400px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
