@@ -370,7 +370,11 @@ const state = {
     recipientName: 'Julie Robinson',
     recipientPhone: '+44 7911 123456',
     origin: 'Entebbe',
+    pickupLocation: '',
+    customPickup: '',
     destination: 'Kampala',
+    dropoffLocation: '',
+    customDropoff: '',
     description: 'Demonstration parcel',
     weight: '520 g',
     quantity: '1',
@@ -2631,9 +2635,9 @@ function renderPaymentPanel(total, walletRemaining) {
   return `<div class="payment-panel"><div class="field"><label for="voucher-code">Promotional voucher</label><input id="voucher-code" value="${state.voucherApplied ? 'FLY2000' : ''}" placeholder="Enter FLY2000"></div><button class="button button--secondary button--small" style="margin-top:10px" type="button" data-action="apply-voucher">Apply Demo Voucher</button><p class="muted text-small" style="margin-top:10px">A voucher reduces the total; choose another method to pay the balance.</p></div>`;
 }
 
-function paymentState(type, title, copy) {
+function paymentState(type, title, copy, action = 'payment-reset') {
   const icon = type === 'pending' ? 'loader-circle' : type === 'success' ? 'circle-check-big' : 'circle-x';
-  return `<div class="payment-panel payment-state"><div class="payment-state__icon payment-state__icon--${type}"><i data-lucide="${icon}"></i></div><h3>${title}</h3><p class="muted">${copy}</p><button class="button button--ghost button--small" type="button" data-action="payment-reset">Reset State</button></div>`;
+  return `<div class="payment-panel payment-state"><div class="payment-state__icon payment-state__icon--${type}"><i data-lucide="${icon}"></i></div><h3>${title}</h3><p class="muted">${copy}</p><button class="button button--ghost button--small" type="button" data-action="${action}">Reset State</button></div>`;
 }
 
 function renderSuccess() {
@@ -2805,55 +2809,185 @@ function renderTransaction(tx) {
 }
 
 function renderParcelBooking() {
-  const steps = ['Sender','Recipient','Parcel','Route','Delivery','Summary','Payment','Confirmed'];
+  const steps = ['Sender', 'Recipient', 'Parcel', 'Delivery'];
+  const isWizardStep = state.parcelStep <= 4;
+  const pickupDisp = state.parcel.pickupLocation ? (state.parcel.pickupLocation === '__other__' ? (state.parcel.customPickup || 'Custom') : state.parcel.pickupLocation) : '';
+  const dropoffDisp = state.parcel.dropoffLocation ? (state.parcel.dropoffLocation === '__other__' ? (state.parcel.customDropoff || 'Custom') : state.parcel.dropoffLocation) : '';
+
   return `
     ${screenHead('Send a parcel', 'Book a traceable stage-to-stage parcel delivery using demonstration data.')}
     
-    <!-- Horizontal progress bar for desktop -->
-    <div class="flow-progress" aria-label="Parcel booking progress">${steps.map((label,index) => `<div class="flow-step ${state.parcelStep === index + 1 ? 'is-active' : state.parcelStep > index + 1 ? 'is-complete' : ''}"><span class="flow-step__number">${state.parcelStep > index + 1 ? '<i data-lucide="check"></i>' : index + 1}</span><span>${label}</span></div>`).join('')}</div>
-    
-    <div class="parcel-booking-flow-container">
-      <!-- Vertical rail progress step indicator for mobile -->
-      <div class="vertical-step-rail" aria-hidden="true">
-        ${steps.map((label, index) => {
-          const isActive = state.parcelStep === index + 1;
-          const isComplete = state.parcelStep > index + 1;
-          const statusClass = isActive ? 'is-active' : isComplete ? 'is-complete' : '';
-          return `
-            <div class="rail-step ${statusClass}">
-              <span class="rail-step__number">${isComplete ? '<i data-lucide="check" style="width:14px;height:14px;"></i>' : index + 1}</span>
-              <span class="rail-step__label">${label}</span>
-            </div>
-          `;
-        }).join('')}
+    ${isWizardStep ? `
+      <!-- Horizontal progress bar for desktop -->
+      <div class="flow-progress" aria-label="Parcel booking progress">
+        ${steps.map((label, index) => `
+          <div class="flow-step ${state.parcelStep === index + 1 ? 'is-active' : state.parcelStep > index + 1 ? 'is-complete' : ''}">
+            <span class="flow-step__number">${state.parcelStep > index + 1 ? '<i data-lucide="check"></i>' : index + 1}</span>
+            <span>${label}</span>
+          </div>
+        `).join('')}
       </div>
       
-      <section class="grid grid--sidebar parcel-booking-main-grid">
-        <div class="card">${renderParcelStep()}</div>
-        <aside class="grid"><article class="card"><p class="section-kicker">Live estimate</p><h2>${state.parcelDelivery}</h2><div class="detail-list"><div class="detail-row"><span>Origin</span><strong>${escapeHtml(state.parcel.origin)}</strong></div><div class="detail-row"><span>Destination</span><strong>${escapeHtml(state.parcel.destination)}</strong></div><div class="detail-row"><span>Category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery time</span><strong>${state.parcelDelivery === 'Priority Stage-to-Stage' ? 'Next eligible departure' : state.parcelDelivery === 'Hold for Collection' ? '1–2 hours, then held' : state.parcelDelivery === 'Future Last-Mile Delivery' ? 'Same-day concept preview' : '1–2 hours'}</strong></div><div class="detail-row"><span>Estimated price</span><strong>${formatUGX(parcelPrice())}</strong></div></div></article><div class="notice"><i data-lucide="package-check"></i><div><strong>Parcel safety</strong><div>Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div></div></div></aside>
-      </section>
-    </div>`;
+      <div class="parcel-booking-flow-container">
+        <!-- Vertical rail progress step indicator for mobile -->
+        <div class="vertical-step-rail" aria-hidden="true">
+          ${steps.map((label, index) => {
+            const isActive = state.parcelStep === index + 1;
+            const isComplete = state.parcelStep > index + 1;
+            const statusClass = isActive ? 'is-active' : isComplete ? 'is-complete' : '';
+            return `
+              <div class="rail-step ${statusClass}">
+                <span class="rail-step__number">${isComplete ? '<i data-lucide="check" style="width:14px;height:14px;"></i>' : index + 1}</span>
+                <span class="rail-step__label">${label}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        
+        <section class="grid grid--sidebar parcel-booking-main-grid">
+          <div class="card">${renderParcelStep()}</div>
+          <aside class="grid">
+            <article class="card">
+              <p class="section-kicker">Live estimate</p>
+              <h2>${state.parcelDelivery}</h2>
+              <div class="detail-list">
+                <div class="detail-row"><span>Origin stage</span><strong>${escapeHtml(state.parcel.origin)}${pickupDisp ? ` · ${escapeHtml(pickupDisp)}` : ''}</strong></div>
+                <div class="detail-row"><span>Destination stage</span><strong>${escapeHtml(state.parcel.destination)}${dropoffDisp ? ` · ${escapeHtml(dropoffDisp)}` : ''}</strong></div>
+                <div class="detail-row"><span>Category</span><strong>${state.parcelCategory}</strong></div>
+                <div class="detail-row"><span>Departure</span><strong>${escapeHtml(state.parcel.departure || 'Next available vehicle')}</strong></div>
+                <div class="detail-row"><span>Delivery time</span><strong>${state.parcelDelivery === 'Priority Stage-to-Stage' ? 'Next eligible departure' : state.parcelDelivery === 'Hold for Collection' ? '1–2 hours, then held' : state.parcelDelivery === 'Future Last-Mile Delivery' ? 'Same-day concept preview' : '1–2 hours'}</strong></div>
+                <div class="detail-row"><span>Estimated price</span><strong>${formatUGX(parcelPrice())}</strong></div>
+              </div>
+            </article>
+            <div class="notice">
+              <i data-lucide="package-check"></i>
+              <div>
+                <strong>Parcel safety</strong>
+                <div>Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    ` : `
+      <div class="parcel-checkout-flow-container">
+        ${renderParcelStep()}
+      </div>
+    `}
+  `;
 }
 
 function renderParcelStep() {
   const step = state.parcelStep;
   let body = '';
-  if (step === 1) body = `<div class="card-head"><div><p class="section-kicker">Step 1 of 8</p><h2>Sender details</h2></div></div><div class="form-grid"><div class="field"><label for="parcel-sender-name">Full name</label><input id="parcel-sender-name" data-parcel-field="senderName" value="${escapeHtml(state.parcel.senderName)}"></div><div class="field"><label for="parcel-sender-phone">Telephone number</label><input id="parcel-sender-phone" data-parcel-field="senderPhone" value="${escapeHtml(state.parcel.senderPhone)}"></div><div class="field field--full"><label for="parcel-pickup">Pickup stage</label><select id="parcel-pickup" data-parcel-field="origin">${appData.routes.map(route => optionMarkup(route, state.parcel.origin)).join('')}</select></div></div>`;
-  if (step === 2) body = `<div class="card-head"><div><p class="section-kicker">Step 2 of 8</p><h2>Recipient details</h2></div></div><div class="form-grid"><div class="field"><label for="parcel-recipient-name">Full name</label><input id="parcel-recipient-name" data-parcel-field="recipientName" value="${escapeHtml(state.parcel.recipientName)}"></div><div class="field"><label for="parcel-recipient-phone">Telephone number</label><input id="parcel-recipient-phone" data-parcel-field="recipientPhone" value="${escapeHtml(state.parcel.recipientPhone)}"></div><div class="field field--full"><label for="parcel-destination">Destination stage</label><select id="parcel-destination" data-parcel-field="destination">${appData.routes.slice().reverse().map(route => optionMarkup(route, state.parcel.destination)).join('')}</select></div></div>`;
-  if (step === 3) body = `<div class="card-head"><div><p class="section-kicker">Step 3 of 8</p><h2>Parcel information</h2></div></div><div class="parcel-category-grid">${['Documents','Small package','Medium package','Large package','Fragile item','Business parcel'].map((category,index) => `<button class="parcel-category ${state.parcelCategory === category ? 'is-selected' : ''}" type="button" data-action="parcel-category" data-value="${category}" aria-pressed="${state.parcelCategory === category}"><i data-lucide="${['file-text','package','package-open','boxes','glass-water','briefcase-business'][index]}"></i><span>${category}</span></button>`).join('')}</div><div class="form-grid" style="margin-top:16px"><div class="field field--full"><label for="parcel-description">Description</label><input id="parcel-description" data-parcel-field="description" value="${escapeHtml(state.parcel.description)}"></div><div class="field"><label for="parcel-weight">Approximate weight</label><select id="parcel-weight" data-parcel-field="weight">${['Under 1 kg','1–5 kg','5–10 kg'].map(value => optionMarkup(value, state.parcel.weight)).join('')}</select></div><div class="field"><label for="parcel-quantity">Quantity</label><input id="parcel-quantity" data-parcel-field="quantity" type="number" value="${escapeHtml(state.parcel.quantity)}" min="1"></div><div class="field"><label for="parcel-value">Declared value</label><input id="parcel-value" data-parcel-field="declaredValue" value="${escapeHtml(state.parcel.declaredValue)}"></div><div class="field"><label for="parcel-fragile">Fragile handling</label><select id="parcel-fragile" data-parcel-field="fragile">${['No','Yes'].map(value => optionMarkup(value, state.parcel.fragile)).join('')}</select></div><div class="field field--full"><label for="parcel-instructions">Special instructions</label><textarea id="parcel-instructions" data-parcel-field="instructions">${escapeHtml(state.parcel.instructions)}</textarea></div><div class="field field--full"><label>Photograph</label><div class="upload-box" data-action="upload-demo" role="button" tabindex="0"><div><i data-lucide="image-plus"></i><strong style="display:block">Add parcel photograph</strong><span>Visual placeholder only</span></div></div></div></div>`;
-  if (step === 4) body = `<div class="card-head"><div><p class="section-kicker">Step 4 of 8</p><h2>Route and collection point</h2></div></div><div class="form-grid"><div class="field"><label for="parcel-origin">Origin stage</label><select id="parcel-origin" data-parcel-field="origin">${appData.routes.map(route => optionMarkup(route, state.parcel.origin)).join('')}</select></div><div class="field"><label for="parcel-route-destination">Destination stage</label><select id="parcel-route-destination" data-parcel-field="destination">${appData.routes.slice().reverse().map(route => optionMarkup(route, state.parcel.destination)).join('')}</select></div><div class="field"><label for="parcel-dropoff">Drop-off time</label><select id="parcel-dropoff" data-parcel-field="dropoff">${['Today · 8:00–9:00 AM','Today · 9:00–10:00 AM'].map(value => optionMarkup(value, state.parcel.dropoff)).join('')}</select></div><div class="field"><label for="parcel-departure">Preferred vehicle departure</label><select id="parcel-departure" data-parcel-field="departure">${['Next available vehicle','9:00 AM departure'].map(value => optionMarkup(value, state.parcel.departure)).join('')}</select></div></div><div class="route-map" style="margin-top:16px;min-height:200px"><div class="route-track">${['Entebbe','Kitooro','Abayita','Kajjansi','Kampala'].map(place => `<div class="route-stop"><span class="route-stop__dot"></span><span>${place}</span></div>`).join('')}</div></div>`;
-  if (step === 5) body = `<div class="card-head"><div><p class="section-kicker">Step 5 of 8</p><h2>Delivery option</h2></div></div><div class="radio-cards">${[['Standard Stage-to-Stage','Delivery on the next suitable vehicle · UGX 7,500','truck'],['Priority Stage-to-Stage','Priority handling and earliest departure · UGX 10,000','badge-alert'],['Hold for Collection','Hold securely at destination stage · UGX 8,000','package-check'],['Future Last-Mile Delivery','Concept preview for future address delivery','map-pin-plus']].map(item => `<label class="radio-card ${state.parcelDelivery === item[0] ? 'is-selected' : ''}"><input type="radio" name="parcel-delivery" value="${item[0]}" ${state.parcelDelivery === item[0] ? 'checked' : ''}><span class="radio-card__icon"><i data-lucide="${item[2]}"></i></span><span class="radio-card__body"><strong>${item[0]}</strong><span>${item[1]}</span></span></label>`).join('')}</div>`;
-  if (step === 6) body = `<div class="card-head"><div><p class="section-kicker">Step 6 of 8</p><h2>Price summary</h2></div></div><div class="detail-list"><div class="detail-row"><span>Parcel category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery option</span><strong>${state.parcelDelivery}</strong></div><div class="detail-row"><span>Route charge</span><strong>${formatUGX(parcelPrice() - 1500)}</strong></div><div class="detail-row"><span>Handling charge</span><strong>UGX 1,500</strong></div><div class="detail-row"><span>Promotional discount</span><strong class="text-success">UGX 0</strong></div></div><div class="total-row"><strong>Total</strong><strong>${formatUGX(parcelPrice())}</strong></div>`;
-  if (step === 7) {
+
+  if (step === 1) {
+    body = `
+      <div class="card-head"><div><h2>Sender details</h2></div></div>
+      <div class="form-grid">
+        <div class="field"><label for="parcel-sender-name">Full name</label><input id="parcel-sender-name" data-parcel-field="senderName" value="${escapeHtml(state.parcel.senderName)}"></div>
+        <div class="field"><label for="parcel-sender-phone">Telephone number</label><input id="parcel-sender-phone" data-parcel-field="senderPhone" value="${escapeHtml(state.parcel.senderPhone)}"></div>
+        <div class="field field--full"><label for="parcel-pickup">Origin stage</label><select id="parcel-pickup" data-parcel-field="origin">${appData.routes.map(route => optionMarkup(route, state.parcel.origin)).join('')}</select></div>
+        
+        <!-- Pickup location along corridor -->
+        <div class="field field--full">
+          <label for="parcel-pickup-location">Specific pickup point along corridor (Optional)</label>
+          <select id="parcel-pickup-location" data-parcel-field="pickupLocation">
+            <option value="" ${!state.parcel.pickupLocation ? 'selected' : ''}>Standard Stage Pickup (${escapeHtml(state.parcel.origin)})</option>
+            ${appData.routes.filter(r => r !== state.parcel.origin).map(r => optionMarkup(r, state.parcel.pickupLocation)).join('')}
+            <option value="__other__" ${state.parcel.pickupLocation === '__other__' ? 'selected' : ''}>Other – type your own</option>
+          </select>
+        </div>
+        ${state.parcel.pickupLocation === '__other__' ? `
+          <div class="field field--full" style="margin-top:-8px; animation: slideDown 0.2s ease;">
+            <label for="parcel-custom-pickup">Specify your pickup location</label>
+            <input id="parcel-custom-pickup" data-parcel-field="customPickup" placeholder="e.g. Total Petrol Station, Entebbe Road" value="${escapeHtml(state.parcel.customPickup || '')}">
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  if (step === 2) {
+    body = `
+      <div class="card-head"><div><h2>Recipient details</h2></div></div>
+      <div class="form-grid">
+        <div class="field"><label for="parcel-recipient-name">Full name</label><input id="parcel-recipient-name" data-parcel-field="recipientName" value="${escapeHtml(state.parcel.recipientName)}"></div>
+        <div class="field"><label for="parcel-recipient-phone">Telephone number</label><input id="parcel-recipient-phone" data-parcel-field="recipientPhone" value="${escapeHtml(state.parcel.recipientPhone)}"></div>
+        <div class="field field--full"><label for="parcel-destination">Destination stage</label><select id="parcel-destination" data-parcel-field="destination">${appData.routes.slice().reverse().map(route => optionMarkup(route, state.parcel.destination)).join('')}</select></div>
+        
+        <!-- Drop-off location along corridor -->
+        <div class="field field--full">
+          <label for="parcel-dropoff-location">Specific drop-off point along corridor (Optional)</label>
+          <select id="parcel-dropoff-location" data-parcel-field="dropoffLocation">
+            <option value="" ${!state.parcel.dropoffLocation ? 'selected' : ''}>Standard Stage Drop-off (${escapeHtml(state.parcel.destination)})</option>
+            ${appData.routes.filter(r => r !== state.parcel.destination).map(r => optionMarkup(r, state.parcel.dropoffLocation)).join('')}
+            <option value="__other__" ${state.parcel.dropoffLocation === '__other__' ? 'selected' : ''}>Other – type your own</option>
+          </select>
+        </div>
+        ${state.parcel.dropoffLocation === '__other__' ? `
+          <div class="field field--full" style="margin-top:-8px; animation: slideDown 0.2s ease;">
+            <label for="parcel-custom-dropoff">Specify your drop-off location</label>
+            <input id="parcel-custom-dropoff" data-parcel-field="customDropoff" placeholder="e.g. Shell Petrol Station, Jinja Road" value="${escapeHtml(state.parcel.customDropoff || '')}">
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  if (step === 3) {
+    body = `
+      <div class="card-head"><div><h2>Parcel information</h2></div></div>
+      <div class="parcel-category-grid">
+        ${['Documents','Small package','Medium package','Large package','Fragile item','Business parcel'].map((category,index) => `<button class="parcel-category ${state.parcelCategory === category ? 'is-selected' : ''}" type="button" data-action="parcel-category" data-value="${category}" aria-pressed="${state.parcelCategory === category}"><i data-lucide="${['file-text','package','package-open','boxes','glass-water','briefcase-business'][index]}"></i><span>${category}</span></button>`).join('')}
+      </div>
+      <div class="form-grid" style="margin-top:16px">
+        <div class="field field--full"><label for="parcel-description">Description</label><input id="parcel-description" data-parcel-field="description" value="${escapeHtml(state.parcel.description)}"></div>
+        <div class="field"><label for="parcel-weight">Approximate weight</label><select id="parcel-weight" data-parcel-field="weight">${['Under 1 kg','1–5 kg','5–10 kg'].map(value => optionMarkup(value, state.parcel.weight)).join('')}</select></div>
+        <div class="field"><label for="parcel-quantity">Quantity</label><input id="parcel-quantity" data-parcel-field="quantity" type="number" value="${escapeHtml(state.parcel.quantity)}" min="1"></div>
+        <div class="field"><label for="parcel-value">Declared value</label><input id="parcel-value" data-parcel-field="declaredValue" value="${escapeHtml(state.parcel.declaredValue)}"></div>
+        <div class="field"><label for="parcel-fragile">Fragile handling</label><select id="parcel-fragile" data-parcel-field="fragile">${['No','Yes'].map(value => optionMarkup(value, state.parcel.fragile)).join('')}</select></div>
+        <div class="field field--full">
+          <label for="parcel-departure">Preferred vehicle departure</label>
+          <select id="parcel-departure" data-parcel-field="departure">
+            ${['Next available vehicle','8:30 AM departure','9:00 AM departure','10:30 AM departure','12:00 PM departure','2:30 PM departure','4:00 PM departure'].map(value => optionMarkup(value, state.parcel.departure)).join('')}
+          </select>
+        </div>
+        <div class="field field--full"><label for="parcel-instructions">Special instructions</label><textarea id="parcel-instructions" data-parcel-field="instructions">${escapeHtml(state.parcel.instructions)}</textarea></div>
+        <div class="field field--full"><label>Photograph</label><div class="upload-box" data-action="upload-demo" role="button" tabindex="0"><div><i data-lucide="image-plus"></i><strong style="display:block">Add parcel photograph</strong><span>Visual placeholder only</span></div></div></div>
+      </div>
+    `;
+  }
+
+  if (step === 4) {
+    body = `
+      <div class="card-head"><div><h2>Delivery option</h2></div></div>
+      <div class="radio-cards">
+        ${[
+          ['Standard Stage-to-Stage','Delivery on the next suitable vehicle · UGX 7,500','truck'],
+          ['Priority Stage-to-Stage','Priority handling and earliest departure · UGX 10,000','badge-alert'],
+          ['Hold for Collection','Hold securely at destination stage · UGX 8,000','package-check'],
+          ['Future Last-Mile Delivery','Concept preview for future address delivery · UGX 12,000','map-pin-plus']
+        ].map(item => `<label class="radio-card ${state.parcelDelivery === item[0] ? 'is-selected' : ''}"><input type="radio" name="parcel-delivery" value="${item[0]}" ${state.parcelDelivery === item[0] ? 'checked' : ''}><span class="radio-card__icon"><i data-lucide="${item[2]}"></i></span><span class="radio-card__body"><strong>${item[0]}</strong><span>${item[1]}</span></span></label>`).join('')}
+      </div>
+    `;
+  }
+
+  if (step === 5) {
     const total = parcelPrice();
     const isOpen = !!state.orderSummaryOpen;
+
+    const pickupDisp = state.parcel.pickupLocation ? (state.parcel.pickupLocation === '__other__' ? (state.parcel.customPickup || 'Custom') : state.parcel.pickupLocation) : '';
+    const dropoffDisp = state.parcel.dropoffLocation ? (state.parcel.dropoffLocation === '__other__' ? (state.parcel.customDropoff || 'Custom') : state.parcel.dropoffLocation) : '';
 
     const summaryListHtml = `
       <div class="detail-list">
         <div class="detail-row"><span>Sender</span><strong>${escapeHtml(state.parcel.senderName)}</strong></div>
         <div class="detail-row"><span>Recipient</span><strong>${escapeHtml(state.parcel.recipientName)}</strong></div>
-        <div class="detail-row"><span>Route</span><strong>${state.parcel.origin} → ${state.parcel.destination}</strong></div>
+        <div class="detail-row"><span>Origin stage</span><strong>${escapeHtml(state.parcel.origin)}${pickupDisp ? ` (${escapeHtml(pickupDisp)})` : ''}</strong></div>
+        <div class="detail-row"><span>Destination stage</span><strong>${escapeHtml(state.parcel.destination)}${dropoffDisp ? ` (${escapeHtml(dropoffDisp)})` : ''}</strong></div>
         <div class="detail-row"><span>Category</span><strong>${state.parcelCategory}</strong></div>
+        <div class="detail-row"><span>Departure</span><strong>${escapeHtml(state.parcel.departure || 'Next available vehicle')}</strong></div>
         <div class="detail-row"><span>Delivery option</span><strong>${state.parcelDelivery}</strong></div>
         <div class="detail-row"><span>Route charge</span><strong>${formatUGX(total - 1500)}</strong></div>
         <div class="detail-row"><span>Handling fee</span><strong>UGX 1,500</strong></div>
@@ -2862,8 +2996,6 @@ function renderParcelStep() {
 
     body = `
       <div class="checkout-unified-layout">
-        
-        <!-- Mobile-only Shopify Order Summary Accordion -->
         <div class="shopify-summary-card mobile-summary-accordion ${isOpen ? 'is-open' : ''}">
           <div class="shopify-summary-header" data-action="toggle-order-summary" role="button" tabindex="0">
             <div class="shopify-summary-title">
@@ -2871,9 +3003,7 @@ function renderParcelStep() {
               <span>${isOpen ? 'Hide order summary' : 'Show order summary'}</span>
               <i data-lucide="chevron-down" class="shopify-accordion-arrow"></i>
             </div>
-            <div class="shopify-summary-price">
-              ${formatUGX(total)}
-            </div>
+            <div class="shopify-summary-price">${formatUGX(total)}</div>
           </div>
           ${isOpen ? `
             <div class="shopify-summary-body">
@@ -2887,15 +3017,17 @@ function renderParcelStep() {
         </div>
 
         <div class="checkout-grid-container">
-          <!-- Main Form Column -->
           <div class="checkout-main-col">
-            <div class="card-head"><div><p class="section-kicker">Step 7 of 8</p><h2 style="font-size: 1.15rem; font-weight: 850; color: var(--brand-blue-dark);">Parcel Payment</h2></div></div>
-            <div class="radio-cards">${parcelPaymentChoice('wallet','Fly Express Wallet',`Available balance: ${formatUGX(state.walletBalance)}`,'wallet-cards')}${parcelPaymentChoice('mobile','Mobile Money','MTN MoMo or Airtel Money','smartphone')}${parcelPaymentChoice('cash','Cash at Stage','Pay the parcel desk before dispatch','banknote')}</div>
+            <div class="card-head"><div><h2 style="font-size: 1.15rem; font-weight: 850; color: var(--brand-blue-dark);">Parcel Payment</h2></div></div>
+            <div class="radio-cards">
+              ${parcelPaymentChoice('wallet','Fly Express Wallet',`Available balance: ${formatUGX(state.walletBalance)}`,'wallet-cards')}
+              ${parcelPaymentChoice('mobile','Mobile Money','MTN MoMo or Airtel Money','smartphone')}
+              ${parcelPaymentChoice('cash','Cash at Stage','Pay the parcel desk before dispatch','banknote')}
+            </div>
             ${renderParcelPaymentPanel()}
-            <div class="notice" style="margin-top:16px"><i data-lucide="info"></i><div>No real payment is processed. Confirming moves directly to the receipt preview.</div></div>
+            <div class="notice" style="margin-top:16px"><i data-lucide="info"></i><div>No real payment is processed. Confirming completes your parcel booking.</div></div>
           </div>
 
-          <!-- Desktop Right Sidebar -->
           <aside class="checkout-sidebar-col">
             <div class="card checkout-summary-card">
               <div class="card-head" style="margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
@@ -2912,13 +3044,44 @@ function renderParcelStep() {
             </div>
           </aside>
         </div>
-
       </div>
     `;
   }
-  if (step === 8) body = `<div class="payment-state"><div class="success-check"><i data-lucide="check"></i></div><p class="eyebrow">Parcel registered</p><h2>Your parcel is ready for handover</h2><p class="muted">Tracking number #964201832-DL has been created for the demonstration.</p><button class="button button--primary" type="button" data-screen="parcel-receipt">View Parcel Receipt</button></div>`;
 
-  const buttons = step < 8 ? (step === 7 ? `
+  if (step === 6) {
+    const pickupDisp = state.parcel.pickupLocation ? (state.parcel.pickupLocation === '__other__' ? (state.parcel.customPickup || 'Custom') : state.parcel.pickupLocation) : '';
+    const dropoffDisp = state.parcel.dropoffLocation ? (state.parcel.dropoffLocation === '__other__' ? (state.parcel.customDropoff || 'Custom') : state.parcel.dropoffLocation) : '';
+
+    body = `
+      <section class="success-screen" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <div class="success-check"><i data-lucide="check"></i></div>
+        <p class="eyebrow" style="text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; color: var(--success); margin-bottom: 4px;">Parcel Registered</p>
+        <h1 style="font-size: 1.6rem; font-weight: 850; color: var(--brand-blue-dark); margin: 0 0 8px;">Ready for Handover</h1>
+        <p class="muted" style="margin-bottom: 20px;">Tracking number <strong>#964201832-DL</strong> has been generated for your parcel.</p>
+        
+        <article class="card" style="text-align: left; padding: 20px; border-radius: 18px; margin-bottom: 20px;">
+          <div class="detail-list">
+            <div class="detail-row"><span>Tracking Number</span><strong>#964201832-DL</strong></div>
+            <div class="detail-row"><span>Sender</span><strong>${escapeHtml(state.parcel.senderName)} (${escapeHtml(state.parcel.senderPhone)})</strong></div>
+            <div class="detail-row"><span>Recipient</span><strong>${escapeHtml(state.parcel.recipientName)} (${escapeHtml(state.parcel.recipientPhone)})</strong></div>
+            <div class="detail-row"><span>Origin Stage</span><strong>${escapeHtml(state.parcel.origin)}${pickupDisp ? ` (${escapeHtml(pickupDisp)})` : ''}</strong></div>
+            <div class="detail-row"><span>Destination Stage</span><strong>${escapeHtml(state.parcel.destination)}${dropoffDisp ? ` (${escapeHtml(dropoffDisp)})` : ''}</strong></div>
+            <div class="detail-row"><span>Preferred Departure</span><strong>${escapeHtml(state.parcel.departure || 'Next available vehicle')}</strong></div>
+            <div class="detail-row"><span>Amount ${state.parcelPaymentMethod === 'cash' ? 'Due' : 'Paid'}</span><strong>${formatUGX(parcelPrice())}</strong></div>
+            <div class="detail-row"><span>Payment Status</span><strong class="${state.parcelPaymentMethod === 'cash' ? 'text-warning' : 'text-success'}">${state.parcelPaymentMethod === 'cash' ? 'Payment Pending' : 'Paid'}</strong></div>
+          </div>
+        </article>
+
+        <div class="button-row" style="justify-content: center; gap: 12px; flex-wrap: wrap;">
+          <button class="button button--primary" type="button" data-screen="parcel-receipt"><i data-lucide="receipt"></i>View Receipt</button>
+          <button class="button button--ghost" type="button" data-screen="trackparcel"><i data-lucide="package-search"></i>Track Parcel</button>
+          <button class="button button--ghost" type="button" data-screen="home">Return Home</button>
+        </div>
+      </section>
+    `;
+  }
+
+  const buttons = step <= 5 ? (step === 5 ? `
     <div class="button-row" style="margin-top:20px; display: flex; gap: 12px;">
       <button class="button button--ghost" type="button" data-action="parcel-back" style="flex: 0 0 80px;">Back</button>
       <button class="button button--golden-orange checkout-pay-btn" type="button" data-action="parcel-next" style="flex: 1;">
@@ -2926,7 +3089,13 @@ function renderParcelStep() {
         <span>Complete Parcel Dispatch — ${formatUGX(parcelPrice())}</span>
       </button>
     </div>
-  ` : `<div class="button-row button-row--end" style="margin-top:20px"><button class="button button--ghost" type="button" data-action="parcel-back" ${step === 1 ? 'disabled' : ''}>Back</button><button class="button button--primary" type="button" data-action="parcel-next">Continue</button></div>`) : '';
+  ` : `
+    <div class="button-row button-row--end" style="margin-top:20px">
+      <button class="button button--ghost" type="button" data-action="parcel-back" ${step === 1 ? 'disabled' : ''}>Back</button>
+      <button class="button button--primary" type="button" data-action="parcel-next">Continue</button>
+    </div>
+  `) : '';
+
   return `${body}${buttons}`;
 }
 
@@ -2941,11 +3110,27 @@ function parcelPaymentChoice(value, title, copy, icon) {
 
 function renderParcelPaymentPanel() {
   if (state.parcelPaymentMethod === 'wallet') {
-    return `<div class="payment-panel"><div class="detail-row"><span>Parcel total</span><strong>${formatUGX(parcelPrice())}</strong></div><div class="detail-row"><span>Balance after payment</span><strong class="${state.walletBalance >= parcelPrice() ? 'text-success' : 'text-danger'}">${formatUGX(state.walletBalance - parcelPrice())}</strong></div><div class="field" style="margin-top:13px"><label for="parcel-wallet-pin">Wallet PIN</label><input id="parcel-wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div></div>`;
+    return `<div class="payment-panel">
+      <div class="grid grid--3" style="gap: 12px; margin-bottom: 4px;">
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Parcel Total</span>
+          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(parcelPrice())}</strong>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Wallet Balance</span>
+          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(state.walletBalance)}</strong>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Remaining Balance</span>
+          <strong class="${state.walletBalance >= parcelPrice() ? 'text-success' : 'text-danger'}" style="font-size: 0.97rem;">${formatUGX(state.walletBalance - parcelPrice())}</strong>
+        </div>
+      </div>
+      <div class="field" style="margin-top:13px"><label for="parcel-wallet-pin">Wallet PIN</label><input id="parcel-wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div>
+    </div>`;
   }
   if (state.parcelPaymentMethod === 'mobile') {
-    if (state.parcelPaymentDemoState === 'success') return `<div class="payment-panel payment-state"><div class="payment-state__icon payment-state__icon--success"><i data-lucide="circle-check-big"></i></div><h3>Authorization successful</h3><p class="muted">The simulated Mobile Money request was approved.</p><button class="button button--ghost button--small" type="button" data-action="parcel-payment-reset">Reset State</button></div>`;
-    if (state.parcelPaymentDemoState === 'failed') return `<div class="payment-panel payment-state"><div class="payment-state__icon payment-state__icon--failed"><i data-lucide="circle-x"></i></div><h3>Authorization failed</h3><p class="muted">The simulated request was declined.</p><button class="button button--ghost button--small" type="button" data-action="parcel-payment-reset">Try Again</button></div>`;
+    if (state.parcelPaymentDemoState === 'success') return paymentState('success', 'Authorization successful', 'The simulated Mobile Money request was approved.', 'parcel-payment-reset');
+    if (state.parcelPaymentDemoState === 'failed') return paymentState('failed', 'Authorization failed', 'The simulated request was declined.', 'parcel-payment-reset');
     return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Operator</label><select id="parcel-mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option>MTN MoMo</option><option>Airtel Money</option></select></div><div class="field"><label for="parcel-mobile-number">Mobile Money number</label><input id="parcel-mobile-number" value="${escapeHtml(state.parcel.senderPhone)}"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--success button--small" type="button" data-action="parcel-payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="parcel-payment-state" data-value="failed">Simulate Failure</button></div></div>`;
   }
   return `<div class="payment-panel"><div class="notice"><i data-lucide="clock-3"></i><div><strong>Payment due at the parcel desk.</strong><div>The parcel remains registered but will not dispatch until the simulated cash payment is confirmed.</div></div></div></div>`;
@@ -2956,16 +3141,16 @@ function advanceParcel() {
   if (state.parcelStep === 2 && (!state.parcel.recipientName.trim() || !state.parcel.recipientPhone.trim())) return toast('Enter the recipient name and telephone number.', 'danger');
   if (state.parcelStep === 3 && (!state.parcel.description.trim() || Number(state.parcel.quantity) < 1)) return toast('Describe the parcel and enter a valid quantity.', 'danger');
   if (state.parcelStep === 4 && state.parcel.origin === state.parcel.destination) return toast('Choose different origin and destination stages.', 'danger');
-  if (state.parcelStep === 7) {
+  if (state.parcelStep === 5) {
     if (state.parcelPaymentMethod === 'wallet' && !/^\d{4}$/.test($('#parcel-wallet-pin')?.value.trim() || '')) return toast('Enter any four digits for the demonstration wallet PIN.', 'danger');
     if (state.parcelPaymentMethod === 'wallet' && parcelPrice() > state.walletBalance) return toast('The demonstration wallet balance is insufficient. Choose another payment method.', 'danger');
     if (state.parcelPaymentMethod === 'mobile' && state.parcelPaymentDemoState !== 'success') return toast('Simulate a successful mobile-money response before confirming.', 'danger');
   }
-  state.parcelStep = Math.min(8, state.parcelStep + 1);
+  state.parcelStep = Math.min(6, state.parcelStep + 1);
   renderCurrentScreen(false);
   const heading = $('#main-content h2');
   if (heading) { heading.setAttribute('tabindex', '-1'); setTimeout(() => heading.focus({ preventScroll: true }), 20); }
-  if (state.parcelStep === 8) toast('Parcel registered in demonstration mode.', 'success');
+  if (state.parcelStep === 6) toast('Parcel registered in demonstration mode.', 'success');
 }
 
 function renderParcelReceipt() {
