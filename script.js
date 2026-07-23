@@ -1371,126 +1371,126 @@ function renderBook() {
             ` : ''}
           </div>
 
-          <div class="route-interchange-card">
-            <div class="route-field-box">
-              <label for="book-from">FROM</label>
-              <select id="book-from" data-field="search-from">
-                ${allowedFrom.map(route => optionMarkup(route, state.searchFrom)).join('')}
-              </select>
-            </div>
-            <button class="swap-button vertical-swap-btn" type="button" data-action="swap-route" aria-label="Swap locations">
-              <i data-lucide="arrow-down-up" style="width: 18px; height: 18px; color: var(--brand-blue-dark);"></i>
-            </button>
-            <div class="route-field-box">
-              <label for="book-to">TO</label>
-              <select id="book-to" data-field="search-to">
-                ${allowedTo.map(route => optionMarkup(route, state.searchTo)).join('')}
-              </select>
-            </div>
-          </div>
-          
-          <div class="form-grid form-grid--2" style="margin-top: 16px; align-items: start;">
-            <div class="field">
-              <label>Travel date</label>
-              <div class="choice-pills" style="margin-top: 4px; display: flex; gap: 8px;">
-                <button class="choice-pill ${state.dateSelectionMode === 'today' ? 'is-selected' : ''}" type="button" data-action="select-date-mode" data-value="today" style="flex: 1; text-align: center;">Today</button>
-                <button class="choice-pill ${state.dateSelectionMode === 'later' ? 'is-selected' : ''}" type="button" data-action="select-date-mode" data-value="later" style="flex: 1; text-align: center;">Later</button>
+          <div class="booking-step2-body">
+            <div class="route-interchange-card">
+              <div class="route-field-box">
+                <label for="book-from">FROM</label>
+                <select id="book-from" data-field="search-from">
+                  ${allowedFrom.map(route => optionMarkup(route, state.searchFrom)).join('')}
+                </select>
               </div>
-              ${state.dateSelectionMode === 'later' ? `
-                <div style="margin-top: 8px;">
-                  <label for="book-date" style="font-size: 0.75rem; font-weight: 700; color: var(--slate); display: block; margin-bottom: 4px;">Choose custom date</label>
-                  <input id="book-date" type="date" value="${state.bookingDate}" data-field="booking-date" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
-                </div>
-              ` : ''}
+              <button class="swap-button vertical-swap-btn" type="button" data-action="swap-route" aria-label="Swap locations">
+                <i data-lucide="arrow-down-up" style="width: 18px; height: 18px; color: var(--brand-blue-dark);"></i>
+              </button>
+              <div class="route-field-box">
+                <label for="book-to">TO</label>
+                <select id="book-to" data-field="search-to">
+                  ${allowedTo.map(route => optionMarkup(route, state.searchTo)).join('')}
+                </select>
+              </div>
             </div>
-            <div class="field"><label for="book-period">Preferred period</label><select id="book-period" data-field="search-period">${['Morning','Afternoon','Evening'].map(period => optionMarkup(period, state.searchPeriod, `${period} · ${period === 'Morning' ? '5:00–11:59' : period === 'Afternoon' ? '12:00–4:59' : '5:00–10:00'}`)).join('')}</select></div>
-          </div>
-
-          <!-- Drop-off location along corridor -->
-          <div class="field" style="margin-top: 16px; text-align: left; width: 100%;">
-            <label for="book-drop-off">Preferred drop-off point along the corridor</label>
-            <select id="book-drop-off" data-field="drop-off-location" style="width: 100%;">
-              ${getDropOffOptions().map(stage => optionMarkup(stage, state.dropOffLocation, stage === state.searchTo ? `${stage} (Final destination)` : stage)).join('')}
-            </select>
-          </div>
-
-          <!-- Modern side-by-side (stacked on mobile) Adults & Children steppers -->
-          <div class="steppers-row">
             
-            <!-- Adults Card -->
-            <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
-              <div style="text-align: left;">
-                <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Adults</strong>
-                <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">12+ years</span>
+            <div class="form-grid form-grid--2" style="align-items: start;">
+              <div class="field">
+                <label>Travel date</label>
+                <div class="choice-pills" style="margin-top: 4px; display: flex; gap: 8px;">
+                  <button class="choice-pill ${state.dateSelectionMode === 'today' ? 'is-selected' : ''}" type="button" data-action="select-date-mode" data-value="today" style="flex: 1; text-align: center;">Today</button>
+                  <button class="choice-pill ${state.dateSelectionMode === 'later' ? 'is-selected' : ''}" type="button" data-action="select-date-mode" data-value="later" style="flex: 1; text-align: center;">Later</button>
+                </div>
+                ${state.dateSelectionMode === 'later' ? `
+                  <div style="margin-top: 8px;">
+                    <label for="book-date" style="font-size: 0.75rem; font-weight: 700; color: var(--slate); display: block; margin-bottom: 4px;">Choose custom date</label>
+                    <input id="book-date" type="date" value="${state.bookingDate}" data-field="booking-date" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
+                  </div>
+                ` : ''}
               </div>
-              <div class="stepper-controls" style="display: flex; align-items: center; gap: 12px;">
-                <button type="button" class="stepper-btn" data-action="decrement-adults" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
-                <span id="adult-count-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.15rem; color: var(--charcoal);">${state.passengerCount}</span>
-                <button type="button" class="stepper-btn" data-action="increment-adults" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
-              </div>
+              <div class="field"><label for="book-period">Preferred period</label><select id="book-period" data-field="search-period">${['Morning','Afternoon','Evening'].map(period => optionMarkup(period, state.searchPeriod, `${period} · ${period === 'Morning' ? '5:00–11:59' : period === 'Afternoon' ? '12:00–4:59' : '5:00–10:00'}`)).join('')}</select></div>
             </div>
 
-            <!-- Children Card -->
-            <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
-              <div style="text-align: left;">
-                <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Children</strong>
-                <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">Under 12</span>
-              </div>
-              <div class="stepper-controls" style="display: flex; align-items: center; gap: 12px;">
-                <button type="button" class="stepper-btn" data-action="decrement-children" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
-                <span id="child-count-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.15rem; color: var(--charcoal);">${state.childCount}</span>
-                <button type="button" class="stepper-btn" data-action="increment-children" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
-              </div>
+            <!-- Drop-off location along corridor -->
+            <div class="field" style="text-align: left; width: 100%;">
+              <label for="book-drop-off">Preferred drop-off point along the corridor</label>
+              <select id="book-drop-off" data-field="drop-off-location" style="width: 100%;">
+                ${getDropOffOptions().map(stage => optionMarkup(stage, state.dropOffLocation, stage === state.searchTo ? `${stage} (Final destination)` : stage)).join('')}
+              </select>
             </div>
 
-          </div>
-
-          <!-- Reserved Child Seats Stepper Card (Only shown if children added) -->
-          ${state.childCount > 0 ? `
-            <div style="margin-top: 16px;">
-              <div class="stepper-card" style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <!-- Modern side-by-side (stacked on mobile) Adults & Children steppers -->
+            <div class="steppers-row">
+              
+              <!-- Adults Card -->
+              <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
                 <div style="text-align: left;">
-                  <strong style="font-size: 0.95rem; display: block; color: var(--charcoal);">Reserved Child Seats</strong>
-                  <span class="muted text-small" style="font-size: 0.76rem; display: block; margin-top: 2px;">Lap travel is free. Reserving a seat adds normal fare (${formatUGX(state.ticketType === 'return' ? 9000 : 5000)} / child)</span>
+                  <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Adults</strong>
+                  <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">12+ years</span>
                 </div>
-                <div class="stepper-controls" style="display: flex; align-items: center; gap: 14px;">
-                  <button type="button" class="stepper-btn" data-action="decrement-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
-                  <span id="child-seats-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.2rem; color: var(--charcoal);">${state.reservedChildSeatsCount}</span>
-                  <button type="button" class="stepper-btn" data-action="increment-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
+                <div class="stepper-controls" style="display: flex; align-items: center; gap: 12px;">
+                  <button type="button" class="stepper-btn" data-action="decrement-adults" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
+                  <span id="adult-count-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.15rem; color: var(--charcoal);">${state.passengerCount}</span>
+                  <button type="button" class="stepper-btn" data-action="increment-adults" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
                 </div>
               </div>
-            </div>
-          ` : ''}
 
-          <!-- Advance Travel Notifications Section -->
-          <div style="margin-top: 16px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; text-align: left;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-              <i data-lucide="bell" style="width: 18px; height: 18px; color: var(--brand-blue);"></i>
-              <strong style="font-size: 0.9rem; color: var(--brand-blue-dark);">Advance Travel Alert Preferences</strong>
-            </div>
-            <p style="font-size: 0.8rem; color: var(--slate); margin: 0 0 10px 0; line-height: 1.4;">
-              Since you are scheduling for later, get automated SMS &amp; app alerts as your vehicle enters stage:
-            </p>
-            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
-                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me when my vehicle becomes active on stage
-              </label>
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
-                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me 15 minutes before scheduled departure
-              </label>
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
-                <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me if driver goes off-road or changes timeline
-              </label>
-            </div>
-          </div>
+              <!-- Children Card -->
+              <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="text-align: left;">
+                  <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Children</strong>
+                  <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">Under 12</span>
+                </div>
+                <div class="stepper-controls" style="display: flex; align-items: center; gap: 12px;">
+                  <button type="button" class="stepper-btn" data-action="decrement-children" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
+                  <span id="child-count-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.15rem; color: var(--charcoal);">${state.childCount}</span>
+                  <button type="button" class="stepper-btn" data-action="increment-children" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
+                </div>
+              </div>
 
+            </div>
+
+            <!-- Reserved Child Seats Stepper Card (Only shown if children added) -->
+            ${state.childCount > 0 ? `
+              <div>
+                <div class="stepper-card" style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                  <div style="text-align: left;">
+                    <strong style="font-size: 0.95rem; display: block; color: var(--charcoal);">Reserved Child Seats</strong>
+                    <span class="muted text-small" style="font-size: 0.76rem; display: block; margin-top: 2px;">Lap travel is free. Reserving a seat adds normal fare (${formatUGX(state.ticketType === 'return' ? 9000 : 5000)} / child)</span>
+                  </div>
+                  <div class="stepper-controls" style="display: flex; align-items: center; gap: 14px;">
+                    <button type="button" class="stepper-btn" data-action="decrement-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">-</button>
+                    <span id="child-seats-display" style="width: 20px; text-align: center; font-weight: 800; font-size: 1.2rem; color: var(--charcoal);">${state.reservedChildSeatsCount}</span>
+                    <button type="button" class="stepper-btn" data-action="increment-child-seats" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--brand-blue); box-shadow: var(--shadow-xs); transition: all 0.2s;">+</button>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- Advance Travel Notifications Section -->
+            <div style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; text-align: left;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <i data-lucide="bell" style="width: 18px; height: 18px; color: var(--brand-blue);"></i>
+                <strong style="font-size: 0.9rem; color: var(--brand-blue-dark);">Advance Travel Alert Preferences</strong>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--slate); margin: 0 0 10px 0; line-height: 1.4;">
+                Since you are scheduling for later, get automated SMS &amp; app alerts as your vehicle enters stage:
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                  <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me when my vehicle becomes active on stage
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                  <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me 15 minutes before scheduled departure
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                  <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me if driver goes off-road or changes timeline
+                </label>
+              </div>
+            </div>
+
+            <div class="button-row" style="margin-top: 8px;">
+              <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
+              <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step">Search Vehicles</button>
+            </div>
           </div>
         </section>
-
-      <div class="floating-cta-container button-row" style="margin-top: 24px;">
-        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
-        <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step">Search Vehicles</button>
-      </div>
     `;
   }
 
