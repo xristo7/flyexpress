@@ -2544,14 +2544,7 @@ function renderCheckout() {
               <span class="status-chip status-chip--warning">Demo mode</span>
             </div>
 
-            <div class="radio-cards" style="margin-top: 16px;">
-              ${paymentChoice('wallet', 'Fly Express Wallet', `Available balance: ${formatUGX(state.walletBalance)}`, 'wallet-cards')}
-              ${paymentChoice('mtn', 'MTN Mobile Money', 'Simulated mobile-money authorization', 'smartphone')}
-              ${paymentChoice('airtel', 'Airtel Money', 'Simulated mobile-money authorization', 'smartphone')}
-              ${paymentChoice('cash', 'Cash at Stage', 'Pay the dispatcher before boarding', 'banknote')}
-              ${paymentChoice('corporate', 'Corporate Travel Account', 'For approved business travellers', 'building-2')}
-              ${paymentChoice('voucher', 'Promotional Voucher', 'Apply an eligible campaign code', 'ticket-percent')}
-            </div>
+            ${renderStandardPaymentOptions(state.paymentMethod, 'payment-method', 'Pay the dispatcher before boarding')}
 
             <div style="margin-top: 16px;">
               ${renderPaymentPanel(total, walletRemaining)}
@@ -2600,8 +2593,26 @@ function renderCheckout() {
   `;
 }
 
-function paymentChoice(value, title, copy, icon) {
-  return `<label class="radio-card ${state.paymentMethod === value ? 'is-selected' : ''}"><input type="radio" name="payment-method" value="${value}" ${state.paymentMethod === value ? 'checked' : ''}><span class="radio-card__icon"><i data-lucide="${icon}"></i></span><span class="radio-card__body"><strong>${title}</strong><span>${copy}</span></span></label>`;
+function renderStandardPaymentOptions(selectedMethod, radioName = 'payment-method', cashSubtitle = 'Pay the dispatcher before boarding') {
+  return `
+    <div class="radio-cards">
+      ${paymentChoiceTile('wallet', 'Fly Express Wallet', `Available balance: ${formatUGX(state.walletBalance)}`, 'wallet-cards', selectedMethod, radioName)}
+      ${paymentChoiceTile('mtn', 'MTN Mobile Money', 'Simulated mobile-money authorization', 'smartphone', selectedMethod, radioName)}
+      ${paymentChoiceTile('airtel', 'Airtel Money', 'Simulated mobile-money authorization', 'smartphone', selectedMethod, radioName)}
+      ${paymentChoiceTile('cash', 'Cash at Stage', cashSubtitle, 'banknote', selectedMethod, radioName)}
+      ${paymentChoiceTile('corporate', 'Corporate Travel Account', 'For approved business travellers', 'building-2', selectedMethod, radioName)}
+      ${paymentChoiceTile('voucher', 'Promotional Voucher', 'Apply an eligible campaign code', 'ticket-percent', selectedMethod, radioName)}
+    </div>
+  `;
+}
+
+function paymentChoiceTile(value, title, copy, icon, currentMethod, radioName) {
+  const isSelected = currentMethod === value;
+  return `<label class="radio-card ${isSelected ? 'is-selected' : ''}">
+    <input type="radio" name="${radioName}" value="${value}" ${isSelected ? 'checked' : ''}>
+    <span class="radio-card__icon"><i data-lucide="${icon}"></i></span>
+    <span class="radio-card__body"><strong>${title}</strong><span>${copy}</span></span>
+  </label>`;
 }
 
 function renderPaymentPanel(total, walletRemaining) {
@@ -2624,15 +2635,69 @@ function renderPaymentPanel(total, walletRemaining) {
       <div class="field" style="margin-top:13px"><label for="wallet-pin">Wallet PIN</label><input id="wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div>
     </div>`;
   }
-  if (state.paymentMethod === 'mobile') {
+  if (state.paymentMethod === 'mobile' || state.paymentMethod === 'mtn' || state.paymentMethod === 'airtel') {
     if (state.paymentDemoState === 'pending') return paymentState('pending','Authorization pending',`A simulated Mobile Money prompt is awaiting approval.`);
     if (state.paymentDemoState === 'success') return paymentState('success','Authorization successful','The mockup payment state has been approved.');
     if (state.paymentDemoState === 'failed') return paymentState('failed','Authorization failed','The demonstration request was declined. Try another state.');
-    return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Operator</label><select id="mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option>MTN MoMo</option><option>Airtel Money</option></select></div><div class="field"><label>Telephone number</label><input value="+256 772 345 678"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--secondary button--small" type="button" data-action="payment-state" data-value="pending">Simulate Pending</button><button class="button button--success button--small" type="button" data-action="payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="payment-state" data-value="failed">Simulate Failure</button></div></div>`;
+    return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Operator</label><select id="mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option ${state.paymentMethod === 'airtel' ? '' : 'selected'}>MTN MoMo</option><option ${state.paymentMethod === 'airtel' ? 'selected' : ''}>Airtel Money</option></select></div><div class="field"><label>Telephone number</label><input value="+256 772 345 678"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--secondary button--small" type="button" data-action="payment-state" data-value="pending">Simulate Pending</button><button class="button button--success button--small" type="button" data-action="payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="payment-state" data-value="failed">Simulate Failure</button></div></div>`;
   }
   if (state.paymentMethod === 'cash') return `<div class="payment-panel"><div class="notice"><i data-lucide="clock-3"></i><div><strong>Reservation held for 15 demonstration minutes.</strong><div>Pay the dispatcher before boarding. Booking reference FX-260718-1842 will show Payment Pending until confirmed.</div></div></div></div>`;
   if (state.paymentMethod === 'corporate') return `<div class="payment-panel"><div class="field"><label for="corporate-reference">Corporate account reference</label><input id="corporate-reference" value="FETA-CORP-DEMO-24"></div><p class="muted text-small">The account will be shown as awaiting corporate approval.</p></div>`;
   return `<div class="payment-panel"><div class="field"><label for="voucher-code">Promotional voucher</label><input id="voucher-code" value="${state.voucherApplied ? 'FLY2000' : ''}" placeholder="Enter FLY2000"></div><button class="button button--secondary button--small" style="margin-top:10px" type="button" data-action="apply-voucher">Apply Demo Voucher</button><p class="muted text-small" style="margin-top:10px">A voucher reduces the total; choose another method to pay the balance.</p></div>`;
+}
+
+function renderSpecialHirePaymentPanel(priceDetails) {
+  const sh = state.specialHire;
+  const total = priceDetails.total;
+  const walletRemaining = state.walletBalance - total;
+
+  if (sh.paymentMethod === 'wallet') {
+    return `<div class="payment-panel">
+      <div class="grid grid--3" style="gap: 12px; margin-bottom: 4px;">
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Charter Total</span>
+          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(total)}</strong>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Wallet Balance</span>
+          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(state.walletBalance)}</strong>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Remaining Balance</span>
+          <strong class="${walletRemaining < 0 ? 'text-danger' : 'text-success'}" style="font-size: 0.97rem;">${formatUGX(walletRemaining)}</strong>
+        </div>
+      </div>
+      <div class="field" style="margin-top:13px"><label for="hire-wallet-pin">Wallet PIN</label><input id="hire-wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div>
+    </div>`;
+  }
+
+  if (sh.paymentMethod === 'mobile' || sh.paymentMethod === 'mtn' || sh.paymentMethod === 'airtel') {
+    if (sh.paymentDemoState === 'pending') return paymentState('pending', 'Authorization pending', 'A simulated Mobile Money prompt is awaiting approval.', 'hire-payment-reset');
+    if (sh.paymentDemoState === 'success') return paymentState('success', 'Authorization successful', 'The mockup payment state has been approved.', 'hire-payment-reset');
+    if (sh.paymentDemoState === 'failed') return paymentState('failed', 'Authorization failed', 'The demonstration request was declined.', 'hire-payment-reset');
+
+    return `<div class="payment-panel">
+      <div class="form-grid">
+        <div class="field"><label>Operator</label><select id="hire-mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option ${sh.paymentMethod === 'airtel' ? '' : 'selected'}>MTN MoMo</option><option ${sh.paymentMethod === 'airtel' ? 'selected' : ''}>Airtel Money</option></select></div>
+        <div class="field"><label>Telephone number</label><input value="${escapeHtml(appData.passenger.phone)}"></div>
+      </div>
+      <div class="button-row" style="margin-top:13px">
+        <button class="button button--secondary button--small" type="button" data-action="hire-payment-state" data-value="pending">Simulate Pending</button>
+        <button class="button button--success button--small" type="button" data-action="hire-payment-state" data-value="success">Simulate Success</button>
+        <button class="button button--soft-red button--small" type="button" data-action="hire-payment-state" data-value="failed">Simulate Failure</button>
+      </div>
+    </div>`;
+  }
+
+  if (sh.paymentMethod === 'cash') {
+    return `<div class="payment-panel"><div class="notice"><i data-lucide="clock-3"></i><div><strong>Reservation held for demonstration.</strong><div>Pay the dispatcher or driver before departure. Permit status will show Payment Pending until confirmed.</div></div></div></div>`;
+  }
+
+  if (sh.paymentMethod === 'corporate') {
+    return `<div class="payment-panel"><div class="field"><label for="hire-corporate-ref">Corporate account reference</label><input id="hire-corporate-ref" value="FETA-CORP-HIRE-09"></div><p class="muted text-small">Charter invoice will be routed to your corporate account.</p></div>`;
+  }
+
+  return `<div class="payment-panel"><div class="field"><label for="hire-voucher-code">Promotional voucher</label><input id="hire-voucher-code" value="${sh.voucherApplied ? 'SPECIAL2026' : ''}" placeholder="Enter SPECIAL2026"></div><button class="button button--secondary button--small" style="margin-top:10px" type="button" data-action="apply-hire-voucher">Apply Demo Voucher</button><p class="muted text-small" style="margin-top:10px">A voucher reduces the total; choose another method to pay the balance.</p></div>`;
 }
 
 function paymentState(type, title, copy, action = 'payment-reset') {
@@ -3019,12 +3084,10 @@ function renderParcelStep() {
         <div class="checkout-grid-container">
           <div class="checkout-main-col">
             <div class="card-head"><div><h2 style="font-size: 1.15rem; font-weight: 850; color: var(--brand-blue-dark);">Parcel Payment</h2></div></div>
-            <div class="radio-cards">
-              ${parcelPaymentChoice('wallet','Fly Express Wallet',`Available balance: ${formatUGX(state.walletBalance)}`,'wallet-cards')}
-              ${parcelPaymentChoice('mobile','Mobile Money','MTN MoMo or Airtel Money','smartphone')}
-              ${parcelPaymentChoice('cash','Cash at Stage','Pay the parcel desk before dispatch','banknote')}
+            ${renderStandardPaymentOptions(state.parcelPaymentMethod, 'parcel-payment-method', 'Pay the parcel desk before dispatch')}
+            <div style="margin-top: 16px;">
+              ${renderParcelPaymentPanel()}
             </div>
-            ${renderParcelPaymentPanel()}
             <!-- Checkout action buttons placed inside left column -->
             <div class="button-row" style="margin-top:20px; display: flex; gap: 12px;">
               <button class="button button--ghost" type="button" data-action="parcel-back" style="flex: 0 0 80px;">Back</button>
@@ -3108,12 +3171,16 @@ function parcelPaymentChoice(value, title, copy, icon) {
 }
 
 function renderParcelPaymentPanel() {
-  if (state.parcelPaymentMethod === 'wallet') {
+  const method = state.parcelPaymentMethod;
+  const total = parcelPrice();
+  const walletRemaining = state.walletBalance - total;
+
+  if (method === 'wallet') {
     return `<div class="payment-panel">
       <div class="grid grid--3" style="gap: 12px; margin-bottom: 4px;">
         <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
           <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Parcel Total</span>
-          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(parcelPrice())}</strong>
+          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(total)}</strong>
         </div>
         <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
           <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Wallet Balance</span>
@@ -3121,18 +3188,24 @@ function renderParcelPaymentPanel() {
         </div>
         <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
           <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Remaining Balance</span>
-          <strong class="${state.walletBalance >= parcelPrice() ? 'text-success' : 'text-danger'}" style="font-size: 0.97rem;">${formatUGX(state.walletBalance - parcelPrice())}</strong>
+          <strong class="${walletRemaining < 0 ? 'text-danger' : 'text-success'}" style="font-size: 0.97rem;">${formatUGX(walletRemaining)}</strong>
         </div>
       </div>
       <div class="field" style="margin-top:13px"><label for="parcel-wallet-pin">Wallet PIN</label><input id="parcel-wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div>
     </div>`;
   }
-  if (state.parcelPaymentMethod === 'mobile') {
+  if (method === 'mobile' || method === 'mtn' || method === 'airtel') {
     if (state.parcelPaymentDemoState === 'success') return paymentState('success', 'Authorization successful', 'The simulated Mobile Money request was approved.', 'parcel-payment-reset');
     if (state.parcelPaymentDemoState === 'failed') return paymentState('failed', 'Authorization failed', 'The simulated request was declined.', 'parcel-payment-reset');
-    return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Operator</label><select id="parcel-mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option>MTN MoMo</option><option>Airtel Money</option></select></div><div class="field"><label for="parcel-mobile-number">Mobile Money number</label><input id="parcel-mobile-number" value="${escapeHtml(state.parcel.senderPhone)}"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--success button--small" type="button" data-action="parcel-payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="parcel-payment-state" data-value="failed">Simulate Failure</button></div></div>`;
+    return `<div class="payment-panel"><div class="form-grid"><div class="field"><label>Operator</label><select id="parcel-mobile-operator" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option ${method === 'airtel' ? '' : 'selected'}>MTN MoMo</option><option ${method === 'airtel' ? 'selected' : ''}>Airtel Money</option></select></div><div class="field"><label for="parcel-mobile-number">Mobile Money number</label><input id="parcel-mobile-number" value="${escapeHtml(state.parcel.senderPhone)}"></div></div><div class="button-row" style="margin-top:13px"><button class="button button--success button--small" type="button" data-action="parcel-payment-state" data-value="success">Simulate Success</button><button class="button button--soft-red button--small" type="button" data-action="parcel-payment-state" data-value="failed">Simulate Failure</button></div></div>`;
   }
-  return `<div class="payment-panel"><div class="notice"><i data-lucide="clock-3"></i><div><strong>Payment due at the parcel desk.</strong><div>The parcel remains registered but will not dispatch until the simulated cash payment is confirmed.</div></div></div></div>`;
+  if (method === 'cash') {
+    return `<div class="payment-panel"><div class="notice"><i data-lucide="clock-3"></i><div><strong>Payment due at the parcel desk.</strong><div>The parcel remains registered but will not dispatch until the simulated cash payment is confirmed.</div></div></div></div>`;
+  }
+  if (method === 'corporate') {
+    return `<div class="payment-panel"><div class="field"><label for="parcel-corporate-ref">Corporate account reference</label><input id="parcel-corporate-ref" value="FETA-CORP-PARCEL-12"></div><p class="muted text-small">Parcel charges will be billed directly to your corporate account.</p></div>`;
+  }
+  return `<div class="payment-panel"><div class="field"><label for="parcel-voucher-code">Promotional voucher</label><input id="parcel-voucher-code" value="${state.parcelVoucherApplied ? 'PARCEL2000' : ''}" placeholder="Enter PARCEL2000"></div><button class="button button--secondary button--small" style="margin-top:10px" type="button" data-action="apply-parcel-voucher">Apply Demo Voucher</button><p class="muted text-small" style="margin-top:10px">A voucher reduces the total; choose another method to pay the balance.</p></div>`;
 }
 
 function advanceParcel() {
@@ -3573,80 +3646,12 @@ function renderSpecialHire() {
                 </div>
               </div>
               
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
-                <label class="radio-card ${sh.paymentMethod === 'wallet' ? 'is-selected' : ''}" style="border: 2px solid ${sh.paymentMethod === 'wallet' ? 'var(--brand-blue)' : 'var(--border)'}; padding: 12px; border-radius: 12px; display: flex; gap: 10px; cursor: pointer; align-items: center; background: white;">
-                  <input type="radio" name="hire-payment-method" value="wallet" ${sh.paymentMethod === 'wallet' ? 'checked' : ''} data-action="select-hire-payment-method" style="display:none;">
-                  <i data-lucide="wallet-cards" style="color: var(--brand-blue); width: 24px; height: 24px;"></i>
-                  <div style="display: flex; flex-direction: column;">
-                    <strong style="font-size: 0.9rem;">Wallet Balance</strong>
-                    <span class="muted" style="font-size: 0.75rem;">Bal: ${formatUGX(state.walletBalance)}</span>
-                  </div>
-                </label>
-                
-                <label class="radio-card ${sh.paymentMethod === 'mobile' ? 'is-selected' : ''}" style="border: 2px solid ${sh.paymentMethod === 'mobile' ? 'var(--brand-blue)' : 'var(--border)'}; padding: 12px; border-radius: 12px; display: flex; gap: 10px; cursor: pointer; align-items: center; background: white;">
-                  <input type="radio" name="hire-payment-method" value="mobile" ${sh.paymentMethod === 'mobile' ? 'checked' : ''} data-action="select-hire-payment-method" style="display:none;">
-                  <i data-lucide="smartphone" style="color: var(--warning); width: 24px; height: 24px;"></i>
-                  <div style="display: flex; flex-direction: column;">
-                    <strong style="font-size: 0.9rem;">Mobile Money</strong>
-                    <span class="muted" style="font-size: 0.75rem;">MTN MoMo or Airtel Money</span>
-                  </div>
-                </label>
-              </div>
+              ${renderStandardPaymentOptions(sh.paymentMethod, 'hire-payment-method', 'Pay the dispatcher or driver before departure')}
               
-              ${sh.paymentMethod === 'wallet' ? `
-                <div class="payment-panel" style="background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px;">
-                  <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px;">
-                    <span>Total Charter Price</span>
-                    <strong>${formatUGX(priceDetails.total)}</strong>
-                  </div>
-                  <div class="detail-row" style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 12px;">
-                    <span>Balance after payment</span>
-                    <strong class="${state.walletBalance >= priceDetails.total ? 'text-success' : 'text-danger'}">${formatUGX(state.walletBalance - priceDetails.total)}</strong>
-                  </div>
-                  ${state.walletBalance < priceDetails.total ? `
-                    <div class="notice" style="background: var(--danger-soft); color: var(--danger);"><i data-lucide="triangle-alert"></i><div>Insufficient Wallet Funds. Choose Mobile Money or deposit funds.</div></div>
-                  ` : `
-                    <div class="field" style="margin-top:13px">
-                      <label for="hire-wallet-pin">Wallet PIN</label>
-                      <input id="hire-wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%; max-width: 200px;">
-                      <span class="field-help">Any four digits are accepted in this preview.</span>
-                    </div>
-                  `}
-                </div>
-              ` : `
-                <div class="payment-panel" style="background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px;">
-                  ${sh.paymentDemoState === 'success' ? `
-                    <div class="payment-panel payment-state" style="text-align: center; display: grid; justify-items: center; gap: 8px;">
-                      <div class="payment-state__icon payment-state__icon--success" style="width: 48px; height: 48px; border-radius: 50%; background: var(--success-soft); color: var(--success); display: grid; place-items: center;"><i data-lucide="circle-check-big"></i></div>
-                      <h3 style="margin: 4px 0 0;">Simulated MoMo Request Approved</h3>
-                      <p class="muted" style="font-size: 0.8rem; margin: 0 0 12px;">Click Complete Special Hire below to finish.</p>
-                      <button class="button button--ghost button--small" type="button" data-action="hire-payment-reset">Reset State</button>
-                    </div>
-                  ` : sh.paymentDemoState === 'failed' ? `
-                    <div class="payment-panel payment-state" style="text-align: center; display: grid; justify-items: center; gap: 8px;">
-                      <div class="payment-state__icon payment-state__icon--failed" style="width: 48px; height: 48px; border-radius: 50%; background: var(--danger-soft); color: var(--brand-red); display: grid; place-items: center;"><i data-lucide="circle-x"></i></div>
-                      <h3 style="margin: 4px 0 0;">Mobile Money Authorization Declined</h3>
-                      <p class="muted" style="font-size: 0.8rem; margin: 0 0 12px;">The simulated request was declined.</p>
-                      <button class="button button--ghost button--small" type="button" data-action="hire-payment-reset">Try Again</button>
-                    </div>
-                  ` : `
-                    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                      <div class="field">
-                        <label>Operator</label>
-                        <select style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;"><option>MTN MoMo</option><option>Airtel Money</option></select>
-                      </div>
-                      <div class="field">
-                        <label>Mobile Number</label>
-                        <input type="tel" value="${escapeHtml(appData.passenger.phone)}" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%;">
-                      </div>
-                    </div>
-                    <div class="button-row" style="margin-top: 13px; display: flex; gap: 8px;">
-                      <button class="button button--success button--small" type="button" data-action="hire-payment-state" data-value="success" style="padding: 8px 12px;">Simulate Success</button>
-                      <button class="button button--soft-red button--small" type="button" data-action="hire-payment-state" data-value="failed" style="padding: 8px 12px;">Simulate Failure</button>
-                    </div>
-                  `}
-                </div>
-              `}
+              <div style="margin-top: 16px;">
+                ${renderSpecialHirePaymentPanel(priceDetails)}
+              </div>
+            </article>
             </article>
             
             <div style="display: flex; gap: 12px; margin-top: 16px;">
