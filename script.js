@@ -1728,94 +1728,8 @@ function renderBook() {
     `;
   }
 
-  if (step === 5) {
-    const total = checkoutTotal();
-
-    return `
-      ${screenHead('Checkout Review', 'Step 5 of 6: Verify passenger manifest, luggage summary and service total.')}
-
-      <div class="booking-desktop-split booking-desktop-split--60-40" style="margin-top: 16px;">
-        <section class="card" style="margin: 0;">
-          <div class="detail-list">
-            <div class="detail-row"><span>Route</span><strong>${state.searchFrom} → ${state.searchTo}</strong></div>
-            ${state.dropOffLocation !== state.searchTo ? `
-              <div class="detail-row"><span>Custom Drop-off Point</span><strong>${escapeHtml(state.dropOffLocation)}</strong></div>
-            ` : ''}
-            <div class="detail-row"><span>Vehicle</span><strong>${state.activeTrip.plate} (${state.activeTrip.vehicle})</strong></div>
-            <div class="detail-row"><span>Driver</span><strong>${state.activeTrip.driverName}</strong></div>
-            <div class="detail-row"><span>Travel Date</span><strong>${formatDemoDate(state.bookingDate)} · ${state.searchPeriod}</strong></div>
-            <div class="detail-row"><span>Travellers</span><strong>${passengerMixLabel()}</strong></div>
-            ${state.isBookingForSomeoneElse ? `
-              <div class="detail-row"><span>Primary Passenger</span><strong>${escapeHtml(state.passengerDetails[0]?.name || 'Christo I.')} (${escapeHtml(state.passengerDetails[0]?.phone || '+256 772 345 678')})</strong></div>
-            ` : ''}
-            <div class="detail-row"><span>Seat Preference</span><strong>${state.capacityMode === 'seats' ? `Seats: ${state.selectedSeats.join(', ')}` : 'Best available'}</strong></div>
-            <div class="detail-row"><span>Registered Luggage</span><strong>${Object.values(state.luggageQuantities).reduce((a,b) => a+b,0)} items</strong></div>
-            <div class="detail-row"><span>Base Fare</span><strong>${formatUGX(checkoutBaseFare())}</strong></div>
-            ${luggageTotal() ? `<div class="detail-row"><span>Luggage Surcharge</span><strong>${formatUGX(luggageTotal())}</strong></div>` : ''}
-            <div class="detail-row" style="border-bottom: 0;"><span>Total Amount</span><strong style="font-size: 1.25rem; color: var(--brand-blue);">${formatUGX(total)}</strong></div>
-          </div>
-        </section>
-
-        <section class="card" style="margin: 0; border: 1px solid rgba(7, 90, 168, 0.15); background: var(--info-soft); padding: 20px; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-          <h3 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 750; color: var(--brand-blue);">Save money with a Return Ticket</h3>
-          <p class="muted" style="margin: 0 0 16px 0; font-size: 0.78rem; line-height: 1.4;">Get a guaranteed discount on your journey back by adding a return voucher to your ticket package.</p>
-          <div style="display: flex; justify-content: flex-end;">
-            <button class="switch ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="toggle-return-switch" aria-label="Toggle return ticket"><span></span></button>
-          </div>
-        </section>
-      </div>
-
-      <div class="floating-cta-container button-row" style="margin-top: 24px;">
-        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
-        <button class="button button--primary" style="flex: 1;" type="button" data-action="booking-next-step">Checkout</button>
-      </div>
-    `;
-  }
-
   if (step === 6) {
-    const total = checkoutTotal();
-    const walletRemaining = state.walletBalance - total;
-    const isReturn = state.ticketType === 'return';
-
-    return `
-      ${screenHead('Select Payment Options', 'Step 6 of 6: Authorize mobile money, deduct from wallet, or pay at desk.')}
-
-      <div class="booking-desktop-split booking-desktop-split--sidebar" style="margin-top: 16px;">
-        <section class="card" style="margin: 0;">
-          <div class="card-head"><div><p class="section-kicker">Payment method</p><h2>How would you like to pay?</h2></div><span class="status-chip status-chip--warning">Demo only</span></div>
-          <div class="radio-cards">
-            ${paymentChoice('wallet','Fly Express Wallet',`Available balance: ${formatUGX(state.walletBalance)}`,'wallet-cards')}
-            ${paymentChoice('mobile','Mobile Money','MTN MoMo or Airtel Money','smartphone')}
-            ${paymentChoice('cash','Cash at Stage','Pay the dispatcher before boarding','banknote')}
-            ${paymentChoice('corporate','Corporate Travel Account','For approved business travellers','building-2')}
-            ${paymentChoice('voucher','Promotional Voucher','Apply an eligible campaign code','ticket-percent')}
-          </div>
-        </section>
-
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          ${renderPaymentPanel(total, walletRemaining)}
-
-          <article class="card card--soft" style="margin: 0; padding: 14px;"><label class="checkbox-row"><input id="booking-conditions" type="checkbox" checked><span><strong>I accept the booking conditions.</strong><br><span class="muted text-small">This confirms only a presentation-state booking and does not create a real reservation.</span></span></label></article>
-
-          ${!isReturn ? `
-            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-alt); padding: 14px 18px; border-radius: 14px; border: 1px dashed var(--border); text-align: left;">
-              <div>
-                <strong style="font-size: 0.85rem; display: block; color: var(--charcoal);">Add Return Ticket?</strong>
-                <span class="muted text-small" style="display: block; margin-top: 2px;">Save up to UGX 1,000 on your return journey</span>
-              </div>
-              <button class="button button--secondary button--small" type="button" data-action="toggle-return-switch">+ Return Ticket</button>
-            </div>
-          ` : ''}
-        </div>
-      </div>
-
-      <div class="floating-cta-container button-row" style="margin-top: 24px;">
-        <button class="button button--ghost" type="button" data-action="booking-prev-step" aria-label="Go back" style="padding: 0; min-width: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; box-shadow: none; margin-right: 4px;"><i data-lucide="chevron-left" style="width: 24px; height: 24px; color: var(--brand-blue);"></i></button>
-        <button class="button button--primary" style="flex: 1;" type="button" data-action="confirm-booking-step">
-          <i data-lucide="credit-card"></i> Pay & Confirm ${formatUGX(total)}
-        </button>
-      </div>
-    `;
+    return renderCheckout();
   }
 }
 
@@ -4988,13 +4902,17 @@ function handleClick(event) {
           return;
         }
         state.bookingStep = 4;
+      } else if (state.bookingStep === 4) {
+        state.bookingStep = 6;
       } else {
         state.bookingStep = Math.min(6, state.bookingStep + 1);
       }
       renderCurrentScreen();
     },
     'booking-prev-step': () => {
-      if (state.bookingStep === 4) {
+      if (state.bookingStep === 6) {
+        state.bookingStep = 4;
+      } else if (state.bookingStep === 4) {
         state.bookingStep = state.capacityMode === 'seats' ? '3b' : 3;
       } else if (state.bookingStep === '3b') {
         state.bookingStep = 3;
