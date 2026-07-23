@@ -2017,8 +2017,17 @@ function renderTripDetails() {
     </div>
   </section>
   <div class="review-sticky-cta">
-    <button class="return-quick-toggle ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="quick-return-toggle" aria-pressed="${state.ticketType === 'return'}"><span class="return-quick-toggle__icon"><i data-lucide="refresh-cw"></i></span><span><small>Return</small><strong>${state.ticketType === 'return' ? 'Added' : 'Add'}</strong></span><span class="switch ${state.ticketType === 'return' ? 'is-on' : ''}" aria-hidden="true"><span></span></span></button>
-    <button class="button button--primary review-pay-button" type="button" data-action="continue-to-checkout"><span>Continue</span><strong>${formatUGX(tripReviewFare())}</strong><i data-lucide="arrow-right"></i></button>
+    <button class="return-quick-toggle ${state.ticketType === 'return' ? 'is-on' : ''}" type="button" data-action="quick-return-toggle" aria-pressed="${state.ticketType === 'return'}">
+      <i data-lucide="${state.ticketType === 'return' ? 'check' : 'refresh-cw'}" style="width: 15px; height: 15px;"></i>
+      <span>${state.ticketType === 'return' ? 'Return added' : '+ Return'}</span>
+    </button>
+    <button class="button button--primary review-pay-button" type="button" data-action="continue-to-checkout">
+      <span>Continue</span>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <strong>${formatUGX(tripReviewFare())}</strong>
+        <i data-lucide="arrow-right" style="width: 17px; height: 17px;"></i>
+      </div>
+    </button>
   </div>`;
 }
 
