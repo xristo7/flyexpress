@@ -2038,12 +2038,12 @@ function renderTripDetails() {
       </div>
       <div class="review-reassurance"><i data-lucide="shield-check"></i><span>Personal item included</span><span>•</span><span>Change anything before payment.</span></div>
       
-      <!-- Immediate Travel Notice Banner (Moved to End) -->
-      <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.15); padding: 14px 16px; border-radius: 16px; margin-top: 18px; margin-bottom: 8px; display: flex; align-items: start; gap: 12px; text-text: left;">
-        <i data-lucide="zap" style="width: 22px; height: 22px; color: var(--brand-blue); flex-shrink: 0; margin-top: 1px;"></i>
+      <!-- Immediate Travel Notice Banner (Seamless Native Card Footer at Very Bottom) -->
+      <div class="smart-review__notice-footer">
+        <i data-lucide="zap" style="width: 20px; height: 20px; color: var(--brand-blue); flex-shrink: 0; margin-top: 2px;"></i>
         <div>
-          <strong style="font-size: 0.92rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Vehicle)</strong>
-          <span style="font-size: 0.82rem; line-height: 1.4; color: var(--slate); font-weight: 500;">
+          <strong style="font-size: 0.9rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Vehicle)</strong>
+          <span style="font-size: 0.8rem; line-height: 1.4; color: var(--slate); font-weight: 500;">
             This vehicle is currently on stage or departing shortly. Your seat is held immediately upon booking — you do not need to be at the stage right now; you can board at stage or meet your vehicle along the corridor route!
           </span>
         </div>

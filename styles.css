@@ -1632,6 +1632,35 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   background: white;
   border: 1px solid rgba(8,27,51,.08);
   box-shadow: 0 28px 60px rgba(8,27,51,.18);
+  overflow: hidden;
+}
+
+/* Seamless Native Card Footer Notice Banner */
+.smart-review__notice-footer {
+  background: var(--info-soft);
+  border-top: 1px solid rgba(22, 119, 255, 0.15);
+  margin-top: 24px;
+  margin-left: -28px;
+  margin-right: -28px;
+  margin-bottom: -26px;
+  padding: 16px 24px;
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .smart-review__notice-footer {
+    margin-left: -16px;
+    margin-right: -16px;
+    margin-bottom: -22px;
+    padding: 14px 18px;
+    border-bottom-left-radius: 26px;
+    border-bottom-right-radius: 26px;
+  }
 }
 .sheet-handle {
   width: 48px;
