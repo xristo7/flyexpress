@@ -6057,7 +6057,7 @@ function openModal(title, body, footer = '', wide = false, customClass = '') {
   if (!$('#modal-root [role="dialog"]')) modalOpener = document.activeElement;
   $('#modal-root').innerHTML = `
     <div class="modal-backdrop" data-action="close-modal">
-      <section class="modal ${wide ? 'modal--wide' : ''} ${customClass}" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="event.stopPropagation()">
+      <section class="modal ${wide ? 'modal--wide' : ''} ${customClass}" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <header class="modal__head">
           <div>
             <span class="modal__eyebrow"><i data-lucide="sparkles"></i> Fly Express</span>
