@@ -8332,3 +8332,208 @@ body[data-active-screen="home"] .main-content {
     opacity: 1;
   }
 }
+
+/* ─── Modern Custom Select Dropdown ─── */
+.custom-select {
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+}
+
+.custom-select .native-select-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  user-select: none;
+  -webkit-user-select: none;
+  box-sizing: border-box;
+}
+
+.custom-select-trigger:hover {
+  border-color: var(--brand-blue);
+  box-shadow: 0 2px 8px rgba(7, 90, 168, 0.1);
+}
+
+.custom-select.is-open .custom-select-trigger {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(7, 90, 168, 0.12), 0 2px 8px rgba(7, 90, 168, 0.1);
+}
+
+.custom-select-trigger.is-placeholder {
+  color: var(--slate);
+  font-weight: 500;
+}
+
+.custom-select-trigger-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-select-chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--slate);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-select-chevron svg {
+  width: 18px;
+  height: 18px;
+}
+
+.custom-select.is-open .custom-select-chevron {
+  transform: rotate(180deg);
+  color: var(--brand-blue);
+}
+
+.custom-select-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(7, 90, 168, 0.12);
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 12px 40px -8px rgba(8, 27, 51, 0.22), 0 0 0 1px rgba(8, 27, 51, 0.04);
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: selectDropIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.custom-select-options::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-select-options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-select-options::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 99px;
+}
+
+@keyframes selectDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.custom-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.custom-select-option:hover {
+  background: var(--info-soft);
+  color: var(--brand-blue);
+}
+
+.custom-select-option.is-selected {
+  background: var(--brand-blue);
+  color: white;
+  font-weight: 750;
+}
+
+.custom-select-option.is-selected:hover {
+  background: var(--brand-blue-dark);
+  color: white;
+}
+
+.custom-select-option-check {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-select-option.is-selected .custom-select-option-check {
+  opacity: 1;
+}
+
+/* Upward variant when near bottom of screen */
+.custom-select-options.drop-up {
+  top: auto;
+  bottom: calc(100% + 6px);
+  animation-name: selectDropUp;
+}
+
+@keyframes selectDropUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Inside modals - ensure options appear above */
+.modal .custom-select-options {
+  z-index: 2100;
+}

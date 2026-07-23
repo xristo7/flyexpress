@@ -501,6 +501,131 @@ function restoreDescribedFocus(root, descriptor) {
 
 function refreshIcons() {
   if (window.lucide?.createIcons) window.lucide.createIcons({ attrs: { 'aria-hidden': 'true' } });
+  upgradeSelects();
+}
+
+/* ─── Modern Custom Select Dropdown Component ─── */
+function upgradeSelects() {
+  document.querySelectorAll('select:not(.native-select-hidden)').forEach(sel => {
+    // Skip selects inside elements that shouldn't be upgraded
+    if (sel.closest('.custom-select')) return;
+
+    // Create wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-select';
+
+    // Copy any id or data attributes for external access
+    const selId = sel.id;
+
+    // Determine selected option text
+    const selectedOpt = sel.options[sel.selectedIndex];
+    const hasRealSelection = selectedOpt && sel.selectedIndex >= 0;
+    const displayText = hasRealSelection ? selectedOpt.textContent : 'Select';
+    const isPlaceholder = !hasRealSelection;
+
+    // Build trigger button
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = `custom-select-trigger${isPlaceholder ? ' is-placeholder' : ''}`;
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.innerHTML = `
+      <span class="custom-select-trigger-label">${escapeHtml(displayText)}</span>
+      <span class="custom-select-chevron"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+    `;
+
+    // Hide native select but keep it in the DOM for form data and event compatibility
+    sel.classList.add('native-select-hidden');
+    sel.setAttribute('tabindex', '-1');
+
+    // Insert wrapper
+    sel.parentNode.insertBefore(wrapper, sel);
+    wrapper.appendChild(sel);
+    wrapper.appendChild(trigger);
+
+    // Click trigger to open/close
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const wasOpen = wrapper.classList.contains('is-open');
+
+      // Close all other open custom selects
+      document.querySelectorAll('.custom-select.is-open').forEach(other => {
+        if (other !== wrapper) closeCustomSelect(other);
+      });
+
+      if (wasOpen) {
+        closeCustomSelect(wrapper);
+      } else {
+        openCustomSelect(wrapper, sel, trigger);
+      }
+    });
+  });
+}
+
+function openCustomSelect(wrapper, sel, trigger) {
+  // Build options panel
+  const optionsPanel = document.createElement('div');
+  optionsPanel.className = 'custom-select-options';
+  optionsPanel.setAttribute('role', 'listbox');
+
+  Array.from(sel.options).forEach((opt, idx) => {
+    const optBtn = document.createElement('button');
+    optBtn.type = 'button';
+    optBtn.className = `custom-select-option${idx === sel.selectedIndex ? ' is-selected' : ''}`;
+    optBtn.setAttribute('role', 'option');
+    optBtn.setAttribute('aria-selected', idx === sel.selectedIndex);
+    optBtn.innerHTML = `
+      <span class="custom-select-option-check"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      <span>${escapeHtml(opt.textContent)}</span>
+    `;
+
+    optBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      sel.selectedIndex = idx;
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+      trigger.querySelector('.custom-select-trigger-label').textContent = opt.textContent;
+      trigger.classList.remove('is-placeholder');
+      closeCustomSelect(wrapper);
+    });
+
+    optionsPanel.appendChild(optBtn);
+  });
+
+  wrapper.appendChild(optionsPanel);
+  wrapper.classList.add('is-open');
+  trigger.setAttribute('aria-expanded', 'true');
+
+  // Check if dropdown would go off-screen and flip upward
+  requestAnimationFrame(() => {
+    const rect = optionsPanel.getBoundingClientRect();
+    if (rect.bottom > window.innerHeight - 10) {
+      optionsPanel.classList.add('drop-up');
+    }
+  });
+
+  // Close when clicking outside
+  const closeHandler = (e) => {
+    if (!wrapper.contains(e.target)) {
+      closeCustomSelect(wrapper);
+      document.removeEventListener('click', closeHandler, true);
+    }
+  };
+  wrapper._closeHandler = closeHandler;
+  setTimeout(() => document.addEventListener('click', closeHandler, true), 10);
+}
+
+function closeCustomSelect(wrapper) {
+  wrapper.classList.remove('is-open');
+  const trigger = wrapper.querySelector('.custom-select-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  const panel = wrapper.querySelector('.custom-select-options');
+  if (panel) panel.remove();
+  if (wrapper._closeHandler) {
+    document.removeEventListener('click', wrapper._closeHandler, true);
+    delete wrapper._closeHandler;
+  }
 }
 
 function setTodayDefaults() {
