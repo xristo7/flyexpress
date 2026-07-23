@@ -1364,7 +1364,8 @@ function renderCurrentScreen(preserveFocus = true) {
   if (state.screen === 'trip-details') setTimeout(() => { if (state.screen === 'trip-details') initTripMap(); }, 240);
   if (state.screen === 'book' && (state.bookingStep || 1) === 2) setTimeout(() => { if (state.screen === 'book' && state.bookingStep === 2) initBookingStep2Map(); }, 240);
   if (state.screen === 'ticket') setTimeout(initTicketQr, 0);
-  if (state.screen === 'parcel-receipt') setTimeout(initParcelBarcode, 0);
+  if (state.screen === 'parcel-receipt') setTimeout(() => { initParcelBarcode(); initQrFor('parcel-qr', 'FLYEXPRESS|PARCEL|#964201832-DL|742915'); }, 0);
+  if (state.screen === 'special-hire' && state.specialHire.step === 4) setTimeout(() => { initQrFor('hire-qr', 'FLYEXPRESS|HIRE|#SH-98402-UG|984021'); }, 0);
   if (focusDescriptor) setTimeout(() => restoreDescribedFocus(root, focusDescriptor), 20);
   if (state.screen === 'live') {
     startLiveProgress();
@@ -2722,7 +2723,7 @@ function renderTicket() {
   return `
     ${screenHead('Digital passenger ticket', 'Present the QR-style visual or six-digit verification code when boarding.', '<button class="button button--ghost" type="button" data-action="ticket-states"><i data-lucide="layers-3"></i>Preview States</button>')}
     <article class="digital-ticket">
-      <header class="ticket-header"><div class="ticket-brand"><div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2>Fly Express</h2><p>Passenger Digital Ticket</p></div></div><span class="status-chip ${status === 'Active' ? 'status-chip--success' : 'status-chip--warning'}">${status}</span></header>
+      <header class="ticket-header"><div class="ticket-brand"><div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2>Fly Express</h2><p>Passenger Digital Ticket</p></div></div></header>
       <div class="ticket-body">
         <div class="ticket-route"><div class="ticket-route__place"><span>FROM</span><strong>Entebbe</strong><span>Main Stage</span></div><div class="ticket-route__arrow"><i data-lucide="arrow-right"></i></div><div class="ticket-route__place"><span>TO</span><strong>Kampala</strong><span>Main Stage</span></div></div>
         <div class="ticket-grid">
@@ -3192,7 +3193,55 @@ function advanceParcel() {
 function renderParcelReceipt() {
   return `
     ${screenHead('Parcel receipt', 'Use this receipt to demonstrate parcel custody, tracking and collection verification.')}
-    <article class="receipt"><header class="receipt__head"><div class="ticket-brand"><div class="logo-frame"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2 style="margin:0">Fly Express Parcel</h2><p class="muted" style="margin:0">Stage-to-Stage Receipt</p></div></div><span class="status-chip status-chip--warning">Registered</span></header><div class="receipt__body"><div class="grid grid--2"><div class="detail-list"><div class="detail-row"><span>Tracking number</span><strong>#964201832-DL</strong></div><div class="detail-row"><span>Sender</span><strong>${escapeHtml(state.parcel.senderName)}</strong></div><div class="detail-row"><span>Sender telephone</span><strong>${escapeHtml(state.parcel.senderPhone)}</strong></div><div class="detail-row"><span>Origin</span><strong>${escapeHtml(state.parcel.origin)}</strong></div><div class="detail-row"><span>Parcel category</span><strong>${state.parcelCategory}</strong></div><div class="detail-row"><span>Delivery</span><strong>${state.parcelDelivery}</strong></div></div><div class="detail-list"><div class="detail-row"><span>Recipient</span><strong>${escapeHtml(state.parcel.recipientName)}</strong></div><div class="detail-row"><span>Recipient telephone</span><strong>${escapeHtml(state.parcel.recipientPhone)}</strong></div><div class="detail-row"><span>Destination</span><strong>${escapeHtml(state.parcel.destination)}</strong></div><div class="detail-row"><span>Amount ${state.parcelPaymentMethod === 'cash' ? 'due' : 'paid'}</span><strong>${formatUGX(parcelPrice())}</strong></div><div class="detail-row"><span>Payment</span><strong>${paymentLabel(state.parcelPaymentMethod)}</strong></div></div></div><hr><div class="grid grid--2"><div><p class="section-kicker">Collection PIN</p><div class="verification-code">742 915</div><p class="muted text-small">Recipient should present this PIN with identification.</p></div><div><p class="section-kicker">Receipt barcode</p><svg id="parcel-barcode" class="parcel-barcode" role="img" aria-label="Barcode for parcel FXP-260718-0842"></svg></div></div><div class="notice" style="margin-top:18px"><i data-lucide="shield-check"></i><div><strong>Collection safety</strong><div>Do not share the collection PIN publicly. Inspect the parcel before leaving the collection desk.</div></div></div></div><footer class="ticket-actions"><button class="button button--primary" type="button" data-screen="trackparcel">Track Parcel</button><button class="button button--ghost" type="button" data-action="share-demo">Share Tracking</button><button class="button button--ghost" type="button" data-screen="support">Contact Parcel Desk</button><button class="button button--ghost" type="button" data-screen="home">Return Home</button></footer></article>`;
+    <article class="digital-ticket" style="max-width: 780px; margin: 0 auto;">
+      <header class="ticket-header">
+        <div class="ticket-brand">
+          <div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div>
+          <div><h2>Fly Express Parcel</h2><p>Stage-to-Stage Digital Receipt</p></div>
+        </div>
+      </header>
+      <div class="ticket-body">
+        <div class="ticket-route">
+          <div class="ticket-route__place"><span>ORIGIN</span><strong>${escapeHtml(state.parcel.origin)}</strong><span>Main Stage</span></div>
+          <div class="ticket-route__arrow"><i data-lucide="arrow-right"></i></div>
+          <div class="ticket-route__place"><span>DESTINATION</span><strong>${escapeHtml(state.parcel.destination)}</strong><span>Main Stage</span></div>
+        </div>
+        <div class="ticket-grid">
+          ${ticketField('Tracking number','#964201832-DL')}
+          ${ticketField('Sender',escapeHtml(state.parcel.senderName))}
+          ${ticketField('Sender telephone',escapeHtml(state.parcel.senderPhone))}
+          ${ticketField('Recipient',escapeHtml(state.parcel.recipientName))}
+          ${ticketField('Recipient telephone',escapeHtml(state.parcel.recipientPhone))}
+          ${ticketField('Parcel category',state.parcelCategory)}
+          ${ticketField('Delivery option',state.parcelDelivery)}
+          ${ticketField('Preferred departure',escapeHtml(state.parcel.departure || 'Next available vehicle'))}
+          ${ticketField('Payment method',paymentLabel(state.parcelPaymentMethod))}
+          ${ticketField('Amount ' + (state.parcelPaymentMethod === 'cash' ? 'due' : 'paid'), formatUGX(parcelPrice()))}
+        </div>
+        <div class="ticket-code-area">
+          <div id="parcel-qr" class="ticket-qr-real" aria-label="Parcel QR code"><div class="qr-code">${generateQr()}</div></div>
+          <div>
+            <p class="section-kicker">Collection PIN</p>
+            <div class="verification-code">742 915</div>
+            <p class="muted text-small">Recipient should present this PIN & QR code with identification.</p>
+          </div>
+        </div>
+        <div class="notice" style="margin-top:18px">
+          <i data-lucide="shield-check"></i>
+          <div>
+            <strong>Collection safety</strong>
+            <div>Do not share the collection PIN or QR code publicly. Inspect the parcel before leaving the collection desk.</div>
+          </div>
+        </div>
+      </div>
+      <div class="ticket-perforation"></div>
+      <footer class="ticket-actions">
+        <button class="button button--primary button--small" type="button" data-screen="trackparcel"><i data-lucide="package-search"></i>Track Parcel</button>
+        <button class="button button--ghost button--small" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share Tracking</button>
+        <button class="button button--ghost button--small" type="button" data-screen="support"><i data-lucide="headphones"></i>Contact Parcel Desk</button>
+        <button class="button button--ghost button--small" type="button" data-screen="home">Return Home</button>
+      </footer>
+    </article>`;
 }
 
 function generateBarcode() {
@@ -3661,68 +3710,53 @@ function renderSpecialHire() {
       }
     }
     const priceDetails = calculateSpecialHirePrice();
-    const barcodeMarkup = generateBarcode();
     
     return `
       ${screenHead('Special Hire Confirmed', 'Use this permit to present to your private driver at departure.')}
       
-      <article class="receipt" style="margin-top: 16px; box-shadow: var(--shadow-md);">
-        <header class="receipt__head" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-strong); padding-bottom: 16px; margin-bottom: 16px;">
-          <div class="ticket-brand" style="display: flex; align-items: center; gap: 12px;">
-            <div class="logo-frame" style="width: 40px; height: 40px; border-radius: 8px; overflow: hidden; display: grid; place-items: center; background: white;"><img src="assets/fly-express-logo.jpg" alt="Fly Express" style="width: 100%; height: 100%; object-fit: cover;"></div>
-            <div>
-              <h2 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--brand-blue-dark);">Fly Express Private</h2>
-              <p class="muted" style="margin: 0; font-size: 0.75rem;">Special Hire Transit Permit</p>
-            </div>
+      <article class="digital-ticket" style="max-width: 780px; margin: 16px auto 0;">
+        <header class="ticket-header">
+          <div class="ticket-brand">
+            <div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div>
+            <div><h2 style="margin: 0; color: white;">Fly Express Private</h2><p style="margin: 0; color: rgba(255,255,255,.75);">Special Hire Transit Permit</p></div>
           </div>
-          <span class="status-chip status-chip--success" style="font-weight: 750;">Reserved</span>
         </header>
         
-        <div class="receipt__body">
-          <div class="grid grid--2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-            <div class="detail-list" style="display: flex; flex-direction: column; gap: 8px;">
-              <div class="detail-row"><span>Permit Number</span><strong>#SH-98402-UG</strong></div>
-              <div class="detail-row"><span>Vehicle Type</span><strong>${vehicleLabels[sh.vehicleType] || 'Special Vehicle'}</strong></div>
-              <div class="detail-row"><span>Client / Contact</span><strong>${escapeHtml(sh.hireType === 'company' ? sh.companyName : appData.passenger.name)}</strong></div>
-              <div class="detail-row"><span>Date & Duration</span><strong>${sh.date} (${sh.durationDays} Day${sh.durationDays > 1 ? 's' : ''})</strong></div>
-            </div>
-            <div class="detail-list" style="display: flex; flex-direction: column; gap: 8px;">
-              <div class="detail-row"><span>Private Route</span><strong>${escapeHtml(destLabel)}</strong></div>
-              <div class="detail-row"><span>Driver Preference</span><strong>${sh.driverType === 'standard' ? 'Standard Route Driver' : 'Certified Tour Guide'}</strong></div>
-              <div class="detail-row"><span>Total Amount Paid</span><strong>${formatUGX(priceDetails.total)}</strong></div>
-              <div class="detail-row"><span>Payment Method</span><strong>${paymentLabel(sh.paymentMethod)}</strong></div>
-            </div>
+        <div class="ticket-body">
+          <div class="ticket-grid">
+            ${ticketField('Permit number','#SH-98402-UG')}
+            ${ticketField('Vehicle type',vehicleLabels[sh.vehicleType] || 'Special Vehicle')}
+            ${ticketField('Client / Contact',escapeHtml(sh.hireType === 'company' ? sh.companyName : appData.passenger.name))}
+            ${ticketField('Date & duration',`${sh.date} (${sh.durationDays} Day${sh.durationDays > 1 ? 's' : ''})`)}
+            ${ticketField('Private route',escapeHtml(destLabel))}
+            ${ticketField('Driver preference',sh.driverType === 'standard' ? 'Standard Route Driver' : 'Certified Tour Guide')}
+            ${ticketField('Total amount paid',formatUGX(priceDetails.total))}
+            ${ticketField('Payment method',paymentLabel(sh.paymentMethod))}
           </div>
           
-          <hr style="margin: 20px 0; border: 0; border-top: 1px dashed var(--border-strong);">
-          
-          <div class="grid grid--2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: center;">
+          <div class="ticket-code-area">
+            <div id="hire-qr" class="ticket-qr-real" aria-label="Special Hire Permit QR code"><div class="qr-code">${generateQr()}</div></div>
             <div>
-              <p class="section-kicker" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: var(--slate); letter-spacing: 0.05em; margin-bottom: 4px;">Authorization PIN</p>
-              <div class="verification-code" style="font-size: 2.2rem; font-weight: 900; letter-spacing: 0.15em; color: var(--brand-blue-dark);">825 041</div>
-              <p class="muted text-small" style="font-size: 0.75rem; margin-top: 4px;">Share this PIN with your driver to authorize departure.</p>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: flex-end;">
-              <p class="section-kicker" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: var(--slate); letter-spacing: 0.05em; margin-bottom: 6px;">Permit Barcode</p>
-              <svg id="parcel-barcode" class="parcel-barcode" role="img" aria-label="Barcode FXP-98402" style="width: 100%; max-width: 200px; height: 40px; stroke: black;">
-                ${barcodeMarkup}
-              </svg>
+              <p class="section-kicker">Driver verification PIN</p>
+              <div class="verification-code">984 021</div>
+              <p class="muted text-small">Present this QR code or 6-digit verification PIN to your designated driver at pickup.</p>
             </div>
           </div>
-          
-          <div class="notice" style="margin-top: 20px; background: var(--info-soft); color: var(--brand-blue); border-radius: 12px; padding: 12px; display: flex; gap: 10px; align-items: flex-start; font-size: 0.8rem;">
-            <i data-lucide="shield-check" style="flex-shrink:0;"></i>
+
+          <div class="notice" style="margin-top: 18px;">
+            <i data-lucide="shield-check"></i>
             <div>
-              <strong>Private Dispatch Agreement</strong>
-              <div style="margin-top: 4px; line-height: 1.4;">Fly Express Private charters are subject to stage and route protocols. Tolls and standard highways costs are fully covered in the total amount.</div>
+              <strong>Charter Verification</strong>
+              <div>This official digital transit permit confirms vehicle reservation, insurance coverage, and driver dispatch.</div>
             </div>
           </div>
         </div>
-        
-        <footer class="ticket-actions" style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
-          <button class="button button--primary" type="button" data-action="print-permit" style="flex: 1; min-width: 120px;">Print Permit</button>
-          <button class="button button--ghost" type="button" data-action="share-demo" style="flex: 1; min-width: 120px;">Share Tracking</button>
-          <button class="button button--ghost" type="button" data-screen="home" style="flex: 1; min-width: 120px;">Return Home</button>
+        <div class="ticket-perforation"></div>
+        <footer class="ticket-actions">
+          <button class="button button--primary button--small" type="button" data-action="print-permit"><i data-lucide="printer"></i>Print Permit</button>
+          <button class="button button--ghost button--small" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share Permit</button>
+          <button class="button button--ghost button--small" type="button" data-screen="support"><i data-lucide="headphones"></i>Support Desk</button>
+          <button class="button button--ghost button--small" type="button" data-screen="home">Return Home</button>
         </footer>
       </article>
     `;
@@ -5210,7 +5244,7 @@ function renderTicket() {
   const luggageItems = appData.luggage.filter(item => (state.luggageQuantities[item.id] || 0) > 0).map(item => `${state.luggageQuantities[item.id]} × ${item.name}`).join(', ');
   return `${screenHead('Digital passenger ticket', 'Present this QR code or the six-digit verification code when boarding.', '<button class="button button--ghost" type="button" data-action="ticket-states"><i data-lucide="layers-3"></i>Preview States</button>')}
     <article class="digital-ticket">
-      <header class="ticket-header"><div class="ticket-brand"><div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2>Fly Express</h2><p>Passenger Digital Ticket</p></div></div><span class="status-chip ${statusClass}">${statusLabels[lifecycle]}</span></header>
+      <header class="ticket-header"><div class="ticket-brand"><div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2>Fly Express</h2><p>Passenger Digital Ticket</p></div></div></header>
       <div class="ticket-status-banner ticket-status-banner--${lifecycle}"><i data-lucide="${statusIcons[lifecycle]}"></i><span><strong>${statusLabels[lifecycle]}</strong><small>${statusCopy}</small></span></div>
       <div class="ticket-body">
         <div class="ticket-route"><div class="ticket-route__place"><span>FROM</span><strong>${trip.boarding.replace(' Main Stage','')}</strong><span>${trip.boarding.includes('Main Stage') ? 'Main Stage' : 'Pickup stage'}</span></div><div class="ticket-route__arrow"><i data-lucide="arrow-right"></i></div><div class="ticket-route__place"><span>TO</span><strong>${state.dropOffLocation.replace(' Main Stage','')}</strong><span>${state.dropOffLocation.includes('Main Stage') ? 'Main Stage' : 'Drop-off stage'}</span></div></div>
@@ -5224,15 +5258,23 @@ function renderTicket() {
     </article>`;
 }
 
-function initTicketQr() {
-  const target = $('#ticket-qr');
+function initQrFor(elementId, qrText) {
+  const target = document.getElementById(elementId);
   if (!target) return;
   target.innerHTML = '';
   if (!window.QRCode) {
-    target.innerHTML = '<div class="ticket-code-fallback"><strong>482 915</strong><span>QR preview unavailable</span></div>';
+    target.innerHTML = `<div class="qr-code">${generateQr()}</div>`;
     return;
   }
-  new QRCode(target, { text: `FLYEXPRESS|FX-260718-1842|FET-884210|${state.activeTrip.plate}|482915`, width: 164, height: 164, colorDark: '#081b33', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  try {
+    new QRCode(target, { text: qrText, width: 140, height: 140, colorDark: '#081b33', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  } catch(e) {
+    target.innerHTML = `<div class="qr-code">${generateQr()}</div>`;
+  }
+}
+
+function initTicketQr() {
+  initQrFor('ticket-qr', `FLYEXPRESS|FX-260718-1842|FET-884210|${state.activeTrip?.plate || 'UBM245K'}|482915`);
 }
 
 function initParcelBarcode() {
