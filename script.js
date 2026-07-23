@@ -1977,20 +1977,26 @@ function renderBook() {
                   <!-- RIGHT COLUMN -->
                   <div class="taxi-card-right-col">
                     <!-- Clickable Driver Card Shape -->
-                    <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" title="View driver details">
-                      <div class="driver-circle-avatar">
-                        <i data-lucide="user"></i>
-                      </div>
-                      <div class="driver-text-block">
-                        <div class="driver-name-tag-row" style="display: flex; align-items: center; gap: 6px;">
-                          <strong class="driver-name-text">${trip.driverName}</strong>
-                          <span class="driver-subtext-pill">Driver</span>
+                    ${(() => {
+                      const dObj = driversData[trip.driverName.toLowerCase()] || {};
+                      const avatarUrl = dObj.avatar || 'assets/driver_1.jpg';
+                      return `
+                        <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" title="View driver details">
+                          <div class="driver-circle-avatar" style="overflow: hidden; border-radius: 50%;">
+                            <img src="${avatarUrl}" alt="${trip.driverName}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                          </div>
+                          <div class="driver-text-block">
+                            <div class="driver-name-tag-row" style="display: flex; align-items: center; gap: 6px;">
+                              <strong class="driver-name-text">${trip.driverName}</strong>
+                              <span class="driver-subtext-pill">Driver</span>
+                            </div>
+                            <div class="driver-rating-row" style="margin-top: 3px;">
+                              <span class="driver-rating-badge"><i data-lucide="star" style="width: 11px; height: 11px; fill: #f59e0b; color: #f59e0b;"></i> ${trip.driverRating} Rating</span>
+                            </div>
+                          </div>
                         </div>
-                        <div class="driver-rating-row" style="margin-top: 3px;">
-                          <span class="driver-rating-badge"><i data-lucide="star" style="width: 11px; height: 11px; fill: #f59e0b; color: #f59e0b;"></i> ${trip.driverRating} Rating</span>
-                        </div>
-                      </div>
-                    </div>
+                      `;
+                    })()}
                     
                     <!-- Desktop-only Bottom Group -->
                     <div class="taxi-desktop-divider-group" style="margin-top: 10px;">
@@ -2182,18 +2188,24 @@ function renderTripResult(trip) {
       <!-- RIGHT COLUMN -->
       <div class="taxi-card-right-col">
         <!-- Driver Row -->
-        <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
-          <div class="driver-circle-avatar">
-            <i data-lucide="user"></i>
-          </div>
-          <div class="driver-text-block">
-            <div class="driver-name-rating">
-              <strong class="driver-name-text">${trip.driverName}</strong>
-              <span class="driver-rating-badge">${trip.driverRating} ★</span>
+        ${(() => {
+          const dObj = driversData[trip.driverName.toLowerCase()] || {};
+          const avatarUrl = dObj.avatar || 'assets/driver_1.jpg';
+          return `
+            <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+              <div class="driver-circle-avatar" style="overflow: hidden; border-radius: 50%;">
+                <img src="${avatarUrl}" alt="${trip.driverName}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+              </div>
+              <div class="driver-text-block">
+                <div class="driver-name-rating">
+                  <strong class="driver-name-text">${trip.driverName}</strong>
+                  <span class="driver-rating-badge">${trip.driverRating} ★</span>
+                </div>
+                <span class="driver-subtext">Driver</span>
+              </div>
             </div>
-            <span class="driver-subtext">Driver</span>
-          </div>
-        </div>
+          `;
+        })()}
         
         <!-- Proximity Row -->
         <div class="taxi-proximity-row">
@@ -2271,17 +2283,22 @@ function renderTripDetails() {
       </div>
 
       <!-- Unified Driver Card (2-Column Layout) -->
-      <article class="card unified-driver-transit-card" style="margin: 0 0 16px 0; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: grid; grid-template-columns: 88px 1fr; gap: 16px; align-items: center;">
-        
-        <!-- Left Profile Column -->
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
-          <div style="width: 84px; height: 84px; border-radius: 50%; overflow: hidden; background: var(--surface-alt); border: 3px solid white; box-shadow: 0 4px 14px rgba(8,27,51,0.15);">
-            <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
-          </div>
-          <div style="margin-top: -12px; z-index: 2; background: white; border-radius: 12px; padding: 2px 8px; box-shadow: 0 3px 8px rgba(8,27,51,0.12); border: 1px solid rgba(8,27,51,0.06); display: inline-flex; align-items: center; gap: 3px; font-size: 0.78rem; font-weight: 800; color: var(--brand-blue-dark);">
-            <i data-lucide="star" style="width: 12px; height: 12px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
-          </div>
-        </div>
+      ${(() => {
+        const dObj = driversData[trip.driverName.toLowerCase()] || {};
+        const driverAvatar = dObj.avatar || 'assets/driver_1.jpg';
+        return `
+          <article class="card unified-driver-transit-card" style="margin: 0 0 16px 0; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: grid; grid-template-columns: 88px 1fr; gap: 16px; align-items: center;">
+            <!-- Left Profile Column -->
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+              <div style="width: 84px; height: 84px; border-radius: 50%; overflow: hidden; background: var(--surface-alt); border: 3px solid white; box-shadow: 0 4px 14px rgba(8,27,51,0.15);">
+                <img src="${driverAvatar}" alt="${trip.driverName}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
+              </div>
+              <div style="margin-top: -12px; z-index: 2; background: white; border-radius: 12px; padding: 2px 8px; box-shadow: 0 3px 8px rgba(8,27,51,0.12); border: 1px solid rgba(8,27,51,0.06); display: inline-flex; align-items: center; gap: 3px; font-size: 0.78rem; font-weight: 800; color: var(--brand-blue-dark);">
+                <i data-lucide="star" style="width: 12px; height: 12px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
+              </div>
+            </div>
+        `;
+      })()}
 
         <!-- Right Driver Details Column (Wider) -->
         <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 10px; min-width: 0;">
@@ -2865,7 +2882,30 @@ function renderLiveTrip() {
       </div>
       <aside class="grid">
         <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-        <article class="card"><div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div><div class="vehicle-identity-media"><div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express passenger vehicle" style="padding:4px;"></div><div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div></div><div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('daniel');" style="cursor: pointer;"><span class="person-icon"><i data-lucide="contact-round"></i></span><div><strong>Daniel</strong><div class="muted text-small">Driver · Verified for ${trip.plate}</div></div></div><div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div><div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div><div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div></article>
+      ${(() => {
+        const dName = trip.driverName || 'Isaac Muwonge';
+        const dObj = driversData[dName.toLowerCase()] || driversData['isaac muwonge'];
+        const avatarUrl = dObj.avatar || 'assets/driver_1.jpg';
+        return `
+          <article class="card">
+            <div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div>
+            <div class="vehicle-identity-media">
+              <div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express passenger vehicle" style="padding:4px;"></div>
+              <div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div>
+            </div>
+            <div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('${dName.toLowerCase()}');" style="cursor: pointer; display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+              <img src="${avatarUrl}" alt="${dName}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 8px rgba(8,27,51,0.12); flex-shrink: 0;">
+              <div>
+                <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">${dName}</strong>
+                <div class="muted text-small">Driver · Verified for ${trip.plate}</div>
+              </div>
+            </div>
+            <div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div>
+            <div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div>
+            <div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div>
+          </article>
+        `;
+      })()}
         <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
         <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
       </aside>
@@ -4198,9 +4238,9 @@ function showDriverProfileModal(driverNameKey) {
       <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
         <div style="position: relative; flex-shrink: 0; width: 72px; height: 72px;">
           ${driver.avatar ? `
-            <img src="${avatarUrl}" alt="${driver.name}" style="width: 100%; height: 100%; border-radius: 16px; object-fit: cover; border: 2px solid var(--border);">
+            <img src="${avatarUrl}" alt="${driver.name}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--border);">
           ` : `
-            <div style="width: 100%; height: 100%; border-radius: 16px; background: var(--brand-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem; border: 2px solid var(--border);">${initials}</div>
+            <div style="width: 100%; height: 100%; border-radius: 50%; background: var(--brand-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem; border: 2px solid var(--border);">${initials}</div>
           `}
           ${isDriving ? `<span class="status-chip status-chip--gold" style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; box-shadow: var(--shadow-sm); z-index: 2; white-space: nowrap;">On Road</span>` : ''}
         </div>
