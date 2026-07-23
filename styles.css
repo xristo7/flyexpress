@@ -4893,13 +4893,23 @@ body[data-active-screen="driver-profile"] .main-content {
 
 @media (max-width: 600px) {
   .driver-chat-screen {
-    min-height: calc(100vh - 140px);
-    max-height: calc(100vh - 140px);
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
     border-radius: 0;
     border: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
   }
   .driver-call-screen {
-    min-height: calc(100vh - 140px);
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
     border-radius: 0;
   }
   .call-content {
