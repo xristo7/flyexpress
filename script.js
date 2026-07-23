@@ -502,6 +502,7 @@ function restoreDescribedFocus(root, descriptor) {
 function refreshIcons() {
   if (window.lucide?.createIcons) window.lucide.createIcons({ attrs: { 'aria-hidden': 'true' } });
   upgradeSelects();
+  upgradeDateInputs();
 }
 
 /* ─── Modern Custom Select Dropdown Component ─── */
@@ -627,6 +628,251 @@ function closeCustomSelect(wrapper) {
   if (wrapper._closeHandler) {
     document.removeEventListener('click', wrapper._closeHandler, true);
     delete wrapper._closeHandler;
+  }
+}
+
+/* ─── Modern Custom Date Selector Component ─── */
+function formatFriendlyDate(isoStr) {
+  if (!isoStr) return 'Select Date';
+  const parts = String(isoStr).split('-');
+  if (parts.length !== 3) return isoStr;
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+  if (isNaN(year) || isNaN(month) || isNaN(day)) return isoStr;
+  const d = new Date(year, month, day);
+  if (isNaN(d.getTime())) return isoStr;
+  
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function upgradeDateInputs() {
+  document.querySelectorAll('input[type="date"]:not(.native-date-hidden)').forEach(dateInput => {
+    if (dateInput.closest('.custom-date-picker')) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-date-picker';
+
+    const initialVal = dateInput.value || '';
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = `custom-date-trigger${!initialVal ? ' is-placeholder' : ''}`;
+    trigger.setAttribute('aria-haspopup', 'dialog');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.innerHTML = `
+      <span class="custom-date-trigger-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      </span>
+      <span class="custom-date-trigger-label">${formatFriendlyDate(initialVal)}</span>
+      <span class="custom-date-chevron">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </span>
+    `;
+
+    dateInput.classList.add('native-date-hidden');
+    dateInput.setAttribute('tabindex', '-1');
+
+    dateInput.parentNode.insertBefore(wrapper, dateInput);
+    wrapper.appendChild(dateInput);
+    wrapper.appendChild(trigger);
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const wasOpen = wrapper.classList.contains('is-open');
+
+      document.querySelectorAll('.custom-date-picker.is-open').forEach(other => {
+        if (other !== wrapper) closeCustomDatePicker(other);
+      });
+
+      if (wasOpen) {
+        closeCustomDatePicker(wrapper);
+      } else {
+        openCustomDatePicker(wrapper, dateInput, trigger);
+      }
+    });
+  });
+}
+
+function openCustomDatePicker(wrapper, dateInput, trigger) {
+  let currentDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00') : new Date();
+  if (isNaN(currentDate.getTime())) currentDate = new Date();
+
+  let viewYear = currentDate.getFullYear();
+  let viewMonth = currentDate.getMonth();
+
+  const minDateStr = dateInput.getAttribute('min') || '';
+  let minDate = minDateStr ? new Date(minDateStr + 'T00:00:00') : null;
+  if (minDate && isNaN(minDate.getTime())) minDate = null;
+
+  const popover = document.createElement('div');
+  popover.className = 'custom-date-popover';
+
+  function renderCalendar() {
+    popover.innerHTML = '';
+
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const navHeader = document.createElement('div');
+    navHeader.className = 'custom-date-header';
+    navHeader.innerHTML = `
+      <button type="button" class="custom-date-nav-btn prev-month" aria-label="Previous month">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="custom-date-month-title">${months[viewMonth]} ${viewYear}</span>
+      <button type="button" class="custom-date-nav-btn next-month" aria-label="Next month">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    `;
+
+    navHeader.querySelector('.prev-month').addEventListener('click', (e) => {
+      e.stopPropagation();
+      viewMonth--;
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      renderCalendar();
+    });
+
+    navHeader.querySelector('.next-month').addEventListener('click', (e) => {
+      e.stopPropagation();
+      viewMonth++;
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      renderCalendar();
+    });
+
+    popover.appendChild(navHeader);
+
+    const weekHead = document.createElement('div');
+    weekHead.className = 'custom-date-weekdays';
+    ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(d => {
+      const span = document.createElement('span');
+      span.textContent = d;
+      weekHead.appendChild(span);
+    });
+    popover.appendChild(weekHead);
+
+    const daysGrid = document.createElement('div');
+    daysGrid.className = 'custom-date-days-grid';
+
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const totalDays = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+      const emptyCell = document.createElement('span');
+      emptyCell.className = 'custom-date-empty';
+      daysGrid.appendChild(emptyCell);
+    }
+
+    const today = new Date();
+    const selectedIso = dateInput.value;
+
+    for (let day = 1; day <= totalDays; day++) {
+      const thisDate = new Date(viewYear, viewMonth, day);
+      const isoString = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+      const dayBtn = document.createElement('button');
+      dayBtn.type = 'button';
+      dayBtn.className = 'custom-date-day';
+
+      const isSelected = selectedIso === isoString;
+      const isToday = today.getFullYear() === viewYear && today.getMonth() === viewMonth && today.getDate() === day;
+      const isDisabled = minDate && thisDate < new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+
+      if (isSelected) dayBtn.classList.add('is-selected');
+      if (isToday) dayBtn.classList.add('is-today');
+      if (isDisabled) {
+        dayBtn.classList.add('is-disabled');
+        dayBtn.disabled = true;
+      }
+
+      dayBtn.textContent = day;
+
+      if (!isDisabled) {
+        dayBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dateInput.value = isoString;
+          dateInput.dispatchEvent(new Event('input', { bubbles: true }));
+          dateInput.dispatchEvent(new Event('change', { bubbles: true }));
+          trigger.querySelector('.custom-date-trigger-label').textContent = formatFriendlyDate(isoString);
+          trigger.classList.remove('is-placeholder');
+          closeCustomDatePicker(wrapper);
+        });
+      }
+
+      daysGrid.appendChild(dayBtn);
+    }
+
+    popover.appendChild(daysGrid);
+
+    const shortcutsBar = document.createElement('div');
+    shortcutsBar.className = 'custom-date-shortcuts';
+
+    const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowIso = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+
+    const shortcuts = [
+      { label: 'Today', iso: todayIso },
+      { label: 'Tomorrow', iso: tomorrowIso }
+    ];
+
+    shortcuts.forEach(sc => {
+      const scBtn = document.createElement('button');
+      scBtn.type = 'button';
+      scBtn.className = 'custom-date-shortcut-btn';
+      scBtn.textContent = sc.label;
+
+      const scDate = new Date(sc.iso + 'T00:00:00');
+      if (minDate && scDate < new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate())) {
+        scBtn.disabled = true;
+        scBtn.classList.add('is-disabled');
+      } else {
+        scBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dateInput.value = sc.iso;
+          dateInput.dispatchEvent(new Event('input', { bubbles: true }));
+          dateInput.dispatchEvent(new Event('change', { bubbles: true }));
+          trigger.querySelector('.custom-date-trigger-label').textContent = formatFriendlyDate(sc.iso);
+          trigger.classList.remove('is-placeholder');
+          closeCustomDatePicker(wrapper);
+        });
+      }
+      shortcutsBar.appendChild(scBtn);
+    });
+
+    popover.appendChild(shortcutsBar);
+  }
+
+  renderCalendar();
+
+  wrapper.appendChild(popover);
+  wrapper.classList.add('is-open');
+  trigger.setAttribute('aria-expanded', 'true');
+
+  const closeHandler = (e) => {
+    if (!wrapper.contains(e.target)) {
+      closeCustomDatePicker(wrapper);
+      document.removeEventListener('click', closeHandler, true);
+    }
+  };
+  wrapper._dateCloseHandler = closeHandler;
+  setTimeout(() => document.addEventListener('click', closeHandler, true), 10);
+}
+
+function closeCustomDatePicker(wrapper) {
+  wrapper.classList.remove('is-open');
+  const trigger = wrapper.querySelector('.custom-date-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  const popover = wrapper.querySelector('.custom-date-popover');
+  if (popover) popover.remove();
+  if (wrapper._dateCloseHandler) {
+    document.removeEventListener('click', wrapper._dateCloseHandler, true);
+    delete wrapper._dateCloseHandler;
   }
 }
 
