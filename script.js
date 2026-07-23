@@ -2973,10 +2973,12 @@ function renderParcelStep() {
       </div>
       <div class="form-grid" style="margin-top:16px">
         <div class="field field--full"><label for="parcel-description">Description</label><input id="parcel-description" data-parcel-field="description" value="${escapeHtml(state.parcel.description)}"></div>
-        <div class="field"><label for="parcel-weight">Approximate weight</label><select id="parcel-weight" data-parcel-field="weight">${['Under 1 kg','1–5 kg','5–10 kg'].map(value => optionMarkup(value, state.parcel.weight)).join('')}</select></div>
-        <div class="field"><label for="parcel-quantity">Quantity</label><input id="parcel-quantity" data-parcel-field="quantity" type="number" value="${escapeHtml(state.parcel.quantity)}" min="1"></div>
-        <div class="field"><label for="parcel-value">Declared value</label><input id="parcel-value" data-parcel-field="declaredValue" value="${escapeHtml(state.parcel.declaredValue)}"></div>
-        <div class="field"><label for="parcel-fragile">Fragile handling</label><select id="parcel-fragile" data-parcel-field="fragile">${['No','Yes'].map(value => optionMarkup(value, state.parcel.fragile)).join('')}</select></div>
+        <div class="field-row-4col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; grid-column: 1 / -1;">
+          <div class="field"><label for="parcel-weight">Approximate weight</label><select id="parcel-weight" data-parcel-field="weight">${['Under 1 kg','1–5 kg','5–10 kg'].map(value => optionMarkup(value, state.parcel.weight)).join('')}</select></div>
+          <div class="field"><label for="parcel-quantity">Quantity</label><input id="parcel-quantity" data-parcel-field="quantity" type="number" value="${escapeHtml(state.parcel.quantity)}" min="1"></div>
+          <div class="field"><label for="parcel-value">Declared value</label><input id="parcel-value" data-parcel-field="declaredValue" value="${escapeHtml(state.parcel.declaredValue)}"></div>
+          <div class="field"><label for="parcel-fragile">Fragile handling</label><select id="parcel-fragile" data-parcel-field="fragile">${['No','Yes'].map(value => optionMarkup(value, state.parcel.fragile)).join('')}</select></div>
+        </div>
         <div class="field field--full">
           <label for="parcel-departure">Preferred vehicle departure</label>
           <select id="parcel-departure" data-parcel-field="departure">

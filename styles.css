@@ -8842,3 +8842,14 @@ body[data-active-screen="home"] .main-content {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+@media (max-width: 640px) {
+  .field-row-4col {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 420px) {
+  .field-row-4col {
+    grid-template-columns: 1fr !important;
+  }
+}
