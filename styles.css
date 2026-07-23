@@ -916,13 +916,13 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   }
   .booking-card-step2 .booking-for-header {
     width: 100%;
-    margin: 0;
-    border-radius: 0 0 20px 20px;
+    margin: 0 0 16px 0;
+    border-radius: 20px;
     padding: 18px 20px;
     box-shadow: var(--shadow-md);
   }
   .booking-step2-body {
-    padding: 20px 20px 28px 20px;
+    padding: 0 20px 28px 20px;
   }
 }
 
@@ -933,8 +933,9 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
     border-radius: 24px !important;
   }
   .booking-card-step2 .booking-for-header {
-    border-radius: 24px 24px 0 0;
+    border-radius: 20px;
     padding: 22px 28px;
+    margin-bottom: 20px;
   }
   .booking-step2-body {
     padding: 28px;
@@ -4201,6 +4202,7 @@ body[data-active-screen="driver-profile"] .main-content {
 .booking-for-header {
   background: linear-gradient(135deg, #081b33 0%, #0b2a50 100%);
   padding: 18px 20px;
+  border-radius: 20px;
   transition: background 0.35s ease;
 }
 .booking-for-header.is-other {
