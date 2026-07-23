@@ -898,7 +898,7 @@ function renderNavigation() {
   }
   
   if (mobile) {
-    const isBookingFlow = ['book', 'trip-details', 'passengers', 'returns', 'luggage', 'checkout', 'trackparcel', 'parcel-status', 'special-hire'].includes(state.screen);
+    const isBookingFlow = ['book', 'trip-details', 'passengers', 'returns', 'luggage', 'checkout', 'trackparcel', 'parcel-status', 'special-hire', 'driver-call', 'driver-chat'].includes(state.screen);
     const isBookStep1 = state.screen === 'book' && (state.bookingStep || 1) === 1;
     if (isBookingFlow && !isBookStep1) {
       mobile.classList.add('is-hidden');

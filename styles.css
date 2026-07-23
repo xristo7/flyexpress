@@ -4131,6 +4131,18 @@ body[data-active-screen="driver-profile"] .main-content {
   }
 }
 
+/* Hide mobile header topbar and bottom navigation when Call or Chat is active on mobile */
+@media (max-width: 768px) {
+  body[data-active-screen="driver-call"] .topbar,
+  body[data-active-screen="driver-chat"] .topbar,
+  body[data-active-screen="driver-call"] #mobile-nav,
+  body[data-active-screen="driver-chat"] #mobile-nav,
+  body[data-active-screen="driver-call"] .mobile-nav,
+  body[data-active-screen="driver-chat"] .mobile-nav {
+    display: none !important;
+  }
+}
+
 /* ─── Driver Chat Screen ─── */
 .driver-chat-screen {
   position: fixed;
