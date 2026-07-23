@@ -2582,7 +2582,23 @@ function paymentChoice(value, title, copy, icon) {
 
 function renderPaymentPanel(total, walletRemaining) {
   if (state.paymentMethod === 'wallet') {
-    return `<div class="payment-panel"><div class="grid grid--3"><div><span class="muted text-small">Current balance</span><strong>${formatUGX(state.walletBalance)}</strong></div><div><span class="muted text-small">Amount due</span><strong>${formatUGX(total)}</strong></div><div><span class="muted text-small">Remaining balance</span><strong class="${walletRemaining < 0 ? 'text-danger' : 'text-success'}">${formatUGX(walletRemaining)}</strong></div></div><div class="field" style="margin-top:13px"><label for="wallet-pin">Wallet PIN</label><input id="wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div></div>`;
+    return `<div class="payment-panel">
+      <div class="grid grid--3" style="gap: 12px; margin-bottom: 4px;">
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Current balance</span>
+          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(state.walletBalance)}</strong>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Amount due</span>
+          <strong style="font-size: 0.97rem; color: var(--brand-blue-dark);">${formatUGX(total)}</strong>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; background: var(--page); border-radius: 10px; border: 1px solid var(--border);">
+          <span class="muted text-small" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;">Remaining balance</span>
+          <strong class="${walletRemaining < 0 ? 'text-danger' : 'text-success'}" style="font-size: 0.97rem;">${formatUGX(walletRemaining)}</strong>
+        </div>
+      </div>
+      <div class="field" style="margin-top:13px"><label for="wallet-pin">Wallet PIN</label><input id="wallet-pin" type="password" inputmode="numeric" maxlength="4" value="2580"><span class="field-help">Any four digits are accepted in this preview.</span></div>
+    </div>`;
   }
   if (state.paymentMethod === 'mobile') {
     if (state.paymentDemoState === 'pending') return paymentState('pending','Authorization pending',`A simulated Mobile Money prompt is awaiting approval.`);
