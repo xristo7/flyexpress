@@ -3133,9 +3133,8 @@ function renderSpecialHire() {
   
   if (step === 2) {
     const chosenVehicle = appData.specialHireVehicles.find(v => v.id === (sh.vehicleType || sh.vehicleId)) || appData.specialHireVehicles[0];
-    const days = Math.max(1, Number(sh.durationDays) || 1);
-    const driverSupplement = sh.driverType === 'tour' ? 30000 : 0;
-    const subtotal = (chosenVehicle.dailyRate + driverSupplement) * days;
+    const days = sh.durationDays || 1;
+    const priceDetails = calculateSpecialHirePrice();
 
     return `
       ${screenHead('Private Charter & Special Hire', 'Step 2 of 3: Enter charter specifications and driver preferences.')}
@@ -3291,9 +3290,9 @@ function renderSpecialHire() {
         <!-- Live Estimate Breakdown Card -->
         <div style="background: var(--surface-alt); border: 1px solid var(--border-strong); padding: 18px; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
           <div>
-            <span style="font-size: 0.74rem; text-transform: uppercase; font-weight: 750; color: var(--muted); letter-spacing: 0.05em; display: block;">Charter Subtotal Estimate</span>
-            <div style="font-size: 1.45rem; font-weight: 850; color: var(--brand-blue-dark); margin-top: 2px;">${formatUGX(subtotal)}</div>
-            <span style="font-size: 0.78rem; color: var(--slate); font-weight: 500;">Includes vehicle, driver allowance &amp; corridor toll access for <strong>${days} day(s)</strong></span>
+            <span style="font-size: 0.74rem; text-transform: uppercase; font-weight: 750; color: var(--muted); letter-spacing: 0.05em; display: block;">Charter Total Estimate (incl. VAT &amp; Fuel)</span>
+            <div style="font-size: 1.45rem; font-weight: 850; color: var(--brand-blue-dark); margin-top: 2px;">${formatUGX(priceDetails.total)}</div>
+            <span style="font-size: 0.78rem; color: var(--slate); font-weight: 500;">Includes vehicle, fuel logistics, driver allowance &amp; 18% VAT for <strong>${days} day(s)</strong></span>
           </div>
           <div style="display: flex; gap: 10px;">
             <button class="button button--ghost" type="button" data-action="special-hire-back" style="padding-inline: 18px; font-weight: 700;">Back</button>
