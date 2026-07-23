@@ -6622,7 +6622,7 @@ body[data-active-screen="home"] .main-content {
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 8px 14px;
-      margin-bottom: 13px;
+      margin-bottom: 6px;
       padding: 0 3px;
     }.home-redesign .section-head h2{ font-size: 1.25rem; margin: 0; }.home-redesign .text-button{
       color: var(--blue-800);

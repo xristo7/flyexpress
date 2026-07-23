@@ -1127,10 +1127,10 @@ function renderHome() {
             </div>
           </section>
 
-          <!-- 6. FLY NOW CAROUSEL -->
+          <!-- 6. DEPARTURES CAROUSEL -->
           <section class="section" style="animation-delay:.15s" aria-labelledby="departuresTitle">
             <div class="section-head">
-              <h2 id="departuresTitle">Fly now</h2>
+              <h2 id="departuresTitle">Departures</h2>
               <button class="text-button" type="button" data-screen="available-vans">Show all</button>
             </div>
             
