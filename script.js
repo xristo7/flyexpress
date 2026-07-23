@@ -659,8 +659,15 @@ function renderOnboarding() {
 
   content.innerHTML = `
     <article class="onboarding-slide">
-      <div class="onboarding-image-container">
+      <div class="onboarding-image-container" style="position: relative;">
         <img src="assets/onboarding-${state.onboardingIndex + 1}.${state.onboardingIndex === 1 ? 'webp' : 'jpg'}" alt="${escapeHtml(slide.title)} visual">
+        ${state.onboardingIndex < 2 ? `
+          <div class="swipe-gesture-pill" aria-label="Swipe left with finger">
+            <i data-lucide="hand" class="swipe-hand-icon"></i>
+            <span>Swipe left to explore</span>
+            <i data-lucide="arrow-right" class="swipe-arrow-anim"></i>
+          </div>
+        ` : ''}
       </div>
       <div class="onboarding-copy">
         <h2>${slide.title}</h2>
