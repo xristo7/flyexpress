@@ -1948,10 +1948,10 @@ function renderTripDetails() {
 
           <!-- Buttons below driver details in right column -->
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <a class="button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; flex: 1; min-width: 80px;">
+            <button class="button button--primary button--small" type="button" data-action="review-call-driver" data-value="${trip.driverName.toLowerCase()}" aria-label="Call Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; flex: 1; min-width: 80px;">
               <i data-lucide="phone" style="width: 13px; height: 13px;"></i> Call
-            </a>
-            <button class="button button--secondary button--small" type="button" onclick="event.stopPropagation(); toast('Messaging ${trip.driverName}...', 'info');" aria-label="Chat with Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark); flex: 1.2; min-width: 90px;">
+            </button>
+            <button class="button button--secondary button--small" type="button" data-action="review-chat-driver" data-value="${trip.driverName.toLowerCase()}" aria-label="Chat with Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark); flex: 1.2; min-width: 90px;">
               <i data-lucide="message-square" style="width: 13px; height: 13px;"></i> Chat
             </button>
           </div>
@@ -4986,6 +4986,21 @@ function handleClick(event) {
     },
     'call-driver': () => {
       navigate('driver-call');
+    },
+    'review-call-driver': () => {
+      const driverKey = value || (state.activeTrip ? state.activeTrip.driverName.toLowerCase() : 'moses mukasa');
+      state.viewingDriverName = driverKey;
+      navigate('driver-call');
+    },
+    'review-chat-driver': () => {
+      const driverKey = value || (state.activeTrip ? state.activeTrip.driverName.toLowerCase() : 'moses mukasa');
+      state.viewingDriverName = driverKey;
+      const driver = (driversData && driversData[driverKey]) || driversData['moses mukasa'] || driversData['isaac muwonge'];
+      if (driver && driver.status === 'driving') {
+        toast(`For safety, ${driver.name} cannot receive messages while driving. Please call instead.`, 'warning');
+      } else {
+        navigate('driver-chat');
+      }
     },
     'send-chat-demo': () => {
       const input = document.querySelector('.chat-compose-input');
