@@ -1919,7 +1919,7 @@ function renderTripDetails() {
       <!-- Route Title Header Block -->
       <div class="smart-review__header-block" style="margin-bottom: 16px;">
         <h1 style="margin: 0; font-size: clamp(1.4rem, 3.8vw, 1.85rem); font-weight: 850; color: var(--brand-blue-dark); line-height: 1.25;">
-          ${trip.boarding} → ${trip.destination}
+          ${trip.boarding.replace(/\s+(Bus Park|Railway Stage|Main Stage|Stage)/gi, '')} → ${trip.destination.replace(/\s+(Bus Park|Railway Stage|Main Stage|Stage)/gi, '')}
         </h1>
       </div>
 
