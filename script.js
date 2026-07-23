@@ -1675,32 +1675,27 @@ function renderBook() {
                   
                   <!-- RIGHT COLUMN -->
                   <div class="taxi-card-right-col">
-                    <!-- Driver Row -->
-                    <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+                    <!-- Clickable Driver Card Shape -->
+                    <div class="taxi-driver-row" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');" title="View driver details">
                       <div class="driver-circle-avatar">
                         <i data-lucide="user"></i>
                       </div>
                       <div class="driver-text-block">
-                        <div class="driver-name-rating">
+                        <div class="driver-name-tag-row" style="display: flex; align-items: center; gap: 6px;">
                           <strong class="driver-name-text">${trip.driverName}</strong>
-                          <span class="driver-rating-badge">${trip.driverRating} ★</span>
+                          <span class="driver-subtext-pill">Driver</span>
                         </div>
-                        <span class="driver-subtext">Driver</span>
+                        <div class="driver-rating-row" style="margin-top: 3px;">
+                          <span class="driver-rating-badge"><i data-lucide="star" style="width: 11px; height: 11px; fill: #f59e0b; color: #f59e0b;"></i> ${trip.driverRating} Rating</span>
+                        </div>
                       </div>
                     </div>
                     
-                    <!-- Proximity Row -->
-                    <div class="taxi-proximity-row">
-                      <span class="proximity-countdown"><i data-lucide="clock"></i> ${trip.countdown}</span>
-                      <span class="proximity-stage">${trip.currentStage}</span>
-                    </div>
-                    
-                    <!-- Desktop-only Divider and Bottom Row -->
-                    <div class="taxi-desktop-divider-group">
+                    <!-- Desktop-only Bottom Group -->
+                    <div class="taxi-desktop-divider-group" style="margin-top: 10px;">
                       <div class="taxi-card-dotted-divider"></div>
-                      <div class="taxi-desktop-bottom-row">
-                        <span class="taxi-depart-time-desktop">${trip.depart}</span>
-                        <span class="taxi-duration-text">${trip.duration}</span>
+                      <div class="taxi-desktop-bottom-row" style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                        <span class="taxi-duration-text" style="font-size: 0.8rem; color: var(--slate); font-weight: 600;"><i data-lucide="clock" style="width: 13px; height: 13px; vertical-align: middle; margin-right: 3px; color: var(--brand-blue);"></i> Travel time: ${trip.duration}</span>
                         <div class="taxi-seats-left-wrapper">
                           ${hasEnoughSeats ? `
                             <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span>
@@ -1713,12 +1708,11 @@ function renderBook() {
                   </div>
                 </div>
                 
-                <!-- MOBILE-ONLY DIVIDER AND BOTTOM ROW -->
+                <!-- MOBILE-ONLY BOTTOM GROUP -->
                 <div class="taxi-mobile-bottom-group">
                   <div class="taxi-card-dotted-divider-full"></div>
-                  <div class="taxi-mobile-bottom-row">
-                    <span class="taxi-depart-time-mobile">${trip.depart}</span>
-                    <span class="taxi-duration-text-mobile">${trip.duration}</span>
+                  <div class="taxi-mobile-bottom-row" style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                    <span class="taxi-duration-text-mobile" style="font-size: 0.78rem; color: var(--slate); font-weight: 600;"><i data-lucide="clock" style="width: 12px; height: 12px; vertical-align: middle; margin-right: 3px; color: var(--brand-blue);"></i> Travel time: ${trip.duration}</span>
                     <div class="taxi-seats-left-wrapper-mobile">
                       ${hasEnoughSeats ? `
                         <span class="status-chip ${trip.seats <= 2 ? 'status-chip--warning' : 'status-chip--success'}">${trip.seats} seats left</span>
