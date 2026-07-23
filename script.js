@@ -3164,7 +3164,7 @@ function renderSpecialHire() {
           <div style="display: flex; align-items: center; gap: 12px;">
             <img src="${chosenVehicle.img}" alt="${chosenVehicle.name}" style="width: 52px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);" />
             <div>
-              <strong style="font-size: 0.94rem; color: var(--brand-blue-dark); display: block;">${chosenVehicle.name} (${chosenVehicle.seats} Seats)</strong>
+              <strong style="font-size: 0.94rem; color: var(--brand-blue-dark); display: block;">${chosenVehicle.name}</strong>
               <span style="font-size: 0.8rem; color: var(--slate); font-weight: 500;">Route: <strong>${sh.destinationType === 'custom' ? (sh.customDestination || 'Custom Corridor') : (sh.route || 'Entebbe Corridor')}</strong></span>
             </div>
           </div>
