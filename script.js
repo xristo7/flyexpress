@@ -4559,7 +4559,13 @@ function initBookingStep2Map() {
   }
   
   const route = state.selectedRoute || 'entebbe';
-  const isFlipped = !!state.routeFlips[route];
+  const rc = appData.routeCards.find(r => r.key === route);
+  const fromCity = (state.searchFrom || '').toLowerCase();
+  const isFlipped = !!state.routeFlips[route] || 
+                    (rc && fromCity.includes(rc.cityB.toLowerCase())) ||
+                    fromCity.includes('kampala') || fromCity.includes('bweyogere') || 
+                    fromCity.includes('nambole') || fromCity.includes('masaka') || 
+                    fromCity.includes('lyantonde') || fromCity.includes('mbarara');
   const points = getCurrentRoutePoints(route, isFlipped);
   
   if (bookingStep2Map) {
@@ -5402,8 +5408,8 @@ function handleClick(event) {
 function handleChange(event) {
   const target = event.target;
   const bookingFields = {
-    'search-from': value => { state.searchFrom = value; state.dropOffLocation = state.searchTo; },
-    'search-to': value => { state.searchTo = value; state.dropOffLocation = value; },
+    'search-from': value => { state.searchFrom = value; state.dropOffLocation = state.searchTo; renderCurrentScreen(); },
+    'search-to': value => { state.searchTo = value; state.dropOffLocation = value; renderCurrentScreen(); },
     'booking-date': value => { state.bookingDate = value; },
     'search-period': value => { state.searchPeriod = value; },
     'search-adults': value => { state.passengerCount = Number(value) || 1; },
@@ -5505,6 +5511,8 @@ function swapRoute() {
   const temp = state.searchFrom;
   state.searchFrom = state.searchTo;
   state.searchTo = temp;
+  const route = state.selectedRoute || 'entebbe';
+  state.routeFlips[route] = !state.routeFlips[route];
   renderCurrentScreen();
   toast('Route direction swapped.', 'success');
 }
