@@ -4287,9 +4287,8 @@ function initTripMap() {
   }
   
   const isReverse = state.activeTrip ? state.activeTrip.boarding.toLowerCase().includes('kampala') || state.activeTrip.boarding.toLowerCase().includes('bweyogere') || state.activeTrip.boarding.toLowerCase().includes('busega') || state.activeTrip.boarding.toLowerCase().includes('nambole') || state.activeTrip.boarding.toLowerCase().includes('masaka') || state.activeTrip.boarding.toLowerCase().includes('lyantonde') || state.activeTrip.boarding.toLowerCase().includes('mbarara') : false;
-  
   const points = getCurrentRoutePoints(routeKey, isReverse);
-  tripReviewMap = L.map(target, { attributionControl: true, boxZoom: false, doubleClickZoom: false, dragging: false, keyboard: false, scrollWheelZoom: false, touchZoom: false, zoomControl: false });
+  tripReviewMap = L.map(target, { attributionControl: true, boxZoom: true, doubleClickZoom: true, dragging: true, keyboard: true, scrollWheelZoom: false, touchZoom: true, zoomControl: true });
   let tileErrors = 0;
   const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' });
   tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
@@ -4339,7 +4338,7 @@ function initBookingStep2Map() {
     bookingStep2Map = null;
   }
   
-  bookingStep2Map = L.map(target, { attributionControl: false, boxZoom: false, doubleClickZoom: false, dragging: false, keyboard: false, scrollWheelZoom: false, touchZoom: false, zoomControl: false });
+  bookingStep2Map = L.map(target, { attributionControl: false, boxZoom: true, doubleClickZoom: true, dragging: true, keyboard: true, scrollWheelZoom: false, touchZoom: true, zoomControl: true });
   
   let tileErrors = 0;
   const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false });
@@ -4405,7 +4404,7 @@ function initLiveTravelMap() {
     liveTravelMap = null;
   }
   
-  liveTravelMap = L.map(target, { attributionControl: false, boxZoom: false, doubleClickZoom: true, dragging: true, keyboard: false, scrollWheelZoom: true, touchZoom: true, zoomControl: false });
+  liveTravelMap = L.map(target, { attributionControl: false, boxZoom: true, doubleClickZoom: true, dragging: true, keyboard: true, scrollWheelZoom: false, touchZoom: true, zoomControl: true });
   
   let tileErrors = 0;
   const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false });
