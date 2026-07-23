@@ -3004,7 +3004,7 @@ function renderSpecialHire() {
     return `
       ${screenHead('Private Charter & Special Hire', 'Step 1 of 3: Choose your vehicle and destination.')}
       
-      <div class="special-hire-step1-layout" style="margin-top: 16px;">
+      <div class="special-hire-step1-layout" style="margin-top: 16px; max-width: 700px;">
         <!-- Left Main Column: Vehicle Selection Grid -->
         <div class="special-hire-main-col">
           <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 14px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
@@ -3157,7 +3157,7 @@ function renderSpecialHire() {
         </div>
       </div>
 
-      <div class="special-hire-flow-container" style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="special-hire-flow-container" style="display: flex; flex-direction: column; gap: 20px; max-width: 700px;">
         
         <!-- Selection Summary Bar -->
         <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.12); padding: 14px 18px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
@@ -3191,11 +3191,11 @@ function renderSpecialHire() {
               <!-- Duration Numeric Stepper -->
               <div class="field" style="margin: 0;">
                 <label style="font-weight: 750; font-size: 0.85rem; color: var(--charcoal); margin-bottom: 6px; display: block;">Duration of Hire</label>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <div style="display: flex; align-items: center; border: 1px solid var(--border-strong); border-radius: 12px; background: white; padding: 4px; width: 100%; justify-content: space-between;">
-                    <button class="button button--ghost" type="button" data-action="decrement-hire-days" style="width: 38px; height: 38px; border-radius: 8px; font-weight: 800; font-size: 1.2rem; display: grid; place-items: center; padding: 0;">-</button>
-                    <span style="font-weight: 850; font-size: 1.05rem; color: var(--brand-blue-dark);">${days} Day${days === 1 ? '' : 's'}</span>
-                    <button class="button button--ghost" type="button" data-action="increment-hire-days" style="width: 38px; height: 38px; border-radius: 8px; font-weight: 800; font-size: 1.2rem; display: grid; place-items: center; padding: 0;">+</button>
+                <div style="display: flex; align-items: center;">
+                  <div style="display: flex; align-items: center; border: 1px solid var(--border-strong); border-radius: 12px; background: white; padding: 6px 10px; width: 100%; justify-content: space-between; height: 46px; box-sizing: border-box;">
+                    <button class="button button--ghost" type="button" data-action="decrement-hire-days" style="width: 28px; height: 28px; border-radius: 7px; font-weight: 800; font-size: 1rem; display: grid; place-items: center; padding: 0; min-width: 28px; flex-shrink: 0;">-</button>
+                    <span style="font-weight: 750; font-size: 0.95rem; color: var(--brand-blue-dark);">${days} Day${days === 1 ? '' : 's'}</span>
+                    <button class="button button--ghost" type="button" data-action="increment-hire-days" style="width: 28px; height: 28px; border-radius: 7px; font-weight: 800; font-size: 1rem; display: grid; place-items: center; padding: 0; min-width: 28px; flex-shrink: 0;">+</button>
                   </div>
                 </div>
               </div>
@@ -3335,7 +3335,7 @@ function renderSpecialHire() {
     return `
       ${screenHead('Private Charter & Special Hire', 'Step 3 of 3: Review pricing and authorize payment.')}
       
-      <div class="checkout-unified-layout" style="margin-top: 16px;">
+      <div class="checkout-unified-layout" style="margin-top: 16px; max-width: 700px;">
         
         <!-- Mobile-only Shopify Order Summary Accordion -->
         <div class="shopify-summary-card mobile-summary-accordion ${isOpen ? 'is-open' : ''}">
