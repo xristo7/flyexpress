@@ -5908,7 +5908,8 @@ function handleClick(event) {
     },
     'confirm-hire-payment': () => {
       const priceDetails = calculateSpecialHirePrice();
-      if (state.specialHire.paymentMethod === 'wallet') {
+      const method = state.specialHire.paymentMethod;
+      if (method === 'wallet') {
         if (state.walletBalance < priceDetails.total) {
           toast('Insufficient wallet balance. Please add funds first.', 'danger');
           return;
@@ -5922,6 +5923,12 @@ function handleClick(event) {
           direction: 'out',
           icon: 'bus'
         });
+      }
+      if (method === 'mobile' || method === 'mtn' || method === 'airtel') {
+        if (state.specialHire.paymentDemoState !== 'success') {
+          toast('Simulate a successful mobile-money response before confirming.', 'danger');
+          return;
+        }
       }
       state.specialHire.step = 4;
       renderCurrentScreen();
@@ -5953,6 +5960,11 @@ function handleChange(event) {
   if (target.name === 'payment-method') {
     state.paymentMethod = target.value;
     state.paymentDemoState = 'idle';
+    renderCurrentScreen();
+  }
+  if (target.name === 'hire-payment-method') {
+    state.specialHire.paymentMethod = target.value;
+    state.specialHire.paymentDemoState = 'idle';
     renderCurrentScreen();
   }
   if (target.name === 'parcel-delivery') {
