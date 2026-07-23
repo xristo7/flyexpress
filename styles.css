@@ -7588,13 +7588,34 @@ body[data-active-screen="home"] .main-content {
   vertical-align: top;
 }
 
-@media (max-width: 1050px) and (min-width: 651px) {
+@media (max-width: 1050px) and (min-width: 701px) {
   .popular-places-column-layout {
     column-count: 2;
     column-gap: 16px;
   }
 }
 
+@media (max-width: 700px) {
+  .popular-places-column-layout {
+    column-count: 1 !important;
+    column-gap: 0 !important;
+  }
+}
+
+.transit-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  text-align: left;
+  font-size: 0.82rem;
+  padding-top: 2px;
+}
+
+@media (max-width: 700px) {
+  .transit-status-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+  }
 }
 
 /* Switcher Icon 180° Rotation Animations */

@@ -1995,7 +1995,7 @@ function renderTripDetails() {
           </span>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: left; font-size: 0.82rem; padding-top: 2px;">
+        <div class="transit-status-grid">
           <div>
             <span style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block;">From</span>
             <strong style="color: var(--charcoal); font-weight: 700; display: block; margin-top: 2px;">${trip.comingFrom}</strong>
