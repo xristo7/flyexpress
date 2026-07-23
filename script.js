@@ -329,8 +329,8 @@ const state = {
   bookingDate: '2026-07-18',
   searchFrom: 'Entebbe Bus Park',
   searchTo: 'Kampala Railway Stage',
-  dropOffLocation: 'Kampala Railway Stage',
-  searchPeriod: 'Morning',
+  dropOffLocation: '',
+  searchPeriod: '',
   bookingOption: '',
   assistance: 'None required',
   passengerCount: 1,
@@ -519,9 +519,8 @@ function upgradeSelects() {
 
     // Determine selected option text
     const selectedOpt = sel.options[sel.selectedIndex];
-    const hasRealSelection = selectedOpt && sel.selectedIndex >= 0;
-    const displayText = hasRealSelection ? selectedOpt.textContent : 'Select';
-    const isPlaceholder = !hasRealSelection;
+    const isPlaceholder = !selectedOpt || selectedOpt.disabled || selectedOpt.value === '' || selectedOpt.hidden;
+    const displayText = isPlaceholder ? 'Select' : selectedOpt.textContent;
 
     // Build trigger button
     const trigger = document.createElement('button');
@@ -570,6 +569,9 @@ function openCustomSelect(wrapper, sel, trigger) {
   optionsPanel.setAttribute('role', 'listbox');
 
   Array.from(sel.options).forEach((opt, idx) => {
+    // Skip disabled or hidden placeholder option ("Select") from list so it cannot be selected
+    if (opt.disabled || opt.hidden || opt.value === '') return;
+
     const optBtn = document.createElement('button');
     optBtn.type = 'button';
     optBtn.className = `custom-select-option${idx === sel.selectedIndex ? ' is-selected' : ''}`;
@@ -1536,13 +1538,14 @@ function renderBook() {
                   </div>
                 ` : ''}
               </div>
-              <div class="field"><label for="book-period">Preferred period</label><select id="book-period" data-field="search-period">${['Morning','Afternoon','Evening'].map(period => optionMarkup(period, state.searchPeriod, `${period} · ${period === 'Morning' ? '5:00–11:59' : period === 'Afternoon' ? '12:00–4:59' : '5:00–10:00'}`)).join('')}</select></div>
+              <div class="field"><label for="book-period">Preferred period</label><select id="book-period" data-field="search-period"><option value="" disabled ${!state.searchPeriod ? 'selected' : ''} hidden>Select</option>${['Morning','Afternoon','Evening'].map(period => optionMarkup(period, state.searchPeriod, `${period} · ${period === 'Morning' ? '5:00–11:59' : period === 'Afternoon' ? '12:00–4:59' : '5:00–10:00'}`)).join('')}</select></div>
             </div>
 
             <!-- Drop-off location along corridor -->
             <div class="field" style="text-align: left; width: 100%;">
               <label for="book-drop-off">Preferred drop-off point along the corridor</label>
               <select id="book-drop-off" data-field="drop-off-location" style="width: 100%;">
+                <option value="" disabled ${!state.dropOffLocation ? 'selected' : ''} hidden>Select</option>
                 ${getDropOffOptions().map(stage => optionMarkup(stage, state.dropOffLocation, stage === state.searchTo ? `${stage} (Final destination)` : stage)).join('')}
               </select>
             </div>
@@ -4999,6 +5002,14 @@ function handleClick(event) {
     },
     'booking-next-step': () => {
       if (state.bookingStep === 2) {
+        if (!state.searchPeriod) {
+          toast('Please select a preferred period before proceeding.', 'warning');
+          return;
+        }
+        if (!state.dropOffLocation) {
+          toast('Please select a preferred drop-off point before proceeding.', 'warning');
+          return;
+        }
         if (state.isBookingForSomeoneElse) {
           if (!state.otherTravelerName || !state.otherTravelerName.trim()) {
             toast("Please enter the traveler's full name.", 'warning');
