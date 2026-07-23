@@ -2086,7 +2086,8 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
   box-shadow: none !important;
 }
 .topbar--dark-bg::after {
-  background: linear-gradient(to bottom, rgba(8, 27, 51, 1) 0%, rgba(8, 27, 51, 0.95) 45%, rgba(8, 27, 51, 0) 100%) !important;
+  display: none !important;
+  background: transparent !important;
 }
 .topbar--dark-bg h2,
 .topbar--dark-bg .icon-button,

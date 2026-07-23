@@ -1911,7 +1911,6 @@ function renderTripDetails() {
   return `<section class="smart-review" aria-label="Review your trip">
     <!-- Top Hero Vehicle & Driver Photo Visual Area -->
     <div class="smart-review__map-card" style="background-image: url('${trip.img}'); background-size: cover; background-position: center; position: relative;">
-      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 100%); pointer-events: none;"></div>
     </div>
 
     <div class="smart-review__sheet">
