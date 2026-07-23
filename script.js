@@ -4170,21 +4170,16 @@ function reviewLuggageOptions() {
 function reviewSeatOptions() {
   const fee = seatReservationFee();
   return `<div class="mode-switch compact-mode-switch">
-    <button class="${state.capacityMode === 'capacity' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="capacity" aria-pressed="${state.capacityMode === 'capacity'}">Best available (Normal UGX 5,000)</button>
-    <button class="${state.capacityMode === 'seats' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="seats" aria-pressed="${state.capacityMode === 'seats'}">Choose seats (+UGX 1,000/seat)</button>
+    <button class="${state.capacityMode === 'capacity' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="capacity" aria-pressed="${state.capacityMode === 'capacity'}">Best available</button>
+    <button class="${state.capacityMode === 'seats' ? 'is-active' : ''}" type="button" data-action="capacity-mode" data-value="seats" aria-pressed="${state.capacityMode === 'seats'}">Choose seats</button>
   </div>
-  ${state.capacityMode === 'capacity' ? `
-    <div class="compact-note" style="background: var(--surface-alt); border-radius: 12px; padding: 12px 14px; text-align: left;">
-      <i data-lucide="badge-check" style="color: var(--success);"></i>
-      <span>Normal rate (UGX 5,000/seat). ${passengerTotal()} place${passengerTotal() === 1 ? '' : 's'} assigned as best available position by stage crew at boarding.</span>
-    </div>
-  ` : `
+  ${state.capacityMode === 'seats' ? `
     <div class="compact-note" style="background: var(--info-soft); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; text-align: left;">
       <i data-lucide="info" style="color: var(--brand-blue);"></i>
       <span>Specific seat reservation adds an extra fee of <strong>UGX 1,000 per seat</strong>. Current seat reservation fee: <strong>+ ${formatUGX(fee)}</strong></span>
     </div>
     ${renderSeatMode()}
-  `}`;
+  ` : ''}`;
 }
 
 function renderSeatMode() {
