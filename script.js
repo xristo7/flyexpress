@@ -2001,17 +2001,6 @@ function renderTripDetails() {
         </p>
       </div>
 
-      <div class="review-route-row">
-        <div>
-          <small>FROM</small>
-          <strong>${trip.boarding.replace(' Main Stage', '')}</strong>
-        </div>
-        <span class="review-swap"><i data-lucide="arrow-down-up" style="width: 18px; height: 18px; color: var(--brand-blue-dark);"></i></span>
-        <div>
-          <small>TO</small>
-          <strong>${trip.destination.replace(' Main Stage', '')}</strong>
-        </div>
-      </div>
       <div class="review-section-label">Selected departure</div>
       <article class="review-departure"><div class="review-departure__time"><strong>${trip.depart.replace(' AM','').replace(' PM','')}</strong><span>${trip.depart.includes('AM') ? 'AM' : 'PM'}</span></div><div class="review-departure__service"><span class="review-vehicle-icon"><i data-lucide="bus-front"></i></span><span><strong>${trip.vehicle}</strong><small>${trip.duration} · ${trip.traffic} traffic · ${trip.plate}</small></span></div><div class="review-departure__price"><span>${trip.seats} seats left</span><strong>${formatUGX(trip.fare)}</strong></div><span class="review-check"><i data-lucide="check"></i></span></article>
       
