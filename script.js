@@ -1923,37 +1923,40 @@ function renderTripDetails() {
         </h1>
       </div>
 
-      <!-- Unified Driver Card -->
-      <article class="card unified-driver-transit-card" style="margin: 0 0 16px 0; padding: 16px 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: flex; flex-direction: column; gap: 14px;">
-        <div style="display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-          <div style="display: flex; gap: 14px; align-items: center;">
-            <div style="position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; flex-shrink: 0;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
-              <div style="width: 64px; height: 64px; border-radius: 50%; overflow: hidden; background: var(--surface-alt); border: 2.5px solid white; box-shadow: 0 4px 12px rgba(8,27,51,0.14);">
-                <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
-              </div>
-              <div style="margin-top: -11px; z-index: 2; background: white; border-radius: 12px; padding: 2px 7px; box-shadow: 0 3px 8px rgba(8,27,51,0.12); border: 1px solid rgba(8,27,51,0.06); display: inline-flex; align-items: center; gap: 3px; font-size: 0.76rem; font-weight: 800; color: var(--brand-blue-dark);">
-                <i data-lucide="star" style="width: 12px; height: 12px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
-              </div>
-            </div>
+      <!-- Unified Driver Card (2-Column Layout) -->
+      <article class="card unified-driver-transit-card" style="margin: 0 0 16px 0; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: grid; grid-template-columns: 88px 1fr; gap: 16px; align-items: center;">
+        
+        <!-- Left Profile Column -->
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+          <div style="width: 84px; height: 84px; border-radius: 50%; overflow: hidden; background: var(--surface-alt); border: 3px solid white; box-shadow: 0 4px 14px rgba(8,27,51,0.15);">
+            <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
+          </div>
+          <div style="margin-top: -12px; z-index: 2; background: white; border-radius: 12px; padding: 2px 8px; box-shadow: 0 3px 8px rgba(8,27,51,0.12); border: 1px solid rgba(8,27,51,0.06); display: inline-flex; align-items: center; gap: 3px; font-size: 0.78rem; font-weight: 800; color: var(--brand-blue-dark);">
+            <i data-lucide="star" style="width: 12px; height: 12px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
+          </div>
+        </div>
 
-            <div>
-              <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--slate); letter-spacing: 0.05em;">Your Driver</span>
-              <h2 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: var(--brand-blue-dark); cursor: pointer;" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');">${trip.driverName}</h2>
-              <div style="font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-top: 2px;">
-                ${trip.vehicle} · <span class="text-success" style="font-weight: 700;">${trip.plate}</span>
-              </div>
+        <!-- Right Driver Details Column (Wider) -->
+        <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 10px; min-width: 0;">
+          <div>
+            <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--slate); letter-spacing: 0.05em; display: block;">Your Driver</span>
+            <h2 style="margin: 2px 0 0 0; font-size: 1.25rem; font-weight: 850; color: var(--brand-blue-dark); cursor: pointer;" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');">${trip.driverName}</h2>
+            <div style="font-size: 0.84rem; color: var(--muted); font-weight: 600; margin-top: 2px;">
+              ${trip.vehicle} · <span class="text-success" style="font-weight: 700;">${trip.plate}</span>
             </div>
           </div>
 
-          <div style="display: flex; gap: 8px;">
-            <a class="button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;">
+          <!-- Buttons below driver details in right column -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a class="button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; flex: 1; min-width: 80px;">
               <i data-lucide="phone" style="width: 13px; height: 13px;"></i> Call
             </a>
-            <button class="button button--secondary button--small" type="button" onclick="event.stopPropagation(); toast('Messaging ${trip.driverName} via SMS...', 'info');" aria-label="Send Message to Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark);">
+            <button class="button button--secondary button--small" type="button" onclick="event.stopPropagation(); toast('Messaging ${trip.driverName} via SMS...', 'info');" aria-label="Send Message to Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark); flex: 1.2; min-width: 110px;">
               <i data-lucide="message-square" style="width: 13px; height: 13px;"></i> Send Message
             </button>
           </div>
         </div>
+
       </article>
 
       <!-- Embedded Interactive Route Map (Moved inside sheet) -->
