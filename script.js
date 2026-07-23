@@ -762,12 +762,12 @@ function renderAuth() {
       <div class="auth-card">
         <button class="text-button" type="button" data-action="auth-back">← Back</button>
         <p class="eyebrow">Verification preview</p>
-        <h2>Enter the six-digit code</h2>
+        <h2>Enter the four-digit code</h2>
         <p class="muted">A demonstration code was prepared for +256 772 345 678.</p>
         <div class="otp-grid" aria-label="One-time password">
-          ${[1,2,3,4,5,6].map((n, i) => `<input class="otp-input" maxlength="1" inputmode="numeric" value="${i + 1}" aria-label="Digit ${n}">`).join('')}
+          ${[1,2,3,4].map((n, i) => `<input class="otp-input" maxlength="1" inputmode="numeric" value="${i + 1}" aria-label="Digit ${n}">`).join('')}
         </div>
-        <div class="demo-hint">Demo hint: use <strong>123456</strong>. No real code was sent.</div>
+        <div class="demo-hint">Demo hint: use <strong>1234</strong>. No real code was sent.</div>
         <button class="button button--primary w-full" style="margin-top:18px" type="button" data-action="verify-otp">Verify and Continue</button>
         <div class="button-row" style="justify-content:space-between;margin-top:10px"><button class="text-button" type="button" data-action="change-number">Change number</button><button class="text-button" type="button" data-action="resend-otp">Resend in <span id="otp-countdown">30</span>s</button></div>
       </div>`;
@@ -789,9 +789,9 @@ function renderAuth() {
           <input id="reg-pin" inputmode="numeric" maxlength="4" value="2580" type="password" style="font-size: 1.25rem; letter-spacing: 0.3em; text-align: center; font-weight: 800; border-radius: 12px;">
           <small class="field-help">Used to authorize Fly Express Wallet transactions.</small>
         </div>
-        <p class="muted text-small" style="margin-bottom: 8px; font-weight: 600;">6-Digit SMS Verification Code:</p>
+        <p class="muted text-small" style="margin-bottom: 8px; font-weight: 600;">4-Digit SMS Verification Code:</p>
         <div class="otp-grid" aria-label="One-time password">
-          ${[1,2,3,4,5,6].map((n, i) => `<input class="otp-input" maxlength="1" inputmode="numeric" value="${i + 1}" aria-label="Digit ${n}">`).join('')}
+          ${[1,2,3,4].map((n, i) => `<input class="otp-input" maxlength="1" inputmode="numeric" value="${i + 1}" aria-label="Digit ${n}">`).join('')}
         </div>
         <button class="button button--primary w-full" style="margin-top:18px" type="button" data-action="create-account">Verify &amp; Create Account</button>
       </div>`;
@@ -1316,7 +1316,7 @@ function renderBook() {
                     ${corridor}
                   </div>
                   <button class="button button--primary w-full" type="button" data-action="booking-next-step" style="padding: 12px; font-size: 0.95rem; font-weight: 800;">
-                    Configure Schedule &amp; Book →
+                    Book Now →
                   </button>
                 </div>
               </div>
@@ -4743,7 +4743,7 @@ function handleClick(event) {
     'show-registration': () => { state.authView = 'register'; renderAuth(); },
     'auth-back': () => { state.authView = 'signin'; renderAuth(); },
     'change-number': () => { state.authView = 'signin'; renderAuth(); },
-    'resend-otp': () => { startOtpCountdown(); toast('A new demonstration code is ready: 123456.', 'success'); },
+    'resend-otp': () => { startOtpCountdown(); toast('A new demonstration code is ready: 1234.', 'success'); },
     'verify-otp': () => verifyOtp(),
     'create-account': () => { showLoading('Creating demonstration profile…', () => enterApp('Demo account created for Christo I.')); },
     'go-back': goBack,
@@ -5378,8 +5378,8 @@ function handleKeydown(event) {
 
 function verifyOtp() {
   const code = $$('.otp-input').map(input => input.value).join('');
-  if (code === '123456') showLoading('Verifying demonstration code…', () => enterApp('Sign-in preview verified successfully.'));
-  else toast('Use the demonstration code 123456.', 'danger');
+  if (code === '1234') showLoading('Verifying demonstration code…', () => enterApp('Sign-in preview verified successfully.'));
+  else toast('Use the demonstration code 1234.', 'danger');
 }
 
 function swapRoute() {
