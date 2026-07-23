@@ -1951,8 +1951,8 @@ function renderTripDetails() {
             <button class="button button--primary button--small" type="button" data-action="review-call-driver" data-value="${trip.driverName.toLowerCase()}" aria-label="Call Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; flex: 1; min-width: 80px;">
               <i data-lucide="phone" style="width: 13px; height: 13px;"></i> Call
             </button>
-            <button class="button button--secondary button--small" type="button" data-action="review-chat-driver" data-value="${trip.driverName.toLowerCase()}" aria-label="Chat with Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark); flex: 1.2; min-width: 90px;">
-              <i data-lucide="message-square" style="width: 13px; height: 13px;"></i> Chat
+            <button class="button button--secondary button--small" type="button" data-action="review-chat-driver" data-value="${trip.driverName.toLowerCase()}" aria-label="Message Driver" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark); flex: 1.2; min-width: 90px;">
+              <i data-lucide="message-square" style="width: 13px; height: 13px;"></i> Message
             </button>
           </div>
         </div>
