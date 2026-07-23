@@ -331,6 +331,11 @@ const state = {
   searchTo: 'Kampala Railway Stage',
   dropOffLocation: '',
   searchPeriod: '',
+  userName: 'Christo I.',
+  userPhone: '+256 772 345 678',
+  userEmail: 'christo.i@example.com',
+  userAvatar: 'assets/christo-avatar.jpg',
+  emergencyContact: '+256 700 123 456',
   bookingOption: '',
   assistance: 'None required',
   passengerCount: 1,
@@ -4258,9 +4263,63 @@ function supportSuccess() {
 }
 
 function renderProfile() {
+  const avatar = state.userAvatar || 'assets/christo-avatar.jpg';
+  const name = state.userName || 'Christo I.';
+  const phone = state.userPhone || '+256 772 345 678';
+  const email = state.userEmail || 'christo.i@example.com';
+  const emergency = state.emergencyContact || '+256 700 123 456';
+
   return `
     ${screenHead('Profile and settings', 'Manage passenger details, language, accessibility, privacy and demonstration preferences.')}
-    <section class="grid grid--sidebar"><div class="grid"><article class="card"><div class="profile-hero"><img src="assets/christo-avatar.jpg" alt="Christo I." class="profile-avatar" style="width: 72px; height: 72px; border-radius: 16px; object-fit: cover; border: 2px solid var(--border); margin: 0;"><div style="flex: 1;"><p class="eyebrow">Fly Express passenger</p><h2 style="margin-bottom:5px">Christo I.</h2><p class="muted">+256 772 345 678 · christo.i@example.com</p><button class="button button--ghost button--small" type="button" data-action="edit-profile"><i data-lucide="pencil"></i>Edit Profile</button></div></div></article><article class="card"><div class="card-head"><h2>Passenger information</h2></div><div class="detail-list"><div class="detail-row"><span>Preferred route</span><strong>Entebbe → Kampala</strong></div><div class="detail-row"><span>Emergency contact</span><strong>+256 700 123 456</strong></div><div class="detail-row"><span>Saved passengers</span><strong>2 passengers</strong></div><div class="detail-row"><span>Saved pickup points</span><strong>Entebbe Main Stage, Kitooro</strong></div></div></article><article class="card"><div class="card-head"><div><p class="section-kicker">Accessibility</p><h2>Display and interaction</h2></div></div><div class="settings-list"><div class="settings-row"><span class="settings-row__icon"><i data-lucide="case-upper"></i></span><span class="settings-row__copy"><strong>Larger text</strong><span>Increase the interface type scale</span></span><button class="switch ${document.body.classList.contains('large-text') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="large-text"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="contrast"></i></span><span class="settings-row__copy"><strong>High contrast</strong><span>Increase borders and text contrast</span></span><button class="switch ${document.body.classList.contains('high-contrast') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="high-contrast"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="pause"></i></span><span class="settings-row__copy"><strong>Reduce motion</strong><span>Limit transitions and animations</span></span><button class="switch ${document.body.classList.contains('reduce-motion') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="reduce-motion"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="audio-lines"></i></span><span class="settings-row__copy"><strong>Screen-reader labels</strong><span>Accessible labels are included throughout</span></span><span class="status-chip status-chip--success">On</span></div></div></article></div><aside class="grid"><article class="card"><h3>Account and preferences</h3><div class="settings-list">${profileRow('Saved passengers','users','Manage frequent travellers','saved-passengers')}${profileRow('Saved pickup points','map-pinned','Manage common boarding points','saved-pickups')}${profileRow('Wallet security','shield-check','PIN and Auto-Pay settings','wallet-pin')}${profileRow('Notification preferences','bell-ring','Choose alert categories','notification-preferences')}${profileRow('Language','languages',state.language,'language')}${profileRow('Privacy','lock-keyhole','Review privacy preview','privacy')}${profileRow('Terms and Conditions','file-check-2','Demonstration terms','terms')}${profileRow('About Fly Express','info','Organization and app details','about')}</div></article><article class="card"><p class="section-kicker">Reviewer tools</p><button class="button button--ghost w-full" type="button" data-action="open-demo-panel"><i data-lucide="flask-conical"></i>Prototype Demo States</button><button class="button button--soft-red w-full" style="margin-top:10px" type="button" data-action="sign-out"><i data-lucide="log-out"></i>Sign Out</button></article></aside></section>`;
+    <section class="grid grid--sidebar">
+      <div class="grid">
+        <!-- Modernized Profile Preview Card -->
+        <article class="card profile-preview-card" style="position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(7, 90, 168, 0.05) 0%, rgba(22, 119, 255, 0.02) 100%), #ffffff; border: 1px solid var(--border-strong); border-radius: 24px; padding: 22px; box-shadow: 0 4px 20px rgba(7, 90, 168, 0.06);">
+          <div class="profile-preview-header" style="display: flex; gap: 18px; align-items: center; flex-wrap: wrap;">
+            <div class="profile-avatar-container" style="position: relative; flex-shrink: 0;">
+              <img src="${avatar}" alt="${escapeHtml(name)}" class="profile-preview-avatar" style="width: 84px; height: 84px; border-radius: 20px; object-fit: cover; border: 2.5px solid #ffffff; box-shadow: 0 4px 14px rgba(7, 90, 168, 0.18);">
+              <span class="profile-verified-badge" title="Verified Passenger" style="position: absolute; bottom: -4px; right: -4px; background: linear-gradient(135deg, #10b981, #059669); color: white; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-size: 11px;">
+                <i data-lucide="check" style="width: 13px; height: 13px; stroke-width: 3;"></i>
+              </span>
+            </div>
+
+            <div class="profile-preview-details" style="flex: 1; min-width: 200px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
+                <span class="eyebrow" style="color: var(--brand-blue); font-weight: 800; letter-spacing: 0.5px; margin: 0;">FLY EXPRESS PASSENGER</span>
+                <span class="status-chip status-chip--success" style="font-size: 0.68rem; font-weight: 800; padding: 2px 7px;"><i data-lucide="shield-check" style="width: 11px; height: 11px;"></i> Verified VIP</span>
+              </div>
+              <h2 style="margin: 0 0 6px 0; font-size: 1.45rem; font-weight: 850; color: var(--brand-blue-dark);">${escapeHtml(name)}</h2>
+              <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--slate); font-size: 0.84rem; font-weight: 600;">
+                <span style="display: inline-flex; align-items: center; gap: 5px;"><i data-lucide="phone" style="width: 13px; height: 13px; color: var(--brand-blue);"></i> ${escapeHtml(phone)}</span>
+                <span>·</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px;"><i data-lucide="mail" style="width: 13px; height: 13px; color: var(--brand-blue);"></i> ${escapeHtml(email)}</span>
+              </div>
+            </div>
+
+            <div style="flex-shrink: 0;">
+              <button class="button button--primary button--small" type="button" data-action="edit-profile" style="border-radius: 12px; font-weight: 750; padding: 9px 16px; display: inline-flex; align-items: center; gap: 7px; box-shadow: 0 4px 12px rgba(22, 119, 255, 0.2);">
+                <i data-lucide="user-pen" style="width: 16px; height: 16px;"></i> Edit Profile & Photo
+              </button>
+            </div>
+          </div>
+
+          <div class="profile-stats-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--border-strong);">
+            <div class="profile-stat-box" style="background: rgba(255, 255, 255, 0.8); border: 1px solid var(--border); border-radius: 14px; padding: 10px 14px;">
+              <span class="muted text-small" style="display: block; font-size: 0.72rem; font-weight: 700;">Completed Travels</span>
+              <strong style="font-size: 1.1rem; color: var(--brand-blue-dark); font-weight: 850;">14 Journeys</strong>
+            </div>
+            <div class="profile-stat-box" style="background: rgba(255, 255, 255, 0.8); border: 1px solid var(--border); border-radius: 14px; padding: 10px 14px;">
+              <span class="muted text-small" style="display: block; font-size: 0.72rem; font-weight: 700;">Wallet Balance</span>
+              <strong style="font-size: 1.1rem; color: var(--brand-blue); font-weight: 850;">${formatUGX(state.walletBalance)}</strong>
+            </div>
+            <div class="profile-stat-box" style="background: rgba(255, 255, 255, 0.8); border: 1px solid var(--border); border-radius: 14px; padding: 10px 14px;">
+              <span class="muted text-small" style="display: block; font-size: 0.72rem; font-weight: 700;">Passenger Status</span>
+              <strong style="font-size: 1.1rem; color: #10b981; font-weight: 850;">Active · Regular</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="card"><div class="card-head"><h2>Passenger information</h2></div><div class="detail-list"><div class="detail-row"><span>Preferred route</span><strong>Entebbe → Kampala</strong></div><div class="detail-row"><span>Emergency contact</span><strong>${escapeHtml(emergency)}</strong></div><div class="detail-row"><span>Saved passengers</span><strong>2 passengers</strong></div><div class="detail-row"><span>Saved pickup points</span><strong>Entebbe Main Stage, Kitooro</strong></div></div></article><article class="card"><div class="card-head"><div><p class="section-kicker">Accessibility</p><h2>Display and interaction</h2></div></div><div class="settings-list"><div class="settings-row"><span class="settings-row__icon"><i data-lucide="case-upper"></i></span><span class="settings-row__copy"><strong>Larger text</strong><span>Increase the interface type scale</span></span><button class="switch ${document.body.classList.contains('large-text') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="large-text"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="contrast"></i></span><span class="settings-row__copy"><strong>High contrast</strong><span>Increase borders and text contrast</span></span><button class="switch ${document.body.classList.contains('high-contrast') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="high-contrast"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="pause"></i></span><span class="settings-row__copy"><strong>Reduce motion</strong><span>Limit transitions and animations</span></span><button class="switch ${document.body.classList.contains('reduce-motion') ? 'is-on' : ''}" type="button" data-action="accessibility" data-value="reduce-motion"><span></span></button></div><div class="settings-row"><span class="settings-row__icon"><i data-lucide="audio-lines"></i></span><span class="settings-row__copy"><strong>Screen-reader labels</strong><span>Accessible labels are included throughout</span></span><span class="status-chip status-chip--success">On</span></div></div></article></div><aside class="grid"><article class="card"><h3>Account and preferences</h3><div class="settings-list">${profileRow('Saved passengers','users','Manage frequent travellers','saved-passengers')}${profileRow('Saved pickup points','map-pinned','Manage common boarding points','saved-pickups')}${profileRow('Wallet security','shield-check','PIN and Auto-Pay settings','wallet-pin')}${profileRow('Notification preferences','bell-ring','Choose alert categories','notification-preferences')}${profileRow('Language','languages',state.language,'language')}${profileRow('Privacy','lock-keyhole','Review privacy preview','privacy')}${profileRow('Terms and Conditions','file-check-2','Demonstration terms','terms')}${profileRow('About Fly Express','info','Organization and app details','about')}</div></article><article class="card"><p class="section-kicker">Reviewer tools</p><button class="button button--ghost w-full" type="button" data-action="open-demo-panel"><i data-lucide="flask-conical"></i>Prototype Demo States</button><button class="button button--soft-red w-full" style="margin-top:10px" type="button" data-action="sign-out"><i data-lucide="log-out"></i>Sign Out</button></article></aside></section>`;
 }
 function profileRow(title, icon, copy, action) { return `<button class="settings-row" type="button" ${action === 'about' ? 'data-screen="about"' : `data-action="${action}"`}><span class="settings-row__icon"><i data-lucide="${icon}"></i></span><span class="settings-row__copy"><strong>${title}</strong><span>${copy}</span></span><i data-lucide="chevron-right"></i></button>`; }
 
@@ -5566,7 +5625,23 @@ function handleClick(event) {
     'demo-state': () => triggerDemoState(value),
     'amount-preset': () => selectAmountPreset(actionTrigger),
     'deposit-state': () => showDepositState(value),
-    'save-profile': () => { closeModal(); toast('Profile changes saved for this browser session.', 'success'); },
+    'save-profile': () => {
+      const nameInput = document.getElementById('edit-profile-name');
+      const phoneInput = document.getElementById('edit-profile-phone');
+      const emailInput = document.getElementById('edit-profile-email');
+      const emergencyInput = document.getElementById('edit-profile-emergency');
+      const avatarInput = document.getElementById('edit-avatar-url');
+
+      if (nameInput && nameInput.value.trim()) state.userName = nameInput.value.trim();
+      if (phoneInput && phoneInput.value.trim()) state.userPhone = phoneInput.value.trim();
+      if (emailInput && emailInput.value.trim()) state.userEmail = emailInput.value.trim();
+      if (emergencyInput && emergencyInput.value.trim()) state.emergencyContact = emergencyInput.value.trim();
+      if (avatarInput && avatarInput.value) state.userAvatar = avatarInput.value;
+
+      closeModal();
+      renderCurrentScreen();
+      toast('Profile details and photo updated successfully!', 'success');
+    },
     'save-language': () => saveLanguage(),
     'save-preferences': () => { closeModal(); toast('Notification preferences updated for this session.', 'success'); },
     'send-wallet-demo': () => { closeModal(); toast('Demo transfer prepared. No funds were moved.', 'success'); },
@@ -6153,8 +6228,84 @@ function showSupportStatuses() {
   openModal('Support request SUP-44720', `<div class="timeline">${[['Submitted','Your request was received.'],['Under Review','A support agent is reviewing the request.'],['Waiting for Passenger','Used when more information is needed.'],['Resolved','A resolution has been provided.'],['Closed','The request lifecycle is complete.']].map((item,index) => `<div class="timeline-item ${index < 2 ? 'is-complete' : index === 2 ? 'is-current' : ''}"><span class="timeline-dot"><i data-lucide="${index < 2 ? 'check' : index === 2 ? 'clock-3' : 'circle'}"></i></span><span class="timeline-copy"><strong>${item[0]}</strong><span>${item[1]}</span></span></div>`).join('')}</div>`);
 }
 
+window.handleAvatarFileSelect = function(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.getElementById('edit-avatar-preview');
+      const urlInput = document.getElementById('edit-avatar-url');
+      if (preview) preview.src = e.target.result;
+      if (urlInput) urlInput.value = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+};
+
+window.setAvatarPreset = function(url) {
+  const preview = document.getElementById('edit-avatar-preview');
+  const urlInput = document.getElementById('edit-avatar-url');
+  if (preview) preview.src = url;
+  if (urlInput) urlInput.value = url;
+};
+
 function showEditProfile() {
-  openModal('Edit passenger profile', `<div class="form-grid"><div class="field field--full"><label>Full name</label><input value="Christo I."></div><div class="field"><label>Telephone</label><input value="+256 772 345 678"></div><div class="field"><label>Email</label><input value="christo.i@example.com"></div><div class="field field--full"><label>Preferred route</label><select><option>Entebbe → Kampala</option><option>Kampala → Entebbe</option></select></div><div class="field field--full"><label>Emergency contact</label><input value="+256 700 123 456"></div></div>`, `<button class="button button--ghost" type="button" data-action="close-modal">Cancel</button><button class="button button--primary" type="button" data-action="save-profile">Save Changes</button>`);
+  const currentAvatar = state.userAvatar || 'assets/christo-avatar.jpg';
+  const name = state.userName || 'Christo I.';
+  const phone = state.userPhone || '+256 772 345 678';
+  const email = state.userEmail || 'christo.i@example.com';
+  const emergency = state.emergencyContact || '+256 700 123 456';
+
+  openModal('Edit passenger profile & photo', `
+    <div class="edit-profile-container">
+      <!-- Profile Picture Update Section -->
+      <div class="profile-photo-edit-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px; background: linear-gradient(135deg, rgba(22, 119, 255, 0.05), rgba(7, 90, 168, 0.02)); border-radius: 18px; border: 1px solid var(--border-strong); margin-bottom: 18px;">
+        <div class="profile-avatar-wrapper" style="position: relative; cursor: pointer;" onclick="document.getElementById('profile-file-input').click();" title="Click to upload new photo">
+          <img id="edit-avatar-preview" src="${currentAvatar}" alt="Profile Avatar" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #ffffff; box-shadow: 0 4px 16px rgba(7, 90, 168, 0.22);">
+          <div class="avatar-camera-overlay" style="position: absolute; bottom: 0; right: 0; background: var(--brand-blue); color: white; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; border: 2.5px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+            <i data-lucide="camera" style="width: 16px; height: 16px;"></i>
+          </div>
+        </div>
+        
+        <input type="file" id="profile-file-input" accept="image/*" style="display: none;" onchange="handleAvatarFileSelect(this)">
+        
+        <div style="margin-top: 10px; text-align: center;">
+          <button type="button" class="button button--ghost button--tiny" onclick="document.getElementById('profile-file-input').click();" style="border-radius: 10px; font-weight: 750; color: var(--brand-blue);">
+            <i data-lucide="upload" style="width: 14px; height: 14px;"></i> Upload New Photo
+          </button>
+        </div>
+
+        <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 0.72rem; color: var(--slate); font-weight: 750;">Presets:</span>
+          <img src="assets/christo-avatar.jpg" onclick="setAvatarPreset('assets/christo-avatar.jpg')" alt="Preset 1" style="width: 32px; height: 32px; border-radius: 50%; cursor: pointer; object-fit: cover; border: 2px solid var(--border);" title="Christo Avatar">
+          <img src="assets/sam-mcalen.jpg" onclick="setAvatarPreset('assets/sam-mcalen.jpg')" alt="Preset 2" style="width: 32px; height: 32px; border-radius: 50%; cursor: pointer; object-fit: cover; border: 2px solid var(--border);" title="Sam Avatar">
+          <img src="assets/fly-express-logo.jpg" onclick="setAvatarPreset('assets/fly-express-logo.jpg')" alt="Preset 3" style="width: 32px; height: 32px; border-radius: 50%; cursor: pointer; object-fit: cover; border: 2px solid var(--border);" title="Fly Express Logo">
+        </div>
+        <input type="hidden" id="edit-avatar-url" value="${currentAvatar}">
+      </div>
+
+      <div class="form-grid">
+        <div class="field field--full">
+          <label for="edit-profile-name">Full name</label>
+          <input id="edit-profile-name" value="${escapeHtml(name)}">
+        </div>
+        <div class="field">
+          <label for="edit-profile-phone">Telephone</label>
+          <input id="edit-profile-phone" value="${escapeHtml(phone)}">
+        </div>
+        <div class="field">
+          <label for="edit-profile-email">Email</label>
+          <input id="edit-profile-email" value="${escapeHtml(email)}">
+        </div>
+        <div class="field field--full">
+          <label for="edit-profile-emergency">Emergency contact</label>
+          <input id="edit-profile-emergency" value="${escapeHtml(emergency)}">
+        </div>
+      </div>
+    </div>
+  `, `
+    <button class="button button--ghost" type="button" data-action="close-modal">Cancel</button>
+    <button class="button button--primary" type="button" data-action="save-profile">Save Profile & Photo</button>
+  `);
 }
 
 function showSavedPassengers() {
