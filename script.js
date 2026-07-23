@@ -1551,7 +1551,7 @@ function renderBook() {
             <div class="steppers-row">
               
               <!-- Adults Card -->
-              <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+              <div class="stepper-card" style="flex: 1; background: #eaedf2; border: 1px solid #d2dbe5; border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
                 <div style="text-align: left;">
                   <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Adults</strong>
                   <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">12+ years</span>
@@ -1564,7 +1564,7 @@ function renderBook() {
               </div>
 
               <!-- Children Card -->
-              <div class="stepper-card" style="flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+              <div class="stepper-card" style="flex: 1; background: #eaedf2; border: 1px solid #d2dbe5; border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
                 <div style="text-align: left;">
                   <strong style="font-size: 0.9rem; display: block; color: var(--charcoal);">Children</strong>
                   <span class="muted text-small" style="font-size: 0.72rem; display: block; margin-top: 2px;">Under 12</span>
@@ -1581,7 +1581,7 @@ function renderBook() {
             <!-- Reserved Child Seats Stepper Card (Only shown if children added) -->
             ${state.childCount > 0 ? `
               <div>
-                <div class="stepper-card" style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <div class="stepper-card" style="background: #eaedf2; border: 1px solid #d2dbe5; border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; width: 100%;">
                   <div style="text-align: left;">
                     <strong style="font-size: 0.95rem; display: block; color: var(--charcoal);">Reserved Child Seats</strong>
                     <span class="muted text-small" style="font-size: 0.76rem; display: block; margin-top: 2px;">Lap travel is free. Reserving a seat adds normal fare (${formatUGX(state.ticketType === 'return' ? 9000 : 5000)} / child)</span>
@@ -1604,15 +1604,15 @@ function renderBook() {
               <p style="font-size: 0.8rem; color: var(--slate); margin: 0 0 10px 0; line-height: 1.4;">
                 Since you are scheduling for later, get automated SMS &amp; app alerts as your vehicle enters stage:
               </p>
-              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
-                  <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me when my vehicle becomes active on stage
+              <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.82rem;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                  <input type="checkbox" checked> Alert me when my vehicle becomes active on stage
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
-                  <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me 15 minutes before scheduled departure
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                  <input type="checkbox" checked> Alert me 15 minutes before scheduled departure
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
-                  <input type="checkbox" checked style="accent-color: var(--brand-blue); width: 16px; height: 16px;"> Alert me if driver goes off-road or changes timeline
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; color: var(--charcoal);">
+                  <input type="checkbox" checked> Alert me if driver goes off-road or changes timeline
                 </label>
               </div>
             </div>
@@ -2288,7 +2288,7 @@ function renderCheckout() {
 
           <article class="card card--soft" style="margin-bottom: 24px;">
             <label class="checkbox-row" style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
-              <input id="booking-conditions" type="checkbox" checked style="accent-color: #d97706; width: 18px; height: 18px; margin-top: 2px;">
+              <input id="booking-conditions" type="checkbox" checked style="margin-top: 2px;">
               <span>
                 <strong>I accept the booking conditions.</strong><br>
                 <span class="muted text-small">This confirms only a presentation-state booking and does not create a real reservation.</span>

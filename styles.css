@@ -703,7 +703,68 @@ body.offline .connection-dot { background: var(--danger); box-shadow: 0 0 0 4px 
 .input-prefix { min-width: 70px; display: grid; place-items: center; border: 1px solid var(--border-strong); border-right: 0; border-radius: 14px 0 0 14px; background: var(--surface-alt); font-weight: 750; }
 .input-group input { border-radius: 0 14px 14px 0; }
 .checkbox-row, .switch-row { display: flex; gap: 10px; align-items: flex-start; }
-.checkbox-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--brand-blue); }
+
+/* ─── Modern Custom Checkbox System ─── */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  border-radius: 6px;
+  border: 1.8px solid #b4c6d8;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  margin: 0;
+  vertical-align: middle;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--brand-blue);
+  background-color: #f0f6ff;
+}
+
+input[type="checkbox"]:focus-visible {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.25);
+}
+
+input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, #1677ff 0%, #0052cc 100%);
+  border-color: #0052cc;
+  box-shadow: 0 2px 6px rgba(22, 119, 255, 0.32);
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 10px;
+  height: 6px;
+  border-left: 2.2px solid #ffffff;
+  border-bottom: 2.2px solid #ffffff;
+  transform: rotate(-45deg) scale(0) translateY(-1px);
+  transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: center center;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: rotate(-45deg) scale(1) translateY(-1px);
+}
+
+input[type="checkbox"]:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background-color: #eef2f6;
+  border-color: #cbd5e1;
+}
 .switch { width: 46px; height: 26px; border-radius: 99px; border: 0; background: var(--border-strong); padding: 3px; cursor: pointer; transition: var(--ease); flex: 0 0 auto; }
 .switch span { display: block; width: 20px; height: 20px; border-radius: 50%; background: white; box-shadow: var(--shadow-xs); transition: transform var(--ease); }
 .switch.is-on { background: var(--brand-blue); }
