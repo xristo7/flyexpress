@@ -8074,3 +8074,54 @@ body[data-active-screen="home"] .main-content {
 .button--golden-orange:active, .checkout-pay-btn:active {
   transform: scale(0.98) !important;
 }
+
+/* ─── Responsive Shopify Checkout Grid (Mobile Top Accordion / Desktop Sticky Right Sidebar) ─── */
+.checkout-unified-layout {
+  width: 100%;
+}
+
+.mobile-summary-accordion {
+  display: block;
+}
+
+.checkout-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.checkout-sidebar-col {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .checkout-unified-layout {
+    max-width: 980px !important;
+    margin: 0 auto !important;
+  }
+
+  .mobile-summary-accordion {
+    display: none !important;
+  }
+
+  .checkout-grid-container {
+    display: grid !important;
+    grid-template-columns: 1fr 340px !important;
+    gap: 24px !important;
+    align-items: start !important;
+  }
+
+  .checkout-sidebar-col {
+    display: block !important;
+    position: sticky !important;
+    top: 90px !important;
+  }
+
+  .checkout-summary-card {
+    padding: 20px !important;
+    border-radius: 18px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+}
