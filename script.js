@@ -1815,22 +1815,7 @@ function renderBook() {
     return `
       ${screenHead('Luggage Registry', 'Step 4 of 6: Declare larger luggage bags in advance to secure loading space.')}
 
-      <div class="booking-desktop-split" style="margin-top: 16px;">
-        <section class="card" style="margin: 0; padding: 24px;">
-          <div style="display: flex; gap: 16px; align-items: start;">
-            <div class="luggage-info-icon" style="background: var(--info-soft); color: var(--brand-blue); width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0;"><i data-lucide="luggage"></i></div>
-            <div>
-              <h3 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 750; color: var(--charcoal);">Cabin Bag vs Standard Luggage</h3>
-              <p class="muted" style="margin: 0; font-size: 0.85rem; line-height: 1.5; text-align: left;">
-                <strong>Cabin Bag (Free):</strong> A small handbag, purse, laptop sleeve, or compact daypack that fits comfortably on your lap or under the passenger seat.
-              </p>
-              <p class="muted" style="margin: 8px 0 0 0; font-size: 0.85rem; line-height: 1.5; text-align: left;">
-                <strong>Standard Luggage (Paid):</strong> Large travel suitcases, trunks, heavy storage bags, or commercial boxes. These require rear cargo rack registration to prevent vehicle overloading.
-              </p>
-            </div>
-          </div>
-        </section>
-
+      <div class="booking-desktop-split booking-desktop-split--sidebar" style="margin-top: 16px;">
         <section class="card" style="margin: 0; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
           <div>
             <h3 style="margin: 0 0 12px 0; font-size: 1rem;">Luggage Declaration Summary</h3>
@@ -1846,6 +1831,21 @@ function renderBook() {
           </div>
 
           <button class="button button--secondary w-full" style="margin-top: 20px;" type="button" data-action="open-luggage-modal"><i data-lucide="plus-circle"></i> Define Luggage & Quantities</button>
+        </section>
+
+        <section class="card luggage-info-sidebar" style="margin: 0; padding: 24px;">
+          <div style="display: flex; gap: 16px; align-items: start;">
+            <div class="luggage-info-icon" style="background: var(--info-soft); color: var(--brand-blue); width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0;"><i data-lucide="luggage"></i></div>
+            <div>
+              <h3 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 750; color: var(--charcoal);">Cabin Bag vs Standard Luggage</h3>
+              <p class="muted" style="margin: 0; font-size: 0.85rem; line-height: 1.5; text-align: left;">
+                <strong>Cabin Bag (Free):</strong> A small handbag, purse, laptop sleeve, or compact daypack that fits comfortably on your lap or under the passenger seat.
+              </p>
+              <p class="muted" style="margin: 8px 0 0 0; font-size: 0.85rem; line-height: 1.5; text-align: left;">
+                <strong>Standard Luggage (Paid):</strong> Large travel suitcases, trunks, heavy storage bags, or commercial boxes. These require rear cargo rack registration to prevent vehicle overloading.
+              </p>
+            </div>
+          </div>
         </section>
       </div>
 

@@ -4128,6 +4128,11 @@ body[data-active-screen="driver-profile"] .main-content {
   .booking-desktop-split--sidebar {
     grid-template-columns: 2fr 1fr;
   }
+
+  .luggage-info-sidebar {
+    position: sticky;
+    top: 90px;
+  }
 }
 
 /* =========================================================
