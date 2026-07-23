@@ -3360,7 +3360,7 @@ function renderSpecialHire() {
     return `
       ${screenHead('Private Charter & Special Hire', 'Enter your charter specifications and driver preferences.')}
       
-      <div class="special-hire-flow-container" style="display: flex; flex-direction: column; gap: 20px; max-width: 700px;">
+      <div class="special-hire-flow-container" style="display: flex; flex-direction: column; gap: 20px; max-width: 700px; margin: 0 auto;">
         
         <!-- Selection Summary Bar -->
         <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.12); padding: 14px 18px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
