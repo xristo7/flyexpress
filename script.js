@@ -2597,8 +2597,7 @@ function renderStandardPaymentOptions(selectedMethod, radioName = 'payment-metho
   return `
     <div class="radio-cards">
       ${paymentChoiceTile('wallet', 'Fly Express Wallet', `Available balance: ${formatUGX(state.walletBalance)}`, 'wallet-cards', selectedMethod, radioName)}
-      ${paymentChoiceTile('mtn', 'MTN Mobile Money', 'Simulated mobile-money authorization', 'smartphone', selectedMethod, radioName)}
-      ${paymentChoiceTile('airtel', 'Airtel Money', 'Simulated mobile-money authorization', 'smartphone', selectedMethod, radioName)}
+      ${paymentChoiceTile('mobile', 'Mobile Money', 'MTN MoMo or Airtel Money', 'smartphone', selectedMethod, radioName)}
       ${paymentChoiceTile('cash', 'Cash at Stage', cashSubtitle, 'banknote', selectedMethod, radioName)}
       ${paymentChoiceTile('corporate', 'Corporate Travel Account', 'For approved business travellers', 'building-2', selectedMethod, radioName)}
       ${paymentChoiceTile('voucher', 'Promotional Voucher', 'Apply an eligible campaign code', 'ticket-percent', selectedMethod, radioName)}
