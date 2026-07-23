@@ -4193,7 +4193,7 @@ function reviewSeatOptions() {
   ${state.capacityMode === 'seats' ? `
     <div class="compact-note" style="background: var(--info-soft); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; text-align: left;">
       <i data-lucide="info" style="color: var(--brand-blue);"></i>
-      <span>Specific seat reservation adds an extra fee of <strong>UGX 1,000 per seat</strong>. Current seat reservation fee: <strong>+ ${formatUGX(fee)}</strong></span>
+      <span>Specific seat reservation adds an extra fee of <strong>UGX 1,000 per seat</strong>.</span>
     </div>
     ${renderSeatMode()}
   ` : ''}`;
