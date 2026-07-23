@@ -1958,14 +1958,6 @@ function renderTripDetails() {
 
       <!-- Embedded Interactive Route Map (Moved inside sheet) -->
       <div style="margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <h3 style="margin: 0; font-size: 0.96rem; font-weight: 800; color: var(--brand-blue-dark); display: flex; align-items: center; gap: 6px;">
-            <i data-lucide="map-pin" style="width: 17px; height: 17px; color: var(--brand-red);"></i> Interactive Corridor Map
-          </h3>
-          <span style="font-size: 0.78rem; font-weight: 700; color: var(--brand-blue); background: var(--info-soft); padding: 4px 10px; border-radius: 8px;">
-            Live Corridor Route
-          </span>
-        </div>
         <div style="position: relative; height: 260px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
           <div id="trip-review-map" class="trip-review-map" style="position: absolute; inset: 0;" aria-label="OpenStreetMap preview from ${trip.boarding} to ${trip.destination}"></div>
           <div id="trip-map-fallback" class="trip-map-fallback" hidden><img src="${getTripVehicleImage(trip.vehicle)}" alt=""><strong>Map preview unavailable</strong><span>Your selected route is still ready.</span></div>
