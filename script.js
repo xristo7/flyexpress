@@ -330,6 +330,7 @@ const state = {
   searchFrom: 'Entebbe Bus Park',
   searchTo: 'Kampala Railway Stage',
   dropOffLocation: '',
+  customDropOff: '',
   searchPeriod: '',
   userName: 'Christo I.',
   userPhone: '+256 772 345 678',
@@ -1794,12 +1795,31 @@ function renderBook() {
 
             <!-- Drop-off location along corridor -->
             <div class="field" style="text-align: left; width: 100%;">
-              <label for="book-drop-off">Preferred drop-off point along the corridor</label>
+              <label for="book-drop-off">Preferred drop-off point</label>
               <select id="book-drop-off" data-field="drop-off-location" style="width: 100%;">
                 <option value="" disabled ${!state.dropOffLocation ? 'selected' : ''} hidden>Select</option>
                 ${getDropOffOptions().map(stage => optionMarkup(stage, state.dropOffLocation, stage === state.searchTo ? `${stage} (Final destination)` : stage)).join('')}
+                <option value="__other__" ${state.dropOffLocation === '__other__' ? 'selected' : ''}>Other – type your own</option>
               </select>
             </div>
+
+            <!-- Custom drop-off free-text field (shown when Other is selected) -->
+            ${state.dropOffLocation === '__other__' ? `
+            <div class="field" style="text-align: left; width: 100%; margin-top: -8px; animation: slideDown 0.2s ease;">
+              <label for="book-drop-off-custom" style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="map-pin" style="width: 13px; height: 13px; color: var(--brand-blue);"></i>
+                Specify your drop-off point
+              </label>
+              <input
+                id="book-drop-off-custom"
+                type="text"
+                data-field="custom-drop-off"
+                placeholder="e.g. Shell Petrol Station, Jinja Road"
+                value="${state.customDropOff || ''}"
+                style="width: 100%;"
+              >
+              <span class="field-help">Enter a landmark, stage, or address near your destination.</span>
+            </div>` : ''}
 
             <!-- Modern side-by-side (stacked on mobile) Adults & Children steppers -->
             <div class="steppers-row">
@@ -5755,7 +5775,8 @@ function handleChange(event) {
     'search-period': value => { state.searchPeriod = value; },
     'search-adults': value => { state.passengerCount = Number(value) || 1; },
     'search-children': value => { state.childCount = Number(value) || 0; },
-    'drop-off-location': value => { state.dropOffLocation = value; }
+    'drop-off-location': value => { state.dropOffLocation = value; if (value !== '__other__') state.customDropOff = ''; renderCurrentScreen(); },
+    'custom-drop-off': value => { state.customDropOff = value; }
   };
   bookingFields[target.dataset.field]?.(target.value);
   if (target.dataset.field === 'return-date') {
