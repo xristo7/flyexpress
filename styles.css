@@ -6822,7 +6822,7 @@ body[data-active-screen="home"] .main-content {
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 8px 14px;
-      margin-bottom: 6px;
+      margin-bottom: 11px;
       padding: 0 3px;
     }.home-redesign .section-head h2{ font-size: 1.25rem; margin: 0; }.home-redesign .text-button{
       color: var(--blue-800);
@@ -6869,7 +6869,7 @@ body[data-active-screen="home"] .main-content {
     }.home-redesign .service:nth-child(2) .service-icon{ background: var(--gold-soft); color: #8a6f00; }.home-redesign .service:nth-child(3) .service-icon{ background: var(--green-soft); color: var(--green); }.home-redesign .service:nth-child(4) .service-icon{ background: var(--red-soft); color: var(--red); }.home-redesign .service-icon svg{ width: 24px; height: 24px; }.home-redesign .departure-scroll{
       grid-auto-columns: min(88%, 360px);
       gap: 15px;
-      padding: 12px 14px 18px;
+      padding: 4px 14px;
       scroll-padding-inline: 14px;
     }.home-redesign .departure-card{
       scroll-snap-align: center;
@@ -6955,7 +6955,7 @@ body[data-active-screen="home"] .main-content {
       cursor: pointer;
       font-weight: 800;
       transition: transform var(--ease), background var(--ease);
-    }.home-redesign .select-button:hover{ transform: translateY(-2px); background: var(--blue-950); }.home-redesign .select-button:active{ transform: scale(.97); }.home-redesign .carousel-dots{ display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 3px; }.home-redesign .carousel-dot{ width: 6px; height: 6px; border: 0; padding: 0; border-radius: 99px; background: var(--line-strong); transition: width var(--ease), background var(--ease); cursor: pointer; }.home-redesign .carousel-dot.is-active{ width: 24px; background: var(--blue-800); }.home-redesign .offer-card{
+    }.home-redesign .select-button:hover{ transform: translateY(-2px); background: var(--blue-950); }.home-redesign .select-button:active{ transform: scale(.97); }.home-redesign .carousel-dots{ display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 11px; margin-bottom: 30px; }.home-redesign .carousel-dot{ width: 6px; height: 6px; border: 0; padding: 0; border-radius: 99px; background: var(--line-strong); transition: width var(--ease), background var(--ease); cursor: pointer; }.home-redesign .carousel-dot.is-active{ width: 24px; background: var(--blue-800); }.home-redesign .offer-card{
       overflow: hidden;
       position: relative;
       padding: 22px;
