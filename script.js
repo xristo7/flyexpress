@@ -1927,12 +1927,17 @@ function renderTripDetails() {
       <article class="card unified-driver-transit-card" style="margin: 0 0 16px 0; padding: 16px 18px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: white; border-radius: 20px; display: flex; flex-direction: column; gap: 14px;">
         <div style="display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
           <div style="display: flex; gap: 14px; align-items: center;">
-            <div style="position: relative; width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: var(--surface-alt); border: 2px solid var(--brand-blue); cursor: pointer;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
-              <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
+            <div style="position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; flex-shrink: 0;" onclick="event.stopPropagation(); showDriverProfileModal('${trip.driverName.toLowerCase()}');">
+              <div style="width: 64px; height: 64px; border-radius: 50%; overflow: hidden; background: var(--surface-alt); border: 2.5px solid white; box-shadow: 0 4px 12px rgba(8,27,51,0.14);">
+                <img src="${trip.img}" alt="${trip.driverName}" style="width: 100%; height: 100%; object-fit: cover;" />
+              </div>
+              <div style="margin-top: -11px; z-index: 2; background: white; border-radius: 12px; padding: 2px 7px; box-shadow: 0 3px 8px rgba(8,27,51,0.12); border: 1px solid rgba(8,27,51,0.06); display: inline-flex; align-items: center; gap: 3px; font-size: 0.76rem; font-weight: 800; color: var(--brand-blue-dark);">
+                <i data-lucide="star" style="width: 12px; height: 12px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
+              </div>
             </div>
 
             <div>
-              <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--brand-red); letter-spacing: 0.05em;">Your Driver (Tap profile)</span>
+              <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--slate); letter-spacing: 0.05em;">Your Driver</span>
               <h2 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: var(--brand-blue-dark); cursor: pointer;" onclick="showDriverProfileModal('${trip.driverName.toLowerCase()}');">${trip.driverName}</h2>
               <div style="font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-top: 2px;">
                 ${trip.vehicle} · <span class="text-success" style="font-weight: 700;">${trip.plate}</span>
@@ -1940,18 +1945,13 @@ function renderTripDetails() {
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
-            <span style="display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-size: 0.86rem; color: var(--charcoal);">
-              <i data-lucide="star" style="width: 14px; height: 14px; fill: var(--brand-gold); color: var(--brand-gold);"></i> ${trip.driverRating}
-            </span>
-            <div style="display: flex; gap: 8px;">
-              <a class="button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;">
-                <i data-lucide="phone" style="width: 13px; height: 13px;"></i> Call
-              </a>
-              <button class="button button--secondary button--small" type="button" onclick="event.stopPropagation(); toast('Messaging ${trip.driverName} via SMS...', 'info');" aria-label="Send Message to Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark);">
-                <i data-lucide="message-square" style="width: 13px; height: 13px;"></i> Send Message
-              </button>
-            </div>
+          <div style="display: flex; gap: 8px;">
+            <a class="button button--primary button--small" href="tel:${trip.driverPhone}" onclick="event.stopPropagation();" aria-label="Call Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;">
+              <i data-lucide="phone" style="width: 13px; height: 13px;"></i> Call
+            </a>
+            <button class="button button--secondary button--small" type="button" onclick="event.stopPropagation(); toast('Messaging ${trip.driverName} via SMS...', 'info');" aria-label="Send Message to Driver" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; background: var(--surface-alt); border: 1px solid var(--border-strong); color: var(--brand-blue-dark);">
+              <i data-lucide="message-square" style="width: 13px; height: 13px;"></i> Send Message
+            </button>
           </div>
         </div>
       </article>
