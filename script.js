@@ -1833,7 +1833,7 @@ function renderBook() {
           <button class="button button--secondary w-full" style="margin-top: 20px;" type="button" data-action="open-luggage-modal"><i data-lucide="plus-circle"></i> Define Luggage & Quantities</button>
         </section>
 
-        <section class="card luggage-info-sidebar" style="margin: 0; padding: 24px;">
+        <div class="luggage-info-sidebar" style="margin: 0; padding: 24px;">
           <div style="display: flex; gap: 16px; align-items: start;">
             <div class="luggage-info-icon" style="background: var(--info-soft); color: var(--brand-blue); width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0;"><i data-lucide="luggage"></i></div>
             <div>
