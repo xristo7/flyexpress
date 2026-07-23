@@ -165,6 +165,14 @@ const appData = {
     { id: 4, category: 'Payments', icon: 'wallet-cards', title: 'UGX 20,000 was added to your wallet.', body: 'Your demonstration wallet balance is now UGX 32,500.', time: 'Yesterday', unread: true },
     { id: 5, category: 'Alerts', icon: 'triangle-alert', title: 'Traffic is heavier than usual.', body: 'Allow approximately 15 additional minutes on the Kampala route.', time: 'Yesterday', unread: true },
     { id: 6, category: 'Parcels', icon: 'luggage', title: 'Your luggage reference has been confirmed.', body: 'Luggage tag LUG-1842 is linked to ticket FET-884210.', time: '15 Jul', unread: false }
+  ],
+  specialHireVehicles: [
+    { id: 'sedan', name: 'Saloon Car / Sedan (4 Seats)', seats: 4, dailyRate: 100000, dayRate: 100000, desc: 'Perfect for solo business travelers, couples, or small private trips.', img: 'assets/fly-express-sedan.jpg' },
+    { id: 'noah', name: 'Toyota Noah (7 Seats)', seats: 7, dailyRate: 150000, dayRate: 150000, desc: 'Versatile and spacious mid-size vehicle for family or small groups.', img: 'assets/fly-express-noah.jpg' },
+    { id: 'minivan', name: 'Alphard / Multi-Seater (10 Seats)', seats: 10, dailyRate: 200000, dayRate: 200000, desc: 'Premium executive multi-seater for comfort and style.', img: 'assets/fly-express-minivan.jpg' },
+    { id: 'commuter', name: 'Commuter (14 Seats)', seats: 14, dailyRate: 250000, dayRate: 250000, desc: 'Standard group commuter for events and tours.', img: 'assets/fly-express-hiace-commuter-2014.jpg' },
+    { id: 'highroof', name: 'Highroof (18 Seats)', seats: 18, dailyRate: 300000, dayRate: 300000, desc: 'Spacious high-roof van with extra luggage room.', img: 'assets/fly-express-hiace-commuter-2014.jpg' },
+    { id: 'coaster', name: 'Executive Coaster (30 Seats)', seats: 30, dailyRate: 450000, dayRate: 450000, desc: 'Full size executive bus for large groups.', img: 'assets/fly-express-coaster-2014.jpg' }
   ]
 };
 
