@@ -3618,6 +3618,7 @@ function renderDriverChat() {
   return `
     <div class="driver-chat-screen">
       <div class="chat-driver-header">
+        <button class="icon-button" type="button" data-action="back-from-chat" aria-label="Close Chat" style="color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.12); border-radius: 50%; width: 36px; height: 36px; display: grid; place-items: center; border: none; cursor: pointer; flex-shrink: 0;"><i data-lucide="arrow-left"></i></button>
         <div class="chat-driver-header__info">
           ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="chat-driver-avatar">` : `<div class="chat-driver-avatar chat-driver-avatar--initials">${initials}</div>`}
           <div>
@@ -3682,6 +3683,10 @@ function renderDriverCall() {
 
   return `
     <div class="driver-call-screen">
+      <button class="icon-button" type="button" data-action="end-call-demo" aria-label="Close Call" style="position: absolute; top: 20px; left: 20px; z-index: 10; color: white; background: rgba(255,255,255,0.15); border: none; border-radius: 50%; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer;">
+        <i data-lucide="arrow-left"></i>
+      </button>
+
       <div class="call-background">
         <div class="call-bg-circle call-bg-circle--1"></div>
         <div class="call-bg-circle call-bg-circle--2"></div>
@@ -5007,7 +5012,10 @@ function handleClick(event) {
     },
     'end-call-demo': () => {
       toast('Call ended.', 'info');
-      showDriverProfileModal(state.viewingDriverName);
+      goBack();
+    },
+    'back-from-chat': () => {
+      goBack();
     },
     'modal-chat-driver': () => {
       closeModal();

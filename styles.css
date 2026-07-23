@@ -4133,14 +4133,19 @@ body[data-active-screen="driver-profile"] .main-content {
 
 /* ─── Driver Chat Screen ─── */
 .driver-chat-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  background: var(--surface-alt);
+  border-radius: 0;
+  border: none;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 120px);
-  max-height: calc(100vh - 120px);
-  background: var(--surface-alt);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
 }
 .chat-driver-header {
   display: flex;
@@ -4386,10 +4391,15 @@ body[data-active-screen="driver-profile"] .main-content {
 
 /* ─── Driver Call Screen ─── */
 .driver-call-screen {
-  position: relative;
-  min-height: calc(100vh - 120px);
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(160deg, #081b33 0%, #0b2a50 50%, #134074 100%);
-  border-radius: var(--radius);
+  border-radius: 0;
+  border: none;
   overflow: hidden;
   display: flex;
   align-items: center;
