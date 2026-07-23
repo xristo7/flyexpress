@@ -69,16 +69,7 @@ function getAvailableTrips() {
     let plate = plates[i % plates.length];
     let driverRating = driver.rating;
     let driverPhone = '+256 774 123 ' + String(100 + i);
-    const driverImages = [
-      'assets/first_van_driver.jpg',
-      'assets/driver_2.jpg',
-      'assets/driver_3.jpg',
-      'assets/driver_4.jpg',
-      'assets/driver_5.jpg',
-      'assets/driver_6.jpg',
-      'assets/driver_7.jpg'
-    ];
-    let image = driverImages[i % driverImages.length];
+    let image = 'assets/first_van_driver.jpg';
     if (i === 0) {
       driverName = 'Moses Mukasa';
       plate = 'UBM 245K';
