@@ -1363,8 +1363,11 @@ function navigate(screen, payload = {}, pushHistory = true) {
 }
 
 function goBack() {
-  if (state.screen === 'tracking' && state.trackingView === 'single') {
+  if ((state.screen === 'tracking' && state.trackingView === 'single') || state.screen === 'trackparcel' || state.screen === 'parcel-status') {
+    state.screen = 'tracking';
     state.trackingView = 'hub';
+    state.selectedTrackingId = null;
+    $('#screen-title').textContent = 'Tracking';
     renderNavigation();
     renderCurrentScreen();
     return;
@@ -6461,7 +6464,9 @@ function loadTracking() {
   } else {
     showLoading('Loading parcel history…', () => {
       state.parcelTrackingState = 'intransit';
-      navigate('trackparcel');
+      state.trackingView = 'single';
+      state.selectedTrackingId = value.startsWith('#') ? value : `#${value}`;
+      navigate('tracking');
       toast('Parcel tracking loaded.', 'success');
     });
   }
