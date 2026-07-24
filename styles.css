@@ -8838,6 +8838,35 @@ body[data-active-screen="home"] .main-content {
   }
 }
 
+/* Special Hire Mobile Selected Card In-Place Transformation */
+.vehicle-card__standard-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .vehicle-card__mobile-inline-form {
+    display: none !important;
+  }
+  .special-hire-sidebar-col {
+    display: block !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .special-hire-sidebar-col {
+    display: none !important;
+  }
+  .vehicle-card.is-selected .vehicle-card__standard-view {
+    display: none !important;
+  }
+  .vehicle-card__mobile-inline-form {
+    display: block !important;
+  }
+}
+
 /* ─── Swipe Gesture Indicator for Onboarding / Splash ─── */
 .swipe-gesture-pill {
   position: absolute;

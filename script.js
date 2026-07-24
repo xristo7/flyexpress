@@ -3380,6 +3380,15 @@ function renderSpecialHire() {
   if (step === 1) {
     const chosenVehicle = appData.specialHireVehicles.find(v => v.id === (sh.vehicleType || sh.vehicleId)) || appData.specialHireVehicles[0];
 
+    const hireVehiclesList = [
+      { id: 'sedan', name: 'Saloon Car / Sedan (4 Seats)', desc: 'Perfect for solo business travelers, couples, or small private trips.', price: 100000, img: state.transparentVehicles['assets/fly-express-sedan.jpg'] || 'assets/fly-express-sedan.jpg' },
+      { id: 'noah', name: 'Toyota Noah (7 Seats)', desc: 'Versatile and spacious mid-size vehicle for family or small groups.', price: 150000, img: state.transparentVehicles['assets/fly-express-noah.jpg'] || 'assets/fly-express-noah.jpg' },
+      { id: 'minivan', name: 'Alphard / Multi-Seater (10 Seats)', desc: 'Comfortable vehicle for family travel or small business delegates.', price: 180000, img: state.transparentVehicles['assets/fly-express-minivan.jpg'] || 'assets/fly-express-minivan.jpg' },
+      { id: 'commuter', name: 'Commuter (14 Seats)', desc: 'Standard roof, spacious, ideal for daily commutes or standard group travel.', price: 220000, img: state.transparentVehicles['assets/fly-express-hiace-commuter.jpg'] || 'assets/fly-express-hiace-commuter.jpg' },
+      { id: 'highroof', name: 'Highroof (18 Seats)', desc: 'High roof version for extra headroom, maximum ventilation, and luggage space.', price: 300000, img: state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg' },
+      { id: 'coaster', name: 'Executive Coaster (30 Seats)', desc: 'Spacious luxury coaster for big company excursions or large events.', price: 600000, img: state.transparentVehicles['assets/fly-express-coaster.jpg'] || 'assets/fly-express-coaster.jpg' }
+    ];
+
     return `
       ${screenHead('Private Charter & Special Hire', 'Choose your vehicle type and enter your charter destination.')}
       
@@ -3388,84 +3397,89 @@ function renderSpecialHire() {
         <div class="special-hire-main-col">
           <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 14px; color: var(--brand-blue-dark);">1. Select Vehicle Type</h2>
           <div class="vehicle-card-grid">
-            <div class="card vehicle-card ${sh.vehicleType === 'sedan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="sedan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'sedan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'sedan' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <img src="${state.transparentVehicles['assets/fly-express-sedan.jpg'] || 'assets/fly-express-sedan.jpg'}" alt="Saloon Car" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Saloon Car / Sedan (4 Seats)</h3>
-                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Perfect for solo business travelers, couples, or small private trips.</p>
-              </div>
-              <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 100,000 / day</strong>
-              </div>
-            </div>
+            ${hireVehiclesList.map(v => {
+              const isSelected = sh.vehicleType === v.id;
+              return `
+                <div class="card vehicle-card ${isSelected ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="${v.id}" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${isSelected ? 'var(--brand-blue)' : 'var(--border)'}; background: ${isSelected ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease;">
+                  
+                  <!-- Standard View (Always visible on Desktop, visible on Mobile when unselected) -->
+                  <div class="vehicle-card__standard-view">
+                    <div>
+                      <img src="${v.img}" alt="${escapeHtml(v.name)}" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
+                      <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">${escapeHtml(v.name)}</h3>
+                      <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">${escapeHtml(v.desc)}</p>
+                    </div>
+                    <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                      <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">${formatUGX(v.price)} / day</strong>
+                    </div>
+                  </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'noah' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="noah" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'noah' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'noah' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <img src="${state.transparentVehicles['assets/fly-express-noah.jpg'] || 'assets/fly-express-noah.jpg'}" alt="Toyota Noah" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Toyota Noah (7 Seats)</h3>
-                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Versatile and spacious mid-size vehicle for family or small groups.</p>
-              </div>
-              <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 150,000 / day</strong>
-              </div>
-            </div>
+                  <!-- Mobile In-Card Inline Form (Visible ONLY on Mobile when Selected) -->
+                  ${isSelected ? `
+                    <div class="vehicle-card__mobile-inline-form" onclick="event.stopPropagation();">
+                      <!-- Selected Vehicle Header Banner -->
+                      <div class="mobile-hire-selected-banner" style="background: rgba(7, 90, 168, 0.07); border: 1px solid rgba(7, 90, 168, 0.15); border-radius: 16px; padding: 12px; display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+                        <img src="${v.img}" alt="${escapeHtml(v.name)}" style="width: 58px; height: 44px; object-fit: contain; flex-shrink: 0;" />
+                        <div>
+                          <span style="font-size: 0.68rem; text-transform: uppercase; font-weight: 800; color: var(--brand-blue); letter-spacing: 0.05em; display: block;">SELECTED VEHICLE</span>
+                          <strong style="font-size: 0.98rem; font-weight: 850; color: var(--brand-blue-dark); display: block; line-height: 1.25;">${escapeHtml(v.name)}</strong>
+                          <span style="color: var(--success); font-size: 0.88rem; font-weight: 850; display: block; margin-top: 2px;">${formatUGX(v.price)} / day</span>
+                        </div>
+                      </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'minivan' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="minivan" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'minivan' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'minivan' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <img src="${state.transparentVehicles['assets/fly-express-minivan.jpg'] || 'assets/fly-express-minivan.jpg'}" alt="Alphard Multi-Seater" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Alphard / Multi-Seater (10 Seats)</h3>
-                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Comfortable vehicle for family travel or small business delegates.</p>
-              </div>
-              <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 180,000 / day</strong>
-              </div>
-            </div>
+                      <!-- 2. Route & Destination Section -->
+                      <div style="margin-top: 4px;">
+                        <h3 style="font-size: 1.02rem; font-weight: 850; margin: 0 0 10px 0; color: var(--brand-blue-dark);">2. Route &amp; Destination</h3>
+                        
+                        <!-- Choice Pills -->
+                        <div class="choice-pills" style="display: flex; gap: 6px; margin-bottom: 12px; width: 100%;">
+                          <button class="choice-pill ${sh.destinationType === 'standard' ? 'is-active' : ''}" type="button" data-action="select-hire-dest-type" data-value="standard" style="flex: 1; text-align: center; font-size: 0.78rem; padding: 7px 10px; font-weight: 750;">Standard Route</button>
+                          <button class="choice-pill ${sh.destinationType === 'custom' ? 'is-active' : ''}" type="button" data-action="select-hire-dest-type" data-value="custom" style="flex: 1; text-align: center; font-size: 0.78rem; padding: 7px 10px; font-weight: 750;">Custom Destination</button>
+                        </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'commuter' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="commuter" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'commuter' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'commuter' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <img src="${state.transparentVehicles['assets/fly-express-hiace-commuter.jpg'] || 'assets/fly-express-hiace-commuter.jpg'}" alt="Commuter (14)" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Commuter (14)</h3>
-                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Standard roof, spacious, ideal for daily commutes or standard group travel.</p>
-              </div>
-              <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 220,000 / day</strong>
-              </div>
-            </div>
+                        ${sh.destinationType === 'standard' ? `
+                          <div class="field" style="margin: 0;">
+                            <label for="hire-route-select-mobile" style="font-size: 0.78rem; font-weight: 700; color: var(--slate); margin-bottom: 4px; display: block;">Select Corridor Route</label>
+                            <select id="hire-route-select-mobile" data-hire-field="standardRoute" style="padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-strong); width: 100%; font-weight: 650; font-size: 0.88rem; background: white;">
+                              <option value="kajansi" ${sh.standardRoute === 'kajansi' ? 'selected' : ''}>Entebbe – Kampala (Via Kajansi)</option>
+                              <option value="busega" ${sh.standardRoute === 'busega' ? 'selected' : ''}>Entebbe – Kampala (Via Busega)</option>
+                              <option value="nambole" ${sh.standardRoute === 'nambole' ? 'selected' : ''}>Entebbe – Nambole</option>
+                              <option value="masaka" ${sh.standardRoute === 'masaka' ? 'selected' : ''}>Entebbe – Masaka</option>
+                              <option value="lyantonde" ${sh.standardRoute === 'lyantonde' ? 'selected' : ''}>Entebbe – Lyantonde</option>
+                              <option value="mbarara" ${sh.standardRoute === 'mbarara' ? 'selected' : ''}>Entebbe – Mbarara</option>
+                            </select>
+                          </div>
+                        ` : `
+                          <div class="field" style="margin: 0;">
+                            <label for="hire-custom-dest-mobile" style="font-size: 0.78rem; font-weight: 700; color: var(--slate); margin-bottom: 4px; display: block;">Destination in Uganda</label>
+                            <input id="hire-custom-dest-mobile" type="text" data-hire-field="customDestination" value="${escapeHtml(sh.customDestination)}" placeholder="e.g. Jinja town, Fort Portal, Kabale" style="padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-strong); width: 100%; font-weight: 650; font-size: 0.88rem;">
+                          </div>
+                        `}
+                      </div>
 
-            <div class="card vehicle-card ${sh.vehicleType === 'highroof' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="highroof" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'highroof' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'highroof' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <img src="${state.transparentVehicles['assets/fly-express-hiace-highroof.jpg'] || 'assets/fly-express-hiace-highroof.jpg'}" alt="Highroof (18)" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Highroof (18)</h3>
-                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">High roof version for extra headroom, maximum ventilation, and luggage space.</p>
-              </div>
-              <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 300,000 / day</strong>
-              </div>
-            </div>
-            
-            <div class="card vehicle-card ${sh.vehicleType === 'coaster' ? 'is-selected' : ''}" data-action="select-hire-vehicle" data-value="coaster" role="button" tabindex="0" style="cursor: pointer; border: 2px solid ${sh.vehicleType === 'coaster' ? 'var(--brand-blue)' : 'var(--border)'}; background: ${sh.vehicleType === 'coaster' ? 'var(--info-soft)' : 'white'}; padding: 18px; border-radius: 18px; transition: all 0.22s ease; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <img src="${state.transparentVehicles['assets/fly-express-coaster.jpg'] || 'assets/fly-express-coaster.jpg'}" alt="Executive Coaster" style="width: 100%; height: 125px; object-fit: contain; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: var(--brand-blue-dark);">Executive Coaster (30 Seats)</h3>
-                <p class="muted" style="font-size: 0.82rem; margin: 4px 0 14px; line-height: 1.4;">Spacious luxury coaster for big company excursions or large events.</p>
-              </div>
-              <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                <strong style="color: var(--success); font-size: 1.05rem; font-weight: 850;">UGX 600,000 / day</strong>
-              </div>
-            </div>
+                      <!-- Primary Action CTA Button -->
+                      <button class="button button--primary w-full" type="button" data-action="special-hire-next" style="margin-top: 16px; padding: 14px; border-radius: 14px; font-weight: 850; font-size: 0.98rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        Continue to Details →
+                      </button>
+                    </div>
+                  ` : ''}
+
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
 
-        <!-- Right Sidebar Column: Sleek 2. Route & Destination + QR Code -->
+        <!-- Right Sidebar Column (Desktop view) -->
         <aside class="special-hire-sidebar-col">
           <div class="special-hire-sidebar-card">
             
             <!-- Selected Vehicle Mini Preview Banner -->
             <div class="sidebar-vehicle-preview">
-              <img src="${chosenVehicle.img}" alt="${chosenVehicle.name}" />
+              <img src="${chosenVehicle.img}" alt="${escapeHtml(chosenVehicle.name)}" />
               <div>
                 <span style="font-size: 0.68rem; text-transform: uppercase; font-weight: 750; color: var(--brand-blue); letter-spacing: 0.05em; display: block;">Selected Vehicle</span>
-                <h4>${chosenVehicle.name}</h4>
+                <h4>${escapeHtml(chosenVehicle.name)}</h4>
                 <strong class="price-tag">${formatUGX(chosenVehicle.dailyRate)} / day</strong>
               </div>
             </div>
