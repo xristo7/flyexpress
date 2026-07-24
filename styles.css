@@ -3813,6 +3813,12 @@ body[data-active-screen="trackparcel"] .main-content {
   box-shadow: 0 6px 16px rgba(8, 27, 51, 0.2);
 }
 
+@media (max-width: 767px) {
+  .tracking-top-nav-bar {
+    display: none !important;
+  }
+}
+
 @media (max-width: 600px) {
   .tracking-top-nav-bar {
     flex-direction: column;

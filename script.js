@@ -1363,6 +1363,12 @@ function navigate(screen, payload = {}, pushHistory = true) {
 }
 
 function goBack() {
+  if (state.screen === 'tracking' && state.trackingView === 'single') {
+    state.trackingView = 'hub';
+    renderNavigation();
+    renderCurrentScreen();
+    return;
+  }
   const previous = state.history.pop() || 'home';
   state.screen = previous;
   navigate(previous, {}, false);
