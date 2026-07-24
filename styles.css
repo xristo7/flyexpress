@@ -9382,6 +9382,10 @@ body[data-active-screen="home"] .main-content {
 .tracking-card-map-preview {
   position: relative;
   overflow: hidden;
+  margin: 12px 12px 0 12px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(8, 27, 51, 0.08) !important;
+  box-shadow: 0 4px 14px rgba(8, 27, 51, 0.06) !important;
 }
 .tracking-card-map-preview .leaflet-control-container {
   display: none !important;

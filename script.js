@@ -4757,8 +4757,8 @@ function renderTrackingHubCard(item, idx) {
   const isTravel = item.type === 'travel';
   return `
     <div class="card tracking-hub-card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-subtle); border-radius: 24px; box-shadow: 0 8px 30px rgba(8,27,51,0.08); background: white;">
-      <!-- Real Leaflet Map Thumbnail Container -->
-      <div class="tracking-card-map-preview" style="position: relative; height: 165px; width: 100%; background: #eef3f7; overflow: hidden;">
+      <!-- Real Leaflet Map Thumbnail Container (Rounded Inset Map) -->
+      <div class="tracking-card-map-preview" style="position: relative; height: 165px; margin: 12px 12px 0 12px; border-radius: 20px; border: 1px solid rgba(8,27,51,0.08); background: #eef3f7; overflow: hidden; box-shadow: 0 4px 14px rgba(8,27,51,0.06);">
         <div id="tracking-card-map-${idx}" style="position: absolute; inset: 0; z-index: 1;"></div>
         <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,27,51,0.15) 0%, rgba(8,27,51,0.78) 100%); pointer-events: none; z-index: 2;"></div>
 
