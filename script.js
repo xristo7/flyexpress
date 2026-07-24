@@ -291,6 +291,25 @@ const driversData = {
       { author: 'Peter K.', rating: 4, date: '1 week ago', comment: 'Standard drive, arrived on time.' }
     ]
   },
+  'hassan kato': {
+    name: 'Hassan Kato',
+    avatar: 'assets/driver_7.jpg',
+    hero: 'assets/driver_7_hero.jpg',
+    role: 'Fly Express Driver',
+    rating: '4.92',
+    routes: '1,150',
+    km: '42,600',
+    associationTime: '2 years 1 month',
+    bio: 'Dedicated express driver along the Kampala-Entebbe corridor. Highly praised for punctuality, smooth driving, and courteous service.',
+    vehicle: 'Alphard / Multi-Seater (10)',
+    plate: 'UBT 509M',
+    color: 'Silver & Blue',
+    status: 'idle',
+    compliments: ['Safe Driver', 'Super Friendly', 'Punctual'],
+    reviews: [
+      { author: 'Samson B.', rating: 5, date: '1 day ago', comment: 'Punctual and very smooth driving on the expressway.' }
+    ]
+  },
   'daniel': {
     name: 'Daniel',
     avatar: '',
