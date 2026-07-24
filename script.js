@@ -1086,13 +1086,6 @@ function renderOnboarding() {
     <article class="onboarding-slide">
       <div class="onboarding-image-container" style="position: relative;">
         <img src="assets/onboarding-${state.onboardingIndex + 1}.${state.onboardingIndex === 1 ? 'webp' : 'jpg'}" alt="${escapeHtml(slide.title)} visual">
-        ${state.onboardingIndex < 2 ? `
-          <div class="swipe-gesture-pill" aria-label="Swipe left with finger">
-            <i data-lucide="hand" class="swipe-hand-icon"></i>
-            <span>Swipe left to explore</span>
-            <i data-lucide="arrow-right" class="swipe-arrow-anim"></i>
-          </div>
-        ` : ''}
       </div>
       <div class="onboarding-copy">
         <h2>${slide.title}</h2>
@@ -1110,7 +1103,7 @@ function renderOnboarding() {
     </article>
   `;
 
-  // Update dots, back/next visibility
+  // Update controls visibility
   const skipBtn = $('.onboarding-skip');
   if (skipBtn) {
     skipBtn.classList.toggle('is-hidden', state.onboardingIndex === 2);
@@ -1121,18 +1114,9 @@ function renderOnboarding() {
     controls.classList.toggle('is-hidden', state.onboardingIndex === 2);
   }
 
-  $('#onboarding-dots').innerHTML = onboardingSlides.map((_, index) => `
-    <button class="progress-dot ${index === state.onboardingIndex ? 'is-active' : ''}" data-action="onboarding-go" data-index="${index}" aria-label="Go to slide ${index + 1}"></button>
-  `).join('');
-
   const next = $('[data-action="onboarding-next"]');
-  const back = $('[data-action="onboarding-back"]');
   if (next) {
     next.innerHTML = `<i data-lucide="chevron-right"></i>`;
-  }
-  if (back) {
-    back.innerHTML = `<i data-lucide="chevron-left"></i>`;
-    back.disabled = state.onboardingIndex === 0;
   }
 
   refreshIcons();
