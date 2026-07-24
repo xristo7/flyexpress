@@ -41,8 +41,17 @@ function getAvailableTrips() {
   const trips = [];
   const routeCards = appData.routeCards || [];
   
-  const driverKeys = Object.keys(driversData || {});
-  const plates = ['UBM 245K', 'UBP 318F', 'UBN 742D', 'UBQ 915A', 'UBR 104C', 'UBS 882E', 'UBT 551X', 'UBU 394M', 'UBV 194P', 'UBW 821Z'];
+  const activeDriverKeys = [
+    'moses mukasa',
+    'isaac muwonge',
+    'john ssekabira',
+    'david okello',
+    'peter semwanga',
+    'arthur ssewankambo',
+    'hassan kato'
+  ];
+  const plates = ['UBM 245K', 'UBP 318F', 'UBN 742D', 'UBQ 915A', 'UBR 104C', 'UBS 882E', 'UBT 509M', 'UBU 394M', 'UBV 194P', 'UBW 821Z'];
+  const vehicleTypes = ['Highroof (18)', 'Commuter (14)', 'Highroof (18)', 'Commuter (14)', 'Commuter (14)', 'Highroof (18)', 'Executive Coaster (30)'];
   
   for (let i = 0; i < 12; i++) {
     const slot = startSlot + i * 30;
@@ -62,22 +71,14 @@ function getAvailableTrips() {
     
     const rc = routeCards[i % routeCards.length] || { key: 'kajansi', stageA: 'Entebbe Bus Park', stageB: 'Kampala Railway Stage', price: 'UGX 5,000', via: 'Via Kajansi', imageB: 'assets/kampala.jpg' };
     
-    const driverKey = driverKeys[i % driverKeys.length] || 'isaac muwonge';
-    const driver = (driversData && driversData[driverKey]) || { name: 'Isaac Muwonge', rating: '4.95' };
+    const driverKey = activeDriverKeys[i % activeDriverKeys.length];
+    const driver = (driversData && driversData[driverKey]) || driversData['moses mukasa'];
     
     let driverName = driver.name;
-    let plate = plates[i % plates.length];
+    let plate = driver.plate || plates[i % plates.length];
     let driverRating = driver.rating;
     let driverPhone = '+256 774 123 ' + String(100 + i);
-    const vehicleTypes = ['Commuter (14)', 'Highroof (18)', 'Executive Coaster (30)', 'Alphard / Multi-Seater (10)'];
-    const vehicleName = vehicleTypes[i % vehicleTypes.length];
-    if (i === 0) {
-      driverName = 'Moses Mukasa';
-      plate = 'UBM 245K';
-      driverRating = '4.90';
-      driverPhone = '+256 774 123 456';
-    }
-
+    let vehicleName = driver.vehicle || vehicleTypes[i % vehicleTypes.length];
     let image = getDriverHeroImage(driverName);
 
     const seats = 3 + (i * 7 + 13) % 10;
