@@ -4244,7 +4244,7 @@ function showDriverProfileModal(driverNameKey) {
   const driverNameClean = (driverNameKey || 'isaac muwonge').toLowerCase().trim();
   const driver = driversData[driverNameClean] || driversData['isaac muwonge'];
   const avatarUrl = driver.avatar || 'assets/driver_1.jpg';
-  const vehicleHeroImg = driver.hero || getTripVehicleImage(driver.vehicle);
+  const vehicleHeroImg = getTripVehicleImage(driver.vehicle);
 
   const bodyHtml = `
     <div class="driver-modal-content" style="text-align: left; padding: 4px;">
@@ -4292,8 +4292,8 @@ function showDriverProfileModal(driverNameKey) {
       <div style="margin-bottom: 20px;">
         <h4 style="margin: 0 0 8px 0; font-size: 0.78rem; font-weight: 800; color: var(--slate); text-transform: uppercase; letter-spacing: 0.06em;">Vehicle Information</h4>
         <div style="display: flex; align-items: center; gap: 14px; background: var(--surface-alt); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 18px;">
-          <div style="width: 120px; height: 80px; border-radius: 12px; overflow: hidden; background: #081b33; position: relative; flex-shrink: 0; box-shadow: 0 4px 12px rgba(8,27,51,0.12);">
-            <img src="${vehicleHeroImg}" alt="${driver.vehicle}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div style="width: 120px; height: 80px; border-radius: 12px; overflow: hidden; background: #f4f8fc; position: relative; flex-shrink: 0; box-shadow: 0 4px 12px rgba(8,27,51,0.08); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; padding: 4px;">
+            <img src="${vehicleHeroImg}" alt="${driver.vehicle}" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; background: #081b33; color: white;">
               <i data-lucide="bus-front" style="width: 28px; height: 28px;"></i>
             </div>
