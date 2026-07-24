@@ -234,6 +234,7 @@ const driversData = {
   'david okello': {
     name: 'David Okello',
     avatar: 'assets/driver_4.jpg',
+    hero: 'assets/driver_4_hero.jpg',
     role: 'Fly Express Driver',
     rating: '4.70',
     routes: '760',
@@ -253,6 +254,7 @@ const driversData = {
   'peter semwanga': {
     name: 'Peter Semwanga',
     avatar: 'assets/driver_5.jpg',
+    hero: 'assets/driver_5_hero.jpg',
     role: 'Fly Express Driver',
     rating: '4.90',
     routes: '1,510',
