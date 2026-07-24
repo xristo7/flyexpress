@@ -358,8 +358,8 @@ const state = {
   parcel: {
     senderName: 'Christo I.',
     senderPhone: '+256 772 345 678',
-    recipientName: 'Julie Robinson',
-    recipientPhone: '+44 7911 123456',
+    recipientName: 'Joan Nankya',
+    recipientPhone: '+256 772 987 654',
     origin: 'Entebbe',
     pickupLocation: '',
     customPickup: '',
@@ -369,9 +369,9 @@ const state = {
     description: 'Demonstration parcel',
     weight: '520 g',
     quantity: '1',
-    declaredValue: '£20',
+    declaredValue: 'UGX 50,000',
     fragile: 'No',
-    instructions: 'Deliver to Julie Robinson in Kampala.',
+    instructions: 'Deliver to Joan Nankya at Kampala Railway Stage.',
     dropoff: 'Today · 8:00–9:00 AM',
     departure: 'Next available vehicle'
   },
@@ -3921,7 +3921,7 @@ function renderParcelList() {
           </div>
           <div class="parcel-list-card__meta">
             <span><i data-lucide="package"></i>Small box · 520 g</span>
-            <span><i data-lucide="user-round"></i>To: Julie Robinson</span>
+            <span><i data-lucide="user-round"></i>To: Joan Nankya</span>
           </div>
         </div>
         <div class="parcel-list-card__footer" onclick="event.stopPropagation();">
@@ -4009,7 +4009,7 @@ function renderParcelTracking() {
           </div>
           <div class="parcel-live-card__grid-item">
             <span class="parcel-live-card__grid-label">To</span>
-            <strong class="parcel-live-card__grid-val">Julie Robinson</strong>
+            <strong class="parcel-live-card__grid-val">Joan Nankya</strong>
           </div>
         </div>
         
@@ -4093,7 +4093,7 @@ function renderParcelStatus() {
           </div>
           <div class="parcel-details-row">
             <span>Recipient</span>
-            <strong>Julie Robinson</strong>
+            <strong>Joan Nankya</strong>
           </div>
         </div>
         
@@ -4665,7 +4665,7 @@ function renderTracking() {
         eta: 'Estimated arrival: Today, 2:30 PM',
         status: 'On the way',
         statusClass: 'status-chip--gold',
-        details: 'Small box · 520 g · Recipient: Julie Robinson',
+        details: 'Small box · 520 g · Recipient: Joan Nankya',
         actions: `<button class="button button--primary button--small" type="button" data-screen="trackparcel">Live Map</button><button class="button button--ghost button--small" type="button" data-screen="parcel-status">View Status</button>`
       },
       {
