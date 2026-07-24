@@ -9325,3 +9325,9 @@ body[data-active-screen="home"] .main-content {
   position: relative;
   overflow: hidden;
 }
+.tracking-card-map-preview .leaflet-control-container {
+  display: none !important;
+}
+.tracking-card-map-preview .leaflet-tile-pane {
+  filter: contrast(1.05) saturate(1.1);
+}

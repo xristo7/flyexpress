@@ -1396,7 +1396,13 @@ function renderCurrentScreen(preserveFocus = true) {
     stopLiveProgress();
   }
   if (state.screen === 'home') setTimeout(initHomeCarousel, 50);
-  if (state.screen === 'tracking') setTimeout(initTrackingMap, 240);
+  if (state.screen === 'tracking') {
+    if (state.trackingView === 'single') {
+      setTimeout(initTrackingMap, 240);
+    } else {
+      setTimeout(initTrackingCardMaps, 200);
+    }
+  }
 }
 
 function initHomeCarousel() {
@@ -4661,27 +4667,80 @@ function getActiveTrackingItems() {
   return { travelItems, parcelItems };
 }
 
-function renderTrackingHubCard(item) {
+let trackingCardMapInstances = [];
+
+function initTrackingCardMaps() {
+  trackingCardMapInstances.forEach(m => {
+    if (m) {
+      try { m.remove(); } catch(e) {}
+    }
+  });
+  trackingCardMapInstances = [];
+
+  const { travelItems, parcelItems } = getActiveTrackingItems();
+  const currentTab = state.trackingTab || 'all';
+
+  let filteredItems = [];
+  if (currentTab === 'travels') filteredItems = travelItems;
+  else if (currentTab === 'parcels') filteredItems = parcelItems;
+  else filteredItems = [...travelItems, ...parcelItems];
+
+  const outbound = [[0.0618, 32.4742], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
+
+  filteredItems.forEach((item, idx) => {
+    const container = document.getElementById(`tracking-card-map-${idx}`);
+    if (!container || !window.L) return;
+
+    try {
+      const miniMap = L.map(container, {
+        attributionControl: false,
+        zoomControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        touchZoom: false,
+        boxZoom: false,
+        keyboard: false
+      });
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false }).addTo(miniMap);
+
+      L.polyline(outbound, { color: '#081b33', opacity: 0.6, weight: 6 }).addTo(miniMap);
+      L.polyline(outbound, { color: '#1677ff', dashArray: '6 6', lineCap: 'round', opacity: 1, weight: 3.5 }).addTo(miniMap);
+
+      L.circleMarker(outbound[0], { color: '#fff', fillColor: '#10b981', fillOpacity: 1, radius: 6, weight: 2.5 }).addTo(miniMap);
+      L.circleMarker(outbound[outbound.length - 1], { color: '#fff', fillColor: '#ef4444', fillOpacity: 1, radius: 6, weight: 2.5 }).addTo(miniMap);
+
+      const vehiclePos = item.type === 'travel' ? outbound[5] : (idx % 2 === 0 ? outbound[3] : outbound[7]);
+      L.circleMarker(vehiclePos, {
+        color: '#ffffff',
+        fillColor: item.type === 'travel' ? '#1677ff' : '#f2a104',
+        fillOpacity: 1,
+        radius: 8,
+        weight: 3
+      }).addTo(miniMap);
+
+      const bounds = L.latLngBounds(outbound);
+      miniMap.fitBounds(bounds, { padding: [20, 20] });
+      trackingCardMapInstances.push(miniMap);
+    } catch(err) {
+      console.warn('Mini map init error:', err);
+    }
+  });
+}
+
+function renderTrackingHubCard(item, idx) {
   const isTravel = item.type === 'travel';
   return `
     <div class="card tracking-hub-card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-subtle); border-radius: 24px; box-shadow: 0 8px 30px rgba(8,27,51,0.08); background: white;">
-      <!-- Route Map Preview Header -->
-      <div class="tracking-card-map-preview" style="position: relative; height: 160px; background: #081b33; overflow: hidden;">
-        <img src="assets/fly-express-hiace-commuter.jpg" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.35; filter: contrast(1.1) brightness(0.8);" />
-        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,27,51,0.3) 0%, rgba(8,27,51,0.9) 100%);"></div>
-
-        <!-- Simulated Map Canvas Overlay with Polyline Route & Live Markers -->
-        <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.85;" viewBox="0 0 400 160" preserveAspectRatio="none">
-          <path d="M 40,120 Q 180,30 360,110" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="6" stroke-linecap="round" />
-          <path d="M 40,120 Q 180,30 360,110" fill="none" stroke="#1677ff" stroke-width="3.5" stroke-dasharray="6 6" stroke-linecap="round" />
-          <circle cx="40" cy="120" r="7" fill="#10b981" stroke="#ffffff" stroke-width="2.5" />
-          <circle cx="360" cy="110" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2.5" />
-          <circle cx="215" cy="58" r="9" fill="${isTravel ? '#1677ff' : '#f2a104'}" stroke="#ffffff" stroke-width="3" />
-        </svg>
+      <!-- Real Leaflet Map Thumbnail Container -->
+      <div class="tracking-card-map-preview" style="position: relative; height: 165px; width: 100%; background: #eef3f7; overflow: hidden;">
+        <div id="tracking-card-map-${idx}" style="position: absolute; inset: 0; z-index: 1;"></div>
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,27,51,0.15) 0%, rgba(8,27,51,0.78) 100%); pointer-events: none; z-index: 2;"></div>
 
         <!-- Top Badges Overlay -->
-        <div style="position: absolute; top: 12px; left: 14px; right: 14px; display: flex; align-items: center; justify-content: space-between; z-index: 3;">
-          <span style="background: rgba(255,255,255,0.95); color: var(--brand-blue-dark); font-weight: 850; font-size: 0.76rem; padding: 4px 12px; border-radius: 14px; backdrop-filter: blur(8px); display: inline-flex; align-items: center; gap: 5px;">
+        <div style="position: absolute; top: 12px; left: 14px; right: 14px; display: flex; align-items: center; justify-content: space-between; z-index: 3; pointer-events: auto;">
+          <span style="background: rgba(255,255,255,0.95); color: var(--brand-blue-dark); font-weight: 850; font-size: 0.76rem; padding: 4px 12px; border-radius: 14px; backdrop-filter: blur(8px); display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
             <i data-lucide="${isTravel ? 'bus-front' : 'package'}" style="width:14px;height:14px;color:var(--brand-blue);"></i>
             ${isTravel ? 'Booked Travel' : 'Parcel Delivery'}
           </span>
@@ -4691,9 +4750,9 @@ function renderTrackingHubCard(item) {
         </div>
 
         <!-- Bottom Route Header Overlay -->
-        <div style="position: absolute; bottom: 12px; left: 14px; right: 14px; color: white; z-index: 3;">
-          <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; font-weight: 750; display: block;">Ref #${item.id}</span>
-          <strong style="font-size: 1.1rem; font-weight: 850; line-height: 1.25; margin-top: 2px; color: white; display: block;">${item.route}</strong>
+        <div style="position: absolute; bottom: 12px; left: 14px; right: 14px; color: white; z-index: 3; pointer-events: none;">
+          <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.9; font-weight: 750; display: block;">Ref #${item.id}</span>
+          <strong style="font-size: 1.05rem; font-weight: 850; line-height: 1.25; margin-top: 2px; color: white; display: block;">${item.route}</strong>
         </div>
       </div>
 
@@ -4859,25 +4918,23 @@ function renderTracking() {
   return `
     ${screenHead('Live Tracking & Journey Hub', 'Track your active booked travels and parcel deliveries with map previews.')}
 
-    <!-- Category Filter Tabs -->
-    <div class="tracking-hub-tabs-wrapper" style="max-width: 600px; margin: 0 auto 20px;">
-      <div class="segmented-control" style="background: white; border: 1px solid var(--border-subtle); padding: 4px; border-radius: 18px; box-shadow: 0 4px 16px rgba(8,27,51,0.04); display: flex;">
-        <button type="button" class="segmented-control__btn ${currentTab === 'all' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="all" style="flex: 1; height: 38px; font-weight: 800; border-radius: 14px;">
-          All Active (${travelItems.length + parcelItems.length})
-        </button>
-        <button type="button" class="segmented-control__btn ${currentTab === 'travels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="travels" style="flex: 1; height: 38px; font-weight: 800; border-radius: 14px;">
-          <i data-lucide="bus-front" style="width:15px;height:15px;vertical-align:-2px;"></i> Travels (${travelItems.length})
-        </button>
-        <button type="button" class="segmented-control__btn ${currentTab === 'parcels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="parcels" style="flex: 1; height: 38px; font-weight: 800; border-radius: 14px;">
-          <i data-lucide="package" style="width:15px;height:15px;vertical-align:-2px;"></i> Parcels (${parcelItems.length})
-        </button>
-      </div>
+    <!-- Category Filter Tabs (Standard App Tabs) -->
+    <div class="tabs" role="tablist" style="margin-bottom: 20px;">
+      <button class="tab ${currentTab === 'all' ? 'is-active' : ''}" type="button" data-action="set-tracking-tab" data-value="all">
+        All Active (${travelItems.length + parcelItems.length})
+      </button>
+      <button class="tab ${currentTab === 'travels' ? 'is-active' : ''}" type="button" data-action="set-tracking-tab" data-value="travels">
+        Travels (${travelItems.length})
+      </button>
+      <button class="tab ${currentTab === 'parcels' ? 'is-active' : ''}" type="button" data-action="set-tracking-tab" data-value="parcels">
+        Parcels (${parcelItems.length})
+      </button>
     </div>
 
     <!-- Active Tracking Cards List -->
     ${filteredItems.length > 0 ? `
       <div class="tracking-cards-grid" style="display: flex; flex-direction: column; gap: 20px; max-width: 650px; margin: 0 auto;">
-        ${filteredItems.map(item => renderTrackingHubCard(item)).join('')}
+        ${filteredItems.map((item, idx) => renderTrackingHubCard(item, idx)).join('')}
       </div>
     ` : `
       <div class="card" style="max-width: 500px; margin: 20px auto; text-align: center; padding: 36px 20px; border-radius: 24px;">
