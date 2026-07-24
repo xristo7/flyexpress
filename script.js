@@ -1416,7 +1416,7 @@ function renderCurrentScreen(preserveFocus = true) {
     stopLiveProgress();
   }
   if (state.screen === 'home') setTimeout(initHomeCarousel, 50);
-  if (state.screen === 'tracking') setTimeout(initTrackingMiniMaps, 240);
+  if (state.screen === 'tracking') setTimeout(initTrackingMap, 240);
 }
 
 function initHomeCarousel() {
@@ -4599,206 +4599,167 @@ function aboutService(title, icon, copy) { return `<article class="service-item"
 function emptyState(icon, title, copy) { return `<div class="empty-state"><div><div class="empty-state__icon"><i data-lucide="${icon}"></i></div><h3>${title}</h3><p class="muted">${copy}</p></div></div>`; }
 
 function renderTracking() {
-  const currentTab = state.trackingTab || 'travels';
-  
-  // Travels tab
-  let travelsContent = '';
-  if (currentTab === 'travels') {
-    const travels = [
-      {
-        id: 'FET-884210',
-        route: 'Entebbe → Kampala',
-        date: 'Today · 8:30 AM departure',
-        vehicle: 'UBM 245K (Coaster)',
-        status: 'Active',
-        statusClass: 'status-chip--info',
-        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Track Vehicle</button><button class="button button--ghost button--small" type="button" data-screen="ticket">View Ticket</button>`
-      },
-      {
-        id: 'FET-883109',
-        route: 'Kampala → Entebbe',
-        date: '16 Jul 2026 · 6:30 PM departure',
-        vehicle: 'UBP 318F (Highroof)',
-        status: 'Completed',
-        statusClass: 'status-chip--success',
-        actions: `<button class="button button--ghost button--small" type="button" data-action="rate-trip">Rate Travel</button>`
-      },
-      {
-        id: 'FET-880291',
-        route: 'Entebbe → Kampala',
-        date: '8 Jul 2026 · 4:34 PM departure',
-        vehicle: 'UBP 318F (Highroof)',
-        status: 'Cancelled',
-        statusClass: 'status-chip--danger',
-        actions: `<span class="muted text-small">Refunded to wallet</span>`
-      }
-    ];
+  const currentTab = state.trackingTab || 'parcels';
+  const selectedIndex = state.trackingSelectedIndex || 0;
 
-    travelsContent = `
-      <div class="tracking-grid">
-        ${travels.map(t => `
-          <article class="card tracking-card">
-            <div id="mini-map-travel-${t.id}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
-            <div class="tracking-card__body">
-              <div class="tracking-card__header">
-                <div>
-                  <h3>${t.route}</h3>
-                  <span class="muted text-small">${t.date}</span>
-                </div>
-                <span class="status-chip ${t.statusClass}">${t.status}</span>
-              </div>
-              <div class="tracking-card__meta">
-                <span><i data-lucide="bus-front" style="width:14px; height:14px;"></i>${t.vehicle}</span>
-                <span><i data-lucide="hash" style="width:14px; height:14px;"></i>Ref: ${t.id}</span>
-              </div>
-              <div class="tracking-card__actions">
-                ${t.actions}
-              </div>
-            </div>
-          </article>
-        `).join('')}
-      </div>
-    `;
-  }
+  let labelStr = 'DELIVERY ID';
+  let idStr = '#964201832-DL';
+  let statusChip = '<span class="status-chip status-chip--gold"><span class="pulse-dot"></span> On the way</span>';
+  let gridContent = '';
+  let driverName = 'Isaac Muwonge';
+  let driverRole = 'Fly Express Driver';
+  let driverAvatar = 'assets/driver_1.jpg';
+  let driverKey = 'isaac muwonge';
+  let topStatusText = '3 Parcels Tracked';
 
-  // Parcels tab
-  let parcelsContent = '';
   if (currentTab === 'parcels') {
-    const parcels = [
-      {
-        id: '#964201832-DL',
-        title: 'Package from Entebbe',
-        route: 'Entebbe → Kampala',
-        eta: 'Estimated arrival: Today, 2:30 PM',
-        status: 'On the way',
-        statusClass: 'status-chip--gold',
-        details: 'Small box · 520 g · Recipient: Joan Nankya',
-        actions: `<button class="button button--primary button--small" type="button" data-screen="trackparcel">Live Map</button><button class="button button--ghost button--small" type="button" data-screen="parcel-status">View Status</button>`
-      },
-      {
-        id: '#964201710-DL',
-        title: 'Documents to Kampala Office',
-        route: 'Entebbe → Kampala',
-        eta: 'Delivered: 16 Jul, 11:42 AM',
-        status: 'Delivered',
-        statusClass: 'status-chip--success',
-        details: 'Documents · 280 g · Recipient: Mark Ochieng',
-        actions: `<button class="button button--ghost button--small" type="button" data-screen="parcel-status">View Receipt</button>`
-      },
-      {
-        id: '#964200988-DL',
-        title: 'Gift parcel',
-        route: 'Kampala → Entebbe',
-        eta: 'Delivered: 10 Jul, 4:15 PM',
-        status: 'Delivered',
-        statusClass: 'status-chip--success',
-        details: 'Gift box · 1.2 kg · Recipient: Florence A.',
-        actions: `<button class="button button--ghost button--small" type="button" data-screen="parcel-status">View Receipt</button>`
-      }
+    topStatusText = '3 Active Parcels';
+    const parcelItems = [
+      { id: '#964201832-DL', title: 'Package from Entebbe', tariff: 'Small box', weight: '520 g', recipient: 'Joan Nankya', status: 'On the way', statusClass: 'status-chip--gold', driver: 'Isaac Muwonge', driverKey: 'isaac muwonge', avatar: 'assets/driver_1.jpg' },
+      { id: '#964201710-DL', title: 'Documents to Kampala', tariff: 'Documents', weight: '280 g', recipient: 'Mark Ochieng', status: 'Delivered', statusClass: 'status-chip--success', driver: 'Moses Mukasa', driverKey: 'moses mukasa', avatar: 'assets/driver_2.jpg' },
+      { id: '#964200988-DL', title: 'Gift parcel', tariff: 'Gift box', weight: '1.2 kg', recipient: 'Florence A.', status: 'Delivered', statusClass: 'status-chip--success', driver: 'John Ssekabira', driverKey: 'john ssekabira', avatar: 'assets/driver_3.jpg' }
     ];
-
-    parcelsContent = `
-      <div class="tracking-grid">
-        ${parcels.map(p => `
-          <article class="card tracking-card">
-            <div id="mini-map-parcel-${p.id.replace('#', '')}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
-            <div class="tracking-card__body">
-              <div class="tracking-card__header">
-                <div>
-                  <p class="section-kicker" style="margin: 0;">Tracking ${p.id}</p>
-                  <h3 style="margin: 2px 0 0;">${p.title}</h3>
-                  <p class="muted text-small" style="margin: 2px 0 0;">${p.eta}</p>
-                </div>
-                <span class="status-chip ${p.statusClass}">${p.status}</span>
-              </div>
-              <div class="tracking-card__meta">
-                <span><i data-lucide="package" style="width:14px; height:14px;"></i>${p.details}</span>
-              </div>
-              <div class="tracking-card__actions">
-                ${p.actions}
-              </div>
-            </div>
-          </article>
-        `).join('')}
+    const item = parcelItems[selectedIndex % parcelItems.length];
+    labelStr = 'DELIVERY ID';
+    idStr = item.id;
+    statusChip = `<span class="status-chip ${item.statusClass}">${item.status}</span>`;
+    gridContent = `
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Tariff</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.tariff}</strong>
+      </div>
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Weight</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.weight}</strong>
+      </div>
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">To</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.recipient}</strong>
       </div>
     `;
-  }
-
-  // Drivers tab
-  let driversContent = '';
-  if (currentTab === 'drivers' || currentTab === 'vehicles') {
-    const drivers = [
-      {
-        id: 'UBM-245K',
-        name: 'Isaac Muwonge',
-        phone: '+256 772 104 932',
-        vehicle: 'UBM 245K (Commuter)',
-        visibility: 'Visibility On',
-        visibilityClass: 'status-chip--success',
-        stage: 'Entebbe Main Stage',
-        eta: 'Active on route • Boarding now',
-        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Track Driver</button><button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('isaac muwonge')">Driver Profile</button>`
-      },
-      {
-        id: 'UBN-742D',
-        name: 'David Okello',
-        phone: '+256 701 883 412',
-        vehicle: 'UBN 742D (Highroof)',
-        visibility: 'Visibility On',
-        visibilityClass: 'status-chip--success',
-        stage: 'Entebbe Main Stage',
-        eta: 'Arriving in 8 mins from Kampala',
-        actions: `<button class="button button--primary button--small" type="button" data-screen="live">Track Driver</button><button class="button button--ghost button--small" type="button" onclick="showDriverProfileModal('david okello')">Driver Profile</button>`
-      }
+    driverName = item.driver;
+    driverKey = item.driverKey;
+    driverAvatar = item.avatar;
+  } else if (currentTab === 'travels') {
+    topStatusText = 'Active Travel Corridor';
+    const travelItems = [
+      { id: 'FET-884210', route: 'Entebbe → Kampala', vehicle: 'UBM 245K (Coaster)', time: 'Today · 8:30 AM', eta: 'En Route (65%)', status: 'Active', statusClass: 'status-chip--info', driver: 'Moses Mukasa', driverKey: 'moses mukasa', avatar: 'assets/driver_2.jpg' },
+      { id: 'FET-883109', route: 'Kampala → Entebbe', vehicle: 'UBP 318F (Highroof)', time: '16 Jul · 6:30 PM', eta: 'Completed', status: 'Completed', statusClass: 'status-chip--success', driver: 'John Ssekabira', driverKey: 'john ssekabira', avatar: 'assets/driver_3.jpg' }
     ];
-
-    driversContent = `
-      <div class="tracking-grid">
-        ${drivers.map(d => `
-          <article class="card tracking-card">
-            <div id="mini-map-vehicle-${d.id}" class="mini-map-thumbnail tracking-card__map-thumb"></div>
-            <div class="tracking-card__body">
-              <div class="tracking-card__header">
-                <div>
-                  <h3 style="margin: 0; font-size: 1.05rem;">${d.name}</h3>
-                  <span class="muted text-small">${d.vehicle}</span>
-                </div>
-                <span class="status-chip ${d.visibilityClass}"><span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#0e6e49; margin-right:4px;"></span>${d.visibility}</span>
-              </div>
-              <div class="tracking-card__meta" style="flex-direction: column; gap: 4px; margin-top: 8px;">
-                <span><i data-lucide="phone" style="width:13px; height:13px;"></i>${d.phone}</span>
-                <span><i data-lucide="map-pin" style="width:13px; height:13px;"></i>${d.stage}</span>
-                <span><i data-lucide="navigation" style="width:13px; height:13px;"></i>${d.eta}</span>
-              </div>
-              <div class="tracking-card__actions">
-                ${d.actions}
-              </div>
-            </div>
-          </article>
-        `).join('')}
+    const item = travelItems[selectedIndex % travelItems.length];
+    labelStr = 'TRAVEL TICKET ID';
+    idStr = item.id;
+    statusChip = `<span class="status-chip ${item.statusClass}">${item.status}</span>`;
+    gridContent = `
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Route</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.route}</strong>
+      </div>
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Vehicle</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.vehicle}</strong>
+      </div>
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Departure</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.time}</strong>
       </div>
     `;
+    driverName = item.driver;
+    driverKey = item.driverKey;
+    driverAvatar = item.avatar;
+  } else {
+    topStatusText = '7 Verified Drivers Online';
+    const driverItems = [
+      { id: 'UBM-245K', name: 'Isaac Muwonge', vehicle: 'Commuter (14)', stage: 'Entebbe Main', status: 'On Road', statusClass: 'status-chip--gold', driverKey: 'isaac muwonge', avatar: 'assets/driver_1.jpg' },
+      { id: 'UBM-245K', name: 'Moses Mukasa', vehicle: 'Highroof (18)', stage: 'Entebbe Main', status: 'Boarding Now', statusClass: 'status-chip--info', driverKey: 'moses mukasa', avatar: 'assets/driver_2.jpg' },
+      { id: 'UBN-742D', name: 'David Okello', vehicle: 'Commuter (14)', stage: 'Kajansi Stage', status: 'In Transit', statusClass: 'status-chip--info', driverKey: 'david okello', avatar: 'assets/driver_4.jpg' },
+      { id: 'UBQ-915A', name: 'Peter Semwanga', vehicle: 'Executive Coaster', stage: 'Kampala Station', status: 'Active', statusClass: 'status-chip--success', driverKey: 'peter semwanga', avatar: 'assets/driver_5.jpg' }
+    ];
+    const item = driverItems[selectedIndex % driverItems.length];
+    labelStr = 'DRIVER REGISTRATION';
+    idStr = item.id;
+    statusChip = `<span class="status-chip ${item.statusClass}">${item.status}</span>`;
+    gridContent = `
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Driver</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.name}</strong>
+      </div>
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Vehicle</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.vehicle}</strong>
+      </div>
+      <div class="tracking-bottom-nav-card__grid-item">
+        <span class="tracking-bottom-nav-card__grid-label">Current Stage</span>
+        <strong class="tracking-bottom-nav-card__grid-val">${item.stage}</strong>
+      </div>
+    `;
+    driverName = item.name;
+    driverKey = item.driverKey;
+    driverAvatar = item.avatar;
   }
 
   return `
-    ${screenHead('Tracking', 'Track travels, parcel deliveries and visible drivers in real-time.')}
-    
-    <div class="choice-pills" style="margin-top: 16px;">
-      <button class="choice-pill ${currentTab === 'travels' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="travels">
-        <i data-lucide="navigation" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Travels
-      </button>
-      <button class="choice-pill ${currentTab === 'parcels' ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="parcels">
-        <i data-lucide="package" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Parcels
-      </button>
-      <button class="choice-pill ${['drivers','vehicles'].includes(currentTab) ? 'is-selected' : ''}" type="button" data-action="tracking-tab" data-value="drivers">
-        <i data-lucide="user-check" style="display:inline-block; width:15px; height:15px; vertical-align:middle; margin-right:4px;"></i>Drivers
-      </button>
-    </div>
+    ${screenHead('Live Navigation Tracking', 'Interactive full-screen navigation tracking for parcels, travels, and online drivers.')}
 
-    <div class="tracking-tab-content">
-      ${currentTab === 'travels' ? travelsContent : ''}
-      ${currentTab === 'parcels' ? parcelsContent : ''}
-      ${['drivers','vehicles'].includes(currentTab) ? driversContent : ''}
+    <div class="tracking-unified-container">
+      <div class="tracking-fullscreen-map-wrapper">
+        <div id="unified-tracking-map" class="tracking-map-canvas"></div>
+        <div id="unified-tracking-map-fallback" class="trip-map-fallback" style="background: #eef3f7; z-index: 2;" hidden>
+          <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; margin-bottom: 6px;">
+          <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Connecting Live Tracking Map...</strong>
+        </div>
+
+        <!-- Floating Top Bar -->
+        <div class="tracking-top-nav-bar">
+          <div class="tracking-tab-segmented">
+            <button type="button" class="tracking-tab-btn ${currentTab === 'parcels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="parcels">
+              <i data-lucide="package"></i> Parcels
+            </button>
+            <button type="button" class="tracking-tab-btn ${currentTab === 'travels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="travels">
+              <i data-lucide="bus-front"></i> Travels
+            </button>
+            <button type="button" class="tracking-tab-btn ${['drivers','vehicles'].includes(currentTab) ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="drivers">
+              <i data-lucide="user-check"></i> Drivers
+            </button>
+          </div>
+
+          <div class="tracking-top-status-pill">
+            <span class="pulse-dot"></span>
+            <span>${topStatusText}</span>
+          </div>
+        </div>
+
+        <!-- Floating Bottom Navigation Card -->
+        <div class="tracking-bottom-nav-card">
+          <div class="tracking-bottom-nav-card__header">
+            <div>
+              <span class="tracking-bottom-nav-card__label">${labelStr}</span>
+              <strong class="tracking-bottom-nav-card__id">${idStr}</strong>
+            </div>
+            ${statusChip}
+          </div>
+
+          <div class="tracking-bottom-nav-card__grid">
+            ${gridContent}
+          </div>
+
+          <hr class="tracking-bottom-nav-card__divider">
+
+          <div class="tracking-bottom-nav-card__driver">
+            <div class="tracking-bottom-nav-card__driver-left" role="button" tabindex="0" onclick="showDriverProfileModal('${driverKey}');" style="cursor: pointer;">
+              <img src="${driverAvatar}" alt="${driverName}" class="tracking-bottom-nav-card__avatar">
+              <div class="tracking-bottom-nav-card__driver-info">
+                <strong>${driverName}</strong>
+                <span>${driverRole}</span>
+              </div>
+            </div>
+            <div class="tracking-bottom-nav-card__actions">
+              <button class="tracking-circle-btn" type="button" data-action="modal-chat-driver" data-value="${driverKey}" aria-label="Chat with driver"><i data-lucide="message-square"></i></button>
+              <button class="tracking-circle-btn" type="button" data-action="modal-call-driver" data-value="${driverKey}" aria-label="Call driver"><i data-lucide="phone"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -5271,6 +5232,69 @@ function getCityLabel(stage) {
   if (lower.includes('entebbe')) return 'Entebbe';
   if (lower.includes('bweyogere')) return 'Bweyogere';
   return 'Kampala';
+}
+
+let unifiedTrackingMap = null;
+
+function initTrackingMap() {
+  const target = $('#unified-tracking-map');
+  const fallback = $('#unified-tracking-map-fallback');
+  if (fallback) fallback.hidden = false;
+  if (!target) return;
+  if (!window.L) {
+    if (fallback) fallback.hidden = false;
+    return;
+  }
+
+  if (unifiedTrackingMap) {
+    unifiedTrackingMap.remove();
+    unifiedTrackingMap = null;
+  }
+
+  const currentTab = state.trackingTab || 'parcels';
+  const outbound = [[0.0618, 32.4742], [0.0934, 32.4705], [0.1340, 32.5220], [0.1870, 32.5350], [0.2185, 32.5398], [0.2480, 32.5550], [0.2680, 32.5650], [0.2880, 32.5680], [0.2990, 32.5720], [0.3122, 32.5883]];
+
+  unifiedTrackingMap = L.map(target, { attributionControl: false, boxZoom: true, doubleClickZoom: true, dragging: true, keyboard: true, zoomControl: true });
+
+  let tileErrors = 0;
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: false });
+  tiles.on('tileload', () => { if (fallback) fallback.hidden = true; });
+  tiles.on('tileerror', () => { tileErrors += 1; if (tileErrors > 2 && fallback) fallback.hidden = false; });
+  tiles.addTo(unifiedTrackingMap);
+  setTimeout(() => { if (fallback) fallback.hidden = true; }, 150);
+
+  L.polyline(outbound, { color: '#081b33', opacity: 0.5, weight: 8 }).addTo(unifiedTrackingMap);
+  L.polyline(outbound, { color: '#1677ff', dashArray: '8 9', lineCap: 'round', opacity: 1, weight: 4 }).addTo(unifiedTrackingMap);
+
+  L.circleMarker(outbound[0], { color: '#fff', fillColor: '#10b981', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip('Entebbe Main Stage', { permanent: false }).addTo(unifiedTrackingMap);
+  L.circleMarker(outbound[outbound.length - 1], { color: '#fff', fillColor: '#ef4444', fillOpacity: 1, radius: 9, weight: 4 }).bindTooltip('Kampala Station', { permanent: false }).addTo(unifiedTrackingMap);
+
+  if (currentTab === 'parcels') {
+    L.circleMarker(outbound[3], { color: '#fff', fillColor: '#f2a104', fillOpacity: 1, radius: 10, weight: 4 })
+      .bindTooltip('Parcel: #964201832-DL (On the way)', { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' })
+      .addTo(unifiedTrackingMap);
+  } else if (currentTab === 'travels') {
+    L.circleMarker(outbound[5], { color: '#fff', fillColor: '#1677ff', fillOpacity: 1, radius: 10, weight: 4 })
+      .bindTooltip('Travel: UBM 245K (En Route)', { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' })
+      .addTo(unifiedTrackingMap);
+  } else {
+    L.circleMarker(outbound[2], { color: '#fff', fillColor: '#10b981', fillOpacity: 1, radius: 9, weight: 4 })
+      .bindTooltip('Isaac Muwonge (On Road)', { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' })
+      .addTo(unifiedTrackingMap);
+    L.circleMarker(outbound[6], { color: '#fff', fillColor: '#10b981', fillOpacity: 1, radius: 9, weight: 4 })
+      .bindTooltip('David Okello (In Transit)', { permanent: true, direction: 'top', offset: [0, -14], className: 'trip-map-vehicle-label' })
+      .addTo(unifiedTrackingMap);
+  }
+
+  const bounds = L.latLngBounds(outbound);
+  const fitMap = () => {
+    if (!unifiedTrackingMap || !target.isConnected) return;
+    unifiedTrackingMap.invalidateSize({ animate: false, pan: false });
+    unifiedTrackingMap.fitBounds(bounds, { animate: false, padding: [40, 40] });
+  };
+  fitMap();
+  requestAnimationFrame(() => requestAnimationFrame(fitMap));
+  setTimeout(fitMap, 300);
 }
 
 function formatDemoDate(value) {
@@ -5784,6 +5808,7 @@ function handleClick(event) {
     'cancel-booking': showCancelBooking,
     'trip-tab': () => { state.tripTab = value; renderCurrentScreen(); },
     'tracking-tab': () => { state.trackingTab = value; renderCurrentScreen(); },
+    'set-tracking-tab': () => { state.trackingTab = value; renderCurrentScreen(); },
     'change-return': showReturnDateModal,
     'rate-trip': showRatingModal,
     'lost-item': () => openLostPropertyModal(),
