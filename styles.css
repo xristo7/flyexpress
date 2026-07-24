@@ -9306,3 +9306,16 @@ body[data-active-screen="home"] .main-content {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ─── Tracking Hub Cards & Single Navigation Page Styling ─── */
+.tracking-hub-card {
+  transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.22s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+.tracking-hub-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 14px 36px rgba(8, 27, 51, 0.12) !important;
+}
+.tracking-card-map-preview {
+  position: relative;
+  overflow: hidden;
+}

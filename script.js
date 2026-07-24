@@ -4589,169 +4589,308 @@ function renderAbout() {
 function aboutService(title, icon, copy) { return `<article class="service-item"><i data-lucide="${icon}"></i><h3 style="margin:10px 0 7px">${title}</h3><p class="muted text-small" style="margin:0">${copy}</p></article>`; }
 function emptyState(icon, title, copy) { return `<div class="empty-state"><div><div class="empty-state__icon"><i data-lucide="${icon}"></i></div><h3>${title}</h3><p class="muted">${copy}</p></div></div>`; }
 
-function renderTracking() {
-  const currentTab = state.trackingTab || 'parcels';
-  const selectedIndex = state.trackingSelectedIndex || 0;
+function getActiveTrackingItems() {
+  const travelItems = [];
 
-  let labelStr = 'DELIVERY ID';
-  let idStr = '#964201832-DL';
-  let statusChip = '<span class="status-chip status-chip--gold"><span class="pulse-dot"></span> On the way</span>';
-  let gridContent = '';
-  let driverName = 'Isaac Muwonge';
-  let driverRole = 'Fly Express Driver';
-  let driverAvatar = 'assets/driver_1.jpg';
-  let driverKey = 'isaac muwonge';
-  let topStatusText = '3 Parcels Tracked';
-
-  if (currentTab === 'parcels') {
-    topStatusText = '3 Active Parcels';
-    const parcelItems = [
-      { id: '#964201832-DL', title: 'Package from Entebbe', tariff: 'Small box', weight: '520 g', recipient: 'Joan Nankya', status: 'On the way', statusClass: 'status-chip--gold', driver: 'Isaac Muwonge', driverKey: 'isaac muwonge', avatar: 'assets/driver_1.jpg' },
-      { id: '#964201710-DL', title: 'Documents to Kampala', tariff: 'Documents', weight: '280 g', recipient: 'Mark Ochieng', status: 'Delivered', statusClass: 'status-chip--success', driver: 'Moses Mukasa', driverKey: 'moses mukasa', avatar: 'assets/driver_2.jpg' },
-      { id: '#964200988-DL', title: 'Gift parcel', tariff: 'Gift box', weight: '1.2 kg', recipient: 'Florence A.', status: 'Delivered', statusClass: 'status-chip--success', driver: 'John Ssekabira', driverKey: 'john ssekabira', avatar: 'assets/driver_3.jpg' }
-    ];
-    const item = parcelItems[selectedIndex % parcelItems.length];
-    labelStr = 'DELIVERY ID';
-    idStr = item.id;
-    statusChip = `<span class="status-chip ${item.statusClass}">${item.status}</span>`;
-    gridContent = `
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Tariff</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.tariff}</strong>
-      </div>
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Weight</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.weight}</strong>
-      </div>
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">To</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.recipient}</strong>
-      </div>
-    `;
-    driverName = item.driver;
-    driverKey = item.driverKey;
-    driverAvatar = item.avatar;
-  } else if (currentTab === 'travels') {
-    topStatusText = 'Active Travel Corridor';
-    const travelItems = [
-      { id: 'FET-884210', route: 'Entebbe → Kampala', vehicle: 'UBM 245K (Coaster)', time: 'Today · 8:30 AM', eta: 'En Route (65%)', status: 'Active', statusClass: 'status-chip--info', driver: 'Moses Mukasa', driverKey: 'moses mukasa', avatar: 'assets/driver_2.jpg' },
-      { id: 'FET-883109', route: 'Kampala → Entebbe', vehicle: 'UBP 318F (Highroof)', time: '16 Jul · 6:30 PM', eta: 'Completed', status: 'Completed', statusClass: 'status-chip--success', driver: 'John Ssekabira', driverKey: 'john ssekabira', avatar: 'assets/driver_3.jpg' }
-    ];
-    const item = travelItems[selectedIndex % travelItems.length];
-    labelStr = 'TRAVEL TICKET ID';
-    idStr = item.id;
-    statusChip = `<span class="status-chip ${item.statusClass}">${item.status}</span>`;
-    gridContent = `
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Route</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.route}</strong>
-      </div>
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Vehicle</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.vehicle}</strong>
-      </div>
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Departure</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.time}</strong>
-      </div>
-    `;
-    driverName = item.driver;
-    driverKey = item.driverKey;
-    driverAvatar = item.avatar;
-  } else {
-    topStatusText = '7 Verified Drivers Online';
-    const driverItems = [
-      { id: 'UBM-245K', name: 'Isaac Muwonge', vehicle: 'Commuter (14)', stage: 'Entebbe Main', status: 'On Road', statusClass: 'status-chip--gold', driverKey: 'isaac muwonge', avatar: 'assets/driver_1.jpg' },
-      { id: 'UBM-245K', name: 'Moses Mukasa', vehicle: 'Highroof (18)', stage: 'Entebbe Main', status: 'Boarding Now', statusClass: 'status-chip--info', driverKey: 'moses mukasa', avatar: 'assets/driver_2.jpg' },
-      { id: 'UBN-742D', name: 'David Okello', vehicle: 'Commuter (14)', stage: 'Kajansi Stage', status: 'In Transit', statusClass: 'status-chip--info', driverKey: 'david okello', avatar: 'assets/driver_4.jpg' },
-      { id: 'UBQ-915A', name: 'Peter Semwanga', vehicle: 'Executive Coaster', stage: 'Kampala Station', status: 'Active', statusClass: 'status-chip--success', driverKey: 'peter semwanga', avatar: 'assets/driver_5.jpg' }
-    ];
-    const item = driverItems[selectedIndex % driverItems.length];
-    labelStr = 'DRIVER REGISTRATION';
-    idStr = item.id;
-    statusChip = `<span class="status-chip ${item.statusClass}">${item.status}</span>`;
-    gridContent = `
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Driver</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.name}</strong>
-      </div>
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Vehicle</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.vehicle}</strong>
-      </div>
-      <div class="tracking-bottom-nav-card__grid-item">
-        <span class="tracking-bottom-nav-card__grid-label">Current Stage</span>
-        <strong class="tracking-bottom-nav-card__grid-val">${item.stage}</strong>
-      </div>
-    `;
-    driverName = item.name;
-    driverKey = item.driverKey;
-    driverAvatar = item.avatar;
+  if (state.activeTrip && state.activeTrip.boarding) {
+    const t = state.activeTrip;
+    travelItems.push({
+      id: 'FET-CURRENT',
+      type: 'travel',
+      title: `${t.boarding} → ${t.destination}`,
+      route: `${t.boarding} → ${t.destination}`,
+      vehicle: `${t.plate || 'UBM 245K'} (${t.vehicle || 'Hiace'})`,
+      seat: 'Seat #4',
+      time: `${formatDemoDate(state.bookingDate)} · ${t.depart || '8:30 AM'}`,
+      eta: 'En Route (65%)',
+      status: 'Active Trip',
+      statusClass: 'status-chip--gold',
+      driver: t.driverName || 'Moses Mukasa',
+      driverKey: (t.driverName || 'moses mukasa').toLowerCase(),
+      avatar: getDriverAvatarImage(t.driverName || 'Moses Mukasa')
+    });
   }
 
+  travelItems.push({
+    id: 'FET-884210',
+    type: 'travel',
+    title: 'Entebbe → Kampala Corridor',
+    route: 'Entebbe Bus Park → Kampala Railway Stage',
+    vehicle: 'UBM 245K (Coaster)',
+    seat: 'Seat #4',
+    time: 'Today · 8:30 AM',
+    eta: 'En Route (65%)',
+    status: 'Active • On Route',
+    statusClass: 'status-chip--info',
+    driver: 'Isaac Muwonge',
+    driverKey: 'isaac muwonge',
+    avatar: 'assets/driver_1.jpg'
+  });
+
+  const parcelItems = [
+    {
+      id: '#964201832-DL',
+      type: 'parcel',
+      title: 'Package from Entebbe',
+      route: 'Entebbe Main Stage → Kampala Taxi Park',
+      tariff: 'Small box',
+      weight: '520 g',
+      recipient: 'Joan Nankya',
+      status: 'In Transit • On the way',
+      statusClass: 'status-chip--gold',
+      driver: 'Moses Mukasa',
+      driverKey: 'moses mukasa',
+      avatar: 'assets/driver_2.jpg'
+    },
+    {
+      id: '#964201710-DL',
+      type: 'parcel',
+      title: 'Documents to Kampala',
+      route: 'Entebbe Stage → Bweyogerere Stage',
+      tariff: 'Documents',
+      weight: '280 g',
+      recipient: 'Mark Ochieng',
+      status: 'Delivered Today',
+      statusClass: 'status-chip--success',
+      driver: 'John Ssekabira',
+      driverKey: 'john ssekabira',
+      avatar: 'assets/driver_3.jpg'
+    }
+  ];
+
+  return { travelItems, parcelItems };
+}
+
+function renderTrackingHubCard(item) {
+  const isTravel = item.type === 'travel';
   return `
-    ${screenHead('Live Navigation Tracking', 'Interactive full-screen navigation tracking for parcels, travels, and online drivers.')}
+    <div class="card tracking-hub-card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-subtle); border-radius: 24px; box-shadow: 0 8px 30px rgba(8,27,51,0.08); background: white;">
+      <!-- Route Map Preview Header -->
+      <div class="tracking-card-map-preview" style="position: relative; height: 160px; background: #081b33; overflow: hidden;">
+        <img src="assets/fly-express-hiace-commuter.jpg" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.35; filter: contrast(1.1) brightness(0.8);" />
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,27,51,0.3) 0%, rgba(8,27,51,0.9) 100%);"></div>
 
-    <div class="tracking-unified-container">
-      <div class="tracking-fullscreen-map-wrapper">
-        <div id="unified-tracking-map" class="tracking-map-canvas"></div>
-        <div id="unified-tracking-map-fallback" class="trip-map-fallback" style="background: #eef3f7; z-index: 2;" hidden>
-          <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; margin-bottom: 6px;">
-          <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Connecting Live Tracking Map...</strong>
+        <!-- Simulated Map Canvas Overlay with Polyline Route & Live Markers -->
+        <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.85;" viewBox="0 0 400 160" preserveAspectRatio="none">
+          <path d="M 40,120 Q 180,30 360,110" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="6" stroke-linecap="round" />
+          <path d="M 40,120 Q 180,30 360,110" fill="none" stroke="#1677ff" stroke-width="3.5" stroke-dasharray="6 6" stroke-linecap="round" />
+          <circle cx="40" cy="120" r="7" fill="#10b981" stroke="#ffffff" stroke-width="2.5" />
+          <circle cx="360" cy="110" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2.5" />
+          <circle cx="215" cy="58" r="9" fill="${isTravel ? '#1677ff' : '#f2a104'}" stroke="#ffffff" stroke-width="3" />
+        </svg>
+
+        <!-- Top Badges Overlay -->
+        <div style="position: absolute; top: 12px; left: 14px; right: 14px; display: flex; align-items: center; justify-content: space-between; z-index: 3;">
+          <span style="background: rgba(255,255,255,0.95); color: var(--brand-blue-dark); font-weight: 850; font-size: 0.76rem; padding: 4px 12px; border-radius: 14px; backdrop-filter: blur(8px); display: inline-flex; align-items: center; gap: 5px;">
+            <i data-lucide="${isTravel ? 'bus-front' : 'package'}" style="width:14px;height:14px;color:var(--brand-blue);"></i>
+            ${isTravel ? 'Booked Travel' : 'Parcel Delivery'}
+          </span>
+          <span class="status-chip ${item.statusClass}" style="box-shadow: 0 4px 14px rgba(0,0,0,0.25);">
+            <span class="pulse-dot"></span> ${item.status}
+          </span>
         </div>
 
-        <!-- Floating Top Bar -->
-        <div class="tracking-top-nav-bar">
-          <div class="tracking-tab-segmented">
-            <button type="button" class="tracking-tab-btn ${currentTab === 'parcels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="parcels">
-              <i data-lucide="package"></i> Parcels
-            </button>
-            <button type="button" class="tracking-tab-btn ${currentTab === 'travels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="travels">
-              <i data-lucide="bus-front"></i> Travels
-            </button>
-            <button type="button" class="tracking-tab-btn ${['drivers','vehicles'].includes(currentTab) ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="drivers">
-              <i data-lucide="user-check"></i> Drivers
-            </button>
-          </div>
-
-          <div class="tracking-top-status-pill">
-            <span class="pulse-dot"></span>
-            <span>${topStatusText}</span>
-          </div>
+        <!-- Bottom Route Header Overlay -->
+        <div style="position: absolute; bottom: 12px; left: 14px; right: 14px; color: white; z-index: 3;">
+          <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; font-weight: 750; display: block;">Ref #${item.id}</span>
+          <strong style="font-size: 1.1rem; font-weight: 850; line-height: 1.25; margin-top: 2px; color: white; display: block;">${item.route}</strong>
         </div>
+      </div>
 
-        <!-- Floating Bottom Navigation Card -->
-        <div class="tracking-bottom-nav-card">
-          <div class="tracking-bottom-nav-card__header">
+      <!-- Card Body Content -->
+      <div style="padding: 16px;">
+        <!-- Specs Grid -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--surface-alt); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 16px; margin-bottom: 14px; text-align: center;">
+          ${isTravel ? `
             <div>
-              <span class="tracking-bottom-nav-card__label">${labelStr}</span>
-              <strong class="tracking-bottom-nav-card__id">${idStr}</strong>
+              <span style="display: block; font-size: 0.7rem; color: var(--slate); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">Vehicle</span>
+              <strong style="font-size: 0.84rem; color: var(--brand-blue-dark); font-weight: 850;">${item.vehicle}</strong>
             </div>
-            ${statusChip}
+            <div>
+              <span style="display: block; font-size: 0.7rem; color: var(--slate); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">Seat / Time</span>
+              <strong style="font-size: 0.84rem; color: var(--brand-blue-dark); font-weight: 850;">${item.seat} • ${item.time}</strong>
+            </div>
+            <div>
+              <span style="display: block; font-size: 0.7rem; color: var(--slate); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">Status</span>
+              <strong style="font-size: 0.84rem; color: var(--brand-blue-dark); font-weight: 850;">${item.eta}</strong>
+            </div>
+          ` : `
+            <div>
+              <span style="display: block; font-size: 0.7rem; color: var(--slate); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">Tariff</span>
+              <strong style="font-size: 0.84rem; color: var(--brand-blue-dark); font-weight: 850;">${item.tariff}</strong>
+            </div>
+            <div>
+              <span style="display: block; font-size: 0.7rem; color: var(--slate); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">Weight</span>
+              <strong style="font-size: 0.84rem; color: var(--brand-blue-dark); font-weight: 850;">${item.weight}</strong>
+            </div>
+            <div>
+              <span style="display: block; font-size: 0.7rem; color: var(--slate); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">To</span>
+              <strong style="font-size: 0.84rem; color: var(--brand-blue-dark); font-weight: 850;">${item.recipient}</strong>
+            </div>
+          `}
+        </div>
+
+        <!-- Driver Info Row -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="showDriverProfileModal('${item.driverKey}');">
+            <img src="${item.avatar}" alt="${item.driver}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--brand-blue);">
+            <div>
+              <strong style="display: block; font-size: 0.9rem; color: var(--brand-blue-dark); line-height: 1.2; font-weight: 850;">${item.driver}</strong>
+              <span style="font-size: 0.75rem; color: var(--slate); font-weight: 600;">Assigned Driver</span>
+            </div>
           </div>
 
-          <div class="tracking-bottom-nav-card__grid">
-            ${gridContent}
+          <div style="display: flex; gap: 8px;">
+            <button class="icon-button icon-button--small" type="button" data-action="modal-chat-driver" data-value="${item.driverKey}" aria-label="Chat driver" style="width: 38px; height: 38px; border-radius: 50%;"><i data-lucide="message-square"></i></button>
+            <button class="icon-button icon-button--small" type="button" data-action="modal-call-driver" data-value="${item.driverKey}" aria-label="Call driver" style="width: 38px; height: 38px; border-radius: 50%;"><i data-lucide="phone"></i></button>
+          </div>
+        </div>
+
+        <!-- Primary Track Button -->
+        <button class="button button--primary w-full" type="button" data-action="open-single-tracking" data-id="${item.id}" style="height: 48px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.92rem;">
+          <i data-lucide="navigation"></i> Track Live Navigation
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderTracking() {
+  const { travelItems, parcelItems } = getActiveTrackingItems();
+  const currentTab = state.trackingTab || 'all';
+
+  let filteredItems = [];
+  if (currentTab === 'travels') {
+    filteredItems = travelItems;
+  } else if (currentTab === 'parcels') {
+    filteredItems = parcelItems;
+  } else {
+    filteredItems = [...travelItems, ...parcelItems];
+  }
+
+  // Check if viewing single item map view
+  if (state.trackingView === 'single') {
+    const selectedItem = filteredItems.find(i => i.id === state.selectedTrackingId) || filteredItems[0] || travelItems[0];
+    const isTravel = selectedItem.type === 'travel';
+
+    return `
+      <div class="tracking-unified-container">
+        <div class="tracking-fullscreen-map-wrapper">
+          <div id="unified-tracking-map" class="tracking-map-canvas"></div>
+          <div id="unified-tracking-map-fallback" class="trip-map-fallback" style="background: #eef3f7; z-index: 2;" hidden>
+            <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; margin-bottom: 6px;">
+            <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Connecting Live Navigation Map...</strong>
           </div>
 
-          <hr class="tracking-bottom-nav-card__divider">
+          <!-- Floating Top Bar with Back Button -->
+          <div class="tracking-top-nav-bar" style="justify-content: space-between; padding: 12px 16px;">
+            <button type="button" class="button button--secondary" data-action="back-to-tracking-hub" style="height: 40px; padding: 0 16px; border-radius: 20px; font-weight: 800; gap: 6px; box-shadow: 0 4px 14px rgba(8,27,51,0.15); background: white; border: 1px solid var(--border-subtle); color: var(--brand-blue-dark);">
+              <i data-lucide="arrow-left"></i> Back to Hub
+            </button>
 
-          <div class="tracking-bottom-nav-card__driver">
-            <div class="tracking-bottom-nav-card__driver-left" role="button" tabindex="0" onclick="showDriverProfileModal('${driverKey}');" style="cursor: pointer;">
-              <img src="${driverAvatar}" alt="${driverName}" class="tracking-bottom-nav-card__avatar">
-              <div class="tracking-bottom-nav-card__driver-info">
-                <strong>${driverName}</strong>
-                <span>${driverRole}</span>
+            <div class="tracking-top-status-pill" style="box-shadow: 0 4px 14px rgba(8,27,51,0.15);">
+              <span class="pulse-dot"></span>
+              <span>${selectedItem.status}</span>
+            </div>
+          </div>
+
+          <!-- Floating Bottom Navigation Sheet -->
+          <div class="tracking-bottom-nav-card">
+            <div class="tracking-bottom-nav-card__header">
+              <div>
+                <span class="tracking-bottom-nav-card__label">${isTravel ? 'TRAVEL TICKET ID' : 'DELIVERY ID'}</span>
+                <strong class="tracking-bottom-nav-card__id">${selectedItem.id}</strong>
               </div>
+              <span class="status-chip ${selectedItem.statusClass}">${selectedItem.status}</span>
             </div>
-            <div class="tracking-bottom-nav-card__actions">
-              <button class="tracking-circle-btn" type="button" data-action="modal-chat-driver" data-value="${driverKey}" aria-label="Chat with driver"><i data-lucide="message-square"></i></button>
-              <button class="tracking-circle-btn" type="button" data-action="modal-call-driver" data-value="${driverKey}" aria-label="Call driver"><i data-lucide="phone"></i></button>
+
+            <div class="tracking-bottom-nav-card__grid">
+              ${isTravel ? `
+                <div class="tracking-bottom-nav-card__grid-item">
+                  <span class="tracking-bottom-nav-card__grid-label">Route</span>
+                  <strong class="tracking-bottom-nav-card__grid-val">${selectedItem.route}</strong>
+                </div>
+                <div class="tracking-bottom-nav-card__grid-item">
+                  <span class="tracking-bottom-nav-card__grid-label">Vehicle</span>
+                  <strong class="tracking-bottom-nav-card__grid-val">${selectedItem.vehicle}</strong>
+                </div>
+                <div class="tracking-bottom-nav-card__grid-item">
+                  <span class="tracking-bottom-nav-card__grid-label">Departure</span>
+                  <strong class="tracking-bottom-nav-card__grid-val">${selectedItem.time}</strong>
+                </div>
+              ` : `
+                <div class="tracking-bottom-nav-card__grid-item">
+                  <span class="tracking-bottom-nav-card__grid-label">Tariff</span>
+                  <strong class="tracking-bottom-nav-card__grid-val">${selectedItem.tariff}</strong>
+                </div>
+                <div class="tracking-bottom-nav-card__grid-item">
+                  <span class="tracking-bottom-nav-card__grid-label">Weight</span>
+                  <strong class="tracking-bottom-nav-card__grid-val">${selectedItem.weight}</strong>
+                </div>
+                <div class="tracking-bottom-nav-card__grid-item">
+                  <span class="tracking-bottom-nav-card__grid-label">To</span>
+                  <strong class="tracking-bottom-nav-card__grid-val">${selectedItem.recipient}</strong>
+                </div>
+              `}
+            </div>
+
+            <hr class="tracking-bottom-nav-card__divider">
+
+            <div class="tracking-bottom-nav-card__driver">
+              <div class="tracking-bottom-nav-card__driver-left" role="button" tabindex="0" onclick="showDriverProfileModal('${selectedItem.driverKey}');" style="cursor: pointer;">
+                <img src="${selectedItem.avatar}" alt="${selectedItem.driver}" class="tracking-bottom-nav-card__avatar">
+                <div class="tracking-bottom-nav-card__driver-info">
+                  <strong>${selectedItem.driver}</strong>
+                  <span>Fly Express Driver</span>
+                </div>
+              </div>
+              <div class="tracking-bottom-nav-card__actions">
+                <button class="tracking-circle-btn" type="button" data-action="modal-chat-driver" data-value="${selectedItem.driverKey}" aria-label="Chat with driver"><i data-lucide="message-square"></i></button>
+                <button class="tracking-circle-btn" type="button" data-action="modal-call-driver" data-value="${selectedItem.driverKey}" aria-label="Call driver"><i data-lucide="phone"></i></button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    `;
+  }
+
+  // Default Tracking Hub Overview Screen
+  return `
+    ${screenHead('Live Tracking & Journey Hub', 'Track your active booked travels and parcel deliveries with map previews.')}
+
+    <!-- Category Filter Tabs -->
+    <div class="tracking-hub-tabs-wrapper" style="max-width: 600px; margin: 0 auto 20px;">
+      <div class="segmented-control" style="background: white; border: 1px solid var(--border-subtle); padding: 4px; border-radius: 18px; box-shadow: 0 4px 16px rgba(8,27,51,0.04); display: flex;">
+        <button type="button" class="segmented-control__btn ${currentTab === 'all' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="all" style="flex: 1; height: 38px; font-weight: 800; border-radius: 14px;">
+          All Active (${travelItems.length + parcelItems.length})
+        </button>
+        <button type="button" class="segmented-control__btn ${currentTab === 'travels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="travels" style="flex: 1; height: 38px; font-weight: 800; border-radius: 14px;">
+          <i data-lucide="bus-front" style="width:15px;height:15px;vertical-align:-2px;"></i> Travels (${travelItems.length})
+        </button>
+        <button type="button" class="segmented-control__btn ${currentTab === 'parcels' ? 'is-active' : ''}" data-action="set-tracking-tab" data-value="parcels" style="flex: 1; height: 38px; font-weight: 800; border-radius: 14px;">
+          <i data-lucide="package" style="width:15px;height:15px;vertical-align:-2px;"></i> Parcels (${parcelItems.length})
+        </button>
+      </div>
     </div>
+
+    <!-- Active Tracking Cards List -->
+    ${filteredItems.length > 0 ? `
+      <div class="tracking-cards-grid" style="display: flex; flex-direction: column; gap: 20px; max-width: 650px; margin: 0 auto;">
+        ${filteredItems.map(item => renderTrackingHubCard(item)).join('')}
+      </div>
+    ` : `
+      <div class="card" style="max-width: 500px; margin: 20px auto; text-align: center; padding: 36px 20px; border-radius: 24px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: #f0f6fc; color: var(--brand-blue); display: grid; place-items: center; margin: 0 auto 14px;">
+          <i data-lucide="${currentTab === 'parcels' ? 'package-x' : 'bus-front'}" style="width: 28px; height: 28px;"></i>
+        </div>
+        <h3 style="margin: 0 0 6px; font-size: 1.15rem; color: var(--brand-blue-dark); font-weight: 850;">No Active ${currentTab === 'parcels' ? 'Parcels' : 'Booked Travels'}</h3>
+        <p style="margin: 0 0 18px; font-size: 0.85rem; color: var(--slate);">You don't have any active ${currentTab === 'parcels' ? 'parcel deliveries' : 'booked journeys'} in progress right now.</p>
+        <button class="button button--primary" type="button" data-screen="${currentTab === 'parcels' ? 'parcel' : 'book'}" style="margin: 0 auto; height: 44px; padding: 0 20px; border-radius: 14px; font-weight: 800;">
+          <i data-lucide="${currentTab === 'parcels' ? 'package-plus' : 'ticket'}"></i> ${currentTab === 'parcels' ? 'Send a Parcel Now' : 'Book a Travel'}
+        </button>
+      </div>
+    `}
   `;
 }
 
@@ -5798,8 +5937,8 @@ function handleClick(event) {
     'ticket-states': showTicketStates,
     'cancel-booking': showCancelBooking,
     'trip-tab': () => { state.tripTab = value; renderCurrentScreen(); },
-    'tracking-tab': () => { state.trackingTab = value; renderCurrentScreen(); },
-    'set-tracking-tab': () => { state.trackingTab = value; renderCurrentScreen(); },
+    'tracking-tab': () => { state.trackingTab = value; state.trackingView = 'hub'; renderCurrentScreen(); },
+    'set-tracking-tab': () => { state.trackingTab = value; state.trackingView = 'hub'; renderCurrentScreen(); },
     'change-return': showReturnDateModal,
     'rate-trip': showRatingModal,
     'lost-item': () => openLostPropertyModal(),
@@ -5818,6 +5957,16 @@ function handleClick(event) {
     'upload-demo': () => toast('Attachment placeholder selected. No file was uploaded.', 'success'),
     'track-parcel': loadTracking,
     'tracking-state': () => { state.parcelTrackingState = value; renderCurrentScreen(); },
+    'open-single-tracking': () => {
+      state.trackingView = 'single';
+      state.selectedTrackingId = value || (actionTrigger.dataset && actionTrigger.dataset.id);
+      renderCurrentScreen();
+    },
+    'back-to-tracking-hub': () => {
+      state.trackingView = 'hub';
+      state.selectedTrackingId = null;
+      renderCurrentScreen();
+    },
     'chat-driver': () => {
       navigate('driver-chat');
     },
