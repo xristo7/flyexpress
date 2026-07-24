@@ -1091,14 +1091,20 @@ function renderOnboarding() {
         <h2>${slide.title}</h2>
         <p>${slide.message}</p>
 
-        ${state.onboardingIndex === 2 ? `
-          <div class="onboarding-last-buttons">
+        ${state.onboardingIndex < 2 ? `
+          <div class="onboarding-controls">
+            <button class="button button--primary onboarding-chevron-btn" type="button" data-action="onboarding-next" aria-label="Next slide">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        ` : `
+          <div class="onboarding-last-buttons" style="margin-top: 24px; width: 100%; max-width: 260px;">
             <button class="button button--primary w-full" type="button" data-action="skip-onboarding" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
               <span>Get Started</span>
               <i data-lucide="arrow-right"></i>
             </button>
           </div>
-        ` : ''}
+        `}
       </div>
     </article>
   `;
@@ -1107,16 +1113,6 @@ function renderOnboarding() {
   const skipBtn = $('.onboarding-skip');
   if (skipBtn) {
     skipBtn.classList.toggle('is-hidden', state.onboardingIndex === 2);
-  }
-
-  const controls = $('.onboarding-controls');
-  if (controls) {
-    controls.classList.toggle('is-hidden', state.onboardingIndex === 2);
-  }
-
-  const next = $('[data-action="onboarding-next"]');
-  if (next) {
-    next.innerHTML = `<i data-lucide="chevron-right"></i>`;
   }
 
   refreshIcons();

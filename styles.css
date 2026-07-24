@@ -413,6 +413,12 @@ select::-ms-expand { display: none; }
     padding-right: 48px !important;
   }
 
+  .onboarding-controls {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    margin-top: 24px !important;
+  }
+
   .onboarding-slide {
     display: grid !important;
     grid-template-columns: 1fr 1.15fr !important;
