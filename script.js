@@ -71,14 +71,14 @@ function getAvailableTrips() {
     let driverPhone = '+256 774 123 ' + String(100 + i);
     const vehicleTypes = ['Commuter (14)', 'Highroof (18)', 'Executive Coaster (30)', 'Alphard / Multi-Seater (10)'];
     const vehicleName = vehicleTypes[i % vehicleTypes.length];
-    let image = getTripVehicleImage(vehicleName, i);
-
     if (i === 0) {
       driverName = 'Moses Mukasa';
       plate = 'UBM 245K';
       driverRating = '4.90';
       driverPhone = '+256 774 123 456';
     }
+
+    let image = getDriverHeroImage(driverName);
 
     const seats = 3 + (i * 7 + 13) % 10;
     const status = seats <= 3 ? 'Almost full' : 'Available';
@@ -2261,9 +2261,11 @@ function renderTripDetails() {
     ? `${state.selectedSeats.join(', ') || 'Choose seats'} (+ ${formatUGX(seatReservationFee())} fee)`
     : 'Best available (Standard rate)';
 
+  const driverHeroImg = getDriverHeroImage(trip.driverName);
+
   return `<section class="smart-review" aria-label="Review your trip">
     <!-- Top Hero Vehicle & Driver Photo Visual Area -->
-    <div class="smart-review__map-card" style="background-image: url('${trip.img}'); background-size: cover; background-position: center; position: relative;">
+    <div class="smart-review__map-card" style="background-image: url('${driverHeroImg}'); background-size: cover; background-position: center; position: relative;">
     </div>
 
     <div class="smart-review__sheet">
@@ -6812,6 +6814,13 @@ function makeImageTransparent(imgUrl, callback) {
     }
   };
   img.onerror = () => callback(imgUrl);
+}
+
+function getDriverHeroImage(driverNameKey) {
+  const key = (driverNameKey || '').toLowerCase().trim();
+  if (key.includes('isaac')) return 'assets/first_van_driver.jpg';
+  const dObj = driversData[key] || driversData['isaac muwonge'];
+  return dObj.avatar || 'assets/driver_1.jpg';
 }
 
 function getTripVehicleImage(vehicleName, index = 0) {
