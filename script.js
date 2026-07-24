@@ -69,7 +69,10 @@ function getAvailableTrips() {
     let plate = plates[i % plates.length];
     let driverRating = driver.rating;
     let driverPhone = '+256 774 123 ' + String(100 + i);
-    let image = 'assets/first_van_driver.jpg';
+    const vehicleTypes = ['Commuter (14)', 'Highroof (18)', 'Executive Coaster (30)', 'Alphard / Multi-Seater (10)'];
+    const vehicleName = vehicleTypes[i % vehicleTypes.length];
+    let image = getTripVehicleImage(vehicleName, i);
+
     if (i === 0) {
       driverName = 'Moses Mukasa';
       plate = 'UBM 245K';
@@ -86,7 +89,7 @@ function getAvailableTrips() {
       arrive: arriveTime,
       seats: seats,
       status: status,
-      vehicle: i % 2 === 0 ? 'Commuter (14)' : 'Highroof (18)',
+      vehicle: vehicleName,
       plate: plate,
       duration: '1 hr 05 min',
       fare: parseInt(rc.price.replace(/[^\d]/g, '')) || 5000,
@@ -6811,9 +6814,25 @@ function makeImageTransparent(imgUrl, callback) {
   img.onerror = () => callback(imgUrl);
 }
 
-function getTripVehicleImage(vehicleName) {
-  const isHighroof = vehicleName && vehicleName.toLowerCase().includes('highroof');
-  const imgUrl = isHighroof ? 'assets/fly-express-hiace-highroof.jpg' : 'assets/fly-express-hiace-commuter.jpg';
+function getTripVehicleImage(vehicleName, index = 0) {
+  if (!vehicleName) return 'assets/first_van_driver.jpg';
+  const name = vehicleName.toLowerCase();
+  let imgUrl = 'assets/first_van_driver.jpg';
+
+  if (name.includes('highroof')) {
+    imgUrl = 'assets/fly-express-hiace-highroof.jpg';
+  } else if (name.includes('coaster')) {
+    imgUrl = 'assets/fly-express-coaster.jpg';
+  } else if (name.includes('minivan') || name.includes('alphard')) {
+    imgUrl = 'assets/fly-express-minivan.jpg';
+  } else if (name.includes('noah')) {
+    imgUrl = 'assets/fly-express-noah.jpg';
+  } else if (name.includes('sedan') || name.includes('saloon')) {
+    imgUrl = 'assets/fly-express-sedan.jpg';
+  } else {
+    imgUrl = (index % 2 === 1) ? 'assets/fly-express-hiace-commuter.jpg' : 'assets/first_van_driver.jpg';
+  }
+
   return state.transparentVehicles[imgUrl] || imgUrl;
 }
 
