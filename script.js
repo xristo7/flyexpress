@@ -2363,16 +2363,8 @@ function renderTripDetails() {
         ${bookingAccordion('seats','armchair','Seat preference',seatSummary,reviewSeatOptions())}
       </div>
       <div class="review-reassurance"><i data-lucide="shield-check"></i><span>Personal item included</span><span>•</span><span>Change anything before payment.</span></div>
-    </div>
-    
-    <!-- Immediate Travel Notice Banner (Outside Sheet on Main Page Background) -->
-    <div class="smart-review__notice-outside">
-      <i data-lucide="zap" style="width: 20px; height: 20px; color: var(--brand-blue); flex-shrink: 0; margin-top: 2px;"></i>
-      <div>
-        <strong style="font-size: 0.9rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Immediate Departure (Active Vehicle)</strong>
-        <span style="font-size: 0.8rem; line-height: 1.4; color: var(--slate); font-weight: 500;">
-          This vehicle is currently on stage or departing shortly. Your seat is held immediately upon booking — you do not need to be at the stage right now; you can board at stage or meet your vehicle along the corridor route!
-        </span>
+      <div class="review-immediate-reassurance" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-subtle); color: var(--slate); font-size: 0.84rem; font-weight: 500; line-height: 1.45;">
+        Your seat is held immediately upon booking — you can either board at stage or meet the vehicle along the route!
       </div>
     </div>
   </section>

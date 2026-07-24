@@ -2072,7 +2072,7 @@ input[type="checkbox"]:disabled {
   z-index: 30;
   bottom: 14px;
   width: min(calc(100% - 32px), 820px);
-  margin: -96px auto 0;
+  margin: 16px auto 0;
   padding: 8px 10px;
   border: 1px solid rgba(8,27,51,0.08);
   border-radius: 22px;
