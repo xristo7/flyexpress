@@ -4500,7 +4500,7 @@ function renderOffers() {
 }
 
 function renderNotifications() {
-  const categories = ['all','Trips','Payments','Parcels','Alerts'];
+  const categories = ['all','Travels','Payments','Parcels','Alerts'];
   const items = appData.notifications.filter(item => state.notificationFilter === 'all' || item.category === state.notificationFilter);
   return `
     ${screenHead('Notifications', 'Trip, wallet, parcel, luggage, promotion and service updates appear in one place.', '<button class="button button--ghost" type="button" data-action="mark-all-read"><i data-lucide="check-check"></i>Mark all as read</button><button class="button button--primary" type="button" data-action="notification-preferences"><i data-lucide="settings-2"></i>Preferences</button>')}
