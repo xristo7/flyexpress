@@ -4587,7 +4587,11 @@ function renderAbout() {
     <section class="grid grid--2" style="margin-top:18px"><article class="card"><h2>Demonstration contacts</h2><div class="detail-list"><div class="detail-row"><span>Passenger support</span><strong>+256 700 000 000</strong></div><div class="detail-row"><span>Parcel desk</span><strong>+256 700 000 001</strong></div><div class="detail-row"><span>Email</span><strong>hello@example.flyexpress.demo</strong></div><div class="detail-row"><span>Office hours</span><strong>5:00 AM – 10:00 PM</strong></div></div><p class="privacy-note">All contact information above is placeholder demonstration content.</p></article><article class="card"><h2>Application information</h2><div class="detail-list"><div class="detail-row"><span>Application</span><strong>Fly Express Passenger App</strong></div><div class="detail-row"><span>Version</span><strong>1.2.0 Prototype</strong></div><div class="detail-row"><span>Data storage</span><strong>Browser memory only</strong></div><div class="detail-row"><span>Operational services</span><strong>None connected</strong></div></div><div class="button-row" style="margin-top:14px"><button class="button button--ghost button--small" type="button" data-action="terms">Terms</button><button class="button button--ghost button--small" type="button" data-action="privacy">Privacy</button></div></article></section>`;
 }
 function aboutService(title, icon, copy) { return `<article class="service-item"><i data-lucide="${icon}"></i><h3 style="margin:10px 0 7px">${title}</h3><p class="muted text-small" style="margin:0">${copy}</p></article>`; }
-function emptyState(icon, title, copy) { return `<div class="empty-state"><div><div class="empty-state__icon"><i data-lucide="${icon}"></i></div><h3>${title}</h3><p class="muted">${copy}</p></div></div>`; }
+function getDriverAvatar(driverNameKey) {
+  const key = (driverNameKey || '').toLowerCase().trim();
+  const driver = driversData[key] || driversData['isaac muwonge'];
+  return driver ? driver.avatar : 'assets/driver_1.jpg';
+}
 
 function getActiveTrackingItems() {
   const travelItems = [];
@@ -4607,7 +4611,7 @@ function getActiveTrackingItems() {
       statusClass: 'status-chip--gold',
       driver: t.driverName || 'Moses Mukasa',
       driverKey: (t.driverName || 'moses mukasa').toLowerCase(),
-      avatar: getDriverAvatarImage(t.driverName || 'Moses Mukasa')
+      avatar: getDriverAvatar(t.driverName || 'Moses Mukasa')
     });
   }
 
