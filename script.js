@@ -123,11 +123,10 @@ const appData = {
     email: 'christo.i@example.com',
     preferredRoute: 'Entebbe Bus Park → Kampala Railway Stage'
   },
-  routes: ['Entebbe Bus Park', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Railway Stage', 'Nambole', 'Bweyogere', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
+  routes: ['Entebbe Bus Park', 'Kitooro', 'Abayita Ababiri', 'Kajjansi', 'Clock Tower', 'Kampala Railway Stage', 'Nambole', 'Mpigi', 'Buwama', 'Masaka', 'Lyantonde', 'Mbarara'],
   routeCards: [
     { key: 'kajansi', cityA: 'Entebbe', cityB: 'Kampala City', stageA: 'Entebbe Bus Park', stageB: 'Kampala Railway Stage', via: 'Via Kajansi', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Clock Tower • Kampala City', coordA: [0.0618, 32.4742], coordB: [0.3136, 32.5811] },
     { key: 'busega', cityA: 'Entebbe', cityB: 'Kampala City', stageA: 'Entebbe Bus Park', stageB: 'Kampala Railway Stage', via: 'Via Busega', price: 'UGX 5,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/kampala.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Busega • Clock Tower • Kampala City', coordA: [0.0618, 32.4742], coordB: [0.3136, 32.5811] },
-    { key: 'bweyogere', cityA: 'Entebbe', cityB: 'Bweyogere', stageA: 'Entebbe Bus Park', stageB: 'Bweyogere', via: 'Via Northern Bypass', price: 'UGX 6,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/bweyogere.jpg', corridor: 'Entebbe • Kajjansi • Busega • Bwaise • Kalerwe • Kyebando • Kiwatule • Naalya • Bweyogere', coordA: [0.0618, 32.4742], coordB: [0.3667, 32.6500] },
     { key: 'nambole', cityA: 'Entebbe', cityB: 'Nambole', stageA: 'Entebbe Bus Park', stageB: 'Nambole', via: 'Via Kajansi', price: 'UGX 7,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/nambole.jpg', corridor: 'Entebbe • Kitooro • Abayita Ababiri • Kajjansi • Nambole', coordA: [0.0618, 32.4742], coordB: [0.3475, 32.6281] },
     { key: 'masaka', cityA: 'Entebbe', cityB: 'Masaka', stageA: 'Entebbe Bus Park', stageB: 'Masaka', via: 'Via Masaka Road', price: 'UGX 20,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/masaka.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Buwama • Masaka', coordA: [0.0618, 32.4742], coordB: [-0.3375, 31.7350] },
     { key: 'lyantonde', cityA: 'Entebbe', cityB: 'Lyantonde', stageA: 'Entebbe Bus Park', stageB: 'Lyantonde', via: 'Via Masaka Road', price: 'UGX 25,000', imageA: 'assets/entebbe.jpg', imageB: 'assets/lyantonde.jpg', corridor: 'Entebbe • Kajjansi • Mpigi • Masaka • Lyantonde', coordA: [0.0618, 32.4742], coordB: [-0.4047, 31.1597] },
@@ -1750,7 +1749,6 @@ function renderBook() {
 
   if (step === 2) {
     const allowedFrom = appData.routes.filter(r => {
-      if (state.selectedRoute === 'bweyogere') return ['Entebbe Bus Park', 'Bweyogere'].includes(r);
       if (state.selectedRoute === 'busega') return ['Entebbe Bus Park', 'Kampala Railway Stage'].includes(r);
       if (state.selectedRoute === 'nambole') return ['Entebbe Bus Park', 'Nambole'].includes(r);
       if (state.selectedRoute === 'masaka') return ['Entebbe Bus Park', 'Masaka'].includes(r);
@@ -5433,7 +5431,11 @@ function getCityImage(stage) {
   if (!stage) return 'assets/kampala.jpg';
   const lower = stage.toLowerCase();
   if (lower.includes('entebbe')) return 'assets/entebbe.jpg';
-  if (lower.includes('bweyogere')) return 'assets/bweyogere.jpg';
+  if (lower.includes('masaka')) return 'assets/masaka.jpg';
+  if (lower.includes('lyantonde')) return 'assets/lyantonde.jpg';
+  if (lower.includes('mbarara')) return 'assets/mbarara.jpg';
+  if (lower.includes('nambole')) return 'assets/nambole.jpg';
+  if (lower.includes('jinja')) return 'assets/jinja.jpg';
   return 'assets/kampala.jpg';
 }
 
@@ -5441,7 +5443,11 @@ function getCityLabel(stage) {
   if (!stage) return 'Kampala';
   const lower = stage.toLowerCase();
   if (lower.includes('entebbe')) return 'Entebbe';
-  if (lower.includes('bweyogere')) return 'Bweyogere';
+  if (lower.includes('masaka')) return 'Masaka';
+  if (lower.includes('lyantonde')) return 'Lyantonde';
+  if (lower.includes('mbarara')) return 'Mbarara';
+  if (lower.includes('nambole')) return 'Nambole';
+  if (lower.includes('jinja')) return 'Jinja';
   return 'Kampala';
 }
 
