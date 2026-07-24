@@ -5435,7 +5435,6 @@ function getCityImage(stage) {
   if (lower.includes('lyantonde')) return 'assets/lyantonde.jpg';
   if (lower.includes('mbarara')) return 'assets/mbarara.jpg';
   if (lower.includes('nambole')) return 'assets/nambole.jpg';
-  if (lower.includes('jinja')) return 'assets/jinja.jpg';
   return 'assets/kampala.jpg';
 }
 
@@ -5447,7 +5446,6 @@ function getCityLabel(stage) {
   if (lower.includes('lyantonde')) return 'Lyantonde';
   if (lower.includes('mbarara')) return 'Mbarara';
   if (lower.includes('nambole')) return 'Nambole';
-  if (lower.includes('jinja')) return 'Jinja';
   return 'Kampala';
 }
 
