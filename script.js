@@ -4243,26 +4243,26 @@ function renderDriverProfile() {
 function showDriverProfileModal(driverNameKey) {
   const driverNameClean = (driverNameKey || 'isaac muwonge').toLowerCase().trim();
   const driver = driversData[driverNameClean] || driversData['isaac muwonge'];
-  const isDriving = driver.status === 'driving';
   const avatarUrl = driver.avatar || 'assets/driver_1.jpg';
   const vehicleHeroImg = driver.hero || getTripVehicleImage(driver.vehicle);
 
   const bodyHtml = `
     <div class="driver-modal-content" style="text-align: left; padding: 4px;">
-      <!-- Top Centered Profile Avatar Block -->
+      <!-- Top Centered Profile Avatar Block (Reduced by 30%) -->
       <div class="driver-modal-avatar-wrapper">
         <div class="driver-modal-avatar-container">
           <img src="${avatarUrl}" alt="${driver.name}" class="driver-modal-avatar-img" />
-          ${isDriving ? `<span class="status-chip status-chip--gold" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; box-shadow: 0 4px 14px rgba(8,27,51,0.2); z-index: 2; white-space: nowrap; background: white; color: var(--brand-blue-dark); border: 1px solid var(--border);">On Road</span>` : ''}
-        </div>
-        <h2 style="margin: 0; font-size: 1.55rem; font-weight: 850; color: var(--brand-blue-dark); line-height: 1.25;">${driver.name}</h2>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px;">
-          <span class="driver-role-badge" style="display: inline-block; background: #eaf2f8; color: var(--brand-blue); font-size: 0.78rem; font-weight: 800; padding: 3px 12px; border-radius: 12px;">${driver.role}</span>
-          <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.92rem; font-weight: 800; color: var(--brand-blue-dark);">
-            <i data-lucide="star" style="width: 15px; height: 15px; fill: var(--brand-gold); color: var(--brand-gold);"></i>
+          <!-- Rating badge placed at bottom of profile image -->
+          <div class="driver-modal-rating-badge" style="position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); background: white; border: 1px solid var(--border-subtle); padding: 4px 14px; border-radius: 20px; box-shadow: 0 4px 14px rgba(8,27,51,0.14); display: flex; align-items: center; gap: 5px; font-size: 0.82rem; font-weight: 850; color: var(--brand-blue-dark); white-space: nowrap; z-index: 5;">
+            <i data-lucide="star" style="width: 14px; height: 14px; fill: var(--brand-gold); color: var(--brand-gold);"></i>
             <span>${driver.rating}</span>
-            <span style="color: var(--muted); font-weight: 600; font-size: 0.8rem;">(${driver.routes} routes)</span>
+            <span style="color: var(--slate); font-weight: 600; font-size: 0.75rem;">(${driver.routes} routes)</span>
           </div>
+        </div>
+        <!-- Stacked Name & Job Title -->
+        <h2 style="margin: 16px 0 6px 0; font-size: 1.45rem; font-weight: 850; color: var(--brand-blue-dark); text-align: center;">${driver.name}</h2>
+        <div style="text-align: center; margin-bottom: 4px;">
+          <span class="driver-role-badge" style="display: inline-block; background: #eaf2f8; color: var(--brand-blue); font-size: 0.78rem; font-weight: 800; padding: 4px 14px; border-radius: 12px;">${driver.role}</span>
         </div>
       </div>
 
@@ -4326,7 +4326,7 @@ function showDriverProfileModal(driverNameKey) {
   const footerHtml = `
     <div style="display: flex; gap: 12px; width: 100%;">
       <button class="button button--secondary" type="button" data-action="modal-chat-driver" data-value="${driverNameClean}" style="flex: 1; height: 48px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
-        <i data-lucide="${isDriving ? 'message-square-off' : 'message-square'}"></i> Chat
+        <i data-lucide="message-square"></i> Chat
       </button>
       <button class="button button--primary" type="button" data-action="modal-call-driver" data-value="${driverNameClean}" style="flex: 1; height: 48px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
         <i data-lucide="phone"></i> Call
@@ -4375,10 +4375,17 @@ function renderDriverChat() {
         <div class="chat-date-divider"><span>Today</span></div>
 
         <div class="chat-messages-container">
-          <div class="chat-notice">
-            <i data-lucide="shield-check"></i>
-            <span>Messages are only available for your active trip. Chat history is cleared after the trip ends.</span>
-          </div>
+          ${driver.status === 'driving' ? `
+            <div class="chat-notice" style="background: rgba(242,161,4,0.12); border: 1px solid rgba(242,161,4,0.3); color: #855300; border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; font-weight: 600; line-height: 1.4;">
+              <i data-lucide="info" style="width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; color: #d48806;"></i>
+              <span><strong>Driver is on the road:</strong> Your message will be delivered now, but ${firstName} will read it upon reaching their destination.</span>
+            </div>
+          ` : `
+            <div class="chat-notice">
+              <i data-lucide="shield-check"></i>
+              <span>Messages are only available for your active trip. Chat history is cleared after the trip ends.</span>
+            </div>
+          `}
 
           ${demoMessages.map(msg => `
             <div class="chat-bubble ${msg.from === 'passenger' ? 'chat-bubble--sent' : 'chat-bubble--received'}">
@@ -5828,12 +5835,7 @@ function handleClick(event) {
     'track-parcel': loadTracking,
     'tracking-state': () => { state.parcelTrackingState = value; renderCurrentScreen(); },
     'chat-driver': () => {
-      const driver = driversData[state.viewingDriverName || 'isaac muwonge'] || driversData['isaac muwonge'];
-      if (driver.status === 'driving') {
-        toast(`For safety, ${driver.name} cannot receive messages while driving. Please call instead.`, 'warning');
-      } else {
-        navigate('driver-chat');
-      }
+      navigate('driver-chat');
     },
     'call-driver': () => {
       navigate('driver-call');
@@ -5846,17 +5848,18 @@ function handleClick(event) {
     'review-chat-driver': () => {
       const driverKey = value || (state.activeTrip ? state.activeTrip.driverName.toLowerCase() : 'moses mukasa');
       state.viewingDriverName = driverKey;
-      const driver = (driversData && driversData[driverKey]) || driversData['moses mukasa'] || driversData['isaac muwonge'];
-      if (driver && driver.status === 'driving') {
-        toast(`For safety, ${driver.name} cannot receive messages while driving. Please call instead.`, 'warning');
-      } else {
-        navigate('driver-chat');
-      }
+      navigate('driver-chat');
     },
     'send-chat-demo': () => {
       const input = document.querySelector('.chat-compose-input');
       if (input && input.value.trim()) {
-        toast('Message sent (prototype preview).', 'success');
+        const dKey = state.viewingDriverName || 'isaac muwonge';
+        const driver = driversData[dKey] || driversData['isaac muwonge'];
+        if (driver && driver.status === 'driving') {
+          toast(`Message sent! ${driver.name} is on the road and will read it upon reaching their destination.`, 'info');
+        } else {
+          toast('Message sent successfully.', 'success');
+        }
         input.value = '';
       } else {
         toast('Type a message first.', 'warning');
