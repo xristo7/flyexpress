@@ -4355,15 +4355,16 @@ function renderDriverChat() {
         <div class="chat-driver-header">
           <button class="icon-button" type="button" data-action="back-from-chat" aria-label="Close Chat" style="color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.12); border-radius: 50%; width: 36px; height: 36px; display: grid; place-items: center; border: none; cursor: pointer; flex-shrink: 0;"><i data-lucide="arrow-left"></i></button>
           <div class="chat-driver-header__info">
-            ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" class="chat-driver-avatar">` : `<div class="chat-driver-avatar chat-driver-avatar--initials">${initials}</div>`}
             <div>
-              <strong>${driver.name}</strong>
+              <strong style="cursor: pointer;" onclick="showDriverProfileModal('${driverNameKey.replace(/'/g, "\\'")}')">${driver.name}</strong>
               <span class="chat-driver-status"><span class="chat-driver-status__dot"></span>Online</span>
             </div>
           </div>
           <div class="chat-driver-header__actions">
             <button class="icon-button" type="button" data-action="call-driver" aria-label="Call driver"><i data-lucide="phone"></i></button>
-            <button class="icon-button" type="button" onclick="showDriverProfileModal('${driverNameKey.replace(/'/g, "\\'")}')" aria-label="View profile"><i data-lucide="user-round"></i></button>
+            <button class="icon-button" type="button" onclick="showDriverProfileModal('${driverNameKey.replace(/'/g, "\\'")}')" aria-label="View driver profile" style="padding: 0; overflow: hidden; border: 2px solid rgba(255,255,255,0.85); background: rgba(255,255,255,0.15);">
+              ${avatarUrl ? `<img src="${avatarUrl}" alt="${driver.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` : initials}
+            </button>
           </div>
         </div>
 
