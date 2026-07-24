@@ -194,6 +194,7 @@ const driversData = {
   'moses mukasa': {
     name: 'Moses Mukasa',
     avatar: 'assets/driver_2.jpg',
+    hero: 'assets/driver_2_hero.jpg',
     role: 'Fly Express Driver',
     rating: '4.90',
     routes: '1,280',
@@ -213,6 +214,7 @@ const driversData = {
   'john ssekabira': {
     name: 'John Ssekabira',
     avatar: 'assets/driver_3.jpg',
+    hero: 'assets/driver_3_hero.jpg',
     role: 'Fly Express Driver',
     rating: '4.80',
     routes: '980',
