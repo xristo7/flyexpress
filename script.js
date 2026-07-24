@@ -7060,13 +7060,6 @@ function renderAvailableVansScreen() {
   return `
     ${screenHead('Available Departures', 'Real-time schedule of active departures leaving Entebbe within a 3-hour window.')}
 
-    <div style="background: var(--info-soft); border: 1px solid rgba(22,119,255,0.08); padding: 14px 16px; border-radius: 16px; margin-bottom: 22px; display: flex; align-items: start; gap: 12px; animation: enter .4s var(--ease) both;">
-      <i data-lucide="info" style="width: 20px; height: 20px; color: var(--brand-blue); flex-shrink: 0; margin-top: 2px;"></i>
-      <div style="font-size: 0.88rem; line-height: 1.45; color: var(--brand-blue-dark); font-weight: 600;">
-        Vehicles exit the window automatically after departure. Tap "Select &amp; Book" to secure your seat.
-      </div>
-    </div>
-
     <div class="available-vans-list" style="display: grid; gap: 16px;">
       ${availableVans.length ? availableVans.map((trip, idx) => {
         const isWarning = trip.seats <= 2;
