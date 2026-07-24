@@ -174,6 +174,7 @@ const driversData = {
   'isaac muwonge': {
     name: 'Isaac Muwonge',
     avatar: 'assets/driver_1.jpg',
+    hero: 'assets/driver_1_hero.jpg',
     role: 'Fly Express Driver',
     rating: '4.95',
     routes: '1,420',
@@ -6810,9 +6811,8 @@ function makeImageTransparent(imgUrl, callback) {
 
 function getDriverHeroImage(driverNameKey) {
   const key = (driverNameKey || '').toLowerCase().trim();
-  if (key.includes('isaac')) return 'assets/first_van_driver.jpg';
   const dObj = driversData[key] || driversData['isaac muwonge'];
-  return dObj.avatar || 'assets/driver_1.jpg';
+  return dObj.hero || dObj.avatar || 'assets/driver_1_hero.jpg';
 }
 
 function getTripVehicleImage(vehicleName, index = 0) {
