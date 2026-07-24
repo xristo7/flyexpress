@@ -274,6 +274,7 @@ const driversData = {
   'arthur ssewankambo': {
     name: 'Arthur Ssewankambo',
     avatar: 'assets/driver_6.jpg',
+    hero: 'assets/driver_6_hero.jpg',
     role: 'Fly Express Driver',
     rating: '4.60',
     routes: '540',
