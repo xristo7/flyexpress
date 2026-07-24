@@ -4225,95 +4225,79 @@ function showDriverProfileModal(driverNameKey) {
   const driver = driversData[driverNameClean] || driversData['isaac muwonge'];
   const isDriving = driver.status === 'driving';
   const avatarUrl = driver.avatar || 'assets/driver_1.jpg';
-  const initials = driver.name.split(' ').map(n => n[0]).join('');
+  const vehicleHeroImg = driver.hero || getTripVehicleImage(driver.vehicle);
 
   const bodyHtml = `
     <div class="driver-modal-content" style="text-align: left; padding: 4px;">
-      <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
-        <div style="position: relative; flex-shrink: 0; width: 72px; height: 72px;">
-          ${driver.avatar ? `
-            <img src="${avatarUrl}" alt="${driver.name}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--border);">
-          ` : `
-            <div style="width: 100%; height: 100%; border-radius: 50%; background: var(--brand-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem; border: 2px solid var(--border);">${initials}</div>
-          `}
-          ${isDriving ? `<span class="status-chip status-chip--gold" style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; box-shadow: var(--shadow-sm); z-index: 2; white-space: nowrap;">On Road</span>` : ''}
+      <!-- Top Centered Profile Avatar Block -->
+      <div class="driver-modal-avatar-wrapper">
+        <div class="driver-modal-avatar-container">
+          <img src="${avatarUrl}" alt="${driver.name}" class="driver-modal-avatar-img" />
+          ${isDriving ? `<span class="status-chip status-chip--gold" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; box-shadow: 0 4px 14px rgba(8,27,51,0.2); z-index: 2; white-space: nowrap; background: white; color: var(--brand-blue-dark); border: 1px solid var(--border);">On Road</span>` : ''}
         </div>
-        <div>
-          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--charcoal);">${driver.name}</h3>
-          <span class="driver-role-badge" style="display: inline-block; background: var(--info-soft); color: var(--brand-blue); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; margin-top: 4px;">${driver.role}</span>
-          <div style="display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 0.85rem;">
-            <i data-lucide="star" style="width: 14px; height: 14px; fill: var(--brand-gold); color: var(--brand-gold);"></i>
-            <strong>${driver.rating}</strong>
-            <span class="muted">(${driver.routes} routes)</span>
+        <h2 style="margin: 0; font-size: 1.55rem; font-weight: 850; color: var(--brand-blue-dark); line-height: 1.25;">${driver.name}</h2>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px;">
+          <span class="driver-role-badge" style="display: inline-block; background: #eaf2f8; color: var(--brand-blue); font-size: 0.78rem; font-weight: 800; padding: 3px 12px; border-radius: 12px;">${driver.role}</span>
+          <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.92rem; font-weight: 800; color: var(--brand-blue-dark);">
+            <i data-lucide="star" style="width: 15px; height: 15px; fill: var(--brand-gold); color: var(--brand-gold);"></i>
+            <span>${driver.rating}</span>
+            <span style="color: var(--muted); font-weight: 600; font-size: 0.8rem;">(${driver.routes} routes)</span>
           </div>
         </div>
       </div>
 
-      <div style="background: var(--surface-alt); border-radius: 12px; padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; text-align: center; border: 1px solid var(--border);">
+      <!-- Stats Bar (3 Columns) -->
+      <div style="background: var(--surface-alt); border-radius: 16px; padding: 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; text-align: center; border: 1px solid var(--border-subtle);">
         <div>
-          <strong style="display: block; font-size: 0.9rem; color: var(--charcoal);">${driver.km} km</strong>
-          <span style="font-size: 0.68rem; color: var(--slate);">On Road</span>
+          <strong style="display: block; font-size: 0.95rem; font-weight: 850; color: var(--brand-blue-dark);">${driver.km} km</strong>
+          <span style="font-size: 0.7rem; color: var(--slate); font-weight: 600;">On Road</span>
         </div>
         <div>
-          <strong style="display: block; font-size: 0.9rem; color: var(--charcoal);">${driver.associationTime}</strong>
-          <span style="font-size: 0.68rem; color: var(--slate);">With Association</span>
+          <strong style="display: block; font-size: 0.95rem; font-weight: 850; color: var(--brand-blue-dark);">${driver.associationTime}</strong>
+          <span style="font-size: 0.7rem; color: var(--slate); font-weight: 600;">With Association</span>
         </div>
         <div>
-          <strong style="display: block; font-size: 0.9rem; color: var(--charcoal);">Uganda</strong>
-          <span style="font-size: 0.68rem; color: var(--slate);">Country</span>
+          <strong style="display: block; font-size: 0.95rem; font-weight: 850; color: var(--brand-blue-dark);">Uganda</strong>
+          <span style="font-size: 0.7rem; color: var(--slate); font-weight: 600;">Country</span>
         </div>
       </div>
 
-      <div style="margin-bottom: 16px;">
-        <h4 style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">About</h4>
-        <p style="margin: 0; font-size: 0.82rem; line-height: 1.45; color: var(--charcoal);">${driver.bio}</p>
+      <!-- About Section -->
+      <div style="margin-bottom: 20px;">
+        <h4 style="margin: 0 0 6px 0; font-size: 0.78rem; font-weight: 800; color: var(--slate); text-transform: uppercase; letter-spacing: 0.06em;">About</h4>
+        <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: var(--charcoal); font-weight: 500;">${driver.bio}</p>
       </div>
 
-      <div style="margin-bottom: 16px;">
-        <h4 style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">Vehicle Information</h4>
-        <div style="display: flex; align-items: center; gap: 10px; background: var(--surface-alt); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px;">
-          <i data-lucide="truck" style="color: var(--brand-blue); width: 18px; height: 18px; flex-shrink: 0;"></i>
-          <div style="font-size: 0.82rem; min-width: 0;">
-            <strong style="display: block; color: var(--charcoal); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${driver.vehicle}</strong>
-            <span class="muted" style="font-size: 0.72rem;">Plate: ${driver.plate} &bull; ${driver.color}</span>
+      <!-- Vehicle Information Section (with Van Photo) -->
+      <div style="margin-bottom: 20px;">
+        <h4 style="margin: 0 0 8px 0; font-size: 0.78rem; font-weight: 800; color: var(--slate); text-transform: uppercase; letter-spacing: 0.06em;">Vehicle Information</h4>
+        <div style="display: flex; align-items: center; gap: 14px; background: var(--surface-alt); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 18px;">
+          <div style="width: 120px; height: 80px; border-radius: 12px; overflow: hidden; background: #081b33; position: relative; flex-shrink: 0; box-shadow: 0 4px 12px rgba(8,27,51,0.12);">
+            <img src="${vehicleHeroImg}" alt="${driver.vehicle}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; background: #081b33; color: white;">
+              <i data-lucide="bus-front" style="width: 28px; height: 28px;"></i>
+            </div>
+          </div>
+          <div style="font-size: 0.88rem; min-width: 0;">
+            <strong style="display: block; color: var(--brand-blue-dark); font-size: 1.02rem; font-weight: 850; margin-bottom: 3px;">${driver.vehicle}</strong>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 2px;">
+              <span style="display: inline-block; color: var(--brand-blue); font-weight: 800; font-size: 0.78rem; background: rgba(7,90,168,0.08); padding: 2px 8px; border-radius: 8px;">${driver.plate}</span>
+              <span style="color: var(--slate); font-size: 0.78rem; font-weight: 600;">• ${driver.color}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div style="margin-bottom: 16px;">
-        <h4 style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">Compliments</h4>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+      <!-- Compliments Section -->
+      <div style="margin-bottom: 12px;">
+        <h4 style="margin: 0 0 8px 0; font-size: 0.78rem; font-weight: 800; color: var(--slate); text-transform: uppercase; letter-spacing: 0.06em;">Compliments</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
           ${driver.compliments.map(comp => `
-            <span class="compliment-badge" style="display: inline-flex; align-items: center; gap: 4px; background: var(--surface-alt); border: 1px solid var(--border); padding: 4px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 600; color: var(--charcoal);">
-              <i data-lucide="${comp.includes('Safe') || comp.includes('Gentle') ? 'shield-check' : comp.includes('Punctual') ? 'clock' : comp.includes('Navigator') ? 'navigation' : 'smile'}" style="width: 12px; height: 12px;"></i>
+            <span class="compliment-badge" style="display: inline-flex; align-items: center; gap: 6px; background: var(--surface-alt); border: 1px solid var(--border); padding: 6px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; color: var(--brand-blue-dark);">
+              <i data-lucide="${comp.includes('Safe') || comp.includes('Gentle') ? 'shield-check' : comp.includes('Punctual') ? 'clock' : comp.includes('Navigator') ? 'navigation' : 'smile'}" style="width: 14px; height: 14px; color: var(--brand-blue);"></i>
               ${comp}
             </span>
           `).join('')}
-        </div>
-      </div>
-
-      <div>
-        <h4 style="margin: 0 0 8px 0; font-size: 0.8rem; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">Traveler Reviews</h4>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          ${driver.reviews && driver.reviews.length ? driver.reviews.map(rev => `
-            <div class="driver-review-card" style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; text-align: left;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <div style="width: 22px; height: 22px; border-radius: 50%; background: var(--brand-blue-soft); color: var(--brand-blue); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.65rem;">
-                    ${rev.author.split(' ').map(n=>n[0]).join('')}
-                  </div>
-                  <div>
-                    <strong style="font-size: 0.75rem; color: var(--charcoal); display: block; line-height: 1.1;">${rev.author}</strong>
-                    <span class="muted" style="font-size: 0.62rem;">${rev.date}</span>
-                  </div>
-                </div>
-                <div style="color: var(--brand-gold); font-size: 0.75rem; line-height: 1;">
-                  ${'★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating)}
-                </div>
-              </div>
-              <p style="margin: 0; font-size: 0.75rem; line-height: 1.35; color: var(--slate);">${rev.comment}</p>
-            </div>
-          `).join('') : '<p class="muted" style="font-size: 0.75rem; margin: 0;">No reviews yet.</p>'}
         </div>
       </div>
     </div>
@@ -4321,16 +4305,16 @@ function showDriverProfileModal(driverNameKey) {
 
   const footerHtml = `
     <div style="display: flex; gap: 12px; width: 100%;">
-      <button class="button button--secondary" type="button" data-action="modal-chat-driver" data-value="${driverNameClean}" style="flex: 1; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+      <button class="button button--secondary" type="button" data-action="modal-chat-driver" data-value="${driverNameClean}" style="flex: 1; height: 48px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
         <i data-lucide="${isDriving ? 'message-square-off' : 'message-square'}"></i> Chat
       </button>
-      <button class="button button--primary" type="button" data-action="modal-call-driver" data-value="${driverNameClean}" style="flex: 1; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+      <button class="button button--primary" type="button" data-action="modal-call-driver" data-value="${driverNameClean}" style="flex: 1; height: 48px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
         <i data-lucide="phone"></i> Call
       </button>
     </div>
   `;
 
-  openModal('Driver Profile', bodyHtml, footerHtml);
+  openModal('Driver Profile', bodyHtml, footerHtml, false, 'modal--driver-profile');
 }
 window.showDriverProfileModal = showDriverProfileModal;
 
