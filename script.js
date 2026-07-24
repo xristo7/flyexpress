@@ -2965,13 +2965,13 @@ function renderParcelBooking() {
         `).join('')}
       </div>
       
-      <div class="parcel-booking-flow-container" style="max-width: 700px; margin: 0 auto;">
-        <div class="card">${renderParcelStep()}</div>
-        <div class="notice" style="margin: 16px auto 0; max-width: 400px; font-size: 0.8rem; padding: 10px 14px;">
-          <i data-lucide="package-check" style="width: 18px; height: 18px;"></i>
+      <div class="parcel-booking-flow-container" style="max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; width: 100%;">
+        <div class="card" style="width: 100%;">${renderParcelStep()}</div>
+        <div class="notice" style="margin: 0; width: 100%; max-width: 100%; font-size: 0.8rem; padding: 14px 16px; border-radius: 18px; display: flex; align-items: start; gap: 12px;">
+          <i data-lucide="package-check" style="width: 20px; height: 20px; flex-shrink: 0; color: var(--brand-blue); margin-top: 1px;"></i>
           <div>
-            <strong style="font-size: 0.82rem;">Parcel safety</strong>
-            <div style="font-size: 0.78rem;">Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div>
+            <strong style="font-size: 0.86rem; color: var(--brand-blue-dark); display: block; margin-bottom: 2px;">Parcel safety</strong>
+            <div style="font-size: 0.8rem; color: var(--brand-blue-dark); line-height: 1.45;">Do not send prohibited, hazardous, unlawful or inadequately packaged items.</div>
           </div>
         </div>
       </div>

@@ -7905,17 +7905,23 @@ body[data-active-screen="home"] .main-content {
 }
 
 @media (max-width: 900px) {
-  /* Hide the horizontal desktop progress bar */
   body[data-active-screen="parcel"] .flow-progress {
-    display: none !important;
+    display: flex !important;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 14px !important;
+    scrollbar-width: none;
+  }
+  body[data-active-screen="parcel"] .flow-progress::-webkit-scrollbar {
+    display: none;
   }
 
   .parcel-booking-flow-container {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: start;
-    gap: 20px;
-    margin-top: 10px;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 16px !important;
+    margin-top: 10px !important;
   }
 
   .vertical-step-rail {
