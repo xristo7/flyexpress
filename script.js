@@ -1393,7 +1393,7 @@ function renderCurrentScreen(preserveFocus = true) {
   const renderers = {
     home: renderHome, book: renderBook, 'special-hire': renderSpecialHire, 'trip-details': renderTripDetails, passengers: renderPassengers, returns: renderReturns,
     luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, tickets: renderTickets, trips: renderTrips,
-    live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
+    live: renderTracking, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
     trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, 'driver-chat': renderDriverChat, 'driver-call': renderDriverCall, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
     profile: renderProfile, about: renderAbout, tracking: renderTracking, 'search-results': renderSearchResultsScreen, 'available-vans': renderAvailableVansScreen
   };
@@ -1478,7 +1478,7 @@ function showSearchShortcuts() {
         <i data-lucide="search" style="color:var(--brand-blue)"></i>
         <strong style="display:block;margin-top:8px;font-size:0.85rem">Find a departure</strong>
       </button>
-      <button class="card card--compact card--hover" type="button" data-screen="live">
+      <button class="card card--compact card--hover" type="button" data-screen="tracking">
         <i data-lucide="navigation" style="color:var(--brand-blue)"></i>
         <strong style="display:block;margin-top:8px;font-size:0.85rem">Track my vehicle</strong>
       </button>
@@ -1563,7 +1563,7 @@ function renderHome() {
             <div class="services-scroll">
               <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Travel</span></button>
               <button class="service" type="button" data-screen="tickets"><span class="service-icon"><i data-lucide="ticket" style="width: 22px; height: 22px; color: var(--brand-blue);"></i></span><span>My Tickets</span></button>
-              <button class="service" type="button" data-screen="live"><span class="service-icon"><i data-lucide="navigation" style="width: 22px; height: 22px; color: var(--brand-blue);"></i></span><span>Track a Travel</span></button>
+              <button class="service" type="button" data-screen="tracking"><span class="service-icon"><i data-lucide="navigation" style="width: 22px; height: 22px; color: var(--brand-blue);"></i></span><span>Track a Travel</span></button>
               <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
               <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
               <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
@@ -1654,7 +1654,7 @@ function renderHome() {
             </div>
             <div class="compact-actions">
               <button class="compact-action primary" type="button" data-screen="ticket">View Ticket</button>
-              <button class="compact-action" type="button" data-screen="live">Track Vehicle</button>
+              <button class="compact-action" type="button" data-screen="tracking">Track Vehicle</button>
             </div>
           </section>
 
@@ -3027,7 +3027,7 @@ function renderTripTabContent() {
 function tripCard(day, month, route, date, vehicle, status, type, payment, mode) {
   const statusClass = mode === 'completed' ? 'status-chip--success' : mode === 'cancelled' ? 'status-chip--danger' : 'status-chip--info';
   const actions = mode === 'upcoming'
-    ? `<button class="button button--primary button--small" type="button" data-screen="ticket">View Ticket</button><button class="button button--ghost button--small" type="button" data-screen="live">Track Vehicle</button><button class="button button--ghost button--small" type="button" data-action="change-return">Change Return Date</button><button class="button button--ghost button--small" type="button" data-screen="support">Contact Support</button>`
+    ? `<button class="button button--primary button--small" type="button" data-screen="ticket">View Ticket</button><button class="button button--ghost button--small" type="button" data-screen="tracking">Track Vehicle</button><button class="button button--ghost button--small" type="button" data-action="change-return">Change Return Date</button><button class="button button--ghost button--small" type="button" data-screen="support">Contact Support</button>`
     : mode === 'completed'
       ? `<button class="button button--primary button--small" type="button" data-action="rate-trip">Rate Travel</button><button class="button button--ghost button--small" type="button" data-screen="book">Book Again</button><button class="button button--ghost button--small" type="button" data-action="lost-item">Report Lost Item</button>`
       : `<button class="button button--ghost button--small" type="button" data-screen="support">View Support Reference</button><button class="button button--primary button--small" type="button" data-screen="book">Book Again</button>`;
@@ -3335,57 +3335,7 @@ function startLiveProgress() {
 function stopLiveProgress() { clearInterval(liveTimer); }
 
 function renderLiveTrip() {
-  const trip = state.activeTrip;
-  return `
-    ${screenHead('Live travel tracking', `Follow ${trip.plate} along the demonstration ${trip.boarding}–${trip.destination} corridor.`, '<button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Travel</button>')}
-    <section class="live-layout live-layout--media">
-      <div class="live-map live-map--media" aria-label="Animated Fly Express route preview" style="position: relative; overflow: hidden; min-height: 480px;">
-        <div id="live-travel-map" style="width: 100%; height: 100%; position: absolute; inset: 0; z-index: 1;"></div>
-        <div id="live-travel-map-fallback" class="trip-map-fallback" style="background: #eef3f7; z-index: 2;" hidden>
-          <img src="assets/fly-express-minivan-2014_1784553037010.jpg" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
-          <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">Preparing Live Map...</strong>
-          <span style="font-size: 0.8rem; color: var(--muted);">Connecting to map tiles...</span>
-        </div>
-        <div class="map-media-topbar" style="z-index: 10; position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; pointer-events: none;">
-          <span class="map-live-pill" style="pointer-events: auto;"><span></span>Live preview</span>
-          <span class="map-vehicle-pill" style="pointer-events: auto;"><i data-lucide="bus-front"></i>${trip.plate}</span>
-        </div>
-        <div class="live-progress-card live-progress-card--media" style="z-index: 10; position: absolute; bottom: 12px; left: 12px; right: 12px; pointer-events: auto;">
-          <div class="live-progress-row"><strong>${trip.boarding} → ${trip.destination}</strong><strong id="live-progress-value">${state.routeProgress}%</strong></div>
-          <div class="live-progress-bar"><span style="width:${state.routeProgress}%"></span></div>
-          <div class="trip-meta" id="live-trip-meta-row"><span><i data-lucide="map-pin"></i>Current: Entebbe</span><span><i data-lucide="flag"></i>Next: Kitooro</span></div>
-        </div>
-      </div>
-      <aside class="grid">
-        <article class="card card--blue"><p class="section-kicker">Estimated arrival</p><div class="wallet-balance">${trip.arrive}</div><p class="muted">${trip.traffic} traffic · ${trip.duration} scheduled journey</p><span class="status-chip" style="background:rgba(255,255,255,.13);color:white">Vehicle moving</span></article>
-      ${(() => {
-        const dName = trip.driverName || 'Isaac Muwonge';
-        const dObj = driversData[dName.toLowerCase()] || driversData['isaac muwonge'];
-        const avatarUrl = dObj.avatar || 'assets/driver_1.jpg';
-        return `
-          <article class="card">
-            <div class="card-head"><h3>Trip and crew</h3><span class="status-chip status-chip--success">Verified</span></div>
-            <div class="vehicle-identity-media">
-              <div class="taxi-van-img-box" style="width:116px;height:76px;border:none !important;"><img src="${getTripVehicleImage(trip.vehicle)}" alt="Fly Express passenger vehicle" style="padding:4px;"></div>
-              <div><strong>${trip.vehicle}</strong><span>Fly Express passenger vehicle</span></div>
-            </div>
-            <div class="people-row" role="button" tabindex="0" onclick="showDriverProfileModal('${dName.toLowerCase()}');" style="cursor: pointer; display: flex; align-items: center; gap: 12px; margin: 12px 0;">
-              <img src="${avatarUrl}" alt="${dName}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 8px rgba(8,27,51,0.12); flex-shrink: 0;">
-              <div>
-                <strong style="font-size: 0.95rem; color: var(--brand-blue-dark);">${dName}</strong>
-                <div class="muted text-small">Driver · Verified for ${trip.plate}</div>
-              </div>
-            </div>
-            <div class="detail-row"><span>Vehicle registration</span><strong>${trip.plate}</strong></div>
-            <div class="detail-row"><span>Boarding stage</span><strong>${trip.boarding}</strong></div>
-            <div class="detail-row"><span>Destination</span><strong>${trip.destination}</strong></div>
-          </article>
-        `;
-      })()}
-        <div class="button-row"><button class="button button--soft-red" type="button" data-action="emergency"><i data-lucide="siren"></i>Emergency Contact</button><button class="button button--ghost" type="button" data-action="share-trip"><i data-lucide="share-2"></i>Share Trip</button></div>
-        <div class="notice"><i data-lucide="shield-check"></i><div><strong>Passenger safety</strong><div>Do not share the verification code publicly. Contact support for route concerns.</div></div></div>
-      </aside>
-    </section>`;
+  return renderTracking();
 }
 
 function renderWallet() {
@@ -6024,7 +5974,7 @@ function renderTicket() {
         <div class="ticket-code-area"><div id="ticket-qr" class="ticket-qr-real" aria-label="Scannable demonstration QR code"></div><div><p class="section-kicker">Verification code</p><div class="verification-code">482 915</div><p class="muted text-small">The code verifies this simulated ticket only.</p></div></div>
       </div>
       <div class="ticket-perforation"></div>
-      <footer class="ticket-actions">${lifecycle === 'payment-pending' ? `<button class="button button--primary button--small" type="button" data-action="change-seats-unpaid"><i data-lucide="armchair"></i>Change Seats</button>` : ''}<button class="button button--primary button--small" type="button" data-action="download-demo"><i data-lucide="download"></i>Download Ticket</button><button class="button button--ghost button--small" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share</button><button class="button button--ghost button--small" type="button" data-screen="live"><i data-lucide="route"></i>View Route</button><button class="button button--ghost button--small" type="button" data-screen="support"><i data-lucide="headphones"></i>Support</button><button class="button button--soft-red button--small" type="button" data-action="cancel-booking"><i data-lucide="x"></i>Cancel Booking</button></footer>
+      <footer class="ticket-actions">${lifecycle === 'payment-pending' ? `<button class="button button--primary button--small" type="button" data-action="change-seats-unpaid"><i data-lucide="armchair"></i>Change Seats</button>` : ''}<button class="button button--primary button--small" type="button" data-action="download-demo"><i data-lucide="download"></i>Download Ticket</button><button class="button button--ghost button--small" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share</button><button class="button button--ghost button--small" type="button" data-screen="tracking"><i data-lucide="route"></i>View Route</button><button class="button button--ghost button--small" type="button" data-screen="support"><i data-lucide="headphones"></i>Support</button><button class="button button--soft-red button--small" type="button" data-action="cancel-booking"><i data-lucide="x"></i>Cancel Booking</button></footer>
     </article>`;
 }
 
@@ -6968,16 +6918,20 @@ function confirmBooking() {
 
 function loadTracking() {
   const value = $('#tracking-number')?.value.trim().toUpperCase();
-  if (!value || (value !== '964201832-DL' && value !== '#964201832-DL' && value !== 'FXP-260718-0842')) {
-    showInvalidTracking();
-  } else {
-    showLoading('Loading parcel history…', () => {
+  if (value) {
+    if (value !== '964201832-DL' && value !== '#964201832-DL' && value !== 'FXP-260718-0842') {
+      showInvalidTracking();
+      return;
+    }
+    showLoading('Loading tracking details…', () => {
       state.parcelTrackingState = 'intransit';
       state.trackingView = 'single';
       state.selectedTrackingId = value.startsWith('#') ? value : `#${value}`;
       navigate('tracking');
-      toast('Parcel tracking loaded.', 'success');
+      toast('Tracking loaded.', 'success');
     });
+  } else {
+    navigate('tracking');
   }
 }
 
