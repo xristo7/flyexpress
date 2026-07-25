@@ -2960,15 +2960,15 @@ function renderTickets() {
     ${screenHead('My Tickets', 'Access your digital travel passes, scannable QR boarding codes, and journey history.')}
     
     <div class="tickets-container" style="max-width: 800px; margin: 16px auto 0;">
-      <!-- Filter Tabs -->
-      <div class="category-tabs" style="margin-bottom: 20px; display: flex; gap: 8px;">
-        <button class="tab-pill ${filter === 'all' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="all">
+      <!-- Category Filter Tabs (Modern Tracking Page Tabs) -->
+      <div class="tabs" role="tablist" style="margin-bottom: 20px;">
+        <button class="tab ${filter === 'all' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="all">
           All Tickets (${tickets.length})
         </button>
-        <button class="tab-pill ${filter === 'active' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="active">
-          Active Passes (${activeCount})
+        <button class="tab ${filter === 'active' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="active">
+          Active (${activeCount})
         </button>
-        <button class="tab-pill ${filter === 'used' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="used">
+        <button class="tab ${filter === 'used' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="used">
           Used &amp; Expired (${usedCount})
         </button>
       </div>
@@ -2989,7 +2989,7 @@ function renderTickets() {
         <div class="tickets-list">
           ${filtered.map(ticket => {
             const isExpired = ticket.status === 'used' || ticket.status === 'expired';
-            const statusLabel = ticket.status === 'active' ? 'ACTIVE PASS' : (ticket.status === 'used' ? 'USED TICKET' : 'EXPIRED TICKET');
+            const statusLabel = ticket.status === 'active' ? 'ACTIVE' : (ticket.status === 'used' ? 'USED' : 'EXPIRED');
             const statusBadgeClass = ticket.status === 'active' ? 'status-chip--success' : 'status-chip--neutral';
             
             return `
@@ -3000,7 +3000,7 @@ function renderTickets() {
                     <i data-lucide="bus" style="width: 18px; height: 18px;"></i>
                     <strong style="font-size: 0.98rem; font-weight: 850;">${escapeHtml(ticket.route)}</strong>
                   </div>
-                  <span class="status-chip ${statusBadgeClass}" style="font-size: 0.72rem; padding: 4px 10px; font-weight: 800; text-transform: uppercase;">${statusLabel}</span>
+                  <span class="status-chip ${statusBadgeClass}" style="font-size: 0.72rem; padding: 4px 12px; font-weight: 850; text-transform: uppercase;">${statusLabel}</span>
                 </div>
 
                 <!-- Body -->
@@ -3047,16 +3047,16 @@ function renderTickets() {
                   </div>
 
                   <div style="display: flex; gap: 8px;">
-                    <button type="button" class="btn btn--sm btn--outline" style="font-size: 0.78rem; font-weight: 750; border-radius: 10px;" onclick="showTicketDetailsModal('${ticket.id}');">
-                      <i data-lucide="ticket"></i> View Pass
+                    <button type="button" class="btn btn--sm btn--outline" style="font-size: 0.82rem; font-weight: 800; border-radius: 12px; height: 38px; padding: 0 16px; display: inline-flex; align-items: center; gap: 6px;" onclick="showTicketDetailsModal('${ticket.id}');">
+                      <i data-lucide="ticket" style="width: 16px; height: 16px;"></i> View
                     </button>
                     ${ticket.status === 'active' ? `
-                      <button type="button" class="btn btn--sm btn--primary" style="font-size: 0.78rem; font-weight: 750; border-radius: 10px;" onclick="loadTracking();">
-                        <i data-lucide="navigation"></i> Track Van
+                      <button type="button" class="btn btn--sm btn--primary" style="font-size: 0.82rem; font-weight: 800; border-radius: 12px; height: 38px; padding: 0 16px; display: inline-flex; align-items: center; gap: 6px;" onclick="loadTracking();">
+                        <i data-lucide="navigation" style="width: 16px; height: 16px;"></i> Track Van
                       </button>
                     ` : `
-                      <button type="button" class="btn btn--sm btn--ghost" style="font-size: 0.78rem; font-weight: 750; border-radius: 10px;" onclick="navigate('book');">
-                        <i data-lucide="rotate-cw"></i> Rebook
+                      <button type="button" class="btn btn--sm btn--primary" style="font-size: 0.82rem; font-weight: 800; border-radius: 12px; height: 38px; padding: 0 16px; display: inline-flex; align-items: center; gap: 6px; background: var(--brand-blue-dark);" onclick="navigate('book');">
+                        <i data-lucide="rotate-cw" style="width: 16px; height: 16px;"></i> Rebook
                       </button>
                     `}
                   </div>
@@ -3077,7 +3077,7 @@ function showTicketDetailsModal(ticketId) {
   if (!ticket) return;
 
   const isExpired = ticket.status === 'used' || ticket.status === 'expired';
-  const statusLabel = ticket.status === 'active' ? 'ACTIVE PASS' : (ticket.status === 'used' ? 'USED TICKET' : 'EXPIRED TICKET');
+  const statusLabel = ticket.status === 'active' ? 'ACTIVE' : (ticket.status === 'used' ? 'USED' : 'EXPIRED');
   const statusClass = ticket.status === 'active' ? 'status-chip--success' : 'status-chip--neutral';
 
   const modalHtml = `
