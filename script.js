@@ -2882,13 +2882,13 @@ function renderDigitalTicketCard(ticketData = {}, isModal = false) {
         </div>
 
         <!-- Verification QR Code Area -->
-        <div class="ticket-code-area">
-          <div class="qr-code" aria-label="Decorative QR-style ticket code">${generateQr()}</div>
-          <div>
-            <p class="section-kicker">Verification code</p>
-            <div class="verification-code">482 915</div>
-            <p class="muted text-small">Present this digital ticket and scannable code to the Fly Express conductor when boarding.</p>
+        <div class="ticket-code-area" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 22px 18px; background: #f8fafc; border-radius: 20px; border: 1px solid var(--border); text-align: center; margin-top: 22px;">
+          <div id="ticket-qr-${ticket.id}" class="qr-code-frame" style="background: #ffffff; padding: 12px; border-radius: 16px; border: 1.5px solid var(--border); box-shadow: 0 4px 14px rgba(8,27,51,0.06); width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+            ${generateQrSvg(ticket.id || '482915', 136)}
           </div>
+          <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--slate); letter-spacing: 0.08em; display: block;">VERIFICATION CODE</span>
+          <div class="verification-code" style="font-size: 1.85rem; font-weight: 900; letter-spacing: 0.18em; color: var(--brand-blue-dark); margin: 6px 0 4px;">482 915</div>
+          <p style="margin: 0; color: var(--slate); font-size: 0.76rem; font-weight: 600; max-width: 320px;">The code verifies this simulated ticket only.</p>
         </div>
       </div>
 
@@ -2930,9 +2930,73 @@ function renderTicket() {
 }
 
 function ticketField(label, value) { return `<div class="ticket-field"><span>${label}</span><strong>${value}</strong></div>`; }
-function generateQr() {
-  const filled = new Set([0,1,2,3,4,5,6,7,8,9,13,17,18,20,22,24,26,27,28,29,30,31,32,33,34,36,38,40,42,44,46,48,50,52,54,55,57,58,59,60,62,64,66,68,70,72,73,74,75,76,77,78,79,80]);
-  return Array.from({length:81}, (_, i) => `<span style="opacity:${filled.has(i) ? 1 : 0}"></span>`).join('');
+
+function generateQrSvg(text = '482915', size = 140) {
+  const matrixSize = 25;
+  const moduleSize = size / matrixSize;
+  
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  const pseudoRandom = (x, y) => {
+    const val = Math.sin(x * 12.9898 + y * 78.233 + hash) * 43758.5453;
+    return (val - Math.floor(val)) > 0.45;
+  };
+
+  const isModuleDark = (r, c) => {
+    if (r <= 6 && c <= 6) {
+      if (r === 0 || r === 6 || c === 0 || c === 6) return true;
+      if (r >= 2 && r <= 4 && c >= 2 && c <= 4) return true;
+      return false;
+    }
+    if (r <= 6 && c >= 18) {
+      const cc = c - 18;
+      if (r === 0 || r === 6 || cc === 0 || cc === 6) return true;
+      if (r >= 2 && r <= 4 && cc >= 2 && cc <= 4) return true;
+      return false;
+    }
+    if (r >= 18 && c <= 6) {
+      const rr = r - 18;
+      if (rr === 0 || rr === 6 || c === 0 || c === 6) return true;
+      if (rr >= 2 && rr <= 4 && c >= 2 && c <= 4) return true;
+      return false;
+    }
+    if ((r === 7 && c <= 7) || (c === 7 && r <= 7)) return false;
+    if ((r === 7 && c >= 17) || (c === 17 && r <= 7)) return false;
+    if ((r === 17 && c <= 7) || (c === 7 && r >= 17)) return false;
+
+    if (r >= 16 && r <= 20 && c >= 16 && c <= 20) {
+      const dr = r - 16, dc = c - 16;
+      if (dr === 0 || dr === 4 || dc === 0 || dc === 4) return true;
+      if (dr === 2 && dc === 2) return true;
+      return false;
+    }
+
+    if (r === 6) return c % 2 === 0;
+    if (c === 6) return r % 2 === 0;
+
+    return pseudoRandom(r, c);
+  };
+
+  let rects = '';
+  for (let r = 0; r < matrixSize; r++) {
+    for (let c = 0; c < matrixSize; c++) {
+      if (isModuleDark(r, c)) {
+        rects += `<rect x="${(c * moduleSize).toFixed(2)}" y="${(r * moduleSize).toFixed(2)}" width="${(moduleSize + 0.1).toFixed(2)}" height="${(moduleSize + 0.1).toFixed(2)}" fill="#081b33"/>`;
+      }
+    }
+  }
+
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:100%; border-radius: 6px;">
+    <rect width="${size}" height="${size}" fill="#ffffff"/>
+    ${rects}
+  </svg>`;
+}
+
+function generateQr(text, size) {
+  return generateQrSvg(text || '482915', size || 136);
 }
 
 function renderTrips() {
@@ -3155,9 +3219,11 @@ function renderTickets() {
                   </div>
 
                   <!-- Interactive QR Code Preview Badge -->
-                  <div class="ticket-qr-trigger" role="button" tabindex="0" onclick="showTicketDetailsModal('${ticket.id}');" style="cursor: pointer; text-align: center; background: rgba(7,90,168,0.04); padding: 12px 14px; border-radius: 16px; border: 1.5px solid rgba(7,90,168,0.14); flex-shrink: 0; transition: all 0.2s ease;" title="Click to view full digital pass">
-                    <i data-lucide="qr-code" style="width: 38px; height: 38px; color: var(--brand-blue);"></i>
-                    <span style="display: block; font-size: 0.68rem; font-weight: 850; color: var(--brand-blue); margin-top: 4px; letter-spacing: 0.03em;">SCAN QR</span>
+                  <div class="ticket-qr-trigger" role="button" tabindex="0" onclick="showTicketDetailsModal('${ticket.id}');" style="cursor: pointer; text-align: center; background: #ffffff; padding: 6px 8px; border-radius: 16px; border: 1.5px solid var(--border); box-shadow: 0 2px 8px rgba(8,27,51,0.06); flex-shrink: 0; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;" title="Click to view full digital pass">
+                    <div style="width: 46px; height: 46px;">
+                      ${generateQrSvg(ticket.id, 46)}
+                    </div>
+                    <span style="display: block; font-size: 0.62rem; font-weight: 850; color: var(--brand-blue); margin-top: 3px; letter-spacing: 0.03em;">SCAN QR</span>
                   </div>
                 </div>
 
