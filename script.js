@@ -1563,6 +1563,7 @@ function renderHome() {
             <div class="services-scroll">
               <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Travel</span></button>
               <button class="service" type="button" data-screen="tickets"><span class="service-icon"><i data-lucide="ticket" style="width: 22px; height: 22px; color: var(--brand-blue);"></i></span><span>My Tickets</span></button>
+              <button class="service" type="button" data-screen="live"><span class="service-icon"><i data-lucide="navigation" style="width: 22px; height: 22px; color: var(--brand-blue);"></i></span><span>Track a Travel</span></button>
               <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
               <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
               <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
