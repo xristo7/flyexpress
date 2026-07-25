@@ -1253,6 +1253,7 @@ function getNavigationHtml(context) {
   const activeHome = state.screen === 'home' ? 'is-active' : '';
   const activeDepartures = state.screen === 'available-vans' ? 'is-active' : '';
   const activeBook = state.screen === 'book' ? 'is-active' : '';
+  const activeTickets = state.screen === 'tickets' ? 'is-active' : '';
   const activeSpecialHire = state.screen === 'special-hire' ? 'is-active' : '';
   const activeTrips = state.screen === 'trips' ? 'is-active' : '';
   const activeWallet = state.screen === 'wallet' ? 'is-active' : '';
@@ -1273,6 +1274,10 @@ function getNavigationHtml(context) {
 
     <button class="${itemClass} ${activeBook}" type="button" data-screen="book">
       <i data-lucide="ticket-plus"></i><span>Book a Travel</span>
+    </button>
+
+    <button class="${itemClass} ${activeTickets}" type="button" data-screen="tickets">
+      <i data-lucide="ticket"></i><span>My Tickets</span>
     </button>
 
     <button class="${itemClass} ${activeSpecialHire}" type="button" data-screen="special-hire">
@@ -1387,7 +1392,7 @@ function renderCurrentScreen(preserveFocus = true) {
   destroyTripMap();
   const renderers = {
     home: renderHome, book: renderBook, 'special-hire': renderSpecialHire, 'trip-details': renderTripDetails, passengers: renderPassengers, returns: renderReturns,
-    luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, trips: renderTrips,
+    luggage: renderLuggage, checkout: renderCheckout, success: renderSuccess, ticket: renderTicket, tickets: renderTickets, trips: renderTrips,
     live: renderLiveTrip, wallet: renderWallet, parcel: renderParcelBooking, 'parcel-receipt': renderParcelReceipt,
     trackparcel: renderParcelTracking, 'trackparcel-list': renderParcelList, 'parcel-status': renderParcelStatus, 'driver-profile': renderDriverProfile, 'driver-chat': renderDriverChat, 'driver-call': renderDriverCall, offers: renderOffers, notifications: renderNotifications, support: renderSupport,
     profile: renderProfile, about: renderAbout, tracking: renderTracking, 'search-results': renderSearchResultsScreen, 'available-vans': renderAvailableVansScreen
@@ -2827,6 +2832,345 @@ function tripCard(day, month, route, date, vehicle, status, type, payment, mode)
       : `<button class="button button--ghost button--small" type="button" data-screen="support">View Support Reference</button><button class="button button--primary button--small" type="button" data-screen="book">Book Again</button>`;
   return `<article class="card trip-card"><div class="trip-date-block"><strong>${day}</strong><span>${month}</span></div><div><div class="card-head"><div><h3>${route}</h3><span class="muted text-small">${date}</span></div><span class="status-chip ${statusClass}">${status}</span></div><div class="trip-meta"><span><i data-lucide="bus-front"></i>${vehicle}</span><span><i data-lucide="ticket"></i>${type}</span><span><i data-lucide="credit-card"></i>${payment}</span></div>${mode === 'upcoming' ? '<div class="countdown" style="margin-top:10px"><i data-lucide="clock-3"></i>Boarding begins in 42 minutes</div>' : mode === 'cancelled' ? '<p class="muted text-small" style="margin:10px 0 0">Reason: Passenger cancelled · Support reference SUP-44720</p>' : ''}</div><div class="trip-card__actions">${actions}</div></article>`;
 }
+
+function getTicketsData() {
+  if (!state.tickets) {
+    state.tickets = [
+      {
+        id: 'TK-984210',
+        route: 'Entebbe Bus Park → Kampala Railway Stage',
+        cityA: 'Entebbe',
+        cityB: 'Kampala',
+        stageA: 'Entebbe Bus Park',
+        stageB: 'Kampala Railway Stage',
+        via: 'Via Kajansi Express',
+        date: 'Today, 25 Jul 2026',
+        time: '09:30 AM',
+        seat: 'Seat 04',
+        passenger: 'Christo I.',
+        price: 'UGX 5,000',
+        status: 'active',
+        vanNumber: 'UBA 412X',
+        driver: 'David Ssemwanga',
+        avatar: 'assets/driver_1.jpg',
+        qrData: 'FLYEXPRESS|TK-984210|CHRISTO|ENT-KLA|SEAT04'
+      },
+      {
+        id: 'TK-984288',
+        route: 'Entebbe Bus Park → Nambole Stage',
+        cityA: 'Entebbe',
+        cityB: 'Nambole',
+        stageA: 'Entebbe Bus Park',
+        stageB: 'Nambole Stage',
+        via: 'Via Northern Bypass',
+        date: 'Tomorrow, 26 Jul 2026',
+        time: '10:15 AM',
+        seat: 'Seat 07',
+        passenger: 'Christo I.',
+        price: 'UGX 7,000',
+        status: 'active',
+        vanNumber: 'UBF 890Y',
+        driver: 'John Ssekabira',
+        avatar: 'assets/driver_3.jpg',
+        qrData: 'FLYEXPRESS|TK-984288|CHRISTO|ENT-NMB|SEAT07'
+      },
+      {
+        id: 'TK-981105',
+        route: 'Kampala Railway Stage → Entebbe Bus Park',
+        cityA: 'Kampala',
+        cityB: 'Entebbe',
+        stageA: 'Kampala Railway Stage',
+        stageB: 'Entebbe Bus Park',
+        via: 'Via Busega Corridor',
+        date: 'Yesterday, 24 Jul 2026',
+        time: '05:00 PM',
+        seat: 'Seat 12',
+        passenger: 'Christo I.',
+        price: 'UGX 5,000',
+        status: 'used',
+        vanNumber: 'UBC 104Z',
+        driver: 'Moses Mukasa',
+        avatar: 'assets/driver_2.jpg',
+        qrData: 'FLYEXPRESS|TK-981105|CHRISTO|KLA-ENT|SEAT12'
+      },
+      {
+        id: 'TK-975420',
+        route: 'Entebbe Bus Park → Mbarara Stage',
+        cityA: 'Entebbe',
+        cityB: 'Mbarara',
+        stageA: 'Entebbe Bus Park',
+        stageB: 'Mbarara Stage',
+        via: 'Via Masaka Highway',
+        date: '18 Jul 2026',
+        time: '07:00 AM',
+        seat: 'Seat 02',
+        passenger: 'Christo I.',
+        price: 'UGX 30,000',
+        status: 'used',
+        vanNumber: 'UBD 554W',
+        driver: 'Godfrey Tumwesigye',
+        avatar: 'assets/driver_4.jpg',
+        qrData: 'FLYEXPRESS|TK-975420|CHRISTO|ENT-MBR|SEAT02'
+      },
+      {
+        id: 'TK-968912',
+        route: 'Entebbe Bus Park → Masaka Stage',
+        cityA: 'Entebbe',
+        cityB: 'Masaka',
+        stageA: 'Entebbe Bus Park',
+        stageB: 'Masaka Stage',
+        via: 'Via Masaka Road',
+        date: '10 Jul 2026',
+        time: '02:30 PM',
+        seat: 'Seat 09',
+        passenger: 'Christo I.',
+        price: 'UGX 20,000',
+        status: 'expired',
+        vanNumber: 'UBE 712V',
+        driver: 'Robert Kagimu',
+        avatar: 'assets/driver_5.jpg',
+        qrData: 'FLYEXPRESS|TK-968912|CHRISTO|ENT-MSK|SEAT09'
+      }
+    ];
+  }
+  return state.tickets;
+}
+
+function renderTickets() {
+  const tickets = getTicketsData();
+  const filter = state.ticketsFilter || 'all';
+
+  let filtered = tickets;
+  if (filter === 'active') {
+    filtered = tickets.filter(t => t.status === 'active');
+  } else if (filter === 'used') {
+    filtered = tickets.filter(t => t.status === 'used' || t.status === 'expired');
+  }
+
+  const activeCount = tickets.filter(t => t.status === 'active').length;
+  const usedCount = tickets.filter(t => t.status === 'used' || t.status === 'expired').length;
+
+  return `
+    ${screenHead('My Tickets', 'Access your digital travel passes, scannable QR boarding codes, and journey history.')}
+    
+    <div class="tickets-container" style="max-width: 800px; margin: 16px auto 0;">
+      <!-- Filter Tabs -->
+      <div class="category-tabs" style="margin-bottom: 20px; display: flex; gap: 8px;">
+        <button class="tab-pill ${filter === 'all' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="all">
+          All Tickets (${tickets.length})
+        </button>
+        <button class="tab-pill ${filter === 'active' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="active">
+          Active Passes (${activeCount})
+        </button>
+        <button class="tab-pill ${filter === 'used' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="used">
+          Used &amp; Expired (${usedCount})
+        </button>
+      </div>
+
+      <!-- Tickets List -->
+      ${filtered.length === 0 ? `
+        <div class="card empty-state-card" style="text-align: center; padding: 48px 24px; background: white; border-radius: 24px; border: 1.5px dashed var(--border);">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--info-soft); color: var(--brand-blue); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+            <i data-lucide="ticket-x" style="width: 32px; height: 32px;"></i>
+          </div>
+          <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 800; color: var(--brand-blue-dark);">No Tickets Found</h3>
+          <p class="muted" style="margin: 0 0 20px 0; font-size: 0.88rem;">You have no ${filter} tickets at the moment.</p>
+          <button class="btn btn--primary" type="button" onclick="navigate('book');">
+            <i data-lucide="ticket-plus"></i> Book a Travel
+          </button>
+        </div>
+      ` : `
+        <div class="tickets-list">
+          ${filtered.map(ticket => {
+            const isExpired = ticket.status === 'used' || ticket.status === 'expired';
+            const statusLabel = ticket.status === 'active' ? 'ACTIVE PASS' : (ticket.status === 'used' ? 'USED TICKET' : 'EXPIRED TICKET');
+            const statusBadgeClass = ticket.status === 'active' ? 'status-chip--success' : 'status-chip--neutral';
+            
+            return `
+              <div class="ticket-card ${isExpired ? 'is-expired' : ''}">
+                <!-- Header Bar -->
+                <div class="ticket-card-header">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="bus" style="width: 18px; height: 18px;"></i>
+                    <strong style="font-size: 0.98rem; font-weight: 850;">${escapeHtml(ticket.route)}</strong>
+                  </div>
+                  <span class="status-chip ${statusBadgeClass}" style="font-size: 0.72rem; padding: 4px 10px; font-weight: 800; text-transform: uppercase;">${statusLabel}</span>
+                </div>
+
+                <!-- Body -->
+                <div class="ticket-card-body">
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; gap: 16px; margin-bottom: 12px; font-size: 0.84rem; flex-wrap: wrap;">
+                      <div>
+                        <span class="muted" style="font-size: 0.72rem; display: block; text-transform: uppercase; font-weight: 700;">Departure</span>
+                        <strong style="color: var(--brand-blue-dark); font-weight: 850; font-size: 0.98rem;">${escapeHtml(ticket.time)}</strong>
+                        <span class="muted" style="font-size: 0.78rem; display: block; font-weight: 600;">${escapeHtml(ticket.date)}</span>
+                      </div>
+                      <div style="border-left: 1.5px solid var(--border); padding-left: 14px;">
+                        <span class="muted" style="font-size: 0.72rem; display: block; text-transform: uppercase; font-weight: 700;">Assigned Seat</span>
+                        <strong style="color: var(--brand-blue); font-weight: 850; font-size: 0.98rem;">${escapeHtml(ticket.seat)}</strong>
+                        <span class="muted" style="font-size: 0.78rem; display: block; font-weight: 600;">${escapeHtml(ticket.passenger)}</span>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--slate); flex-wrap: wrap;">
+                      <span>Via: <strong>${escapeHtml(ticket.via)}</strong></span>
+                      <span>•</span>
+                      <span>Vehicle: <strong>${escapeHtml(ticket.vanNumber)}</strong></span>
+                    </div>
+                  </div>
+
+                  <!-- Interactive QR Code Preview Badge -->
+                  <div class="ticket-qr-trigger" role="button" tabindex="0" onclick="showTicketDetailsModal('${ticket.id}');" style="cursor: pointer; text-align: center; background: rgba(7,90,168,0.04); padding: 12px 14px; border-radius: 16px; border: 1.5px solid rgba(7,90,168,0.14); flex-shrink: 0; transition: all 0.2s ease;" title="Click to view full digital pass">
+                    <i data-lucide="qr-code" style="width: 38px; height: 38px; color: ${isExpired ? '#64748b' : 'var(--brand-blue)'};"></i>
+                    <span style="display: block; font-size: 0.68rem; font-weight: 850; color: ${isExpired ? '#64748b' : 'var(--brand-blue)'}; margin-top: 4px; letter-spacing: 0.03em;">SCAN QR</span>
+                  </div>
+                </div>
+
+                <!-- Perforated Cut-Out Divider Line -->
+                <div class="ticket-card-divider">
+                  <div class="ticket-card-notch-left"></div>
+                  <div class="ticket-card-notch-right"></div>
+                </div>
+
+                <!-- Footer Bar -->
+                <div class="ticket-card-footer">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 0.82rem; font-weight: 700; color: var(--slate);">Ticket ID: <strong style="color: var(--charcoal); font-weight: 850;">${escapeHtml(ticket.id)}</strong></span>
+                    <strong style="color: var(--success); font-size: 0.98rem; font-weight: 850;">${escapeHtml(ticket.price)}</strong>
+                  </div>
+
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn--sm btn--outline" style="font-size: 0.78rem; font-weight: 750; border-radius: 10px;" onclick="showTicketDetailsModal('${ticket.id}');">
+                      <i data-lucide="ticket"></i> View Pass
+                    </button>
+                    ${ticket.status === 'active' ? `
+                      <button type="button" class="btn btn--sm btn--primary" style="font-size: 0.78rem; font-weight: 750; border-radius: 10px;" onclick="loadTracking();">
+                        <i data-lucide="navigation"></i> Track Van
+                      </button>
+                    ` : `
+                      <button type="button" class="btn btn--sm btn--ghost" style="font-size: 0.78rem; font-weight: 750; border-radius: 10px;" onclick="navigate('book');">
+                        <i data-lucide="rotate-cw"></i> Rebook
+                      </button>
+                    `}
+                  </div>
+                </div>
+
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function showTicketDetailsModal(ticketId) {
+  const tickets = getTicketsData();
+  const ticket = tickets.find(t => t.id === ticketId) || tickets[0];
+  if (!ticket) return;
+
+  const isExpired = ticket.status === 'used' || ticket.status === 'expired';
+  const statusLabel = ticket.status === 'active' ? 'ACTIVE PASS' : (ticket.status === 'used' ? 'USED TICKET' : 'EXPIRED TICKET');
+  const statusClass = ticket.status === 'active' ? 'status-chip--success' : 'status-chip--neutral';
+
+  const modalHtml = `
+    <div class="modal-backdrop is-visible" id="ticket-modal-backdrop" onclick="closeTicketModal();">
+      <div class="modal modal--ticket-detail ${isExpired ? 'is-expired' : ''}" onclick="event.stopPropagation();" style="max-width: 520px; width: 100%; border-radius: 24px; padding: 0; overflow: hidden;">
+        
+        <!-- Header -->
+        <div style="background: ${isExpired ? '#475569' : 'linear-gradient(135deg, #075AA8, #0B2545)'}; padding: 20px 24px; color: white; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; opacity: 0.85; letter-spacing: 0.05em; display: block;">BOARDING PASS &amp; TICKET</span>
+            <strong style="font-size: 1.15rem; font-weight: 850;">${escapeHtml(ticket.id)}</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="status-chip ${statusClass}" style="font-size: 0.75rem; padding: 4px 10px; text-transform: uppercase;">${statusLabel}</span>
+            <button type="button" class="icon-button" onclick="closeTicketModal();" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 6px;"><i data-lucide="x"></i></button>
+          </div>
+        </div>
+
+        <div style="padding: 24px; background: white;">
+          <!-- Route -->
+          <div style="text-align: center; margin-bottom: 20px; background: rgba(7,90,168,0.04); padding: 14px; border-radius: 16px; border: 1px dashed rgba(7,90,168,0.15);">
+            <div style="font-size: 0.78rem; color: var(--slate); font-weight: 700; text-transform: uppercase;">ROUTING</div>
+            <div style="font-size: 1.2rem; font-weight: 900; color: var(--brand-blue-dark); margin: 4px 0;">${escapeHtml(ticket.route)}</div>
+            <div style="font-size: 0.82rem; color: var(--brand-blue); font-weight: 650;">${escapeHtml(ticket.via)}</div>
+          </div>
+
+          <!-- Ticket Info Grid -->
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; font-size: 0.88rem;">
+            <div>
+              <span class="muted" style="font-size: 0.75rem; display: block;">Passenger</span>
+              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.passenger)}</strong>
+            </div>
+            <div>
+              <span class="muted" style="font-size: 0.75rem; display: block;">Seat Assigned</span>
+              <strong style="color: var(--brand-blue); font-weight: 850;">${escapeHtml(ticket.seat)}</strong>
+            </div>
+            <div>
+              <span class="muted" style="font-size: 0.75rem; display: block;">Departure Date</span>
+              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.date)}</strong>
+            </div>
+            <div>
+              <span class="muted" style="font-size: 0.75rem; display: block;">Boarding Time</span>
+              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.time)}</strong>
+            </div>
+            <div>
+              <span class="muted" style="font-size: 0.75rem; display: block;">Vehicle Plate</span>
+              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.vanNumber)}</strong>
+            </div>
+            <div>
+              <span class="muted" style="font-size: 0.75rem; display: block;">Driver Name</span>
+              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.driver)}</strong>
+            </div>
+          </div>
+
+          <!-- QR Code Container -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: #f8fafc; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px;">
+            <div id="modal-ticket-qr" style="background: white; padding: 12px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06);"></div>
+            <div style="font-family: monospace; letter-spacing: 0.15em; font-size: 0.9rem; font-weight: 800; color: var(--charcoal); margin-top: 12px;">${escapeHtml(ticket.id)}</div>
+            <small style="color: var(--slate); font-size: 0.72rem; margin-top: 2px;">Present QR code to Fly Express Driver for Boarding</small>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn--outline" style="flex: 1; font-weight: 750;" onclick="toast('Boarding pass saved to downloads', 'success');">
+              <i data-lucide="download"></i> Download Pass
+            </button>
+            ${ticket.status === 'active' ? `
+              <button type="button" class="btn btn--primary" style="flex: 1; font-weight: 750;" onclick="closeTicketModal(); loadTracking();">
+                <i data-lucide="navigation"></i> Track Live
+              </button>
+            ` : `
+              <button type="button" class="btn btn--primary" style="flex: 1; font-weight: 750;" onclick="closeTicketModal(); navigate('book');">
+                <i data-lucide="rotate-cw"></i> Book Again
+              </button>
+            `}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  const existing = $('#ticket-modal-backdrop');
+  if (existing) existing.remove();
+
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  refreshIcons();
+
+  setTimeout(() => {
+    initQrFor('modal-ticket-qr', ticket.qrData || `FLYEXPRESS|${ticket.id}|CHRISTO`);
+  }, 50);
+}
+
+function closeTicketModal() {
+  const modal = $('#ticket-modal-backdrop');
+  if (modal) modal.remove();
+}
+window.showTicketDetailsModal = showTicketDetailsModal;
+window.closeTicketModal = closeTicketModal;
 
 let liveTimer;
 function startLiveProgress() {
@@ -6027,6 +6371,7 @@ function handleClick(event) {
     'ticket-states': showTicketStates,
     'cancel-booking': showCancelBooking,
     'trip-tab': () => { state.tripTab = value; renderCurrentScreen(); },
+    'filter-tickets': () => { state.ticketsFilter = value; renderCurrentScreen(); },
     'tracking-tab': () => { state.trackingTab = value; state.trackingView = 'hub'; renderCurrentScreen(); },
     'set-tracking-tab': () => { state.trackingTab = value; state.trackingView = 'hub'; renderCurrentScreen(); },
     'change-return': showReturnDateModal,
@@ -6476,8 +6821,28 @@ function confirmBooking() {
     if (state.paymentDemoState === 'failed') { toast('The simulated authorization failed. Reset it or choose another payment method.', 'danger'); return; }
   }
   if (state.paymentMethod === 'corporate' && ($('#corporate-reference')?.value.trim().length || 0) < 4) { toast('Enter a valid corporate account reference.', 'danger'); return; }
-  if (state.paymentMethod === 'voucher') { toast('Apply the voucher, then choose how to pay the remaining balance.', 'danger'); return; }
   state.ticketStatus = 'active';
+  const newTicketId = `TK-${Math.floor(100000 + Math.random() * 900000)}`;
+  const trip = state.activeTrip || {};
+  getTicketsData().unshift({
+    id: newTicketId,
+    route: `${state.searchFrom || 'Entebbe Bus Park'} → ${state.searchTo || 'Kampala Railway Stage'}`,
+    cityA: state.searchFrom || 'Entebbe',
+    cityB: state.searchTo || 'Kampala',
+    stageA: state.searchFrom || 'Entebbe Bus Park',
+    stageB: state.searchTo || 'Kampala Railway Stage',
+    via: trip.via || 'Via Expressway',
+    date: 'Today, 25 Jul 2026',
+    time: trip.depart || '10:00 AM',
+    seat: state.selectedSeats.length > 0 ? `Seat ${state.selectedSeats.map(s => String(s).padStart(2, '0')).join(', ')}` : 'Seat 01',
+    passenger: state.contactName || 'Christo I.',
+    price: formatUGX(checkoutTotal()),
+    status: 'active',
+    vanNumber: trip.plate || 'UBA 412X',
+    driver: trip.driverName || 'David Ssemwanga',
+    avatar: 'assets/driver_1.jpg',
+    qrData: `FLYEXPRESS|${newTicketId}|CHRISTO`
+  });
   showLoading('Creating demonstration booking…', () => { navigate('success'); toast('Your trip is reserved in the prototype.', 'success'); });
 }
 
