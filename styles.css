@@ -9429,15 +9429,7 @@ body[data-active-screen="home"] .main-content {
 
 .ticket-card.is-expired,
 .ticket-card.is-used {
-  filter: grayscale(0.95) opacity(0.68);
-  background: #f8fafc !important;
-  border-color: #cbd5e1 !important;
-}
-
-.ticket-card.is-expired:hover,
-.ticket-card.is-used:hover {
-  filter: grayscale(0.85) opacity(0.88);
-  border-color: #94a3b8 !important;
+  background: #ffffff;
 }
 
 .ticket-card-header {
@@ -9451,7 +9443,8 @@ body[data-active-screen="home"] .main-content {
 
 .ticket-card.is-expired .ticket-card-header,
 .ticket-card.is-used .ticket-card-header {
-  background: #475569 !important;
+  background: #64748b !important;
+  color: #ffffff;
 }
 
 .ticket-card-body {

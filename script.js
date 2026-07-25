@@ -2969,7 +2969,7 @@ function renderTickets() {
           Active (${activeCount})
         </button>
         <button class="tab ${filter === 'used' ? 'is-active' : ''}" type="button" data-action="filter-tickets" data-value="used">
-          Used &amp; Expired (${usedCount})
+          Expired (${usedCount})
         </button>
       </div>
 
@@ -3028,8 +3028,8 @@ function renderTickets() {
 
                   <!-- Interactive QR Code Preview Badge -->
                   <div class="ticket-qr-trigger" role="button" tabindex="0" onclick="showTicketDetailsModal('${ticket.id}');" style="cursor: pointer; text-align: center; background: rgba(7,90,168,0.04); padding: 12px 14px; border-radius: 16px; border: 1.5px solid rgba(7,90,168,0.14); flex-shrink: 0; transition: all 0.2s ease;" title="Click to view full digital pass">
-                    <i data-lucide="qr-code" style="width: 38px; height: 38px; color: ${isExpired ? '#64748b' : 'var(--brand-blue)'};"></i>
-                    <span style="display: block; font-size: 0.68rem; font-weight: 850; color: ${isExpired ? '#64748b' : 'var(--brand-blue)'}; margin-top: 4px; letter-spacing: 0.03em;">SCAN QR</span>
+                    <i data-lucide="qr-code" style="width: 38px; height: 38px; color: var(--brand-blue);"></i>
+                    <span style="display: block; font-size: 0.68rem; font-weight: 850; color: var(--brand-blue); margin-top: 4px; letter-spacing: 0.03em;">SCAN QR</span>
                   </div>
                 </div>
 
