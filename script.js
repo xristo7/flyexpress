@@ -2780,22 +2780,153 @@ function paymentLabel(method = state.paymentMethod) {
   return ({ wallet: 'Fly Express Wallet', mobile: 'Mobile Money', cash: 'Cash at Stage', corporate: 'Corporate Travel Account', voucher: 'Promotional Voucher' })[method] || 'Demo Payment';
 }
 
+function renderDigitalTicketCard(ticketData = {}, isModal = false) {
+  const ticket = Object.assign({
+    id: 'FET-884210',
+    bookingRef: 'FX-260718-1842',
+    route: 'Entebbe Bus Park → Kampala Railway Stage',
+    cityA: 'Entebbe Bus Park',
+    cityB: 'Kampala Railway Stage',
+    stageA: 'Entebbe Bus Park',
+    stageB: 'Kampala Railway Stage',
+    via: 'Via Kajansi Express',
+    date: '18 July 2026',
+    time: '08:30 AM',
+    seat: 'Seat 04',
+    passenger: 'Christo I.',
+    price: 'UGX 5,000',
+    status: 'active',
+    vanNumber: 'UBM 245K',
+    driver: 'Julius Musoke'
+  }, ticketData);
+
+  const isExpired = ticket.status === 'used' || ticket.status === 'expired';
+  const statusLabel = ticket.status === 'active' ? 'Active' : (ticket.status === 'used' ? 'Used' : 'Expired');
+  const statusSubtext = ticket.status === 'active' ? 'Ready for boarding' : (ticket.status === 'used' ? 'Journey completed' : 'Travel date has passed');
+  const statusIcon = ticket.status === 'active' ? 'check-circle-2' : (ticket.status === 'used' ? 'check-circle' : 'clock-3');
+
+  let fromPlace = ticket.cityA || ticket.stageA || 'Entebbe Bus Park';
+  let toPlace = ticket.cityB || ticket.stageB || 'Kampala Railway Stage';
+  if (ticket.route && ticket.route.includes('→')) {
+    const parts = ticket.route.split('→').map(s => s.trim());
+    if (parts.length === 2) {
+      fromPlace = parts[0];
+      toPlace = parts[1];
+    }
+  }
+
+  return `
+    <article class="digital-ticket ${isExpired ? 'is-expired' : ''}">
+      <header class="ticket-header" style="background: ${isExpired ? '#64748b' : 'linear-gradient(135deg, #16a9e0 0%, #075aa8 50%, #063d73 100%)'} !important;">
+        <div class="ticket-brand">
+          <div class="logo-frame logo-frame--ticket">
+            <img src="assets/fly-express-logo.jpg" alt="Fly Express logo">
+          </div>
+          <div>
+            <h2>Fly Express</h2>
+            <p>Passenger Digital Ticket</p>
+          </div>
+        </div>
+        ${isModal ? `
+          <button type="button" class="icon-button" onclick="closeTicketModal();" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 6px; border-radius: 50%; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;" title="Close">
+            <i data-lucide="x"></i>
+          </button>
+        ` : ''}
+      </header>
+
+      <div class="ticket-body">
+        <!-- Status Banner Box -->
+        <div class="ticket-status-banner" style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 16px; margin-bottom: 22px; background: ${ticket.status === 'active' ? '#eefbf4' : '#f1f5f9'}; border: 1px solid ${ticket.status === 'active' ? '#bbf7d0' : '#e2e8f0'};">
+          <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: ${ticket.status === 'active' ? '#22c55e' : '#64748b'}; color: white; flex-shrink: 0;">
+            <i data-lucide="${statusIcon}" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div>
+            <strong style="display: block; font-size: 0.98rem; font-weight: 850; color: ${ticket.status === 'active' ? '#15803d' : '#334155'}; margin: 0;">
+              ${statusLabel}
+            </strong>
+            <span style="font-size: 0.8rem; color: ${ticket.status === 'active' ? '#166534' : '#64748b'}; font-weight: 600; display: block; margin-top: 1px;">
+              ${statusSubtext}
+            </span>
+          </div>
+        </div>
+
+        <!-- Route Block -->
+        <div class="ticket-route">
+          <div class="ticket-route__place">
+            <span>FROM</span>
+            <strong>${escapeHtml(fromPlace)}</strong>
+            <span>Pickup stage</span>
+          </div>
+          <div class="ticket-route__arrow">
+            <i data-lucide="arrow-right"></i>
+          </div>
+          <div class="ticket-route__place">
+            <span>TO</span>
+            <strong>${escapeHtml(toPlace)}</strong>
+            <span>Drop-off stage</span>
+          </div>
+        </div>
+
+        <!-- Ticket Field Grid -->
+        <div class="ticket-grid">
+          ${ticketField('Passenger', escapeHtml(ticket.passenger || 'Christo I.'))}
+          ${ticketField('Booking reference', escapeHtml(ticket.bookingRef || 'FX-260718-1842'))}
+          ${ticketField('Ticket number', escapeHtml(ticket.id || 'FET-884210'))}
+          ${ticketField('Travel date', escapeHtml(ticket.date || '18 July 2026'))}
+          ${ticketField('Departure', escapeHtml(ticket.time || '08:30 AM'))}
+          ${ticketField('Assigned seat', escapeHtml(ticket.seat || 'Seat 04'))}
+          ${ticketField('Vehicle', escapeHtml(ticket.vanNumber || 'UBM 245K'))}
+          ${ticketField('Driver', escapeHtml(ticket.driver || 'Julius Musoke'))}
+          ${ticketField('Routing via', escapeHtml(ticket.via || 'Via Kajansi Express'))}
+          ${ticketField('Fare paid', escapeHtml(ticket.price || 'UGX 5,000'))}
+        </div>
+
+        <!-- Verification QR Code Area -->
+        <div class="ticket-code-area">
+          <div class="qr-code" aria-label="Decorative QR-style ticket code">${generateQr()}</div>
+          <div>
+            <p class="section-kicker">Verification code</p>
+            <div class="verification-code">482 915</div>
+            <p class="muted text-small">Present this digital ticket and scannable code to the Fly Express conductor when boarding.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket-perforation"></div>
+
+      <!-- Action Footer Buttons -->
+      <footer class="ticket-actions">
+        <button class="button button--primary button--small" type="button" onclick="toast('Digital ticket downloaded', 'success');">
+          <i data-lucide="download"></i>Download Ticket
+        </button>
+        ${ticket.status === 'active' ? `
+          <button class="button button--ghost button--small" type="button" onclick="${isModal ? 'closeTicketModal();' : ''} loadTracking();">
+            <i data-lucide="navigation"></i>Track Travel
+          </button>
+        ` : `
+          <button class="button button--ghost button--small" type="button" onclick="${isModal ? 'closeTicketModal();' : ''} navigate('book');">
+            <i data-lucide="rotate-cw"></i>Rebook Travel
+          </button>
+        `}
+        <button class="button button--ghost button--small" type="button" onclick="toast('Ticket link copied to clipboard', 'info');">
+          <i data-lucide="share-2"></i>Share Ticket
+        </button>
+        ${isModal ? `
+          <button class="button button--ghost button--small" type="button" onclick="closeTicketModal();">
+            Close
+          </button>
+        ` : ''}
+      </footer>
+    </article>
+  `;
+}
+
 function renderTicket() {
-  const status = state.paymentMethod === 'cash' ? 'Payment Pending' : 'Active';
+  const activeTicket = getTicketsData()[0];
   return `
     ${screenHead('Digital passenger ticket', 'Present the QR-style visual or six-digit verification code when boarding.', '<button class="button button--ghost" type="button" data-action="ticket-states"><i data-lucide="layers-3"></i>Preview States</button>')}
-    <article class="digital-ticket">
-      <header class="ticket-header"><div class="ticket-brand"><div class="logo-frame logo-frame--ticket"><img src="assets/fly-express-logo.jpg" alt="Fly Express logo"></div><div><h2>Fly Express</h2><p>Passenger Digital Ticket</p></div></div></header>
-      <div class="ticket-body">
-        <div class="ticket-route"><div class="ticket-route__place"><span>FROM</span><strong>Entebbe</strong><span>Main Stage</span></div><div class="ticket-route__arrow"><i data-lucide="arrow-right"></i></div><div class="ticket-route__place"><span>TO</span><strong>Kampala</strong><span>Main Stage</span></div></div>
-        <div class="ticket-grid">
-          ${ticketField('Passenger',escapeHtml(state.passengerDetails[0]?.name || appData.passenger.name))}${ticketField('Booking reference','FX-260718-1842')}${ticketField('Ticket number','FET-884210')}${ticketField('Travel date','18 July 2026')}${ticketField('Departure','8:30 AM')}${ticketField('Boarding time','8:15 AM')}${ticketField('Vehicle','UBM 245K')}${ticketField('Ticket type',state.ticketType === 'return' ? 'Open Return' : 'One Way')}${ticketField('Passengers',String(state.passengerCount + state.childCount))}${ticketField('Capacity reference',state.capacityMode === 'seats' ? state.selectedSeats.join(', ') : 'Position 04')}${ticketField('Payment status',state.paymentMethod === 'cash' ? 'Pending' : 'Paid')}${ticketField('Fare paid',formatUGX(checkoutTotal()))}${ticketField('Luggage',luggageTotal() ? `LUG-1842 · ${formatUGX(luggageTotal())}` : 'Small item only')}${ticketField('Validity','Until boarding / return expiry')}${ticketField('Return expiry',state.ticketType === 'return' ? '21 Jul 2026 · 10 PM' : 'Not applicable')}
-        </div>
-        <div class="ticket-code-area"><div class="qr-code" aria-label="Decorative QR-style ticket code">${generateQr()}</div><div><p class="section-kicker">Verification code</p><div class="verification-code">482 915</div><p class="muted text-small">This code and QR visual are non-scannable demonstration elements.</p></div></div>
-      </div>
-      <div class="ticket-perforation"></div>
-      <footer class="ticket-actions"><button class="button button--primary button--small" type="button" data-action="download-demo"><i data-lucide="download"></i>Download Ticket</button><button class="button button--ghost button--small" type="button" data-action="share-demo"><i data-lucide="share-2"></i>Share</button><button class="button button--ghost button--small" type="button" data-screen="live"><i data-lucide="route"></i>View Route</button><button class="button button--ghost button--small" type="button" data-screen="support"><i data-lucide="headphones"></i>Support</button><button class="button button--soft-red button--small" type="button" data-action="cancel-booking"><i data-lucide="x"></i>Cancel Booking</button></footer>
-    </article>`;
+    ${renderDigitalTicketCard(activeTicket, false)}
+  `;
 }
 
 function ticketField(label, value) { return `<div class="ticket-field"><span>${label}</span><strong>${value}</strong></div>`; }
@@ -3076,86 +3207,10 @@ function showTicketDetailsModal(ticketId) {
   const ticket = tickets.find(t => t.id === ticketId) || tickets[0];
   if (!ticket) return;
 
-  const isExpired = ticket.status === 'used' || ticket.status === 'expired';
-  const statusLabel = ticket.status === 'active' ? 'ACTIVE' : (ticket.status === 'used' ? 'USED' : 'EXPIRED');
-  const statusClass = ticket.status === 'active' ? 'status-chip--success' : 'status-chip--neutral';
-
   const modalHtml = `
-    <div class="modal-backdrop is-visible" id="ticket-modal-backdrop" onclick="closeTicketModal();">
-      <div class="modal modal--ticket-detail ${isExpired ? 'is-expired' : ''}" onclick="event.stopPropagation();" style="max-width: 520px; width: 100%; border-radius: 24px; padding: 0; overflow: hidden;">
-        
-        <!-- Header -->
-        <div style="background: ${isExpired ? '#475569' : 'linear-gradient(135deg, #075AA8, #0B2545)'}; padding: 20px 24px; color: white; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; opacity: 0.85; letter-spacing: 0.05em; display: block;">BOARDING PASS &amp; TICKET</span>
-            <strong style="font-size: 1.15rem; font-weight: 850;">${escapeHtml(ticket.id)}</strong>
-          </div>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="status-chip ${statusClass}" style="font-size: 0.75rem; padding: 4px 10px; text-transform: uppercase;">${statusLabel}</span>
-            <button type="button" class="icon-button" onclick="closeTicketModal();" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 6px;"><i data-lucide="x"></i></button>
-          </div>
-        </div>
-
-        <div style="padding: 24px; background: white;">
-          <!-- Route -->
-          <div style="text-align: center; margin-bottom: 20px; background: rgba(7,90,168,0.04); padding: 14px; border-radius: 16px; border: 1px dashed rgba(7,90,168,0.15);">
-            <div style="font-size: 0.78rem; color: var(--slate); font-weight: 700; text-transform: uppercase;">ROUTING</div>
-            <div style="font-size: 1.2rem; font-weight: 900; color: var(--brand-blue-dark); margin: 4px 0;">${escapeHtml(ticket.route)}</div>
-            <div style="font-size: 0.82rem; color: var(--brand-blue); font-weight: 650;">${escapeHtml(ticket.via)}</div>
-          </div>
-
-          <!-- Ticket Info Grid -->
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; font-size: 0.88rem;">
-            <div>
-              <span class="muted" style="font-size: 0.75rem; display: block;">Passenger</span>
-              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.passenger)}</strong>
-            </div>
-            <div>
-              <span class="muted" style="font-size: 0.75rem; display: block;">Seat Assigned</span>
-              <strong style="color: var(--brand-blue); font-weight: 850;">${escapeHtml(ticket.seat)}</strong>
-            </div>
-            <div>
-              <span class="muted" style="font-size: 0.75rem; display: block;">Departure Date</span>
-              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.date)}</strong>
-            </div>
-            <div>
-              <span class="muted" style="font-size: 0.75rem; display: block;">Boarding Time</span>
-              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.time)}</strong>
-            </div>
-            <div>
-              <span class="muted" style="font-size: 0.75rem; display: block;">Vehicle Plate</span>
-              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.vanNumber)}</strong>
-            </div>
-            <div>
-              <span class="muted" style="font-size: 0.75rem; display: block;">Driver Name</span>
-              <strong style="color: var(--charcoal); font-weight: 800;">${escapeHtml(ticket.driver)}</strong>
-            </div>
-          </div>
-
-          <!-- QR Code Container -->
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: #f8fafc; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px;">
-            <div id="modal-ticket-qr" style="background: white; padding: 12px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06);"></div>
-            <div style="font-family: monospace; letter-spacing: 0.15em; font-size: 0.9rem; font-weight: 800; color: var(--charcoal); margin-top: 12px;">${escapeHtml(ticket.id)}</div>
-            <small style="color: var(--slate); font-size: 0.72rem; margin-top: 2px;">Present QR code to Fly Express Driver for Boarding</small>
-          </div>
-
-          <!-- Action Buttons -->
-          <div style="display: flex; gap: 10px;">
-            <button type="button" class="btn btn--outline" style="flex: 1; font-weight: 750;" onclick="toast('Boarding pass saved to downloads', 'success');">
-              <i data-lucide="download"></i> Download Pass
-            </button>
-            ${ticket.status === 'active' ? `
-              <button type="button" class="btn btn--primary" style="flex: 1; font-weight: 750;" onclick="closeTicketModal(); loadTracking();">
-                <i data-lucide="navigation"></i> Track Live
-              </button>
-            ` : `
-              <button type="button" class="btn btn--primary" style="flex: 1; font-weight: 750;" onclick="closeTicketModal(); navigate('book');">
-                <i data-lucide="rotate-cw"></i> Book Again
-              </button>
-            `}
-          </div>
-        </div>
-
+    <div class="modal-backdrop is-visible" id="ticket-modal-backdrop" onclick="closeTicketModal();" style="display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 9999;">
+      <div class="modal-wrapper" onclick="event.stopPropagation();" style="max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+        ${renderDigitalTicketCard(ticket, true)}
       </div>
     </div>
   `;
@@ -3165,10 +3220,6 @@ function showTicketDetailsModal(ticketId) {
 
   document.body.insertAdjacentHTML('beforeend', modalHtml);
   refreshIcons();
-
-  setTimeout(() => {
-    initQrFor('modal-ticket-qr', ticket.qrData || `FLYEXPRESS|${ticket.id}|CHRISTO`);
-  }, 50);
 }
 
 function closeTicketModal() {
