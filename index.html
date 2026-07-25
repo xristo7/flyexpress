@@ -19,7 +19,7 @@
   <link rel="preload" as="image" href="assets/onboarding-1.jpg">
   <link rel="preload" as="image" href="assets/onboarding-2.webp">
   <link rel="preload" as="image" href="assets/onboarding-3.jpg">
-  <script defer src="script.js?v=402"></script>
+  <script defer src="script.js?v=403"></script>
 </head>
 <body>
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -104,7 +104,20 @@
         </div>
       </div>
 
-      <nav id="desktop-nav" class="sidebar__nav"></nav>
+      <nav id="desktop-nav" class="sidebar__nav">
+        <button class="nav-item is-active" type="button" data-screen="home"><i data-lucide="house"></i><span>Home</span></button>
+        <button class="nav-item" type="button" data-screen="available-vans"><i data-lucide="clock-arrow-up"></i><span>Departures</span></button>
+        <button class="nav-item" type="button" data-screen="book"><i data-lucide="ticket-plus"></i><span>Book a Travel</span></button>
+        <button class="nav-item" type="button" data-screen="tickets"><i data-lucide="ticket"></i><span>My Tickets</span></button>
+        <button class="nav-item" type="button" data-screen="special-hire"><i data-lucide="bus"></i><span>Special Hire</span></button>
+        <button class="nav-item" type="button" data-screen="trips"><i data-lucide="route"></i><span>My Travels</span></button>
+        <button class="nav-item" type="button" data-screen="wallet"><i data-lucide="wallet-cards"></i><span>Wallet</span></button>
+        <button class="nav-item" type="button" data-screen="parcel"><i data-lucide="package-plus"></i><span>Parcels</span></button>
+        <button class="nav-item" type="button" data-screen="tracking"><i data-lucide="navigation"></i><span>Tracking</span></button>
+        <button class="nav-item" type="button" data-screen="offers"><i data-lucide="badge-percent"></i><span>Offers</span></button>
+        <button class="nav-item" type="button" data-screen="support"><i data-lucide="life-buoy"></i><span>Help &amp; Support</span></button>
+        <button class="nav-item" type="button" data-screen="about"><i data-lucide="info"></i><span>About Fly Express</span></button>
+      </nav>
 
       <div class="sidebar__footer">
         <button class="prototype-link" type="button" data-action="open-demo-panel">
