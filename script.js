@@ -2904,8 +2904,8 @@ function renderDigitalTicketCard(ticketData = {}, isModal = false) {
             <i data-lucide="navigation"></i>Track Travel
           </button>
         ` : `
-          <button class="button button--ghost button--small" type="button" onclick="${isModal ? 'closeTicketModal();' : ''} navigate('book');">
-            <i data-lucide="rotate-cw"></i>Rebook Travel
+          <button class="button button--primary button--small" type="button" style="background: var(--brand-blue-dark); color: #ffffff !important; border: none !important; box-shadow: none;" onclick="${isModal ? 'closeTicketModal();' : ''} navigate('book');">
+            <i data-lucide="rotate-cw" style="color: #ffffff;"></i><span style="color: #ffffff !important;">Rebook Travel</span>
           </button>
         `}
         <button class="button button--ghost button--small" type="button" onclick="toast('Ticket link copied to clipboard', 'info');">
@@ -3249,8 +3249,8 @@ function renderTickets() {
                         <i data-lucide="navigation" style="width: 16px; height: 16px;"></i> Track Van
                       </button>
                     ` : `
-                      <button type="button" class="btn btn--sm btn--primary" style="font-size: 0.82rem; font-weight: 800; border-radius: 12px; height: 38px; padding: 0 16px; display: inline-flex; align-items: center; gap: 6px; background: var(--brand-blue-dark);" onclick="navigate('book');">
-                        <i data-lucide="rotate-cw" style="width: 16px; height: 16px;"></i> Rebook
+                      <button type="button" class="btn btn--sm btn--primary" style="font-size: 0.82rem; font-weight: 800; border-radius: 12px; height: 38px; padding: 0 16px; display: inline-flex; align-items: center; gap: 6px; background: var(--brand-blue-dark); color: #ffffff !important; border: none !important; box-shadow: none;" onclick="navigate('book');">
+                        <i data-lucide="rotate-cw" style="width: 16px; height: 16px; color: #ffffff;"></i> <span style="color: #ffffff !important;">Rebook</span>
                       </button>
                     `}
                   </div>
