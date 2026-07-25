@@ -1470,6 +1470,10 @@ function showSearchShortcuts() {
         <i data-lucide="ticket-plus" style="color:var(--brand-blue)"></i>
         <strong style="display:block;margin-top:8px;font-size:0.85rem">Book Kampala to Entebbe</strong>
       </button>
+      <button class="card card--compact card--hover" type="button" data-screen="tickets">
+        <i data-lucide="ticket" style="color:var(--brand-blue)"></i>
+        <strong style="display:block;margin-top:8px;font-size:0.85rem">My Tickets &amp; Passes</strong>
+      </button>
       <button class="card card--compact card--hover" type="button" data-screen="book">
         <i data-lucide="search" style="color:var(--brand-blue)"></i>
         <strong style="display:block;margin-top:8px;font-size:0.85rem">Find a departure</strong>
@@ -1558,6 +1562,7 @@ function renderHome() {
             <div class="section-head"><h2 id="servicesTitle">Popular services</h2><button class="text-button" type="button" data-action="open-search-shortcuts">Show all</button></div>
             <div class="services-scroll">
               <button class="service" type="button" data-screen="book" data-action-payload='{"bookingStep":1}'><span class="service-icon"><svg><use href="#i-ticket"></use></svg></span><span>Book Travel</span></button>
+              <button class="service" type="button" data-screen="tickets"><span class="service-icon"><i data-lucide="ticket" style="width: 22px; height: 22px; color: var(--brand-blue);"></i></span><span>My Tickets</span></button>
               <button class="service" type="button" data-screen="returns"><span class="service-icon"><svg><use href="#i-return"></use></svg></span><span>Return Ticket</span></button>
               <button class="service" type="button" data-screen="parcel"><span class="service-icon"><svg><use href="#i-package"></use></svg></span><span>Send Parcel</span></button>
               <button class="service" type="button" data-screen="wallet"><span class="service-icon"><svg><use href="#i-wallet"></use></svg></span><span>Wallet</span></button>
