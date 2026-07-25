@@ -3127,10 +3127,7 @@ function renderTickets() {
               <div class="ticket-card ${isExpired ? 'is-expired' : ''}">
                 <!-- Header Bar -->
                 <div class="ticket-card-header">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="bus" style="width: 18px; height: 18px;"></i>
-                    <strong style="font-size: 0.98rem; font-weight: 850;">${escapeHtml(ticket.route)}</strong>
-                  </div>
+                  <strong style="font-size: 0.98rem; font-weight: 850;">${escapeHtml(ticket.route)}</strong>
                   <span class="status-chip ${statusBadgeClass}" style="font-size: 0.72rem; padding: 4px 12px; font-weight: 850; text-transform: uppercase;">${statusLabel}</span>
                 </div>
 
