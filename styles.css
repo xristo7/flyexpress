@@ -8865,9 +8865,24 @@ body[data-active-screen="home"] .main-content {
   .vehicle-card.is-selected .vehicle-card__standard-view {
     display: none !important;
   }
+  .vehicle-card.is-selected {
+    overflow: visible !important;
+    position: relative;
+    z-index: 30;
+  }
   .vehicle-card__mobile-inline-form {
     display: block !important;
+    overflow: visible !important;
+    position: relative;
   }
+}
+
+.vehicle-card.has-open-dropdown,
+.card.has-open-dropdown,
+.vehicle-card:has(.custom-select.is-open),
+.card:has(.custom-select.is-open) {
+  overflow: visible !important;
+  z-index: 2500 !important;
 }
 
 /* ─── Swipe Gesture Indicator for Onboarding / Splash ─── */
@@ -9030,8 +9045,8 @@ body[data-active-screen="home"] .main-content {
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  z-index: 2000;
-  background: rgba(255, 255, 255, 0.96);
+  z-index: 3000 !important;
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border: 1px solid rgba(7, 90, 168, 0.12);

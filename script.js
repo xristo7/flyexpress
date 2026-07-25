@@ -629,6 +629,9 @@ function openCustomSelect(wrapper, sel, trigger) {
   wrapper.classList.add('is-open');
   trigger.setAttribute('aria-expanded', 'true');
 
+  const parentCard = wrapper.closest('.vehicle-card') || wrapper.closest('.card');
+  if (parentCard) parentCard.classList.add('has-open-dropdown');
+
   // Check if dropdown would go off-screen and flip upward
   requestAnimationFrame(() => {
     const rect = optionsPanel.getBoundingClientRect();
@@ -650,6 +653,8 @@ function openCustomSelect(wrapper, sel, trigger) {
 
 function closeCustomSelect(wrapper) {
   wrapper.classList.remove('is-open');
+  const parentCard = wrapper.closest('.vehicle-card') || wrapper.closest('.card');
+  if (parentCard) parentCard.classList.remove('has-open-dropdown');
   const trigger = wrapper.querySelector('.custom-select-trigger');
   if (trigger) trigger.setAttribute('aria-expanded', 'false');
   const panel = wrapper.querySelector('.custom-select-options');
