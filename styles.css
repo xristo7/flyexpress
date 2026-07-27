@@ -1247,7 +1247,7 @@ input[type="checkbox"]:disabled {
 }
 
 .modal--wide {
-  max-width: 680px !important;
+  max-width: 500px !important;
 }
 
 @keyframes modalPopIn {
@@ -1433,7 +1433,7 @@ input[type="checkbox"]:disabled {
   .ticket-route__place strong { font-size: 1rem; }
   .live-map { min-height: 390px; }
   .modal-backdrop { padding: 16px 30px !important; }
-  .modal { padding: 18px; border-radius: var(--radius-md); max-width: calc(100vw - 60px) !important; }
+  .modal { padding: 18px; border-radius: var(--radius-md); max-width: min(500px, calc(100vw - 40px)) !important; }
   .toast-region { top: 10px; right: 10px; width: calc(100vw - 20px); }
   .demo-state-grid { grid-template-columns: 1fr; }
 }
@@ -8747,7 +8747,7 @@ body[data-active-screen="home"] .main-content {
   }
 }
 
-/* ─── Notification Popups, Toasts & Modals Max-Width on Desktop (400px) ─── */
+/* ─── Notification Popups, Toasts & Modals Max-Width on Desktop (500px Max) ─── */
 @media (min-width: 769px) {
   .toast-region,
   .toast-container,
@@ -8764,20 +8764,26 @@ body[data-active-screen="home"] .main-content {
     box-sizing: border-box !important;
   }
 
-  .modal:not(.modal--wide):not(.modal--driver-profile),
+  .modal,
+  .modal--wide,
+  .modal--driver-profile,
   .modal--notification,
   .notification-popup-modal,
-  .notification-card-popup {
-    max-width: calc(100vw - 60px) !important;
-    width: calc(100vw - 60px) !important;
+  .notification-card-popup,
+  .sheet,
+  .bottom-sheet {
+    max-width: 500px !important;
+    width: min(500px, calc(100vw - 40px)) !important;
     box-sizing: border-box !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 }
 
 @media (max-width: 767px) {
   .modal-backdrop, .sheet-backdrop {
-    padding-left: 30px !important;
-    padding-right: 30px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
   .modal,
   .modal--wide,
@@ -8785,8 +8791,8 @@ body[data-active-screen="home"] .main-content {
   .modal--notification,
   .notification-popup-modal,
   .notification-card-popup {
-    max-width: calc(100vw - 60px) !important;
-    width: calc(100vw - 60px) !important;
+    max-width: min(500px, calc(100vw - 40px)) !important;
+    width: min(500px, calc(100vw - 40px)) !important;
     box-sizing: border-box !important;
     margin-left: auto !important;
     margin-right: auto !important;
@@ -8795,8 +8801,8 @@ body[data-active-screen="home"] .main-content {
 
 /* Driver Profile Modal Custom Redesign */
 .modal--driver-profile {
-  max-width: 550px !important;
-  width: min(92vw, 550px) !important;
+  max-width: 500px !important;
+  width: min(92vw, 500px) !important;
   padding: 24px !important;
   border-radius: 28px !important;
 }
